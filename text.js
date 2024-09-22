@@ -21,5 +21,6 @@
 // 3 Products Details Page.
 // 4 Add to Cart Page.
 // 5 By Now Page Order.
-//6 Payment Page.
+// 6 Payment Page.
 // 7 Admin Penal Page.
+// 8 Order Page.
