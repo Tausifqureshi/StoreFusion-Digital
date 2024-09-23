@@ -13,8 +13,6 @@
 // Payment Part This Use.
 // 4. Payment Part Create Use ===> RozerPay
 
-
-
 // Project All Page Create.
 // 1  Singnup and login Page
 // 2 Home Page All Products Page.
