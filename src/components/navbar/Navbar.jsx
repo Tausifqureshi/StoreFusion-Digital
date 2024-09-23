@@ -11,7 +11,12 @@ function Navbar() {
   const { mode, toggleMode, cartItems, updateCartItems } =
     useContext(MyContext); // Add cartItems and updateCartItems
 
+  // const user = JSON.parse(localStorage.getItem("user"));
+  // console.log(localStorage.getItem('user')); // Check what is being stored
+
   const user = JSON.parse(localStorage.getItem("user"));
+console.log("Retrieved user:", user);
+
   const navigate = useNavigate();
 
   function handleLogout() {
@@ -90,7 +95,7 @@ function Navbar() {
                  
 
                   {/* Admin-Page */}
-                  {user?.email === "tauifqureshi780@gmail.com" ? (
+                  {user?.role === "user"? (
                     <div className="flow-root">
                       <Link
                         to="/dashboard"
@@ -125,8 +130,7 @@ function Navbar() {
                     )}
                   </div>
 
-                  
-                  <div className="flow-root">
+                  {user?   <div className="flow-root">
                     <Link to="/">
                       <img
                         className="w-10 h-10 rounded-full"
@@ -134,13 +138,13 @@ function Navbar() {
                         alt="Profile Picture"
                       />
                     </Link>
-                  </div>
+                  </div>:""}
+                
 
 
                 </div>
 
-               {/* {user ? : ""} */}
-                <div className="border-t border-gray-200 px-4 py-6">
+               {user ?  <div className="border-t border-gray-200 px-4 py-6">
                   <div className="flex items-center">
                     <Link to="/">
                       <img
@@ -156,7 +160,8 @@ function Navbar() {
                       INDIA
                     </span>
                   </div>
-                </div>
+                </div>: ""}
+               
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -253,17 +258,20 @@ function Navbar() {
                 </Link> : ""}
 
                 {/*Admin  */}
-                {user?.email === "tauifqureshi780@gmail.com" ? (
-                  <Link
-                    to="/dashboard"
-                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                  >
-                    Admin
-                  </Link>
-                ) : (
-                  ""
-                )}
+             
+
+
+        {user?.role === "user" ? (
+  <Link
+    to="/dashboard"
+    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
+    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+  >
+    Admin
+  </Link>
+       ) : null}
+
+
 
                 {/* SignUp-and Logout */}
                 {user ? (
