@@ -94,7 +94,6 @@ function Login() {
 
 
 
-
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -114,22 +113,15 @@ function Login() {
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
   
-        // Save email and role to localStorage
+        // Save to local storage
         localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
   
-        // Attempt to log in
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-  
         toast.success("Login Successful!", { autoClose: 1500 });
         navigate('/'); // Redirect to home page
-  
       } catch (error) {
         console.error(error);
-        if (error.code === 'auth/wrong-password') {
-          toast.error("Incorrect password. Please try again.", { autoClose: 1500 });
-        } else {
-          toast.error("An unexpected error occurred. Please check your connection or try again later.", { autoClose: 1500 });
-        }
+        toast.error("An unexpected error occurred. Please try again.", { autoClose: 1500 });
       } finally {
         setLoading(false);
       }
@@ -138,6 +130,7 @@ function Login() {
       setLoading(false);
     }
   };
+  
   
 
 
