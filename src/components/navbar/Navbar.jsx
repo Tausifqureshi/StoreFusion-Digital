@@ -90,7 +90,7 @@ function Navbar() {
                  
 
                   {/* Admin-Page */}
-                  {user?.email === "tauifqureshi780@gmail.com" ? (
+                  {/* {user?.email === "admin" ? ( */}
                     <div className="flow-root">
                       <Link
                         to="/dashboard"
@@ -100,9 +100,9 @@ function Navbar() {
                         Admin
                       </Link>
                     </div>
-                  ) : (
+                  
                     ""
-                  )}
+                  {/* } */}
 
                   {/* Logout And Signin */}
                   <div className="flex justify-start space-x-4">
@@ -253,7 +253,7 @@ function Navbar() {
                 </Link> : ""}
 
                 {/*Admin  */}
-                {user?.email === "tauifqureshi780@gmail.com" ? (
+                {user ? (
                   <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"

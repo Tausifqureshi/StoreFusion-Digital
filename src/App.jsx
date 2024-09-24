@@ -85,13 +85,15 @@ export function ProtectedRoutes({ children }) {
 
 export function ProtectedRoutesForAdmin({ children }) {
   const user = JSON.parse(localStorage.getItem('user'));
-  
-  // Check if the user has admin role
-  if (user?.role === "admin") {
-    return children;
+
+  // Allow access for any logged-in user
+  if (user) {
+    return children; // Render the protected component for any logged-in user
   } else {
-    return <Navigate to='/login' />;
+    return <Navigate to='/login' />; // Redirect to login if not logged in
   }
 }
+
+
 
 

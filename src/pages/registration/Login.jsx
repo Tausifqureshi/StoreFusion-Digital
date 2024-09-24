@@ -117,9 +117,9 @@ function Login() {
         // Save email and role to localStorage
         localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
   
-        // Login user
+        // Attempt to log in
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        
+  
         toast.success("Login Successful!", { autoClose: 1500 });
         navigate('/'); // Redirect to home page
   
@@ -138,6 +138,10 @@ function Login() {
       setLoading(false);
     }
   };
+  
+
+
+
   
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
