@@ -94,43 +94,85 @@ function Login() {
 
 
 
-  const login = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+//   const login = async (e) => {
+//     e.preventDefault();
+//     setLoading(true);
   
-    if (validateForm()) {
-      const usersRef = collection(fireDB, 'users');
-      const q = query(usersRef, where("email", "==", formData.email));
+//     if (validateForm()) {
+//       const usersRef = collection(fireDB, 'users');
+//       const q = query(usersRef, where("email", "==", formData.email));
   
-      try {
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-          toast.error("User not found. Please check your email.", { autoClose: 1500 });
-          setLoading(false);
-          return;
-        }
+//       try {
+//         const querySnapshot = await getDocs(q);
+//         if (querySnapshot.empty) {
+//           toast.error("User not found. Please check your email.", { autoClose: 1500 });
+//           setLoading(false);
+//           return;
+//         }
   
-        const userDoc = querySnapshot.docs[0];
-        const userData = userDoc.data();
+//         const userDoc = querySnapshot.docs[0];
+//         const userData = userDoc.data();
   
-        // Save to local storage
-        localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
+//         // Save to local storage
+//         // localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
+//         // Save to local storage
+// localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
+
   
-        await signInWithEmailAndPassword(auth, formData.email, formData.password);
-        toast.success("Login Successful!", { autoClose: 1500 });
-        navigate('/'); // Redirect to home page
-      } catch (error) {
-        console.error(error);
-        toast.error("An unexpected error occurred. Please try again.", { autoClose: 1500 });
-      } finally {
+//         await signInWithEmailAndPassword(auth, formData.email, formData.password);
+//         toast.success("Login Successful!", { autoClose: 1500 });
+//         navigate('/'); // Redirect to home page
+//       } catch (error) {
+//         console.error(error);
+//         toast.error("An unexpected error occurred. Please try again.", { autoClose: 1500 });
+//       } finally {
+//         setLoading(false);
+//       }
+//     } else {
+//       toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+//       setLoading(false);
+//     }
+//   };
+  
+
+
+const login = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+
+  if (validateForm()) {
+    const usersRef = collection(fireDB, 'users');
+    const q = query(usersRef, where("email", "==", formData.email));
+
+    try {
+      const querySnapshot = await getDocs(q);
+      if (querySnapshot.empty) {
+        toast.error("User not found. Please check your email.", { autoClose: 1500 });
         setLoading(false);
+        return;
       }
-    } else {
-      toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+
+      const userDoc = querySnapshot.docs[0];
+      const userData = userDoc.data();
+
+      // Save to local storage
+      localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
+
+      await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      toast.success("Login Successful!", { autoClose: 1500 });
+      navigate('/'); // Redirect to home page
+    } catch (error) {
+      console.error(error);
+      toast.error("An unexpected error occurred. Please try again.", { autoClose: 1500 });
+    } finally {
       setLoading(false);
     }
-  };
-  
+  } else {
+    toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+    setLoading(false);
+  }
+};
+
   
 
 

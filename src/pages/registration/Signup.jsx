@@ -82,7 +82,12 @@ function Signup() {
 
 
 
-
+  const validAdminEmails = [
+    "admin@example.com", 
+    "superuser@example.com", 
+    "admin@tausifquraishigamil.com" // Allowed admin email
+  ];
+  
   const signup = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -91,12 +96,15 @@ function Signup() {
       try {
         const { email, password, fullName } = formData;
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        
+  
+        // Check if the email is an admin email
+        const role = validAdminEmails.includes(email) ? "admin" : "user"; // Assign role based on email
+  
         const user = { 
           name: fullName, 
           uid: userCredential.user.uid, 
           email: userCredential.user.email, 
-          role: "user", // Default role is user
+          role: role, // Set role based on email
           time: Timestamp.now() 
         };
   
@@ -119,6 +127,9 @@ function Signup() {
     }
   };
   
+
+
+
 
   
   return (

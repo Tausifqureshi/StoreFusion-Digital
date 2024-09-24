@@ -69,16 +69,35 @@ export function ProtectedRoutes({ children }) {
     return <Navigate to='/login' />;
   }
 
+
 }
-// Admin jab tak ye hi email id se se nhi aye ga tak admin show nhi hoga
-//Password = Tausif2000.
+
+
+
+
+
+
+// yahi Code work kar rahi netlufy pe.yad rahkna
 // export function ProtectedRoutesForAdmin({ children }) {
-//   const admin = JSON.parse(localStorage.getItem('user'));
-//   // Check if the admin is defined and has the correct email
-//   if (admin?.role === "tauifqureshi780@gmail.com") {
-//     return children;
+//   const user = JSON.parse(localStorage.getItem('user'));
+
+//   // Allow access for any logged-in user
+//   if (user) {
+//     return children; // Render the protected component for any logged-in user
 //   } else {
-//     return <Navigate to='/login' />;
+//     return <Navigate to='/login' />; // Redirect to login if not logged in
+//   }
+// }
+
+
+// export function ProtectedRoutesForAdmin({ children }) {
+//   const user = JSON.parse(localStorage.getItem('user'));
+
+//   // Allow access only for admin users
+//   if (user && user.role === "admin") {
+//     return children; // Render the protected component for admin
+//   } else {
+//     return <Navigate to='/login' />; // Redirect to login if not admin
 //   }
 // }
 
@@ -86,14 +105,10 @@ export function ProtectedRoutes({ children }) {
 export function ProtectedRoutesForAdmin({ children }) {
   const user = JSON.parse(localStorage.getItem('user'));
 
-  // Allow access for any logged-in user
-  if (user) {
-    return children; // Render the protected component for any logged-in user
+  // Allow access only for admin users
+  if (user && user.role === "admin") {
+    return children; // Render the protected component for admin
   } else {
-    return <Navigate to='/login' />; // Redirect to login if not logged in
+    return <Navigate to='/login' />; // Redirect to login if not admin
   }
 }
-
-
-
-

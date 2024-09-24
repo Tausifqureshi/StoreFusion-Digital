@@ -253,7 +253,7 @@ function Navbar() {
                 </Link> : ""}
 
                 {/*Admin  */}
-                {user ? (
+                {/* {user ? (
                   <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
@@ -263,7 +263,21 @@ function Navbar() {
                   </Link>
                 ) : (
                   ""
-                )}
+                )} */}
+
+
+
+
+                {user && user.role === "admin" ? ( 
+  <Link
+    to="/dashboard"
+    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
+    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+  >
+    Admin
+  </Link>
+) : null}
+
 
                 {/* SignUp-and Logout */}
                 {user ? (
