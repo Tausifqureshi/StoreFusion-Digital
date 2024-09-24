@@ -72,23 +72,26 @@ export function ProtectedRoutes({ children }) {
 }
 // Admin jab tak ye hi email id se se nhi aye ga tak admin show nhi hoga
 //Password = Tausif2000.
+// export function ProtectedRoutesForAdmin({ children }) {
+//   const admin = JSON.parse(localStorage.getItem('user'));
+//   // Check if the admin is defined and has the correct email
+//   if (admin?.role === "tauifqureshi780@gmail.com") {
+//     return children;
+//   } else {
+//     return <Navigate to='/login' />;
+//   }
+// }
+
+
 export function ProtectedRoutesForAdmin({ children }) {
-  const admin = JSON.parse(localStorage.getItem('user'));
-  // Check if the admin is defined and has the correct email
-  if (admin?.role === "tauifqureshi780@gmail.com") {
+  const user = JSON.parse(localStorage.getItem('user'));
+  
+  // Check if the user has admin role
+  if (user?.role === "admin") {
     return children;
   } else {
     return <Navigate to='/login' />;
   }
 }
 
-// export function ProtectedRoutesForAdmin({ children }) {
-//   const admin = JSON.parse(localStorage.getItem('user'));
-//   // Check if the admin is defined and has the correct email
-//   if (admin?.role === "admin") {
-//     return children;
-//   } else {
-//     return <Navigate to='/login' />;
-//   }
-// }
 

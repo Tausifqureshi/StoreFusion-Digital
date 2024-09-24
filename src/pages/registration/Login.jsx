@@ -35,47 +35,94 @@ function Login() {
     return Object.keys(errors).length === 0;
   };
 
+  // const login = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   if (validateForm()) {
+  //     // Firestore reference for users collection
+  //     const usersRef = collection(fireDB, 'users'); // Adjust the collection name as needed
+  //     const q = query(usersRef, where("email", "==", formData.email)); // Email check
+
+  //     try {
+  //       const querySnapshot = await getDocs(q);
+  //       if (querySnapshot.empty) {
+  //         // Agar user nahi mila
+  //         toast.error("User not found. Please check your email.", { autoClose: 1500 });
+  //         setLoading(false);
+  //         return;
+  //       }
+
+  //          // User data ko fetch karen
+  //     // const userDoc = querySnapshot.docs[0];
+  //     // const userData = userDoc.data();
+
+  //     const userDoc = querySnapshot.docs[0];
+  //     const userData = userDoc.data();
+  //     console.log("User Data fetched:", userData); // Log the fetched user data
+      
+  //     // Check if role is defined
+  //     console.log("User Role:", userData.role); // Should not be undefined
+      
+  //     // Save to local storage
+  //     localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
+      
+
+  //          // Agar user mila, toh login karne ki koshish karte hain
+  //           // Server-side validation for email existence
+  //       await signInWithEmailAndPassword(auth, formData.email, formData.password);
+      
+
+  //       toast.success("Login Successful!", { autoClose: 1500 });
+  //       navigate('/'); // Redirect to home page
+
+  //     } catch (error) {
+  //       console.error(error);
+  //       if (error.code === 'auth/wrong-password') {
+  //         toast.error("Incorrect password. Please try again.", { autoClose: 1500 });
+  //       } else {
+  //         toast.error("An unexpected error occurred. Please check your connection or try again later.", { autoClose: 1500 });
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   } else {
+  //     toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+  //     setLoading(false);
+  //   }
+  // };
+
+
+
+
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     if (validateForm()) {
-      // Firestore reference for users collection
-      const usersRef = collection(fireDB, 'users'); // Adjust the collection name as needed
-      const q = query(usersRef, where("email", "==", formData.email)); // Email check
-
+      const usersRef = collection(fireDB, 'users');
+      const q = query(usersRef, where("email", "==", formData.email));
+  
       try {
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
-          // Agar user nahi mila
           toast.error("User not found. Please check your email.", { autoClose: 1500 });
           setLoading(false);
           return;
         }
-
-           // User data ko fetch karen
-      // const userDoc = querySnapshot.docs[0];
-      // const userData = userDoc.data();
-
-      const userDoc = querySnapshot.docs[0];
-      const userData = userDoc.data();
-      console.log("User Data fetched:", userData); // Log the fetched user data
-      
-      // Check if role is defined
-      console.log("User Role:", userData.role); // Should not be undefined
-      
-      // Save to local storage
-      localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
-      
-
-           // Agar user mila, toh login karne ki koshish karte hain
-            // Server-side validation for email existence
+  
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+  
+        // Save email and role to localStorage
+        localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
+  
+        // Login user
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      
-
+        
         toast.success("Login Successful!", { autoClose: 1500 });
         navigate('/'); // Redirect to home page
-
+  
       } catch (error) {
         console.error(error);
         if (error.code === 'auth/wrong-password') {
@@ -91,7 +138,7 @@ function Login() {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
       <div className='bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative'>
