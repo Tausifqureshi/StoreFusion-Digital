@@ -29,3 +29,4 @@
 
 // how to allow new user registarion with firebase on production react.js
 // Login.jsx:80 FirebaseError: Missing or insufficient permissions.
+// Tausif12000
