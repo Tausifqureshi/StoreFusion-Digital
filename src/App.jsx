@@ -74,12 +74,21 @@ export function ProtectedRoutes({ children }) {
 //Password = Tausif2000.
 export function ProtectedRoutesForAdmin({ children }) {
   const admin = JSON.parse(localStorage.getItem('user'));
-  
   // Check if the admin is defined and has the correct email
-  if (admin?.role === "auifqureshi780@gmail.com") {
+  if (admin?.role === "tauifqureshi780@gmail.com") {
     return children;
   } else {
     return <Navigate to='/login' />;
   }
 }
+
+// export function ProtectedRoutesForAdmin({ children }) {
+//   const admin = JSON.parse(localStorage.getItem('user'));
+//   // Check if the admin is defined and has the correct email
+//   if (admin?.role === "admin") {
+//     return children;
+//   } else {
+//     return <Navigate to='/login' />;
+//   }
+// }
 

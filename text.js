@@ -22,3 +22,9 @@
 // 6 Payment Page.
 // 7 Admin Penal Page.
 // 8 Order Page.
+
+
+
+
+
+// how to allow new user registarion with firebase on production react.js
