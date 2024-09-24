@@ -81,7 +81,6 @@ function Signup() {
   // };
 
 
-
   const validAdminEmails = [
     "admin@example.com", 
     "superuser@example.com", 
@@ -110,14 +109,18 @@ function Signup() {
   
         const userRef = collection(fireDB, "users");
         await addDoc(userRef, user);
-        
+  
         toast.success("Signup Successful!", { autoClose: 1500 });
         setFormData({ fullName: '', email: '', password: '' });
         setTermsAccepted(false);
         navigate('/login'); // Redirect to login page
       } catch (error) {
         console.error(error);
-        toast.error("Signup failed. Please try again.", { autoClose: 1500 });
+        if (error.code === 'auth/email-already-in-use') {
+          toast.error("This email is already in use. Please use a different email.", { autoClose: 1500 });
+        } else {
+          toast.error("Signup failed. Please try again.", { autoClose: 1500 });
+        }
       } finally {
         setLoading(false);
       }
