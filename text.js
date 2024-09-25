@@ -32,5 +32,5 @@
 
 
 // Admin Email id
-// "admin@tausifquraishigamil.com
-// password: Admin100
+// superuser@example.com
+// password: Admin200

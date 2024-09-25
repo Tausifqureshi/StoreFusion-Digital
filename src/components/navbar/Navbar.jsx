@@ -90,8 +90,7 @@ function Navbar() {
                  
 
                   {/* Admin-Page */}
-                  {/* {user?.email === "admin" ? ( */}
-                    <div className="flow-root">
+                   {user && user.role === "admin"?   <div className="flow-root">
                       <Link
                         to="/dashboard"
                         className="block p-2 font-medium"
@@ -100,9 +99,11 @@ function Navbar() {
                         Admin
                       </Link>
                     </div>
+                  : ""}
+
                   
-                    ""
-                  {/* } */}
+                  
+                 
 
                   {/* Logout And Signin */}
                   <div className="flex justify-start space-x-4">
