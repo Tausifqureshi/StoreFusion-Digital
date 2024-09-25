@@ -72,36 +72,6 @@ export function ProtectedRoutes({ children }) {
 
 }
 
-
-
-
-
-
-// yahi Code work kar rahi netlufy pe.yad rahkna
-// export function ProtectedRoutesForAdmin({ children }) {
-//   const user = JSON.parse(localStorage.getItem('user'));
-
-//   // Allow access for any logged-in user
-//   if (user) {
-//     return children; // Render the protected component for any logged-in user
-//   } else {
-//     return <Navigate to='/login' />; // Redirect to login if not logged in
-//   }
-// }
-
-
-// export function ProtectedRoutesForAdmin({ children }) {
-//   const user = JSON.parse(localStorage.getItem('user'));
-
-//   // Allow access only for admin users
-//   if (user && user.role === "admin") {
-//     return children; // Render the protected component for admin
-//   } else {
-//     return <Navigate to='/login' />; // Redirect to login if not admin
-//   }
-// }
-
-
 export function ProtectedRoutesForAdmin({ children }) {
   const user = JSON.parse(localStorage.getItem('user'));
 

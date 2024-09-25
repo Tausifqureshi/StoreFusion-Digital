@@ -47,38 +47,6 @@ function Signup() {
     return Object.keys(errors).length === 0;
   };
 
-  // const signup = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   if (validateForm()) {
-  //     try {
-  //       const { email, password, fullName } = formData;
-  //       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  //       const user = { name: fullName, uid: userCredential.user.uid, email: userCredential.user.email, time: Timestamp.now() };
-
-  //       const userRef = collection(fireDB, "users");
-  //       await addDoc(userRef, user);
-
-  //       toast.success("Signup Successful!", { autoClose: 1500 });
-  //       setFormData({ fullName: '', email: '', password: '' });
-  //       setTermsAccepted(false);
-  //       navigate('/login'); // Redirect to login page
-  //     } catch (error) {
-  //       console.error(error);
-  //       if (error.code === 'auth/email-already-in-use') {
-  //         toast.error("This email is already in use. Please use a different email.", { autoClose: 1500 });
-  //       } else {
-  //         toast.error("Signup failed. Please try again.", { autoClose: 1500 });
-  //       }
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   } else {
-  //     toast.error("Please fix the errors in the form.", { autoClose: 1500 });
-  //     setLoading(false);
-  //   }
-  // };
 
 
   const validAdminEmails = [
