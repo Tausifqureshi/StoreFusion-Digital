@@ -19,6 +19,7 @@ import AddProduct from "./pages/admin/page-admin/AddProduct";
 import UpdateProduct from "./pages/admin/page-admin/UpdateProduct";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Allproducts from "./pages/allproducts/Allproducts";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,17 +28,23 @@ const router = createBrowserRouter(
       <Route path="/order" element={ <Order />}/>
 
       <Route path="/cart" element={<Cart />} />
+      <Route path="/allProducts" element={<Allproducts/>} />
+      {/* <Route path="/addproduct" element={<AddProduct/>} /> */}
+
       <Route path="/dashboard" element={<ProtectedRoutesForAdmin>
         <Dashboard />
         {/* Only Admin ke liye */}
       </ProtectedRoutesForAdmin>} />
+
       <Route path="/signup" element={<Signup />} />
       <Route path="/login" element={<Login />} />
       <Route path="/productInfo/:id" element={<ProductInfo />} />
+
       <Route path="/addProduct/" element={<ProtectedRoutesForAdmin>
         <AddProduct />
        {/* Only Admin hi is me prodcuts use kar sakta hai users nhi admin matlab jis ne website create kiya */}
       </ProtectedRoutesForAdmin>} />
+
       <Route path="/updateProduct/" element={<ProtectedRoutesForAdmin >
         <UpdateProduct/>
       </ProtectedRoutesForAdmin>} />
@@ -72,6 +79,7 @@ export function ProtectedRoutes({ children }) {
 
 }
 
+//Admin ke liye hai ye function. 
 export function ProtectedRoutesForAdmin({ children }) {
   const user = JSON.parse(localStorage.getItem('user'));
 

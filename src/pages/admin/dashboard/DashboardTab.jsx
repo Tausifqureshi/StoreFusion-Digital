@@ -5,10 +5,25 @@ import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { FaUser, FaCartPlus } from 'react-icons/fa';
 import { AiFillShopping, AiFillPlusCircle, AiFillDelete } from 'react-icons/ai';
 import { useSpring, animated } from 'react-spring';
+import AddProduct from '../page-admin/AddProduct';
+import { useNavigate } from 'react-router-dom';
 
 function DashboardTab() {
   const { mode } = useContext(MyContext);
   const [index, setIndex] = useState(0); // Track the current tab index
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleModal = () => setIsOpen(!isOpen);
+
+  const navigate = useNavigate(); // useNavigate hook
+
+  const add = () => {
+    navigate('/addproduct'); // Navigate to '/addproduct'
+  };
+  // const add = ()=>{
+  //   window.location.href= '/addproduct'
+  // }
 
   // Animation for tab panel
   const animationProps = useSpring({
@@ -17,6 +32,8 @@ function DashboardTab() {
     from: { opacity: 0, transform: `translateY(20px)` },
     reset: true,
   });
+
+
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -47,10 +64,13 @@ function DashboardTab() {
               <button
                 type="button"
                 className={`flex items-center gap-2 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-indigo-500 hover:to-blue-500 text-white px-6 py-3 rounded-full shadow-lg transform transition hover:scale-105 duration-200 ease-in-out ${mode === 'dark' ? 'bg-gray-800' : ''}`}
+                onClick={add}
               >
                 Add Product <FaCartPlus size={24} />
               </button>
-            </div>
+             </div>
+              {/* <AddProduct /> */}
+            
             <div className="overflow-x-auto bg-white shadow-lg rounded-xl">
               <table className="w-full text-sm text-left font-semibold">
                 <thead className={`text-xs uppercase bg-gray-50 ${mode === 'dark' ? 'bg-gray-700 text-white' : 'text-gray-700'}`}>

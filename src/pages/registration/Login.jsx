@@ -93,12 +93,7 @@ function Login() {
   };
 
 
-  
 
-
-
-
-  
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
       <div className='bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative'>
