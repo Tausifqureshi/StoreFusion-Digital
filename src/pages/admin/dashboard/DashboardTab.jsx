@@ -5,15 +5,14 @@ import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { FaUser, FaCartPlus } from 'react-icons/fa';
 import { AiFillShopping, AiFillPlusCircle, AiFillDelete } from 'react-icons/ai';
 import { useSpring, animated } from 'react-spring';
-// import AddProduct from '../page-admin/AddProduct';
+import AddProduct from '../page-admin/AddProduct';
 import { useNavigate } from 'react-router-dom';
 
 function DashboardTab() {
   const { mode, product } = useContext(MyContext);
   console.log(product);
-
+    
   const [index, setIndex] = useState(0); // Track the current tab index
-
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleModal = () => setIsOpen(!isOpen);
@@ -82,22 +81,30 @@ function DashboardTab() {
                     ))}
                   </tr>
                 </thead>
-                <tbody>
+                 
+
+                 {product. map((item, index)=>{
+                  const { title,price,imageUrl, category,date, description} = item;
+                  return <tbody key={index}>
                   <tr className={`border-b ${mode === 'dark' ? 'bg-gray-800' : 'bg-gray-50'} hover:bg-gray-100`}>
-                    <td className="px-6 py-4">1.</td>
+                    <td className="px-6 py-4">{index + 1}</td>
                     <td className="px-6 py-4">
-                      <img className="w-16 rounded-lg" src="https://dummyimage.com/720x400" alt="img" />
+                      <img className="w-16 rounded-lg" src= {imageUrl} alt="img" />
                     </td>
-                    <td className="px-6 py-4">Title</td>
-                    <td className="px-6 py-4">₹100</td>
-                    <td className="px-6 py-4">Pots</td>
-                    <td className="px-6 py-4">12 Aug 2019</td>
+                    <td className="px-6 py-4">{title}</td>
+                    <td className="px-6 py-4">{price}</td>
+                    <td className="px-6 py-4">{category}</td>
+                    <td className="px-6 py-4">{date}</td>
                     <td className="px-6 py-4 flex space-x-4">
                       <AiFillPlusCircle className="text-green-600 cursor-pointer" size={28} />
                       <AiFillDelete className="text-red-600 cursor-pointer hover:text-red-800 transition duration-150" size={28} />
                     </td>
                   </tr>
                 </tbody>
+                 })}
+
+              
+
               </table>
             </div>
           </animated.div>
