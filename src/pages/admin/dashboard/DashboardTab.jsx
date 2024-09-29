@@ -5,11 +5,13 @@ import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { FaUser, FaCartPlus } from 'react-icons/fa';
 import { AiFillShopping, AiFillPlusCircle, AiFillDelete } from 'react-icons/ai';
 import { useSpring, animated } from 'react-spring';
-import AddProduct from '../page-admin/AddProduct';
+// import AddProduct from '../page-admin/AddProduct';
 import { useNavigate } from 'react-router-dom';
 
 function DashboardTab() {
-  const { mode } = useContext(MyContext);
+  const { mode, product } = useContext(MyContext);
+  console.log(product);
+
   const [index, setIndex] = useState(0); // Track the current tab index
 
   const [isOpen, setIsOpen] = useState(false);

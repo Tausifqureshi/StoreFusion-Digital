@@ -162,7 +162,7 @@ function MyState({ children }) {
         loading: loading, 
         setLoading: setLoading,
         addProduct : addProduct ,
-        products:products, 
+        product: product,
         setProducts: setProducts,
 
 
