@@ -21,7 +21,7 @@ function Dashboard() {
     { title: 'Total Orders', value: 15, icon: <FaShoppingCart /> },
     { title: 'Total Users', value: 20, icon: <FaUsers /> },
     { title: 'New Discounts', value: 5, icon: <FaTag /> },
-  ];
+  ]; 
 
   return (
     <Layout>

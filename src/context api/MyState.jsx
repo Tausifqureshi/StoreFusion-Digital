@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MyContext } from "./myContext";
 import Loader from "../components/loader/Loader";
 import { fireDB } from "../firebase/FirebaseConfig";
-import { Timestamp , addDoc,collection,onSnapshot, orderBy, query} from "firebase/firestore";
+import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc} from "firebase/firestore";
 import { toast } from 'react-toastify';
 
 function MyState({ children }) {
@@ -83,7 +83,7 @@ function MyState({ children }) {
       setLoading(false)
     }
    
-   //  form emp[ty ke liye oject ko aise hi empty karte hai 
+   //  form empty ke liye oject ko aise hi empty karte hai 
     setProducts({
       title: '',
       price: '',
@@ -133,10 +133,78 @@ function MyState({ children }) {
 
 
   
-  // const updateCartItems = (item) => {
-  //   setCartItems((prevItems) => [...prevItems, item]); // Add item to the cart
-  // };
+  // Edidt Function
+  const edithandle = (item) => {
+    setProducts(item)
+  }
+  // update product Function.
+
+  const updateProduct = async () => {
+    setLoading(true);
+    try {
+      await setDoc(doc(fireDB, "products", products.id), products);
+      toast.success("Product Updated successfully");
+      getProductData();
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 800);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false); // Ensure loading state is reset
+    }
+
+    // Reset form
+    setProducts({
+      title: '',
+      price: '',
+      imageUrl: '',
+      category: '',
+      description: '',
+      time: Timestamp.now(),
+      date: new Date().toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      })
+    });
+  }
   
+
+  // Delete Products Function
+  const deleteProduct = async (item) => {
+    setLoading(true);
+    try {
+      await deleteDoc(doc(fireDB, "products", item.id));
+      toast.success('Product Deleted successfully!', {
+        position: "top-right",  // Toast notification ki position
+        autoClose: 2000,  // 2 seconds me auto-close
+        hideProgressBar: false,  // Progress bar dikhana
+        closeOnClick: true,  // Click karne par close ho
+        pauseOnHover: true,  // Hover karne par pause ho
+        draggable: true,  // Draggable banaye
+        progress: undefined,  // Progress bar ko undefined rakhein
+        icon: "🗑️",  // Custom icon for success
+      });
+      getProductData();
+    } catch (error) {
+      console.log('Error deleting product:', error);
+      toast.error('Product Deletion Failed. Please try again.', {
+        position: "top-right",  // Toast notification ki position
+        autoClose: 2000,  // 2 seconds me auto-close
+        hideProgressBar: false,  // Progress bar dikhana
+        closeOnClick: true,  // Click karne par close ho
+        pauseOnHover: true,  // Hover karne par pause ho
+        draggable: true,  // Draggable banaye
+        progress: undefined,  // Progress bar ko undefined rakhein
+        icon: "⚠️",  // Custom icon for error
+      });
+    } finally {
+      setLoading(false);  // Loading state ko reset karna
+    }
+  };
+  
+
 
   // Them ke liye ye function.
   const toggleMode = () => {
@@ -155,17 +223,20 @@ function MyState({ children }) {
   return (
     <MyContext.Provider
       value={{
-        mode: mode,
-        toggleMode: toggleMode,
-        cartItems: cartItems,
+        mode : mode,
+        toggleMode : toggleMode,
+        cartItems : cartItems,
         // updateCartItems: updateCartItems,
-        loading: loading, 
-        setLoading: setLoading,
+        loading : loading, 
+        setLoading : setLoading,
         addProduct : addProduct ,
         products: products,
-        setProducts: setProducts,
-        addProduct: addProduct,
+        setProducts : setProducts,
+        addProduct  : addProduct,
         product: product,
+        edithandle : edithandle  ,
+       updateProduct : updateProduct, 
+       deleteProduct : deleteProduct,
 
 
       }}

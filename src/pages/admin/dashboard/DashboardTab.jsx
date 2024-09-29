@@ -3,15 +3,15 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { MyContext } from '../../../context api/myContext';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { FaUser, FaCartPlus } from 'react-icons/fa';
-import { AiFillShopping, AiFillPlusCircle, AiFillDelete } from 'react-icons/ai';
+import { AiFillShopping, AiFillPlusCircle, AiFillDelete ,AiFillEdit} from 'react-icons/ai';
 import { useSpring, animated } from 'react-spring';
 import AddProduct from '../page-admin/AddProduct';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function DashboardTab() {
-  const { mode, product } = useContext(MyContext);
+  const { mode, product, edithandle, updateProduct, deleteProduct  } = useContext(MyContext);
   console.log(product);
-    
+  
   const [index, setIndex] = useState(0); // Track the current tab index
   const [isOpen, setIsOpen] = useState(false);
 
@@ -96,8 +96,18 @@ function DashboardTab() {
                     <td className="px-6 py-4">{category}</td>
                     <td className="px-6 py-4">{date}</td>
                     <td className="px-6 py-4 flex space-x-4">
-                      <AiFillPlusCircle className="text-green-600 cursor-pointer" size={28} />
-                      <AiFillDelete className="text-red-600 cursor-pointer hover:text-red-800 transition duration-150" size={28} />
+                      {/* <AiFillPlusCircle className="text-green-600 cursor-pointer" size={28} onClick={edithandle}/> */}
+                      {/* <Link to="/updateProduct"
+                      >
+                      <AiFillEdit className="text-blue-600 cursor-pointer" size={28} onClick={edithandle(item)} />
+                      </Link> */}
+
+                      <Link to="/updateProduct" onClick={() => edithandle(item)}>
+                     <AiFillEdit className="text-blue-600 cursor-pointer" size={28} />
+                      </Link>
+
+
+                      <AiFillDelete className="text-red-600 cursor-pointer hover:text-red-800 transition duration-150" size={28} onClick={()=>deleteProduct(item)}/>
                     </td>
                   </tr>
                 </tbody>
