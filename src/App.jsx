@@ -11,7 +11,6 @@ import Order from "./components/order/Order";
 import Cart from "./pages/cart/Cart";
 import Dashboard from "./pages/admin/dashboard/Dashboard";
 import NoPage from "./pages/nopage/NoPage";
-import MyState from "./context api/myState";
 import Signup from "./pages/registration/Signup";
 import Login from "./pages/registration/Login";
 import ProductInfo from "./pages/productInfo/ProductInfo";
@@ -20,7 +19,7 @@ import UpdateProduct from "./pages/admin/page-admin/UpdateProduct";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Allproducts from "./pages/allproducts/Allproducts";
-
+import MyState from "./context api/MyState";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
