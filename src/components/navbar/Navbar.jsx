@@ -6,10 +6,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 
+
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const { mode, toggleMode, cartItems, updateCartItems } =
-    useContext(MyContext); // Add cartItems and updateCartItems
+  const { mode, toggleMode, cartItems, updateCartItems } = useContext(MyContext); // Add cartItems and updateCartItems
+  const errorValue = useContext (MyContext); // Add cartItems and updateCartItems
+console.log(errorValue);
+  
 
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();

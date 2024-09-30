@@ -4,13 +4,15 @@ import Loader from "../components/loader/Loader";
 import { fireDB } from "../firebase/FirebaseConfig";
 import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc} from "firebase/firestore";
 import { toast } from 'react-toastify';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
-function MyState({ children }) {
+
+
+function MyState({ children}) {
   const [mode, setMode] = useState("light");
   const [loading, setLoading] = useState(false); //loading ke liye.
   const [cartItems, setCartItems] = useState([]); // Cart items ki length ke liye hai 0 jab tak product add nhi tab tak na show ho is ke liye ye state.
-  const navigate = useNavigate();
+
   // products ke liye ye state hai .
   const [products, setProducts] = useState({ //
     title: '', // initail state me title null same niche wala jo null hai .
@@ -31,9 +33,77 @@ function MyState({ children }) {
   
   })
 
-
+  const navigate = useNavigate();
   // AddProducts Function.
+  // const addProduct = async () => {
+  //   if (products.title.trim() === '' || products.price.trim() === '' || products.imageUrl.trim() === '' || products.category.trim() === '' || products.description.trim() === '') {
+  //     return toast.error('Please fill all fields', {
+  //       position: "top-right",
+  //       autoClose: 1500,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       icon: "🚨", // Modern touch: Adding an icon
+  //     });
+
+  //   }
+  //   const productRef = collection(fireDB, "products");
+   
+  //   setLoading(true)
+  //   try {
+  //     await addDoc(productRef, products) //products ko fireabse me add krne ke liye addDoc kamuse karte hai.
+  //     toast.success("Product added successfully!", {
+  //       position: "top-right",
+  //       autoClose: 1500,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       icon: "✅", // Modern success icon
+  //     });
+
+  //     if (success) { // Replace with your success condition
+  //       navigate('/dashboard'); // Navigate after adding product
+  //     }
+  //     getProductData()
+  //     // closeModal()
+  //     setLoading(false)
+  //   } catch (error) {
+  //     console.log("Error adding product:",error)
+  //     toast.error("Error adding product. Please try again.", {
+  //       position: "top-right",
+  //       autoClose: 1500,
+  //       hideProgressBar: false,
+  //       closeOnClick: true,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       icon: "⚠️", // Error icon
+  //     });
+  //     setLoading(false)
+  //   }
+   
+  //  //  form empty ke liye oject ko aise hi empty karte hai 
+  //   setProducts({
+  //     title: '',
+  //     price: '',
+  //     imageUrl: '',
+  //     category: '',
+  //     description: '',
+  //     time: Timestamp.now(),
+  //     date: new Date().toLocaleString("en-US", {
+  //       month: "short",
+  //       day: "2-digit",
+  //       year: "numeric",
+  //     })
+  //   });
+  // }
+
   const addProduct = async () => {
+    // Check if required fields are empty
     if (products.title.trim() === '' || products.price.trim() === '' || products.imageUrl.trim() === '' || products.category.trim() === '' || products.description.trim() === '') {
       return toast.error('Please fill all fields', {
         position: "top-right",
@@ -45,13 +115,14 @@ function MyState({ children }) {
         progress: undefined,
         icon: "🚨", // Modern touch: Adding an icon
       });
-
     }
     const productRef = collection(fireDB, "products");
-   
-    setLoading(true)
+    setLoading(true);
     try {
-      await addDoc(productRef, products) //products ko fireabse me add krne ke liye addDoc kamuse karte hai.
+      // Add product to Firebase
+      await addDoc(productRef, products);
+      
+      // Show success notification
       toast.success("Product added successfully!", {
         position: "top-right",
         autoClose: 1500,
@@ -62,14 +133,17 @@ function MyState({ children }) {
         progress: undefined,
         icon: "✅", // Modern success icon
       });
-      setTimeout(() => {
-        navigate("/dashboard");
-      }, 800);
-      getProductData()
-      // closeModal()
-      setLoading(false)
+  
+      // Navigate to dashboard after success
+      navigate('/dashboard');
+  
+      // Fetch updated product data
+      getProductData();
+      setLoading(false);
     } catch (error) {
-      console.log("Error adding product:",error)
+      console.log("Error adding product:", error);
+  
+      // Show error notification
       toast.error("Error adding product. Please try again.", {
         position: "top-right",
         autoClose: 1500,
@@ -80,10 +154,10 @@ function MyState({ children }) {
         progress: undefined,
         icon: "⚠️", // Error icon
       });
-      setLoading(false)
+      setLoading(false);
     }
-   
-   //  form empty ke liye oject ko aise hi empty karte hai 
+  
+    // Reset form after submission
     setProducts({
       title: '',
       price: '',
@@ -95,10 +169,10 @@ function MyState({ children }) {
         month: "short",
         day: "2-digit",
         year: "numeric",
-      })
+      }),
     });
-  }
-
+  };
+  
 
   // ****** get product
   const [product, setProduct] = useState([]);
@@ -237,6 +311,7 @@ function MyState({ children }) {
         edithandle : edithandle  ,
        updateProduct : updateProduct, 
        deleteProduct : deleteProduct,
+       navigate:  navigate,
 
 
       }}

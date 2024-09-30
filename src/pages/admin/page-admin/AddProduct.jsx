@@ -2,11 +2,18 @@ import React, { useContext } from "react";
 import { MyContext } from "../../../context api/myContext";
 
 function AddProduct() {
-  const { products, setProducts, addProduct } = useContext(MyContext);
+  const { products, setProducts, addProduct, navigate } = useContext(MyContext);
+
 
   function inputHandle(e) {
     setProducts({ ...products, [e.target.name]: e.target.value });
   }
+
+
+  // const produtsAdded = async () => {
+  //   await addProduct(); // Wait for addProduct to finish
+  //   navigate('/dashboard'); // Navigate after adding the product
+  // };
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -63,7 +70,7 @@ function AddProduct() {
 
           <div className="flex justify-center">
             <button
-              onClick={addProduct}
+              onClick={()=>{addProduct()}}
               className="bg-blue-500 w-full text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >
               Add Product

@@ -1,251 +1,107 @@
-// import React, { useEffect, useState } from "react";
-// import { MyContext } from "./myContext";
-// import Loader from "../components/loader/Loader";
-// import { fireDB } from "../firebase/FirebaseConfig";
-// import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc} from "firebase/firestore";
-// import { toast } from 'react-toastify';
-// import { useNavigate } from "react-router-dom";
-
-// function MyState({ children }) {
-//   const [mode, setMode] = useState("light");
-//   const [loading, setLoading] = useState(false); //loading ke liye.
-//   const [cartItems, setCartItems] = useState([]); // Cart items ki length ke liye hai 0 jab tak product add nhi tab tak na show ho is ke liye ye state.
-//   const navigate = useNavigate();
-//   // products ke liye ye state hai .
-//   const [products, setProducts] = useState({ //
-//     title: '', // initail state me title null same niche wala jo null hai .
-//     price: '',
-//     imageUrl: '',
-//     category: '',
-//     description: '',
-//     time: Timestamp.now(), //firebase se ara ye timesTamp now
-//     date: new Date().toLocaleString( // tolocalString method date ko short kar deta hai hai string me.new Date() mili gi is se hemsa.
-
-//       "en-US",
-//       {
-//         month: "short",
-//         day: "2-digit",
-//         year: "numeric",
-//       }
-//     )
+import "./App.css";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+  Route,
+  RouterProvider,
   
-//   })
+} from "react-router-dom";
+import Home from "./pages/home/Home";
+import Order from "./components/order/Order";
+import Cart from "./pages/cart/Cart";
+import Dashboard from "./pages/admin/dashboard/Dashboard";
+import NoPage from "./pages/nopage/NoPage";
+import Signup from "./pages/registration/Signup";
+import Login from "./pages/registration/Login";
+import ProductInfo from "./pages/productInfo/ProductInfo";
+import AddProduct from "./pages/admin/page-admin/AddProduct";
+import UpdateProduct from "./pages/admin/page-admin/UpdateProduct";
+import { ToastContainer} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Allproducts from "./pages/allproducts/Allproducts";
+
+import MyState from "./context api/MySatate";
+// import Coustom from "./context api/Coustom";
 
 
-//   // AddProducts Function.
-//   const addProduct = async () => {
-//     if (products.title.trim() === '' || products.price.trim() === '' || products.imageUrl.trim() === '' || products.category.trim() === '' || products.description.trim() === '') {
-//       return toast.error('Please fill all fields', {
-//         position: "top-right",
-//         autoClose: 1500,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         icon: "🚨", // Modern touch: Adding an icon
-//       });
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route>
+      <Route path="/" element={<Home />} />
+      <Route path="/order" element={ <Order />}/>
 
-//     }
-//     const productRef = collection(fireDB, "products");
-   
-//     setLoading(true)
-//     try {
-//       await addDoc(productRef, products) //products ko fireabse me add krne ke liye addDoc kamuse karte hai.
-//       toast.success("Product added successfully!", {
-//         position: "top-right",
-//         autoClose: 1500,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         icon: "✅", // Modern success icon
-//       });
-//       setTimeout(() => {
-//         navigate("/dashboard");
-//       }, 800);
-//       getProductData()
-//       // closeModal()
-//       setLoading(false)
-//     } catch (error) {
-//       console.log("Error adding product:",error)
-//       toast.error("Error adding product. Please try again.", {
-//         position: "top-right",
-//         autoClose: 1500,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         icon: "⚠️", // Error icon
-//       });
-//       setLoading(false)
-//     }
-   
-//    //  form empty ke liye oject ko aise hi empty karte hai 
-//     setProducts({
-//       title: '',
-//       price: '',
-//       imageUrl: '',
-//       category: '',
-//       description: '',
-//       time: Timestamp.now(),
-//       date: new Date().toLocaleString("en-US", {
-//         month: "short",
-//         day: "2-digit",
-//         year: "numeric",
-//       })
-//     });
-//   }
+      <Route path="/cart" element={<Cart />} />
+      <Route path="/allProducts" element={<Allproducts/>} />
+      {/* <Route path="/addproduct" element={<AddProduct/>} /> */}
 
+      <Route path="/dashboard" element={<ProtectedRoutesForAdmin>
+        <Dashboard />
+        {/* Only Admin ke liye */}
+      </ProtectedRoutesForAdmin>} />
 
-//   // ****** get product
-//   const [product, setProduct] = useState([]);
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/login" element={<Login />} />
+      {/* <Route path="/mystate" element={<MyState/>} /> */}
+      <Route path="/productInfo/:id" element={<ProductInfo />} />
 
-//    // Update product
-//    const getProductData = async () => {
-//     setLoading(true)
-//     try {
-//       const q = query(
-//         collection(fireDB, "products"),
-//         orderBy("time"),
-//         // limit(5)
-//       );
-//       const data = onSnapshot(q, (QuerySnapshot) => {
-//         let productsArray = [];
-//         QuerySnapshot.forEach((doc) => {
-//           productsArray.push({ ...doc.data(), id: doc.id });
-//         });
-//         setProduct(productsArray)
-//         setLoading(false);
-//       });
-//       return () => data;
-//     } catch (error) {
-//       console.log(error)
-//       setLoading(false)
-//     }
-//   }
+      <Route path="/addProduct/" element={<ProtectedRoutesForAdmin>
+        <AddProduct />
+       {/* Only Admin hi is me prodcuts use kar sakta hai users nhi admin matlab jis ne website create kiya */}
+      </ProtectedRoutesForAdmin>} />
 
-//   useEffect(() => {
-//     getProductData(); //useEffect ka use sid effect ke liye ie me is ka use hora hai autometic data fect ho is liye is me ye getProducts name ka function dale hai.
-//   }, []);
+      <Route path="/updateProduct/" element={<ProtectedRoutesForAdmin >
+        <UpdateProduct/>
+      </ProtectedRoutesForAdmin>} />
+      <Route path="/*" element={<NoPage />} />
+    </Route>
+  )
+);
+function App() {
+  return (
+    <>
+      {/* <Coustom> */}
+
+      <MyState>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </MyState>
+      {/* </Coustom> */}
+
+     
+      
+       
+    </>
+  );
+
+ 
+
+}
+
+export default App;
 
 
   
-//   // Edidt Function
-//   const edithandle = (item) => {
-//     setProducts(item)
-//   }
-//   // update product Function.
 
-//   const updateProduct = async () => {
-//     setLoading(true);
-//     try {
-//       await setDoc(doc(fireDB, "products", products.id), products);
-//       toast.success("Product Updated successfully");
-//       getProductData();
-//       setTimeout(() => {
-//         window.location.href = '/dashboard';
-//       }, 800);
-//     } catch (error) {
-//       console.log(error);
-//     } finally {
-//       setLoading(false); // Ensure loading state is reset
-//     }
-
-//     // Reset form
-//     setProducts({
-//       title: '',
-//       price: '',
-//       imageUrl: '',
-//       category: '',
-//       description: '',
-//       time: Timestamp.now(),
-//       date: new Date().toLocaleString("en-US", {
-//         month: "short",
-//         day: "2-digit",
-//         year: "numeric",
-//       })
-//     });
-//   }
-  
-
-//   // Delete Products Function
-//   const deleteProduct = async (item) => {
-//     setLoading(true);
-//     try {
-//       await deleteDoc(doc(fireDB, "products", item.id));
-//       toast.success('Product Deleted successfully!', {
-//         position: "top-right",  // Toast notification ki position
-//         autoClose: 2000,  // 2 seconds me auto-close
-//         hideProgressBar: false,  // Progress bar dikhana
-//         closeOnClick: true,  // Click karne par close ho
-//         pauseOnHover: true,  // Hover karne par pause ho
-//         draggable: true,  // Draggable banaye
-//         progress: undefined,  // Progress bar ko undefined rakhein
-//         icon: "🗑️",  // Custom icon for success
-//       });
-//       getProductData();
-//     } catch (error) {
-//       console.log('Error deleting product:', error);
-//       toast.error('Product Deletion Failed. Please try again.', {
-//         position: "top-right",  // Toast notification ki position
-//         autoClose: 2000,  // 2 seconds me auto-close
-//         hideProgressBar: false,  // Progress bar dikhana
-//         closeOnClick: true,  // Click karne par close ho
-//         pauseOnHover: true,  // Hover karne par pause ho
-//         draggable: true,  // Draggable banaye
-//         progress: undefined,  // Progress bar ko undefined rakhein
-//         icon: "⚠️",  // Custom icon for error
-//       });
-//     } finally {
-//       setLoading(false);  // Loading state ko reset karna
-//     }
-//   };
-  
+// Users ke liye.
+export function ProtectedRoutes({ children }) {
+  if (localStorage.getItem('user')) { // Use 'user' instead of 'users'
+    return children;
+  } else {
+    return <Navigate to='/login' />;
+  }
 
 
-//   // Them ke liye ye function.
-//   const toggleMode = () => {
-//     if (mode === "light") {
-//       setMode("dark");
-//       document.body.style.backgroundColor = "rgb(17, 24, 39)";
-//     } else {
-//       setMode("light");
-//       document.body.style.backgroundColor = "white";
-//     }
-//   };
+}
 
+//Admin ke liye hai ye function. 
+export function ProtectedRoutesForAdmin({ children }) {
+  const user = JSON.parse(localStorage.getItem('user'));
 
-//   // 
-
-//   return (
-//     <MyContext.Provider
-//       value={{
-//         mode : mode,
-//         toggleMode : toggleMode,
-//         cartItems : cartItems,
-//         // updateCartItems: updateCartItems,
-//         loading : loading, 
-//         setLoading : setLoading,
-//         addProduct : addProduct ,
-//         products: products,
-//         setProducts : setProducts,
-//         addProduct  : addProduct,
-//         product: product,
-//         edithandle : edithandle  ,
-//        updateProduct : updateProduct, 
-//        deleteProduct : deleteProduct,
-
-
-//       }}
-//     >
-    
-//       {/* <h1>My State</h1> */}
-//       {children}
-//     </MyContext.Provider>
-//   );
-// }
-
-// export default MyState;
+  // Allow access only for admin users
+  if (user && user.role === "admin") {
+    return children; // Render the protected component for admin
+  } else {
+    return <Navigate to='/login' />; // Redirect to login if not admin
+  }
+}
