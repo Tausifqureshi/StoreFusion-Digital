@@ -7,11 +7,10 @@ import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 
 function MyState({ children }) {
-
   const [mode, setMode] = useState("light");
   const [loading, setLoading] = useState(false); //loading ke liye.
   const [cartItems, setCartItems] = useState([]); // Cart items ki length ke liye hai 0 jab tak product add nhi tab tak na show ho is ke liye ye state.
-
+  const navigate = useNavigate();
   // products ke liye ye state hai .
   const [products, setProducts] = useState({ //
     title: '', // initail state me title null same niche wala jo null hai .
@@ -64,7 +63,7 @@ function MyState({ children }) {
         icon: "✅", // Modern success icon
       });
       setTimeout(() => {
-        window.location.href = "/dashboard";
+        navigate("/dashboard");
       }, 800);
       getProductData()
       // closeModal()

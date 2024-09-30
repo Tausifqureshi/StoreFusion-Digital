@@ -19,7 +19,12 @@ import UpdateProduct from "./pages/admin/page-admin/UpdateProduct";
 import { ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Allproducts from "./pages/allproducts/Allproducts";
-import MyState from "./context api/MyState";
+// import MyState from "./context api/myState";
+// import MyState from "./context api/MyState";
+// import MySatate from "./context api/MySatate";
+import MyState from "./context api/MySatate";
+
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
