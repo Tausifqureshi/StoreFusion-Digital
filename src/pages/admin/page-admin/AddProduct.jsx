@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { MyContext } from "../../../context api/myContext";
 
 function AddProduct() {
-  const { products, setProducts, addProduct, navigate } = useContext(MyContext);
+  const { products, setProducts, addProduct} = useContext(MyContext);
 
 
   function inputHandle(e) {

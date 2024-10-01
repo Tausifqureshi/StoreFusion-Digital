@@ -34,73 +34,6 @@ function MyState({ children}) {
   })
 
   const navigate = useNavigate();
-  // AddProducts Function.
-  // const addProduct = async () => {
-  //   if (products.title.trim() === '' || products.price.trim() === '' || products.imageUrl.trim() === '' || products.category.trim() === '' || products.description.trim() === '') {
-  //     return toast.error('Please fill all fields', {
-  //       position: "top-right",
-  //       autoClose: 1500,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       icon: "🚨", // Modern touch: Adding an icon
-  //     });
-
-  //   }
-  //   const productRef = collection(fireDB, "products");
-   
-  //   setLoading(true)
-  //   try {
-  //     await addDoc(productRef, products) //products ko fireabse me add krne ke liye addDoc kamuse karte hai.
-  //     toast.success("Product added successfully!", {
-  //       position: "top-right",
-  //       autoClose: 1500,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       icon: "✅", // Modern success icon
-  //     });
-
-  //     if (success) { // Replace with your success condition
-  //       navigate('/dashboard'); // Navigate after adding product
-  //     }
-  //     getProductData()
-  //     // closeModal()
-  //     setLoading(false)
-  //   } catch (error) {
-  //     console.log("Error adding product:",error)
-  //     toast.error("Error adding product. Please try again.", {
-  //       position: "top-right",
-  //       autoClose: 1500,
-  //       hideProgressBar: false,
-  //       closeOnClick: true,
-  //       pauseOnHover: true,
-  //       draggable: true,
-  //       progress: undefined,
-  //       icon: "⚠️", // Error icon
-  //     });
-  //     setLoading(false)
-  //   }
-   
-  //  //  form empty ke liye oject ko aise hi empty karte hai 
-  //   setProducts({
-  //     title: '',
-  //     price: '',
-  //     imageUrl: '',
-  //     category: '',
-  //     description: '',
-  //     time: Timestamp.now(),
-  //     date: new Date().toLocaleString("en-US", {
-  //       month: "short",
-  //       day: "2-digit",
-  //       year: "numeric",
-  //     })
-  //   });
-  // }
 
   const addProduct = async () => {
     // Check if required fields are empty
@@ -177,7 +110,7 @@ function MyState({ children}) {
   // ****** get product
   const [product, setProduct] = useState([]);
 
-   // Update product
+   // getProductData.
    const getProductData = async () => {
     setLoading(true)
     try {
@@ -212,7 +145,6 @@ function MyState({ children}) {
     setProducts(item)
   }
   // update product Function.
-
   const updateProduct = async () => {
     setLoading(true);
     try {
@@ -220,7 +152,8 @@ function MyState({ children}) {
       toast.success("Product Updated successfully");
       getProductData();
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        // window.location.href = '';
+        navigate('/dashboard')
       }, 800);
     } catch (error) {
       console.log(error);
@@ -311,7 +244,8 @@ function MyState({ children}) {
         edithandle : edithandle  ,
        updateProduct : updateProduct, 
        deleteProduct : deleteProduct,
-       navigate:  navigate,
+      
+
 
 
       }}
