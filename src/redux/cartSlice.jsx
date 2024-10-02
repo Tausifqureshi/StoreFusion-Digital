@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 // Initial state for the cart (empty array initially)
-const initialState = [];
+const initialState = JSON.parse(localStorage.getItem('cart')) ?? [];
 
 // Create a slice for cart with actions to add and delete items
 const cartSlice = createSlice({
@@ -21,6 +21,6 @@ const cartSlice = createSlice({
 
 // Export the actions to be used in components
 export const { addToCart, deleteFromCart } = cartSlice.actions;
-
+   
 // Export the reducer to be used in the Redux store
 export default cartSlice.reducer;

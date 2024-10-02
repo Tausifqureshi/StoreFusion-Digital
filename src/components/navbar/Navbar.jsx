@@ -5,11 +5,12 @@ import { RxCross2 } from "react-icons/rx";
 import { Dialog, Transition } from "@headlessui/react";
 import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
+import { useSelector } from "react-redux";
 
 
 function Navbar() {
   const [open, setOpen] = useState(false);
-  const { mode, toggleMode, cartItems, updateCartItems } = useContext(MyContext); // Add cartItems and updateCartItems
+  const { mode, toggleMode, cartItem, updateCartItems } = useContext(MyContext); // Add cartItems and updateCartItems
   const errorValue = useContext (MyContext); // Add cartItems and updateCartItems
 console.log(errorValue);
   
@@ -21,6 +22,9 @@ console.log(errorValue);
     localStorage.removeItem("user"); // Remove specific user item
     navigate("/login"); // Redirect to login page after logout
   }
+
+  const cartItems = useSelector((state) => state.cart)
+
 
   return (
     <div className="bg-white sticky top-0 z-50  ">
@@ -129,8 +133,7 @@ console.log(errorValue);
                     )}
                   </div>
 
-                  
-                  <div className="flow-root">
+                  {user ? <div className="flow-root">
                     <Link to="/">
                       <img
                         className="w-10 h-10 rounded-full"
@@ -138,29 +141,33 @@ console.log(errorValue);
                         alt="Profile Picture"
                       />
                     </Link>
-                  </div>
+                  </div> : ""}
+                  
 
 
                 </div>
 
-               {/* {user ? : ""} */}
-                <div className="border-t border-gray-200 px-4 py-6">
-                  <div className="flex items-center">
-                    <Link to="/">
-                      <img
-                        src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
-                        alt="India Flag"
-                        className="block h-auto w-5"
-                      />
-                    </Link>
-                    <span
-                      className="ml-3 block text-base font-medium"
-                      style={{ color: mode === "dark" ? "white" : "black" }}
-                    >
-                      INDIA
-                    </span>
-                  </div>
+               {user ?   
+               <div className="border-t border-gray-200 px-4 py-6">
+
+                <div className="flex items-center">
+                  <Link to="/">
+                    <img
+                      src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
+                      alt="India Flag"
+                      className="block h-auto w-5"
+                    />
+                  </Link>
+                  <span
+                    className="ml-3 block text-base font-medium"
+                    style={{ color: mode === "dark" ? "white" : "black" }}
+                  >
+                    INDIA
+                  </span>
                 </div>
+               </div>: ""}
+              
+
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -237,6 +244,7 @@ console.log(errorValue);
             </div>
 
             <div className="ml-auto flex items-center space-x-6">
+
               {/* Pages */}
               <div className="hidden lg:flex lg:space-x-6">
                 <Link
@@ -280,7 +288,7 @@ console.log(errorValue);
   >
     Admin
   </Link>
-) : null}
+                 ) : null}
 
 
                 {/* SignUp-and Logout */}
@@ -371,11 +379,11 @@ console.log(errorValue);
                 </svg>
 
                 {/* Cart Item Count */}
-                {cartItems.length > 0 && (
+                {/* {cartItem.length > 0 && ( */}
                   <span className="ml-2 text-sm font-medium flex items-center justify-center w-6 h-6 bg-red-600 text-white rounded-full absolute -top-1 -right-2">
                     {cartItems.length}
                   </span>
-                )}
+                {/* )} */}
                 <span className="sr-only">items in cart, view bag</span>
               </Link>
             </div>
