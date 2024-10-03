@@ -7,13 +7,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 import { useSelector } from "react-redux";
 
-
 function Navbar() {
   const [open, setOpen] = useState(false);
   const { mode, toggleMode, cartItem, updateCartItems } = useContext(MyContext); // Add cartItems and updateCartItems
-  const errorValue = useContext (MyContext); // Add cartItems and updateCartItems
-// console.log(errorValue);
-  
+  const errorValue = useContext(MyContext); // Add cartItems and updateCartItems
+  // console.log(errorValue);
 
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
@@ -23,12 +21,13 @@ function Navbar() {
     navigate("/login"); // Redirect to login page after logout
   }
 
-  const cartItems = useSelector((state) => state.cart)
-
+  const cartItems = useSelector((state) => state.cart);
+  const totalQuantity = cartItems.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.quantity; // quanty bade gi utne hi itme show hoge. agr only products dhekna hai tu cart.length kar sakta hai but amzone me quantity jaisa hi use hai.
+  }, 0);
 
   return (
     <div className="bg-white sticky top-0 z-50  ">
-
       {/* Mobaile Ke Liye Desgin */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -85,19 +84,23 @@ function Navbar() {
                   </Link>
 
                   {/* Order-page */}
-                  {user?  <div className="flow-root">
-                    <Link
-                      to="/order"
-                      className="block p-2 font-medium"
-                      style={{ color: mode === "dark" ? "white" : "black" }}
-                    >
-                      Order
-                    </Link>
-                  </div>: ""}
-                 
+                  {user ? (
+                    <div className="flow-root">
+                      <Link
+                        to="/order"
+                        className="block p-2 font-medium"
+                        style={{ color: mode === "dark" ? "white" : "black" }}
+                      >
+                        Order
+                      </Link>
+                    </div>
+                  ) : (
+                    ""
+                  )}
 
                   {/* Admin-Page */}
-                   {user && user.role === "admin"?   <div className="flow-root">
+                  {user && user.role === "admin" ? (
+                    <div className="flow-root">
                       <Link
                         to="/dashboard"
                         className="block p-2 font-medium"
@@ -106,11 +109,9 @@ function Navbar() {
                         Admin
                       </Link>
                     </div>
-                  : ""}
-
-                  
-                  
-                 
+                  ) : (
+                    ""
+                  )}
 
                   {/* Logout And Signin */}
                   <div className="flex justify-start space-x-4">
@@ -133,47 +134,47 @@ function Navbar() {
                     )}
                   </div>
 
-                  {user ? <div className="flow-root">
-                    <Link to="/">
-                      <img
-                        className="w-10 h-10 rounded-full"
-                        src="https://i.pravatar.cc/300"
-                        alt="Profile Picture"
-                      />
-                    </Link>
-                  </div> : ""}
-                  
-
-
+                  {user ? (
+                    <div className="flow-root">
+                      <Link to="/">
+                        <img
+                          className="w-10 h-10 rounded-full"
+                          src="https://i.pravatar.cc/300"
+                          alt="Profile Picture"
+                        />
+                      </Link>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                 </div>
 
-               {user ?   
-               <div className="border-t border-gray-200 px-4 py-6">
-
-                <div className="flex items-center">
-                  <Link to="/">
-                    <img
-                      src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
-                      alt="India Flag"
-                      className="block h-auto w-5"
-                    />
-                  </Link>
-                  <span
-                    className="ml-3 block text-base font-medium"
-                    style={{ color: mode === "dark" ? "white" : "black" }}
-                  >
-                    INDIA
-                  </span>
-                </div>
-               </div>: ""}
-              
-
+                {user ? (
+                  <div className="border-t border-gray-200 px-4 py-6">
+                    <div className="flex items-center">
+                      <Link to="/">
+                        <img
+                          src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
+                          alt="India Flag"
+                          className="block h-auto w-5"
+                        />
+                      </Link>
+                      <span
+                        className="ml-3 block text-base font-medium"
+                        style={{ color: mode === "dark" ? "white" : "black" }}
+                      >
+                        INDIA
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>
         </Dialog>
       </Transition.Root>
-
 
       {/* desktop  this create Desgin*/}
       <header className="relative bg-white">
@@ -244,7 +245,6 @@ function Navbar() {
             </div>
 
             <div className="ml-auto flex items-center space-x-6">
-
               {/* Pages */}
               <div className="hidden lg:flex lg:space-x-6">
                 <Link
@@ -254,18 +254,22 @@ function Navbar() {
                 >
                   All Products
                 </Link>
-                 
-                 {/* Products */}
-                {user ?  <Link
-                  to="/order"
-                  className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                >
-                  Order
-                </Link> : ""}
 
-                {/*Admin  */}
-                {/* {user ? (
+                {/* Products */}
+                {user ? (
+                  <Link
+                    to="/order"
+                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
+                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                  >
+                    Order
+                  </Link>
+                ) : (
+                  ""
+                )}
+
+
+                {user && user.role === "admin" ? (
                   <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
@@ -273,23 +277,7 @@ function Navbar() {
                   >
                     Admin
                   </Link>
-                ) : (
-                  ""
-                )} */}
-
-
-
-
-                {user && user.role === "admin" ? ( 
-  <Link
-    to="/dashboard"
-    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-  >
-    Admin
-  </Link>
-                 ) : null}
-
+                ) : null}
 
                 {/* SignUp-and Logout */}
                 {user ? (
@@ -313,37 +301,40 @@ function Navbar() {
                 )}
               </div>
 
-                 {/* Flags */}
-                 {user? <div className="hidden lg:flex items-center space-x-4">
-                <a
-                  href="#"
-                  className="flex items-center text-gray-700 hover:text-gray-900 transition-all duration-300 transform hover:scale-105"
-                >
-                  <img
-                    src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
-                    alt="Indian Flag"
-                    className="block h-auto w-6"
-                  />
-                  <span
-                    className="ml-3 text-sm font-medium"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+              {/* Flags */}
+              {user ? (
+                <div className="hidden lg:flex items-center space-x-4">
+                  <a
+                    href="#"
+                    className="flex items-center text-gray-700 hover:text-gray-900 transition-all duration-300 transform hover:scale-105"
                   >
-                    INDIA
-                  </span>
-                </a>
+                    <img
+                      src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
+                      alt="Indian Flag"
+                      className="block h-auto w-6"
+                    />
+                    <span
+                      className="ml-3 text-sm font-medium"
+                      style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                    >
+                      INDIA
+                    </span>
+                  </a>
 
-                <a
-                  href="#"
-                  className="flex items-center transition-all duration-300 transform hover:scale-105"
-                >
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src="https://i.pravatar.cc/300"
-                    alt="Profile Picture"
-                  />
-                </a>
-              </div>: ""}
-              
+                  <a
+                    href="#"
+                    className="flex items-center transition-all duration-300 transform hover:scale-105"
+                  >
+                    <img
+                      className="w-10 h-10 rounded-full"
+                      src="https://i.pravatar.cc/300"
+                      alt="Profile Picture"
+                    />
+                  </a>
+                </div>
+              ) : (
+                ""
+              )}
 
               {/* Search */}
               <button
@@ -379,19 +370,22 @@ function Navbar() {
                 </svg>
 
                 {/* Cart Item Count */}
-                {/* {cartItem.length > 0 && ( */}
+                {/* <span className="ml-2 text-sm font-medium flex items-center justify-center w-6 h-6 bg-red-600 text-white rounded-full absolute -top-1 -right-2">
+                    {totalQuantity}
+                  </span> */}
+
+                {totalQuantity > 0 && ( //product koi add nhi tab tak ye zero show nho hoga is logi se.
                   <span className="ml-2 text-sm font-medium flex items-center justify-center w-6 h-6 bg-red-600 text-white rounded-full absolute -top-1 -right-2">
-                    {cartItems.length}
+                    {totalQuantity}
                   </span>
-                {/* )} */}
+                )}
+
                 <span className="sr-only">items in cart, view bag</span>
               </Link>
             </div>
           </div>
         </nav>
       </header>
-
-      
     </div>
   );
 }

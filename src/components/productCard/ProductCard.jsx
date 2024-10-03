@@ -81,8 +81,8 @@ return (
       {product.map((item, index)=>{
         const { title,price,imageUrl, category,date, description} = item;
         const isExpanded = showMoreIndex[index]; // Check if this product is expanded
-      return <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg" key={index}>
-    <div className={`border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${mode === 'dark' ? 'bg-gray-800' : 'border-gray-200'} border-opacity-60 rounded-2xl overflow-hidden`}>
+        return <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg" key={index}>
+       <div className={`border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${mode === 'dark' ? 'bg-gray-800' : 'border-gray-200'} border-opacity-60 rounded-2xl overflow-hidden`}>
         <div className="flex justify-center cursor-pointer">
         <img className="rounded-2xl w-full h-56 p-2 hover:scale-110 transition-transform duration-300 ease-in-out" src={imageUrl} alt="blog" />
         </div>
