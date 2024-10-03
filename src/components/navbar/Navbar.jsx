@@ -12,7 +12,7 @@ function Navbar() {
   const [open, setOpen] = useState(false);
   const { mode, toggleMode, cartItem, updateCartItems } = useContext(MyContext); // Add cartItems and updateCartItems
   const errorValue = useContext (MyContext); // Add cartItems and updateCartItems
-console.log(errorValue);
+// console.log(errorValue);
   
 
   const user = JSON.parse(localStorage.getItem("user"));
