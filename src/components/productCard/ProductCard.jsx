@@ -76,7 +76,7 @@ return (
   <div className="h-1 w-20 bg-blue-800 rounded transition-all duration-300 ease-in-out hover:bg-blue-600"></div>
 </div>
 
-
+   
      <div className="flex flex-wrap -m-4">
       {product.map((item, index)=>{
         const { title,price,imageUrl, category,date, description} = item;
