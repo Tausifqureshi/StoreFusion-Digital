@@ -1,141 +1,17 @@
-// import React, { useState } from "react";
-// import { fireDB } from "../../firebase/FirebaseConfig";
-// import { addDoc, collection } from "firebase/firestore";
-// import { v4 as uuidv4 } from 'uuid';
-// import Cart from "./Cart";
-
-// function Razorpay() {
-//   const [name, setName] = useState("");
-//   const [address, setAddress] = useState("");
-//   const [pincode, setPincode] = useState("");
-//   const [phoneNumber, setPhoneNumber] = useState("");
-
-//   const buyNow = async () => {
-//     // validation
-//     if (name === "" || address == "" || pincode == "" || phoneNumber == "") {
-//       return toast.error("All fields are required", {
-//         position: "top-center",
-//         autoClose: 1000,
-//         hideProgressBar: false,
-//         closeOnClick: true,
-//         pauseOnHover: true,
-//         draggable: true,
-//         progress: undefined,
-//         theme: "colored",
-//       });
-//     }
-//     const addressInfo = {
-//       name,
-//       address,
-//       pincode,
-//       phoneNumber,
-//       date: new Date().toLocaleString("en-US", {
-//         month: "short",
-//         day: "2-digit",
-//         year: "numeric",
-//       }),
-//     };
-//     console.log(addressInfo);
-
-//     var options = {
-//       key: "",
-//       key_secret: "",
-//       amount: parseInt(grandTotal * 100),
-//       currency: "INR",
-//       order_receipt: "order_rcptid_" + name,
-//       name: "StoreFusion",
-//       description: "for testing purpose",
-//       handler: function (response) {
-//         // console.log(response)
-//         toast.success("Payment Successful");
-
-//         const paymentId = response.razorpay_payment_id;
-//         // store in firebase
-//         const orderInfo = {
-//           cartItems,
-//           addressInfo,
-//           date: new Date().toLocaleString("en-US", {
-//             month: "short",
-//             day: "2-digit",
-//             year: "numeric",
-//           }),
-//           email: JSON.parse(localStorage.getItem("user")).user.email,
-//           userid: JSON.parse(localStorage.getItem("user")).user.uid,
-//           paymentId,
-//         };
-
-//         try {
-//           const result = await addDoc(collection(fireDB, "orders"), orderInfo);
-//         } catch (error) {
-//           console.log(error);
-//         }
-//       },
-
-//       theme: {
-//         color: "#3399cc",
-//       },
-//     };
-//     var pay = new window.Razorpay(options);
-//     pay.open();
-//     console.log(pay);
-//   };
-
-//   return <>
-//   <Cart />
-   
-//   </>;
-// }
-
-// export default Razorpay;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState } from "react";
-import { fireDB } from "../../firebase/FirebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
+import Modal from "../../components/modal/Modal";
 import Cart from "./Cart";
-import { toast } from "react-toastify"; // Ensure you have this imported
-
-function Razorpay({ grandTotal, cartItems }) {
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+function Razorpay() {
+//     const [name, setName] = useState("")
+//   const [address, setAddress] = useState("");
+//   const [pincode, setPincode] = useState("")
+//   const [phoneNumber, setPhoneNumber] = useState("")
+const [formData, setFormData] = useState({fullName: '', address: '', pincode: '',  phoneNumber: ''})
+console.log(formData);
 
   const buyNow = async () => {
-    // validation
-    if (name === "" || address === "" || pincode === "" || phoneNumber === "") {
+    // validation 
+    if (formData.fullName === "" || formData.address == "" || formData.pincode == "" || formData.phoneNumber == "") {
       return toast.error("All fields are required", {
         position: "top-center",
         autoClose: 1000,
@@ -145,82 +21,77 @@ function Razorpay({ grandTotal, cartItems }) {
         draggable: true,
         progress: undefined,
         theme: "colored",
-      });
+      })
+     
     }
-
+   
     const addressInfo = {
       name,
       address,
       pincode,
       phoneNumber,
-      date: new Date().toLocaleString("en-US", {
-        month: "short",
-        day: "2-digit",
-        year: "numeric",
-      }),
-    };
-    console.log(addressInfo);
+      date: new Date().toLocaleString(
+        "en-US",
+        {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }
+      )
+    }
+    console.log(addressInfo)
 
     var options = {
-      key: "", // Razorpay API Key
+      key: "",
       key_secret: "",
       amount: parseInt(grandTotal * 100),
       currency: "INR",
-      order_receipt: "order_rcptid_" + uuidv4(),
-      name: "StoreFusion",
+      order_receipt: 'order_rcptid_' + name,
+      name: "E-Bharat",
       description: "for testing purpose",
-      handler: async function (response) {
-        toast.success("Payment Successful");
+      handler: function (response) {
 
-        const paymentId = response.razorpay_payment_id;
+        // console.log(response)
+        toast.success('Payment Successful')
 
-        // store in firebase
+        const paymentId = response.razorpay_payment_id
+        // store in firebase 
         const orderInfo = {
           cartItems,
           addressInfo,
-          date: new Date().toLocaleString("en-US", {
-            month: "short",
-            day: "2-digit",
-            year: "numeric",
-          }),
+          date: new Date().toLocaleString(
+            "en-US",
+            {
+              month: "short",
+              day: "2-digit",
+              year: "numeric",
+            }
+          ),
           email: JSON.parse(localStorage.getItem("user")).user.email,
           userid: JSON.parse(localStorage.getItem("user")).user.uid,
-          paymentId,
-        };
+          paymentId
+        }
 
         try {
-          await addDoc(collection(fireDB, "orders"), orderInfo);
+          const result = addDoc(collection(fireDB, "orders"), orderInfo)
         } catch (error) {
-          console.log("Error saving order:", error);
-          toast.error("Failed to save order. Try again.");
+          console.log(error)
         }
       },
 
       theme: {
-        color: "#3399cc",
-      },
+        color: "#3399cc"
+      }
     };
-
     var pay = new window.Razorpay(options);
     pay.open();
-  };
+    // console.log(pay)
+  }
+  return <div>
+ 
+  <Modal formData={formData} setFormData={setFormData}/>
 
-  return (
-    <>
-     <Cart 
-  name={name} 
-  setName={setName} 
-  address={address} 
-  setAddress={setAddress} 
-  pincode={pincode} 
-  setPincode={setPincode} 
-  phoneNumber={phoneNumber} 
-  setPhoneNumber={setPhoneNumber}
-/>
-
-      
-    </>
-  );
+  </div>;
 }
 
 export default Razorpay;

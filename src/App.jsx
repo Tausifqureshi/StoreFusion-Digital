@@ -15,6 +15,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Allproducts from "./pages/allproducts/Allproducts";
 import MyState from "./context api/MySatate";
+// import Razorpay from "./context api/Coustom";
+// import Razorpay from "./pages/cart/Razorpay";
 
 function App() {
   return (
@@ -33,6 +35,7 @@ function App() {
           <Route path="/updateProduct/" element={<ProtectedRoutesForAdmin><UpdateProduct /></ProtectedRoutesForAdmin>} />
           <Route path="/*" element={<NoPage />} />
         </Routes>
+       {/* <Razorpay /> */}
         <ToastContainer />
       </MyState>
     </BrowserRouter>

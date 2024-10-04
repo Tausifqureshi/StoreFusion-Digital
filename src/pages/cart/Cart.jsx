@@ -9,7 +9,9 @@ import { toast } from 'react-toastify';
 import { Link } from "react-router-dom"; // Import Link for navigation
 import Razorpay from "./Razorpay";
 
-function Cart({ name, setName, address, setAddress, pincode, setPincode, phoneNumber, setPhoneNumber}) {
+// function Cart({ name, setName, address, setAddress, pincode, setPincode, phoneNumber, setPhoneNumber}) {
+function Cart() {
+  // console.log(formData);
   const { mode } = useContext(MyContext);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
@@ -158,8 +160,16 @@ return (
                 Total items: {cartItems.reduce((total, item) => total + item.quantity, 0)}
               </span>
             </p>
-            <Modal  name={name} setName={setName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}/>
+           
+            <Modal 
+            //  name={name} setName={setName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}
+            //  formData= { formData}  setFormData = {setFormData}
+
+             />
+             
+         <Razorpay />
           </div>
+      
         </div>
       ) : (
         <div className="flex items-center justify-center h-screen">
