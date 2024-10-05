@@ -2,7 +2,7 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 
-function Modal({formData, setFormData}) {
+function Modal({formData, setFormData,buyNow}) {
   const{ fullName, address, pincode, phoneNumber } = formData
   // console.log("input feild", formData)
   let [isOpen, setIsOpen] = useState(false);
@@ -11,15 +11,7 @@ function Modal({formData, setFormData}) {
    function toggleModal() {
   setIsOpen(!isOpen);
      }
-  // // Modal open and close
-  // function closeModal() {
-  //   setIsOpen(false);
-  // }
 
-  // function openModal() {
-  //   setIsOpen(true);
-  // }
-  
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log(e.target.value)
