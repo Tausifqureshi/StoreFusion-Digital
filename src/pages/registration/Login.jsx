@@ -97,11 +97,11 @@ function Login() {
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
       <div className='bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative'>
-        {loading && (
+        {/* {loading && (
           <div className='fixed inset-0 flex items-center justify-center bg-gray-50 opacity-75 z-50'>
             <Loader />
           </div>
-        )}
+        )} */}
         <h1 className='text-center text-gray-800 text-2xl mb-4 font-extrabold'>Log In</h1>
         <form onSubmit={login}>
           <div className='mb-4'>

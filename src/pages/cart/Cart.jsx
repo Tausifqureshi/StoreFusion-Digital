@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteFromCart, incrementQuantity, decrementQuantity } from "../../redux/cartSlice";
 import { toast } from 'react-toastify';
 import { Link } from "react-router-dom"; // Import Link for navigation
-import Razorpay from "../razorpay/Razorpay";
+// import Razorpay from "../razorpay/Razorpay";
 
 
 function Cart() {
@@ -162,12 +162,12 @@ return (
               </span>
             </p>
            
-            {/* <Modal 
-             fullName={fullName} setFullName={setFullName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}
+            <Modal 
+            //  fullName={fullName} setFullName={setFullName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}
             
 
-             /> */}
-             <Razorpay />
+             />
+             {/* <Razorpay /> */}
           </div>
       
         </div>
