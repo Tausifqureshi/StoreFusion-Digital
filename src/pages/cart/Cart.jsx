@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Layout from "../../components/layout/Layout";
 import { MyContext } from "../../context api/myContext";
 import Modal from "../../components/modal/Modal";
@@ -7,14 +7,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteFromCart, incrementQuantity, decrementQuantity } from "../../redux/cartSlice";
 import { toast } from 'react-toastify';
 import { Link } from "react-router-dom"; // Import Link for navigation
-import Razorpay from "./Razorpay";
+import Razorpay from "../razorpay/Razorpay";
 
-// function Cart({ name, setName, address, setAddress, pincode, setPincode, phoneNumber, setPhoneNumber}) {
+
 function Cart() {
-  // console.log(formData);
+  // console.log(fullName)
   const { mode } = useContext(MyContext);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
+
 
   // Delete from cart 
   const deleteCart = (products) => {
@@ -161,13 +162,12 @@ return (
               </span>
             </p>
            
-            <Modal 
-            //  name={name} setName={setName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}
-            //  formData= { formData}  setFormData = {setFormData}
+            {/* <Modal 
+             fullName={fullName} setFullName={setFullName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber}
+            
 
-             />
-             
-         <Razorpay />
+             /> */}
+             <Razorpay />
           </div>
       
         </div>
