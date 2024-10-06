@@ -128,7 +128,7 @@
 
 
 
-// service cloud.firestore {
+// // service cloud.firestore {
 //   match /databases/{database}/documents {
     
 //     // Rules for Users Collection
@@ -152,6 +152,19 @@
 //   }
 // }
 
+
+
+
+
+// service cloud.firestore {
+//     match /databases/{database}/documents {
+//       // Allow read/write for all users (for testing purposes only)
+//       match /{document=**} {
+//         allow read, write: if true; // Be careful with this in production
+//       }
+//     }
+//   }
+  
 
 
 

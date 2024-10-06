@@ -12,6 +12,7 @@
   "dependencies": {
     "@headlessui/react": "^2.1.8",
     "@reduxjs/toolkit": "^2.2.7",
+    "crypto-js": "^4.2.0",
     "firebase": "^10.13.2",
     "firebase-admin": "^12.5.0",
     "react": "^18.3.1",
