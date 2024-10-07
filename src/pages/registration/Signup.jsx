@@ -1,3 +1,30 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MyContext } from '../../context api/myContext';
@@ -45,26 +72,24 @@ function Signup() {
     return Object.keys(errors).length === 0;
   };
 
-
-
   const validAdminEmails = [
     "admin@example.com", 
     "superuser@example.com", 
     "admin@tausifquraishigamil.com" // Allowed admin email
   ];
-  
+
   const signup = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     if (validateForm()) {
       try {
         const { email, password, fullName } = formData;
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-  
+
         // Check if the email is an admin email
         const role = validAdminEmails.includes(email) ? "admin" : "user"; // Assign role based on email
-  
+
         const user = { 
           name: fullName, 
           uid: userCredential.user.uid, 
@@ -72,10 +97,13 @@ function Signup() {
           role: role, // Set role based on email
           time: Timestamp.now() 
         };
-  
+
         const userRef = collection(fireDB, "users");
         await addDoc(userRef, user);
-  
+
+        // Store user data in localStorage
+        localStorage.setItem("user", JSON.stringify(user));
+
         toast.success("Signup Successful!", { autoClose: 1500 });
         setFormData({ fullName: '', email: '', password: '' });
         setTermsAccepted(false);
@@ -95,12 +123,7 @@ function Signup() {
       setLoading(false);
     }
   };
-  
 
-
-
-
-  
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
       <div className='bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative'>

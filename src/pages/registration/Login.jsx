@@ -1,4 +1,34 @@
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
@@ -53,26 +83,23 @@ function Login() {
           return;
         }
 
-           // User data ko fetch karen
-      // const userDoc = querySnapshot.docs[0];
-      // const userData = userDoc.data();
+        // User data ko fetch karen
+        const userDoc = querySnapshot.docs[0];
+        const userData = userDoc.data();
+        console.log("User Data fetched:", userData); // Log the fetched user data
+        
+        // Check if role is defined
+        console.log("User Role:", userData.role); // Should not be undefined
+        
+        // Save to local storage
+        localStorage.setItem('user', JSON.stringify({
+          email: userData.email,
+          uid: userData.uid, // Store user UID
+          role: userData.role // Store user role
+        }));
 
-      const userDoc = querySnapshot.docs[0];
-      const userData = userDoc.data();
-      console.log("User Data fetched:", userData); // Log the fetched user data
-      
-      // Check if role is defined
-      console.log("User Role:", userData.role); // Should not be undefined
-      
-      // Save to local storage
-      localStorage.setItem('user', JSON.stringify({ email: userData.email, role: userData.role }));
-      
-
-           // Agar user mila, toh login karne ki koshish karte hain
-            // Server-side validation for email existence
+        // Agar user mila, toh login karne ki koshish karte hain
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
-      
-
         toast.success("Login Successful!", { autoClose: 1500 });
         navigate('/'); // Redirect to home page
 
@@ -91,8 +118,6 @@ function Login() {
       setLoading(false);
     }
   };
-
-
 
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
