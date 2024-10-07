@@ -106,10 +106,9 @@ function MyState({ children}) {
     });
   };
   
-  
+
   // ****** get product
   const [product, setProduct] = useState([]);
-
    // getProductData.
    const getProductData = async () => {
     setLoading(true)
@@ -138,8 +137,6 @@ function MyState({ children}) {
     getProductData(); //useEffect ka use sid effect ke liye ie me is ka use hora hai autometic data fect ho is liye is me ye getProducts name ka function dale hai.
   }, []);
 
-
-  
   // Edidt Function
   const edithandle = (item) => {
     setProducts(item)
@@ -177,7 +174,6 @@ function MyState({ children}) {
     });
   }
   
-
   // Delete Products Function
   const deleteProduct = async (item) => {
     setLoading(true);
@@ -210,8 +206,6 @@ function MyState({ children}) {
       setLoading(false);  // Loading state ko reset karna
     }
   };
-  
-
 
   // Them ke liye ye function.
   const toggleMode = () => {
@@ -223,9 +217,13 @@ function MyState({ children}) {
       document.body.style.backgroundColor = "white";
     }
   };
+   
+  // Get Order Data ke liye ye function
+  
 
+  
 
-  // 
+  
 
   return (
     <MyContext.Provider

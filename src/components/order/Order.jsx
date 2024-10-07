@@ -3,9 +3,14 @@ import Layout from "../layout/Layout";
 
 function Order() {
   return (
-    <div>
-      <Layout> Order </Layout>
-    </div>
+      <Layout>
+      
+      <h1> Order </h1>
+      
+       
+       
+        </Layout>
+    
   );
 }
 
