@@ -168,7 +168,7 @@ return (
             
 
             {/* //  /> */}
-             <Razorpay />
+            <Razorpay cartItems={cartItems} totalAmount={totalWithShipping} />
           </div>
       
         </div>

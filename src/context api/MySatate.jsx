@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MyContext } from "./myContext";
 import Loader from "../components/loader/Loader";
 import { fireDB } from "../firebase/FirebaseConfig";
-import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc} from "firebase/firestore";
+import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc, getDocs} from "firebase/firestore";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
@@ -219,7 +219,31 @@ function MyState({ children}) {
   };
    
   // Get Order Data ke liye ye function
-  
+  const [order, setOrder] = useState([]);
+ const getOrderData = async () => {
+  setLoading(true)
+  try {
+    const result = await getDocs(collection(fireDB, "orders"))
+    const ordersArray = [];
+    result.forEach((doc) => {
+      ordersArray.push(doc.data());
+      setLoading(false)
+    });
+    setOrder(ordersArray);
+    console.log(ordersArray)
+    setLoading(false);
+  } catch (error) {
+    console.log(error)
+    setLoading(false)
+  }
+}
+
+
+useEffect(() => {
+  getProductData();
+  getOrderData()
+
+}, []);
 
   
 
@@ -242,9 +266,7 @@ function MyState({ children}) {
         edithandle : edithandle  ,
        updateProduct : updateProduct, 
        deleteProduct : deleteProduct,
-      
-
-
+       order : order, 
 
       }}
     >
