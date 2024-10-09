@@ -239,9 +239,32 @@ function MyState({ children}) {
 }
 
 
+//Get user ke liye ye function hai deshbord me jaye ga.
+const [user, setUser] = useState([]);
+const getUserData = async () => {
+  setLoading(true)
+  try {
+    const result = await getDocs(collection(fireDB, "users"))
+    const usersArray = [];
+    result.forEach((doc) => {
+      usersArray.push(doc.data());
+      setLoading(false)
+    });
+    setUser(usersArray);
+    // console.log(usersArray)
+    setLoading(false);
+  } catch (error) {
+    console.log(error)
+    setLoading(false)
+  }
+}
+
+
+
 useEffect(() => {
   getProductData();
-  getOrderData()
+  getOrderData();
+  getUserData();
 
 }, []);
 
@@ -267,6 +290,7 @@ useEffect(() => {
        updateProduct : updateProduct, 
        deleteProduct : deleteProduct,
        order : order, 
+       user: user,
 
       }}
     >

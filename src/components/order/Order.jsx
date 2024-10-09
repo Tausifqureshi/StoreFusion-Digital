@@ -67,10 +67,6 @@
 
 
 
-
-
-
-
 import React, { useContext } from "react";
 import Layout from "../layout/Layout";
 import Loader from "../loader/Loader";
