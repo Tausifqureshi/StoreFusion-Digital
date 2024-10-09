@@ -287,6 +287,7 @@ function DashboardTab() {
                           </th>
                         </tr>
                       </thead>
+                      
                       {allorder.cartItems.map((item, index) => {
                         const {
                           title,
@@ -408,6 +409,7 @@ function DashboardTab() {
                             </tr>
                           </tbody>
                         );
+                      
                       })}
                     </table>
                   );
