@@ -1,73 +1,122 @@
-import React, { useContext, useEffect } from 'react'
-import myContext from '../../context/data/myContext'
-import { useDispatch, useSelector } from 'react-redux'
-import { toast } from 'react-toastify'
-import { addToCart, deleteFromCart } from '../../redux/cartSlice'
+
+
+import React, { useContext, useEffect, useState } from "react";
+import { MyContext } from "../../context api/myContext";
+import { useDispatch, useSelector } from "react-redux";
+import { addToCart } from "../../redux/cartSlice";
+import { toast } from 'react-toastify';
 
 function ProductCard() {
-    const context = useContext(myContext)
-    const { mode, product, searchkey,filterType,
-        filterPrice } = context;
+  const { mode, product, searchkey, filterType, filterPrice, sortPrice } = useContext(MyContext);
+  const [showMoreIndex, setShowMoreIndex] = useState({});
 
-    const dispatch = useDispatch()
-    const cartItems = useSelector((state) => state.cart)
-    console.log(cartItems)
+  const toggleShowMore = (index) => {
+    setShowMoreIndex((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
 
-    // add to cart
-    const addCart = (product) => {
-        dispatch(addToCart(product))
-        toast.success('add to cart');
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart);
+
+  const addCart = (product) => {
+    const isProductInCart = cartItems.some(item => item.id === product.id);
+    if (isProductInCart) {
+      toast.info(`Product is already in your cart!`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "🗑️",
+      });
+    } else {
+      const serializedProduct = {
+        ...product,
+        quantity: 1,
+        time: product.time?.seconds ?? Date.now(),
+      };
+      dispatch(addToCart(serializedProduct));
+      toast.success("Product added to cart!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "🗑️",
+      });
     }
+  };
 
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cartItems));
-    }, [cartItems])
-
-
-
-    return (
-        <section className="text-gray-600 body-font">
-            <div className="container px-5 py-8 md:py-16 mx-auto">
-                <div class="lg:w-1/2 w-full mb-6 lg:mb-10">
-                    <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900" style={{ color: mode === 'dark' ? 'white' : '' }}>Our Latest Collection</h1>
-                    <div class="h-1 w-20 bg-pink-600 rounded"></div>
-                </div>
-
-                <div className="flex flex-wrap -m-4">
-                    {product.filter((obj) => obj.title.toLowerCase().includes(searchkey))
-                        .filter((obj) => obj.category.toLowerCase().includes(filterType))
-                        .filter((obj) => obj.price.includes(filterPrice)).map((item, index) => {
-                            const { title, price, description, imageUrl } = item;
-                            return (
-                                <div className="p-4 md:w-1/4  drop-shadow-lg " >
-                                    <div className="h-full border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out    border-gray-200 border-opacity-60 rounded-2xl overflow-hidden" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
-                                        <div className="flex justify-center cursor-pointer" >
-                                            <img className=" rounded-2xl w-full h-80 p-2 hover:scale-110 transition-scale-110  duration-300 ease-in-out" src={imageUrl} alt="blog" />
-                                        </div>
-                                        <div className="p-5 border-t-2">
-                                            <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1" style={{ color: mode === 'dark' ? 'white' : '', }}>E-Bharat</h2>
-                                            <h1 className="title-font text-lg font-medium text-gray-900 mb-3" style={{ color: mode === 'dark' ? 'white' : '', }}>{title}</h1>
-                                            {/* <p className="leading-relaxed mb-3">{item.description.}</p> */}
-                                            <p className="leading-relaxed mb-3" style={{ color: mode === 'dark' ? 'white' : '' }}>₹ {price}</p>
-                                            <div className=" flex justify-center">
-                                                <button onClick={() => addCart(item)} type="button" className="focus:outline-none text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm w-full  py-2">Add To Cart</button>
-
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            )
-                        })}
-                </div>
-                {/* <div className=" flex justify-center">
-                                            <button onClick={()=>addCart()} type="button" className="focus:outline-none text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm w-full  py-2">Add To Cart</button>
-
-                                        </div> */}
-            </div>
-        </section >
-
+  // Apply filters
+  const filteredProducts = product
+    .filter((item) =>
+      // Filter by search key
+      item.title.toLowerCase().includes(searchkey.toLowerCase())
     )
+    .filter((item) =>
+      // Filter by category (filterType)
+      filterType === '' || item.category === filterType
+    )
+    .filter((item) => {
+      // Filter by price range
+      if (filterPrice === "") return true; // No price filter
+      const [minPrice, maxPrice] = filterPrice.split('-').map(Number);
+      return item.price >= minPrice && item.price <= maxPrice;
+    })
+    // Apply sorting
+    .sort((a, b) => {
+      if (sortPrice === 'low-to-high') {
+        return a.price - b.price; // Low to High
+      } else if (sortPrice === 'high-to-low') {
+        return b.price - a.price; // High to Low
+      }
+      return 0; // No sorting
+    });
+
+  return (
+    <div className="container mx-auto px-4 mt-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredProducts.map((product, index) => (
+          <div
+            key={product.id}
+            className="rounded-lg shadow-lg border border-gray-300 p-5"
+            style={{
+              backgroundColor: mode === "dark" ? "#1F1F1F" : "white",
+              color: mode === "dark" ? "white" : "black",
+            }}
+          >
+            <img src={product.image} alt={product.title} className="w-full h-40 object-cover mb-4" />
+            <h3 className="text-lg font-semibold">{product.title}</h3>
+            <p className="text-sm text-gray-600">Category: {product.category}</p>
+            <p className="text-xl font-bold">₹{product.price}</p>
+            <button
+              onClick={() => addCart(product)}
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-200"
+            >
+              Add to Cart
+            </button>
+            <div className="mt-3">
+              <button
+                onClick={() => toggleShowMore(index)}
+                className="text-blue-500 hover:underline"
+              >
+                {showMoreIndex[index] ? 'Show Less' : 'Show More'}
+              </button>
+              {showMoreIndex[index] && (
+                <p className="mt-2">{product.description}</p>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
-export default ProductCard
+export default ProductCard;

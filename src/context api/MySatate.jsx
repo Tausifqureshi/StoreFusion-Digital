@@ -273,6 +273,7 @@ useEffect(() => {
 const [searchkey, setSearchkey] = useState('');
 const [filterType, setFilterType] = useState('');
 const [filterPrice, setFilterPrice] = useState('');
+const [sortPrice, setSortPrice] = useState('');
   
 
   
@@ -302,6 +303,8 @@ const [filterPrice, setFilterPrice] = useState('');
        setFilterType : setFilterType,
        filterPrice : filterPrice ,
        setFilterPrice : setFilterPrice,
+       sortPrice: sortPrice, 
+       setSortPrice : setSortPrice,
 
       }}
     >
