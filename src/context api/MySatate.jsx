@@ -260,7 +260,6 @@ const getUserData = async () => {
 }
 
 
-
 useEffect(() => {
   getProductData();
   getOrderData();
@@ -268,6 +267,12 @@ useEffect(() => {
 
 }, []);
 
+
+
+//Filter ke liye ye State.
+const [searchkey, setSearchkey] = useState('');
+const [filterType, setFilterType] = useState('');
+const [filterPrice, setFilterPrice] = useState('');
   
 
   
@@ -291,6 +296,12 @@ useEffect(() => {
        deleteProduct : deleteProduct,
        order : order, 
        user: user,
+       searchkey: searchkey,
+       setSearchkey :  setSearchkey,
+       filterType:  filterType,
+       setFilterType : setFilterType,
+       filterPrice : filterPrice ,
+       setFilterPrice : setFilterPrice,
 
       }}
     >

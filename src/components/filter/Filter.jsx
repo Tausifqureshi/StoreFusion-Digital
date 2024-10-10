@@ -120,14 +120,17 @@
 
 
 
-import React, { useContext, useState } from "react";
+import React, { useContext} from "react";
 import { MyContext } from "../../context api/myContext";
 
+
 function Filter() {
-  const [searchkey, setSearchkey] = useState('');
-  const [filterType, setFilterType] = useState('');
-  const [filterPrice, setFilterPrice] = useState('');
-  const { mode, product } = useContext(MyContext);
+  // const [searchkey, setSearchkey] = useState('');
+  // const [filterType, setFilterType] = useState('');
+  // const [filterPrice, setFilterPrice] = useState('');
+  // const { mode, product} = useContext(MyContext);
+
+  const { mode, product,searchkey, setSearchkey ,filterType, setFilterType,filterPrice, setFilterPrice} = useContext(MyContext);
 
   return (
     <div className="container mx-auto px-4 mt-5">
@@ -203,6 +206,7 @@ function Filter() {
               </option>
             ))}
           </select>
+          
         </div>
       </div>
     </div>
