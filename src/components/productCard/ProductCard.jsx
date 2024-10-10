@@ -78,6 +78,7 @@ return (
 
    
      <div className="flex flex-wrap -m-4">
+     
       {product.map((item, index)=>{
         const { title,price,imageUrl, category,date, description} = item;
         const isExpanded = showMoreIndex[index]; // Check if this product is expanded
