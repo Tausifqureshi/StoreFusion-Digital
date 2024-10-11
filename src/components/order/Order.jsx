@@ -94,7 +94,12 @@ function Order() {
                       color: mode === 'dark' ? 'white' : 'black',
                     }}
                   >
-                    <img src={item.imageUrl} alt="product-image" className="w-full rounded-lg sm:w-40" />
+                    {/* <img src={item.imageUrl} alt="product-image" className="w-full rounded-lg sm:w-40" /> */}
+                    <img
+                    src={item.imageUrl}
+                    alt="product-image"
+                    className="w-full h-32 object-contain rounded-lg sm:w-40 sm:h-32" // Set smaller height and object-contain
+                  />
                     <div className="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                       <div className="mt-5 sm:mt-0">
                         <h2 className="text-lg font-bold" style={{ color: mode === 'dark' ? 'white' : 'black' }}>

@@ -1,81 +1,62 @@
-import React, { useContext, useEffect } from 'react'
-import Filter from '../../components/filter/Filter'
-import ProductCard from '../../components/productCard/ProductCard'
-import Layout from '../../components/layout/Layout'
-import myContext from '../../context/data/myContext'
-import { useDispatch, useSelector } from 'react-redux'
-import { addToCart } from '../../redux/cartSlice'
-
-function Allproducts() {
-  const context = useContext(myContext)
-  const { mode, product ,searchkey, setSearchkey,filterType,setFilterType,
-      filterPrice,setFilterPrice} = context
-
-  const dispatch = useDispatch()
-  const cartItems = useSelector((state)=> state.cart);
-  console.log(cartItems)
-
-  const addCart = (product)=> {
-      dispatch(addToCart(product));
-      toast.success('add to cart');
-
-  }
-
-  useEffect(() => {
-      localStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems])
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
-
-  return (
-    <Layout>
-      <Filter/>
-      <section className="text-gray-600 body-font">
-            <div className="container px-5 py-8 md:py-16 mx-auto">
-                <div class="lg:w-1/2 w-full mb-6 lg:mb-10">
-                    <h1 class="sm:text-3xl text-2xl font-medium title-font mb-2 text-gray-900" style={{ color: mode === 'dark' ? 'white' : '' }}>Our Latest Collection</h1>
-                    <div class="h-1 w-20 bg-pink-600 rounded"></div>
-                </div>
-
-                <div className="flex flex-wrap -m-4">
-                    {product.filter((obj)=> obj.title.toLowerCase().includes(searchkey))
-                     .filter((obj) => obj.category.toLowerCase().includes(filterType))
-                     .filter((obj) => obj.price.includes(filterPrice)).map((item, index) => {
-                        const { title, price, description, imageUrl,id } = item;
-                        return (
-                            <div onClick={()=> window.location.href = `/productinfo/${id}`}   key={index} className="p-4 md:w-1/4  drop-shadow-lg " >
-                                <div className="h-full border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out    border-gray-200 border-opacity-60 rounded-2xl overflow-hidden" style={{ backgroundColor: mode === 'dark' ? 'rgb(46 49 55)' : '', color: mode === 'dark' ? 'white' : '', }} >
-                                    <div className="flex justify-center cursor-pointer" >
-                                        <img className=" rounded-2xl w-full h-80 p-2 hover:scale-110 transition-scale-110  duration-300 ease-in-out" src={imageUrl} alt="blog" />
-                                    </div>
-                                    <div className="p-5 border-t-2">
-                                        <h2 className="tracking-widest text-xs title-font font-medium text-gray-400 mb-1" style={{ color: mode === 'dark' ? 'white' : '', }}>E-Bharat</h2>
-                                        <h1 className="title-font text-lg font-medium text-gray-900 mb-3" style={{ color: mode === 'dark' ? 'white' : '', }}>{title}</h1>
-                                        {/* <p className="leading-relaxed mb-3">{item.description.}</p> */}
-                                        <p className="leading-relaxed mb-3" style={{ color: mode === 'dark' ? 'white' : '' }}>₹{price}</p>
-                                        <div className=" flex justify-center">
-                                            <button type="button" 
-                                            onClick={()=> addCart(item)}
-                                            className="focus:outline-none text-white bg-pink-600 hover:bg-pink-700 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm w-full  py-2">Add To Cart</button>
-
-                                        </div>
-                                    </div>
-
-                                </div>
+<Layout>
+    {loading && <Loader />}
+    <section className="text-gray-700 body-font overflow-hidden">
+        <div className="container px-5 py-24 mx-auto">
+            {products ? (
+                <div className="lg:w-4/5 mx-auto flex flex-wrap">
+                    <div className="lg:w-1/2 w-full lg:h-[28rem] h-60 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 transform hover:scale-105">
+                        <img
+                            alt="ecommerce"
+                            className="w-full h-full object-contain object-center"
+                            src={products.imageUrl}
+                        />
+                    </div>
+                    <div className="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0 bg-white rounded-lg shadow-lg p-6">
+                        <h2 className="text-sm title-font text-gray-500 tracking-wide uppercase">Brand Name</h2>
+                        <h1 className="text-gray-900 text-4xl title-font font-bold mb-2">{products.title}</h1>
+                        <div className="flex mb-4">
+                            <span className="flex items-center">
+                                {[...Array(4)].map((_, i) => (
+                                    <StarIcon key={i} className="text-yellow-500" />
+                                ))}
+                                <StarIcon filled={false} className="text-yellow-500" />
+                                <span className="text-gray-600 ml-3">4 Reviews</span>
+                            </span>
+                            <span className="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-3">
+                                <Link to="/cart" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                                    <FaShoppingCart className="w-5 h-5" />
+                                </Link>
+                                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                                    <FaTwitter className="w-5 h-5" />
+                                </a>
+                                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                                    <FaInstagram className="w-5 h-5" />
+                                </a>
+                                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-indigo-600 transition-colors">
+                                    <FaYoutube className="w-5 h-5" />
+                                </a>
+                            </span>
+                        </div>
+                        <p className="leading-relaxed border-b-2 mb-6 pb-6 text-gray-700">{products.description}</p>
+                        <div className="flex items-center justify-between">
+                            <span className="title-font font-bold text-4xl text-gray-900">₹{products.price}</span>
+                            <div className="flex items-center">
+                                <button onClick={() => addCart(products)} className="text-white bg-indigo-600 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-700 transition-shadow shadow-md rounded-lg">
+                                    Add To Cart
+                                </button>
+                                <button 
+                                    onClick={toggleHeart} 
+                                    className={`rounded-full w-10 h-10 p-0 border-0 inline-flex items-center justify-center ml-4 transition-colors ${isHeartFilled ? 'bg-red-600' : 'bg-gray-200'} hover:bg-gray-300`}
+                                >
+                                    <FaHeart className={`w-6 h-6 ${isHeartFilled ? 'text-white' : 'text-gray-500'}`} />
+                                </button>
                             </div>
-                        )
-                    })}
-
-
-
-
+                        </div>
+                    </div>
                 </div>
-
-            </div>
-        </section >
-    </Layout>
-  )
-}
-
-export default Allproducts
+            ) : (
+                ""
+            )}
+        </div>
+    </section>
+</Layout>
