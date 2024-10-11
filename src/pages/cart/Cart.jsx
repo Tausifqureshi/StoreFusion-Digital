@@ -38,6 +38,7 @@ function Cart() {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
+  
   // Total Amount Calculation
   const totalAmount = cartItems.reduce((accumulator, currentValue) => {
     const price = parseFloat(currentValue.price) || 0; // Ensure price is a number
@@ -76,7 +77,6 @@ return (
                   key={index}
                   className={`mb-6 p-6 rounded-lg border drop-shadow-xl ${mode === "dark" ? "bg-gray-800" : "bg-white"} sm:flex sm:justify-between`}
                 >
-                 
                   <img
                     src={imageUrl}
                     alt="product-image"
