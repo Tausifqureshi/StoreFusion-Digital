@@ -3,14 +3,15 @@ import { MyContext } from "../../context api/myContext";
 
 function Filter() {
   const { mode, product, searchkey, setSearchkey, filterType, setFilterType, filterPrice, setFilterPrice, sortPrice, setSortPrice } = useContext(MyContext);
-
+  //  console.log(product)
   const resetFilters = () => {
     setSearchkey("");
     setFilterType("");
     setFilterPrice("");
     setSortPrice("");
   };
-
+  const uniqueCategories = [...new Set(product.map(item => item.category))];
+  // console.log(uniqueCategories)
   return (
     <div className="container mx-auto px-4 mt-5">
       <div
@@ -68,10 +69,17 @@ function Filter() {
                 color: mode === "dark" ? "white" : "black",
               }}
             >
-              <option value="">All Products</option>
+              {/* <option value="">All Products</option>
               {product.map((item, index) => (
                 <option key={index} value={item.category}>
                   {item.category}
+                </option>
+              ))} */}
+
+              <option value="">All Products</option>
+              {uniqueCategories.map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
                 </option>
               ))}
             </select>
