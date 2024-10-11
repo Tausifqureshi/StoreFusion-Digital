@@ -3,6 +3,8 @@ import { MyContext } from "../../context api/myContext";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartSlice";
 import { toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
+
 
 function ProductCard() {
   const { mode, product, searchkey, filterType, filterPrice, sortPrice  } = useContext(MyContext);
@@ -17,6 +19,7 @@ function ProductCard() {
 
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
+  const navigate = useNavigate(); // Use the hook for navigation
 
   const addCart = (product) => {
     const isProductInCart = cartItems.some(item => item.id === product.id);
@@ -98,7 +101,7 @@ function ProductCard() {
             const isExpanded = showMoreIndex[index];
 
             return (
-              <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg" key={index}>
+              <div  onClick={()=> navigate(`/productinfo/${item.id}`)} className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg" key={index}>
                 <div className={`border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${mode === 'dark' ? 'bg-gray-800' : 'border-gray-200'} border-opacity-60 rounded-2xl overflow-hidden`}>
                   <div className="flex justify-center cursor-pointer">
                     <img className="rounded-2xl w-full h-56 p-2 hover:scale-110 transition-transform duration-300 ease-in-out" src={imageUrl} alt="product" />

@@ -1,5 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Layout from '../../components/layout/Layout';
+import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart } from '../../redux/cartSlice';
+import { fireDB } from '../../firebase/FirebaseConfig';
+import { useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { MyContext } from '../../context api/myContext';
+
 
 const StarIcon = ({ filled = true }) => (
     <svg
