@@ -170,7 +170,6 @@ const cartSlice = createSlice({
         },
         deleteFromCart(state, action) {
             const newState = state.filter(item => item.id !== action.payload.id);
-            // localStorage.setItem('cart', JSON.stringify(newState)); // Update local storage after deletion
             return newState; // Return new state after deletion
         },
 
@@ -179,7 +178,7 @@ const cartSlice = createSlice({
         },
 
         // New reducer to clear the cart after successful payment
-        clearCart(state) {
+        clearCart() {
             localStorage.removeItem('cart'); // Clear local storage
             return []; // Empty array represents cleared cart
         }
