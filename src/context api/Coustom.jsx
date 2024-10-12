@@ -142,6 +142,27 @@ export default cartSlice.reducer;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //RozarPay code
 
 import React, { useState } from "react";
@@ -150,7 +171,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { fireDB } from "../../firebase/FirebaseConfig";
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'; 
-import { clearCart } from '../../redux/cartSlice';
+// import { clearCart } from '../../redux/cartSlice';
 
 function Razorpay({ cartItems, totalAmount }) {
   const [formData, setFormData] = useState({
