@@ -38,7 +38,7 @@ function Cart() {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  
+
   // Total Amount Calculation
   const totalAmount = cartItems.reduce((accumulator, currentValue) => {
     const price = parseFloat(currentValue.price) || 0; // Ensure price is a number
@@ -168,9 +168,7 @@ return (
             {/* <Modal  */}
               {/* fullName={fullName} setFullName={setFullName} address={address} setAddress={setAddress} pincode={pincode} setPincode={setPincode} phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} */}
             
-
-            {/* //  /> */}
-            <Razorpay cartItems={cartItems} totalAmount={totalWithShipping} />
+             <Razorpay cartItems={cartItems} totalAmount={totalWithShipping} />
           </div>
       
         </div>
