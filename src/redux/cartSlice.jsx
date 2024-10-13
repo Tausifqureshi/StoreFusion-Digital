@@ -39,12 +39,17 @@ const cartSlice = createSlice({
         clearCart(state) {
             localStorage.removeItem('cart'); // Clear local storage
             return []; // Empty array represents cleared cart
+        },
+        
+          // Cancel the order by removing it from the state
+          cancelOrder(state, action) {
+            return state.filter(order => order.id !== action.payload.id); // Remove the cancelled order
         }
     }
 });
 
 // Export the new clearCart action
-export const { addToCart, deleteFromCart, incrementQuantity, decrementQuantity, clearCart, } = cartSlice.actions;
+export const { addToCart, deleteFromCart, incrementQuantity, decrementQuantity, clearCart, cancelOrder} = cartSlice.actions;
 
 // Export the reducer
 export default cartSlice.reducer;

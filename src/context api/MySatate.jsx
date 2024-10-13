@@ -364,6 +364,7 @@ const [sortPrice, setSortPrice] = useState('');
        updateProduct : updateProduct, 
        deleteProduct : deleteProduct,
        order : order, 
+       setOrder : setOrder,
        user: user,
        searchkey: searchkey,
        setSearchkey :  setSearchkey,
@@ -373,7 +374,7 @@ const [sortPrice, setSortPrice] = useState('');
        setFilterPrice : setFilterPrice,
        sortPrice: sortPrice, 
        setSortPrice : setSortPrice,
-       cancelOrder: cancelOrder, 
+      //  cancelOrder: cancelOrder, 
 
       }}
     >

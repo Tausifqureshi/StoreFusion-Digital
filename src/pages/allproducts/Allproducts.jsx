@@ -8,7 +8,7 @@ function Allproducts() {
 
   return (
     <div>
-     <h1> Allproducts </h1>
+     <h1> Allproducts </h1>  
     </div>
   )
 }

@@ -162,9 +162,8 @@ function ProductInfo() {
 
 
 
-
 return(
-    <Layout>
+<Layout>
     {loading && <Loader />}
     <section className="text-gray-700 body-font overflow-hidden">
         <div className="container px-5 py-24 mx-auto">
