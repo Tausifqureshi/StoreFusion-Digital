@@ -33,10 +33,8 @@ const cartSlice = createSlice({
             return newState; // Return new state after deletion
         },
 
-        // setOrders(state, action) {
-        //     return action.payload; // Set orders from payload
-        // },
-
+       
+ 
         // New reducer to clear the cart after successful payment
         clearCart(state) {
             localStorage.removeItem('cart'); // Clear local storage

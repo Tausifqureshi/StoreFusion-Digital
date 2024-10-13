@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { MyContext } from "./myContext";
 import Loader from "../components/loader/Loader";
 import { fireDB } from "../firebase/FirebaseConfig";
-import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc, getDocs} from "firebase/firestore";
+import { Timestamp , addDoc,collection,onSnapshot, orderBy, query,setDoc,doc, deleteDoc, getDocs, where} from "firebase/firestore";
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 
@@ -219,9 +219,9 @@ function MyState({ children}) {
   };
    
   // Get Order Data ke liye ye function
-  const [order, setOrder] = useState([]);
+ const [order, setOrder] = useState([]);
  const getOrderData = async () => {
-  setLoading(true)
+  setLoading(true)    
   try {
     const result = await getDocs(collection(fireDB, "orders"))
     const ordersArray = [];
@@ -237,6 +237,74 @@ function MyState({ children}) {
     setLoading(false)
   }
 }
+
+
+
+
+  // Cancel Order Function
+  const cancelOrder = async (orderItem) => {
+    setLoading(true);
+    try {
+      // Check if userid is defined
+      if (!orderItem.userid) {
+        throw new Error('User ID is undefined');
+      }
+  
+      // Query to find the order by userId
+      const q = query(
+        collection(fireDB, "orders"),
+        where("userid", "==", orderItem.userid) // Use the defined userid
+      );
+      
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        toast.warning('No order found to cancel.', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+        return; // Exit if no orders found
+      }
+  
+      querySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+        toast.success('Order cancelled successfully!', {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          icon: "🗑️", // Icon for successful cancellation
+        });
+      });
+  
+    } catch (error) {
+      console.log('Error cancelling order:', error);
+      toast.error('Order cancellation failed. Please try again.', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "⚠️", // Icon for error
+      });
+    } finally {
+      setLoading(false); // Ensure loading state is reset
+    }
+  };
+  
+
+
+
 
 
 //Get user ke liye ye function hai deshbord me jaye ga.
@@ -305,6 +373,7 @@ const [sortPrice, setSortPrice] = useState('');
        setFilterPrice : setFilterPrice,
        sortPrice: sortPrice, 
        setSortPrice : setSortPrice,
+       cancelOrder: cancelOrder, 
 
       }}
     >

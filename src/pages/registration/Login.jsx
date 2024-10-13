@@ -92,10 +92,17 @@ function Login() {
         console.log("User Role:", userData.role); // Should not be undefined
         
         // Save to local storage
-        localStorage.setItem('user', JSON.stringify({
+        // localStorage.setItem('user', JSON.stringify({
+        //   email: userData.email,
+        //   uid: userData.uid, // Store user UID
+        //   role: userData.role // Store user role
+        // }));
+
+        localStorage.setItem("user", JSON.stringify({
+          fullName: userData.name,
           email: userData.email,
-          uid: userData.uid, // Store user UID
-          role: userData.role // Store user role
+          uid: userData.uid,
+          role: userData.role
         }));
 
         // Agar user mila, toh login karne ki koshish karte hain

@@ -102,7 +102,13 @@ function Signup() {
         await addDoc(userRef, user);
 
         // Store user data in localStorage
-        localStorage.setItem("user", JSON.stringify(user));
+        // localStorage.setItem("user", JSON.stringify(user));
+         localStorage.setItem("user", JSON.stringify({
+          fullName: user.name,
+          email: user.email,
+          uid: user.uid,
+          role: user.role
+        }));
 
         toast.success("Signup Successful!", { autoClose: 1500 });
         setFormData({ fullName: '', email: '', password: '' });
