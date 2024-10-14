@@ -17,12 +17,11 @@ import Allproducts from "./pages/allproducts/Allproducts";
 import MyState from "./context api/MySatate";
 // import Razorpay from "./context api/Coustom";
 // import Razorpay from "./pages/cart/Razorpay";
-
 function App() {
   return (
     <BrowserRouter>
       <MyState>
-        <Routes>
+        <Routes>  
           <Route path="/" element={<Home />} />
           <Route path="/order" element={<Order />} />
           <Route path="/cart" element={<Cart />} />
