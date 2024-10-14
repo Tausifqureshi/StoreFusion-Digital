@@ -84,6 +84,7 @@ function ProductInfo() {
 
     useEffect(() => {
         localStorage.setItem('cart', JSON.stringify(cartItems));
+        window.scrollTo(0, 0);
     }, [cartItems]);
 
 

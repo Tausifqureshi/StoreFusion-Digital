@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, deleteFromCart } from "../../redux/cartSlice";
 import Loader from "../../components/loader/Loader";
 import MyState from "../../context api/MySatate";
+import { Link } from "react-router-dom";
 
 
 function Home() {
@@ -37,6 +38,13 @@ function Home() {
         <HeroSection />
         <Filter />
         <ProductCard />
+        <div className="flex justify-center -mt-10 mb-4">
+              <Link to={'/allproducts'}>
+             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
+              See more
+            </button>
+          </Link>
+        </div>
         <Track />
         <Testimonial />
         {/* <Loader /> */}

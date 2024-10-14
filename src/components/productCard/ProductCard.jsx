@@ -56,6 +56,7 @@ function ProductCard() {
 
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
+    window.scrollTo(0, 0);
   }, [cartItems]);
 
 // Apply filters
@@ -83,8 +84,8 @@ function ProductCard() {
     return b.price - a.price; // High to Low
   }
   return 0; // No sorting
-   });
-
+   })
+   .slice(0,8);
 
   return (
     // <section className="text-gray-600 body-font">
@@ -166,7 +167,7 @@ function ProductCard() {
 
 <div className="flex flex-wrap -m-4">
 {filteredProducts.map((item, index) => {
-  const { title, price, imageUrl, category, description } = item;
+  const { title, price, imageUrl, category, description,id } = item;
   const isExpanded = showMoreIndex[index];
 
   return (
