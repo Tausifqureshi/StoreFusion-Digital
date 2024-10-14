@@ -11,6 +11,7 @@ import { addToCart, deleteFromCart } from "../../redux/cartSlice";
 import Loader from "../../components/loader/Loader";
 import MyState from "../../context api/MySatate";
 import { Link } from "react-router-dom";
+import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 
 
 function Home() {
@@ -48,6 +49,7 @@ function Home() {
         <Track />
         <Testimonial />
         {/* <Loader /> */}
+        <ScrollToTopButoon />
       </Layout>
     </div>
   );

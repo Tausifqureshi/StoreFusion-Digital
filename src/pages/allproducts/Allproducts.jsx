@@ -7,6 +7,7 @@ import { addToCart } from '../../redux/cartSlice';
 import ProductCard from '../../components/productCard/ProductCard';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
+import ScrollToTopButoon from '../../components/Scroll top/ScrollToTopButoon';
 
 
 
@@ -191,7 +192,7 @@ return 0; // No sorting
   )}
 </div>
 </section>
-
+<ScrollToTopButoon />
 
  </Layout>
   )

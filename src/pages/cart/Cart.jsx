@@ -8,6 +8,7 @@ import { deleteFromCart, incrementQuantity, decrementQuantity } from "../../redu
 import { toast } from 'react-toastify';
 import { Link } from "react-router-dom"; // Import Link for navigation
 import Razorpay from "../razorpay/Razorpay";
+import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 // import PayU from "../payu/PayU";
 
 
@@ -184,6 +185,7 @@ return (
         </div>
       )}
     </div>
+    <ScrollToTopButoon />
   </Layout>
 );
 
