@@ -74,14 +74,14 @@ function Razorpay({ cartItems, totalAmount }) {
 
           const orderRef = collection(fireDB, "orders");
           await addDoc(orderRef, orderInfo); 
-          toast.success('Order saved successfully');
+          toast.success('Order saved successfully',{ autoClose: 1000 });
 
           // Clear cart from Redux and localStorage
           dispatch(clearCart());  // Clear cart from Redux state
           localStorage.removeItem('cart');  // Clear cart from local storage
         } catch (error) {
           console.log("Error saving order:", error);
-          toast.error('Failed to save order');
+          toast.error('Failed to save order',{ autoClose: 1000 });
         }
       },
       theme: {
@@ -108,4 +108,3 @@ export default Razorpay;
 
 
 
-// aisa ho sakta haija  me products add karo or cart me  payment kar do payment karne ke baad localstorage se products delete and but jis ki payment hohi hai o sirf ordert page pe hi show ho lekin localstorage se delete ho chuka ho kaiss kar re ge redux ke sath
