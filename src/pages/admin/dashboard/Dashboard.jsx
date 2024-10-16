@@ -88,6 +88,9 @@
 
 
 
+
+
+
 import React, { useContext } from 'react';
 import { FaBox, FaShoppingCart, FaUsers, FaTag } from 'react-icons/fa';
 import { MyContext } from '../../../context api/myContext';
@@ -112,10 +115,11 @@ function Dashboard() {
     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
   };
 
+  // Updated stats with increased product count
   const stats = [
-    { title: 'Total Products', value: 100, icon: <FaBox />, bgColor: 'bg-purple-100' },
-    { title: 'Total Orders', value: 200, icon: <FaShoppingCart />, bgColor: 'bg-blue-100' },
-    { title: 'Total Users', value: 150, icon: <FaUsers />, bgColor: 'bg-green-100' },
+    { title: 'Total Products', value: 1000, icon: <FaBox />, bgColor: 'bg-purple-100' },
+    { title: 'Total Orders', value: 500, icon: <FaShoppingCart />, bgColor: 'bg-blue-100' },
+    { title: 'Total Users', value: 1500, icon: <FaUsers />, bgColor: 'bg-green-100' },
     { title: 'New Discounts', value: 30, icon: <FaTag />, bgColor: 'bg-yellow-100' },
   ];
 
@@ -175,13 +179,13 @@ function Dashboard() {
 
   return (
     <Layout>
-      <div className="dashboard-container px-5 py-10">
+      <div className="dashboard-container px-5 py-10 bg-gray-100 min-h-screen">
         <h1 className="text-4xl font-extrabold text-center mb-10">
-          Dashboard Overview
+          Admin Dashboard Overview
         </h1>
         <section className="text-gray-600 body-font">
           <div className="container mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-10">
               {stats.map((item, index) => (
                 <div
                   key={index}
@@ -229,12 +233,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
-
-
-
-
-
-
-
-
