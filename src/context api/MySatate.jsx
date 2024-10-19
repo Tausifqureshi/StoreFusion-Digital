@@ -384,5 +384,5 @@ const [sortPrice, setSortPrice] = useState('');
     </MyContext.Provider>
   );
 }
-
+  
 export default MyState;

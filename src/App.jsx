@@ -20,7 +20,7 @@ import MyState from "./context api/MySatate";
 function App() {
   return (
     <BrowserRouter>
-      <MyState>
+      <MyState> 
         <Routes>  
           <Route path="/" element={<Home />} />
           <Route path="/order" element={<Order />} />
@@ -36,7 +36,8 @@ function App() {
         </Routes>
        {/* <Razorpay /> */}
         <ToastContainer />
-      </MyState>
+      </MyState> 
+      {/* MyState se Wrap q ke MyState ek provider hai context api ka use hora hai appcompoents ki MyState se Wrap kar re hai iska matlab ab app componets me jitne componets use hoge us me dircte value pass kar skate hai context api ka use kar ke q ke app componets prants hai ab sub ka. */}
     </BrowserRouter>
   );
 }
