@@ -24,16 +24,82 @@ const storage = getStorage(app);
 export { fireDB, auth, storage };
 
 
-// Qureshi1520
-// tauifqureshi280@gmail.com
 
-// // Import the functions you need from the SDKs you need
-// import { initializeApp } from "firebase/app";
-// // TODO: Add SDKs for Firebase products that you want to use
-// // https://firebase.google.com/docs/web/setup#available-libraries
 
-// // Your web app's Firebase configuration
-// ;
 
-// // Initialize Firebase
-// const app = initializeApp(firebaseConfig);
+
+
+
+
+
+
+
+
+
+
+
+// tausifqureshi600@gmail.com
+// Tausif600
+
+
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+    
+//     // Rules for Users Collection
+//     match /users/{userId} {
+//       // Allow read/write if user is authenticated and either it's the same user or they are an admin
+//       allow read, write: if request.auth != null && 
+//                         (request.auth.uid == userId || request.auth.token.role == 'admin');
+//     }
+    
+//     // Rules for Admin-Specific Data
+//     match /adminData/{document} {
+//       // Only allow users with 'admin' role to read/write
+//       allow read, write: if request.auth != null && request.auth.token.role == 'admin';
+//     }
+
+//     // General Rules for All Other Documents
+//     match /{document=**} {
+//       // Allow read/write only if the user is authenticated
+//       allow read, write: if request.auth != null;
+//     }
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// rules_version = "2";
+
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     match /{document=**} {
+//       // Allow read and write access to authenticated users
+//       allow read, write: if true;
+//     }
+//   }
+// }

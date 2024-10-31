@@ -96,7 +96,7 @@ return (
                         <p className={`text-lg font-semibold text-black`}>
                           ₹ {price}
                         </p>
-                      </div>
+                      </div> 
                     </div>
                     <div className="mt-4 sm:mt-0 flex flex-col sm:block sm:space-x-6 relative">
                       {/* Quantity Design */}
