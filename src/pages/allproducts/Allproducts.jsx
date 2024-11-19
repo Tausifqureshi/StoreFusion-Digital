@@ -73,7 +73,7 @@ window.scrollTo(0, 0);
 // scroll ke liye top pe visit hoga is se.
 }, [])
 
-
+  
 
 // Apply filters
 const filteredProducts = product

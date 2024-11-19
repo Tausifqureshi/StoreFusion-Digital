@@ -20,7 +20,7 @@ const cartSlice = createSlice({
                 localStorage.setItem('cart', JSON.stringify(state)); // Update local storage after incrementing
             }
         },
-        decrementQuantity(state, action) {
+        decrementQuantity(state, afction) {
             const item = state.find(item => item.id === action.payload);
             if (item && item.quantity > 1) {
                 item.quantity -= 1;
@@ -53,3 +53,4 @@ export const { addToCart, deleteFromCart, incrementQuantity, decrementQuantity, 
 
 // Export the reducer
 export default cartSlice.reducer;
+                                                                                         
