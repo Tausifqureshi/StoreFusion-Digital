@@ -19,7 +19,7 @@ import MyState from "./context api/MySatate";
 // import Razorpay from "./pages/cart/Razorpay";
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter> 
       <MyState> 
         <Routes>  
           <Route path="/" element={<Home />} />

@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 function ProductCard() {
   const { mode, product, searchkey, filterType, filterPrice, sortPrice  } = useContext(MyContext);
   const [showMoreIndex, setShowMoreIndex] = useState({});
-
+ 
   const toggleShowMore = (index) => {
     setShowMoreIndex((prevState) => ({
       ...prevState,
