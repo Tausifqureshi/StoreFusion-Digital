@@ -30,7 +30,7 @@ function Navbar() {
     <div className="bg-white sticky top-0 z-50  ">
       {/* Mobaile Ke Liye Desgin */}
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
+        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen} >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -40,7 +40,8 @@ function Navbar() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-black bg-opacity-25" />
+    
+            <div className="fixed inset-0 bg-black bg-opacity-25" />       
           </Transition.Child>
 
           <div className="fixed inset-0 z-40 flex">

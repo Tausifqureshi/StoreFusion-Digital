@@ -19,8 +19,10 @@ import MyState from "./context api/MySatate";
 // import Razorpay from "./pages/cart/Razorpay";
 function App() {
   return (
+    
     <BrowserRouter> 
       <MyState> 
+      {/* <h1 className="text-4xl font-extrabold text-center mb-10 bg-green-600 text-red-900">Tausif</h1> */}
         <Routes>  
           <Route path="/" element={<Home />} />
           <Route path="/order" element={<Order />} />
