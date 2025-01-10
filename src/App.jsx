@@ -66,3 +66,5 @@ export function ProtectedRoutesForAdmin({ children }) {
     return <Navigate to='/login' />; // Redirect to login if not admin
   }
 }
+
+
