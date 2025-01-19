@@ -106,7 +106,7 @@ function Filter() {
           </div>
 
           {/* Sort by Price */}
-          <select
+          <select 
             value={sortPrice}
             onChange={(e) => setSortPrice(e.target.value)}
             className="px-4 py-3 rounded-md bg-gray-200 border border-gray-300 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition duration-200 md:ml-4 w-full md:w-auto"
