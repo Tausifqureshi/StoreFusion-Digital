@@ -36,7 +36,7 @@ function ProductCard() {
       });
     } else {
       const serializedProduct = {
-        ...product,
+        ...product, 
         quantity: 1,
         time: product.time?.seconds ?? Date.now(),
       };
