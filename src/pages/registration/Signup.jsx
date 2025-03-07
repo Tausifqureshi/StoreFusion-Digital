@@ -46,7 +46,7 @@ function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePasswordToggle = () => {
+  const handlePasswordToggle = () => {   
     setShowPassword(!showPassword);
   };
 
@@ -139,7 +139,7 @@ function Signup() {
           </div>
         )} */}
         <h1 className='text-center text-gray-800 text-2xl mb-4 font-extrabold'>Create Your Account</h1>
-        <form onSubmit={signup}>
+        <form onSubmit={signup} action=''>
           <div className='mb-4'>
             <input
               type="text"
