@@ -31,7 +31,7 @@ const cartSlice = createSlice({
             const newState = state.filter(item => item.id !== action.payload.id);
             // localStorage.setItem('cart', JSON.stringify(newState)); // Update local storage after deletion
             return newState; // Return new state after deletion
-        },
+        }, 
 
        
  
