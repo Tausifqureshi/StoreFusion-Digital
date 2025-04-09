@@ -20,7 +20,7 @@ const cartSlice = createSlice({
                 localStorage.setItem('cart', JSON.stringify(state)); // Update local storage after incrementing
             }
         },
-        decrementQuantity(state, afction) {
+        decrementQuantity(state, action) {
             const item = state.find(item => item.id === action.payload);
             if (item && item.quantity > 1) {
                 item.quantity -= 1;
