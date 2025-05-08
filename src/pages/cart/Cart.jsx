@@ -56,12 +56,12 @@ function Cart() {
   const incrementCartQuantity = (itemId) => {
     dispatch(incrementQuantity(itemId));
   };
-
+ 
   // Decrement quantity of item
   const decrementCartQuantity = (itemId) => {
     dispatch(decrementQuantity(itemId));
   };
-
+  
 return (
   <Layout>
     <div className={`min-h-screen pt-5 ${mode === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
