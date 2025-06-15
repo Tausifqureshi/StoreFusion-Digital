@@ -1,36 +1,5 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -44,6 +13,15 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
+// const [searchParams ]= useSearchParams();
+
+
+// const redirectPath = searchParams.get('redirect') ||  '/';
+// console.log("Hello",redirectPath)
+
+  const location = useLocation(); 
+  console.log("LoginPage", location);
+  const PreviousPathname = location.state?.PreviousPathname || '/';
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -108,7 +86,8 @@ function Login() {
         // Agar user mila, toh login karne ki koshish karte hain
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
         toast.success("Login Successful!", { autoClose: 1500 });
-        navigate('/'); // Redirect to home page
+        // navigate(redirectPath, {replace: true}); // Redirect to home page useSerahParams use.
+        navigate(PreviousPathname, {replace: true}); // Redirect to home page
 
       } catch (error) {
         console.error(error);

@@ -3,7 +3,12 @@ import { BsFillCloudSunFill } from "react-icons/bs";
 import { FiSun } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { Dialog, Transition } from "@headlessui/react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+  useLocation,
+  useSearchParams,
+} from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 import { useSelector } from "react-redux";
 
@@ -15,10 +20,20 @@ function Navbar() {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
+  const location = useLocation();
+  // console.log("Navbar Location", location);
+  console.log("Login location.state:", location);
 
-  function handleLogout() {
+  function handleLogout(e) {
+    // e.preventDefualt();
+    e.preventDefault();
+
+
     localStorage.removeItem("user"); // Remove specific user item
-    navigate("/login"); // Redirect to login page after logout
+    navigate(`/login`);
+    // navigate(`/login?redirect=${location.pathname}`);
+
+    navigate("/login", {state: { PreviousPathname: location.pathname },});
   }
 
   const cartItems = useSelector((state) => state.cart);
@@ -30,7 +45,7 @@ function Navbar() {
     <div className="bg-white sticky top-0 z-50  ">
       {/* Mobaile Ke Liye Desgin */}
       <Transition.Root show={open} as={Fragment}>
-        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen} >
+        <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -40,8 +55,7 @@ function Navbar() {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-    
-            <div className="fixed inset-0 bg-black bg-opacity-25" />       
+            <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-40 flex">
@@ -269,8 +283,15 @@ function Navbar() {
                   ""
                 )}
 
+                 <Link
+                    to="/dashboard"
+                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
+                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                  >
+                    Admin
+                  </Link>
 
-                {user && user.role === "admin" ? (
+                {/* {user && user.role === "admin" ? (
                   <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
@@ -278,7 +299,7 @@ function Navbar() {
                   >
                     Admin
                   </Link>
-                ) : null}
+                ) : null} */}
 
                 {/* SignUp-and Logout */}
                 {user ? (

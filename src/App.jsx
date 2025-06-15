@@ -1,6 +1,6 @@
 
 import "./App.css";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Order from "./components/order/Order";
 import Cart from "./pages/cart/Cart";
@@ -18,6 +18,7 @@ import MyState from "./context api/MySatate";
 // import Razorpay from "./context api/Coustom";
 // import Razorpay from "./pages/cart/Razorpay";
 function App() {
+
   return (
      
     <BrowserRouter> 
@@ -37,7 +38,7 @@ function App() {
           <Route path="/*" element={<NoPage />} />
         </Routes>
        {/* <Razorpay /> */}
-        <ToastContainer />
+        <ToastContainer /> 
       </MyState> 
       {/* MyState se Wrap q ke MyState ek provider hai context api ka use hora hai appcompoents ki MyState se Wrap kar re hai iska matlab ab app componets me jitne componets use hoge us me dircte value pass kar skate hai context api ka use kar ke q ke app componets prants hai ab sub ka. */}
     </BrowserRouter>
@@ -48,22 +49,26 @@ export default App;
 
 // Users ke liye.
 export function ProtectedRoutes({ children }) {
+  const location = useLocation();
   if (localStorage.getItem('user')) {
     return children;
   } else {
-    return <Navigate to='/login' />;
+    return <Navigate to='/login' state={{ PreviousPathname: location.pathname, }} replace/>;
+
   }
 }
 
 // Admin ke liye hai ye function.
 export function ProtectedRoutesForAdmin({ children }) {
+  const location = useLocation();
+  console.log("App location", location);
   const user = JSON.parse(localStorage.getItem('user'));
 
   // Allow access only for admin users
   if (user && user.role === "admin") {
     return children; // Render the protected component for admin
   } else {
-    return <Navigate to='/login' />; // Redirect to login if not admin
+    return <Navigate to='/login' state={{ PreviousPathname: location.pathname,}} replace/>; // Redirect to login if not admin
   }
 }
 

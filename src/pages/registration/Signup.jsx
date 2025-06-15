@@ -26,7 +26,7 @@
 
 
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, replace, useNavigate } from 'react-router-dom';
 import { MyContext } from '../../context api/myContext';
 import { toast } from 'react-toastify';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -113,7 +113,7 @@ function Signup() {
         toast.success("Signup Successful!", { autoClose: 1500 });
         setFormData({ fullName: '', email: '', password: '' });
         setTermsAccepted(false);
-        navigate('/login'); // Redirect to login page
+        navigate('/login',{replace:true}); // Redirect to login page
       } catch (error) {
         console.error(error);
         if (error.code === 'auth/email-already-in-use') {
