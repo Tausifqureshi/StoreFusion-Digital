@@ -21,7 +21,7 @@ function Filter() {
           backgroundColor: mode === "dark" ? "#1F1F1F" : "white",
           color: mode === "dark" ? "white" : "black",
         }}
-      >
+      >   
         <h2 className="text-xl font-bold mb-4">Filter Products</h2>
 
           {/* Search Filter */}

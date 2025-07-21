@@ -9,7 +9,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 function DashboardTab() {
   const { mode, product, edithandle, deleteProduct, order, user  } = useContext(MyContext);
-
+ 
   
   const [index, setIndex] = useState(0); // Track the current tab index
   const navigate = useNavigate(); // useNavigate hook
