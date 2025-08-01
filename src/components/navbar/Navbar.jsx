@@ -7,7 +7,6 @@ import {
   Link,
   useNavigate,
   useLocation,
-  useSearchParams,
 } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 import { useSelector } from "react-redux";
@@ -30,10 +29,10 @@ function Navbar() {
 
 
     localStorage.removeItem("user"); // Remove specific user item
-    navigate(`/login`);
-    // navigate(`/login?redirect=${location.pathname}`);
+    // navigate(`/login`);
+    navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa 
 
-    navigate("/login", {state: { PreviousPathname: location.pathname },});
+    // navigate("/login", {state: { PreviousPathname: location.pathname },}); useLocation use to aisa
   }
 
   const cartItems = useSelector((state) => state.cart);
@@ -281,17 +280,17 @@ function Navbar() {
                   </Link>
                 ) : (
                   ""
-                )}
+                )}  
 
-                 <Link
+                 {/* <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
                     style={{ color: mode === "dark" ? "#fff" : "#212529" }}
                   >
                     Admin
-                  </Link>
+                  </Link> */}
 
-                {/* {user && user.role === "admin" ? (
+                {user && user.role === "admin" ? (
                   <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
@@ -299,7 +298,7 @@ function Navbar() {
                   >
                     Admin
                   </Link>
-                ) : null} */}
+                ) : null}
 
                 {/* SignUp-and Logout */}
                 {user ? (

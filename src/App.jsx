@@ -65,7 +65,7 @@ export function ProtectedRoutesForAdmin({ children }) {
   const user = JSON.parse(localStorage.getItem('user'));
 
   // Allow access only for admin users
-  if (user && user.role === "admin") {
+  if (user && user.role === "admin") { 
     return children; // Render the protected component for admin
   } else {
     return <Navigate to='/login' state={{ PreviousPathname: location.pathname,}} replace/>; // Redirect to login if not admin
