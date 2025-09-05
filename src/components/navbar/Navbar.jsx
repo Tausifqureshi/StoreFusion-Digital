@@ -3,11 +3,7 @@ import { BsFillCloudSunFill } from "react-icons/bs";
 import { FiSun } from "react-icons/fi";
 import { RxCross2 } from "react-icons/rx";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  Link,
-  useNavigate,
-  useLocation,
-} from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 import { useSelector } from "react-redux";
 
@@ -27,10 +23,9 @@ function Navbar() {
     // e.preventDefualt();
     e.preventDefault();
 
-
     localStorage.removeItem("user"); // Remove specific user item
     // navigate(`/login`);
-    navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa 
+    navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa
 
     // navigate("/login", {state: { PreviousPathname: location.pathname },}); useLocation use to aisa
   }
@@ -280,9 +275,9 @@ function Navbar() {
                   </Link>
                 ) : (
                   ""
-                )}  
+                )}
 
-                 {/* <Link
+                {/* <Link
                     to="/dashboard"
                     className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
                     style={{ color: mode === "dark" ? "#fff" : "#212529" }}

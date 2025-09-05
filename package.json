@@ -15,7 +15,7 @@
     "@headlessui/react": "^2.1.8",
     "@mui/material": "^6.1.4",
     "@reduxjs/toolkit": "^2.2.7",
-    "apexcharts": "^3.54.0",
+    "apexcharts": "^5.3.4",
     "caniuse-lite": "^1.0.30001723",
     "chart.js": "^4.4.4",
     "crypto-js": "^4.2.0",
