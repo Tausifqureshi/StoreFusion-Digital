@@ -238,9 +238,6 @@ function MyState({ children}) {
   }
 }
 
-
-
-
   // Cancel Order Function
   const cancelOrder = async (orderItem) => {
     setLoading(true);
@@ -301,11 +298,6 @@ function MyState({ children}) {
       setLoading(false); // Ensure loading state is reset
     }
   };
-  
-
-
-
-
 
 //Get user ke liye ye function hai deshbord me jaye ga.
 const [user, setUser] = useState([]);
@@ -327,7 +319,6 @@ const getUserData = async () => {
   }
 }
 
-
 useEffect(() => {
   getProductData();
   getOrderData();
@@ -335,17 +326,12 @@ useEffect(() => {
 
 }, []);
   
-
-
 //Filter ke liye ye State.
 const [searchkey, setSearchkey] = useState('');
 const [filterType, setFilterType] = useState('');
 const [filterPrice, setFilterPrice] = useState('');
 const [sortPrice, setSortPrice] = useState('');
   
-
-  
-
   return (
     <MyContext.Provider
       value={{

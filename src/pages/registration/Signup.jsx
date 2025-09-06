@@ -1,30 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import React, { useContext, useState } from 'react';
 import { Link, replace, useNavigate } from 'react-router-dom';
 import { MyContext } from '../../context api/myContext';

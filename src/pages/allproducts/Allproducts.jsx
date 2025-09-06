@@ -8,11 +8,12 @@ import ProductCard from '../../components/productCard/ProductCard';
 import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import ScrollToTopButoon from '../../components/Scroll top/ScrollToTopButoon';
+import Loader from "../../components/loader/Loader"
     
 
 
 function Allproducts() {
-const { mode, product ,searchkey,filterType, filterPrice,setFilterPrice, sortPrice} = useContext(MyContext);
+const { mode, product ,searchkey,filterType, filterPrice, loading, sortPrice} = useContext(MyContext);
 const [showMoreIndex, setShowMoreIndex] = useState({});
 const [visibleProducts, setVisibleProducts] = useState(8); // Start with 8 products
 
@@ -91,6 +92,7 @@ const filteredProducts = product
     const [minPrice, maxPrice] = filterPrice.split('-').map(Number);
     return item.price >= minPrice && item.price <= maxPrice;
   })
+ 
 
 //Apply filters and sorting
 .sort((a, b) => {
@@ -101,23 +103,28 @@ if(sortPrice === 'low-to-high') {
 }
 return 0; // No sorting
  })
-
+ // ...existing code...
+console.log("Products from context:", product);
+// ...existing code...
  const loadMoreProducts = () => {
   setVisibleProducts((prev) => prev + 4); // Load 4 more products on click
 };
 
   return (
-    // <div>
-    //  <h1> Allproducts </h1>  
-    // </div>
-
-
 
   <Layout>
   <Filter/>
 
 <section className="text-gray-600 body-font">
 <div className="container px-5 py-8 md:py-16 mx-auto">
+ {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader />
+          </div>
+        ) : (
+<>
+
+
 <div className="lg:w-1/2 w-full mb-6 lg:mb-10">
 <h1 className={`sm:text-3xl text-2xl font-medium title-font mb-2 ${mode === 'dark' ? 'text-white' : 'text-gray-900'}`}>
   Our Latest Collection
@@ -190,6 +197,9 @@ return 0; // No sorting
   </button>
 </div>
   )}
+</>
+  )}
+
 </div>
 </section>
 <ScrollToTopButoon />
