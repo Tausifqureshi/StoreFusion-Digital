@@ -29,7 +29,7 @@ function App() {
       {/* <h1 className="text-4xl font-extrabold text-center mb-10 bg-green-600 text-red-900">Tausif</h1> */}
         <Routes>  
           <Route path="/" element={<Home />} />
-          <Route path="/aout" element={<About />} />
+          <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
           <Route path="/cart" element={<Cart />} />

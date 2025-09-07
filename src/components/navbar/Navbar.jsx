@@ -36,8 +36,9 @@ function Navbar() {
   }, 0);
 
   return (
-    <div className="bg-white sticky top-0 z-50  ">
+    <div className="bg-white sticky top-0 z-50">
       {/* Mobaile Ke Liye Desgin */}
+      {/* Mobile Menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
           <Transition.Child
@@ -52,7 +53,7 @@ function Navbar() {
             <div className="fixed inset-0 bg-black bg-opacity-25" />
           </Transition.Child>
 
-          <div className="fixed inset-0 z-40 flex">
+          <div className="fixed inset-0 flex z-50">
             <Transition.Child
               as={Fragment}
               enter="transition ease-in-out duration-300 transform"
@@ -63,122 +64,94 @@ function Navbar() {
               leaveTo="-translate-x-full"
             >
               <Dialog.Panel
-                className="relative flex w-full max-w-xs flex-col overflow-y-auto pb-12 shadow-xl"
+                className="relative flex flex-col w-full max-w-xs"
                 style={{
-                  backgroundColor:
-                    mode === "dark" ? "rgb(40, 44, 52)" : "white",
+                  backgroundColor: mode === "dark" ? "rgb(40,44,52)" : "white",
                   color: mode === "dark" ? "white" : "black",
                 }}
               >
-                <div className="flex items-center justify-between px-4 pb-2 pt-28">
+                {/* Top bar inside mobile menu */}
+                <div className="flex items-center justify-between px-4 pt-6 pb-4">
                   <h2 className="text-lg font-semibold">Menu</h2>
                   <button
-                    type="button"
-                    className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
                     onClick={() => setOpen(false)}
+                    className="p-2 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                   >
-                    <span className="sr-only"> Close menu </span>
-                    <RxCross2 className="w-5 h-5" />
+                    <RxCross2 className="w-6 h-6" />
                   </button>
                 </div>
 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                  {/* Allproducts-Page */}
+                {/* Menu links */}
+                <div className="space-y-4 px-6 py-9">
                   <Link
                     to="/allproducts"
-                    className="block text-sm font-medium"
-                    style={{ color: mode === "dark" ? "white" : "black" }}
+                    className="block text-base font-medium hover:text-blue-500"
                   >
                     All Products
                   </Link>
+                  <Link
+                    to="/about"
+                    className="block text-base font-medium hover:text-blue-500"
+                  >
+                    About
+                  </Link>
+                  <Link
+                    to="/contact"
+                    className="block text-base font-medium hover:text-blue-500"
+                  >
+                    Contact
+                  </Link>
 
-                  {/* Order-page */}
-                  {user ? (
-                    <div className="flow-root">
-                      <Link
-                        to="/order"
-                        className="block p-2 font-medium"
-                        style={{ color: mode === "dark" ? "white" : "black" }}
-                      >
-                        Order
-                      </Link>
-                    </div>
-                  ) : (
-                    ""
+                  {user && (
+                    <Link
+                      to="/order"
+                      className="block text-base font-medium hover:text-blue-500"
+                    >
+                      Order
+                    </Link>
+                  )}
+                  {user && user.role === "admin" && (
+                    <Link
+                      to="/dashboard"
+                      className="block text-base font-medium hover:text-blue-500"
+                    >
+                      Admin
+                    </Link>
                   )}
 
-                  {/* Admin-Page */}
-                  {user && user.role === "admin" ? (
-                    <div className="flow-root">
-                      <Link
-                        to="/dashboard"
-                        className="block p-2 font-medium"
-                        style={{ color: mode === "dark" ? "white" : "black" }}
-                      >
-                        Admin
-                      </Link>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-
-                  {/* Logout And Signin */}
-                  <div className="flex justify-start space-x-4">
+                  {/* Auth buttons */}
+                  <div className="pt-4 border-t border-gray-200">
                     {user ? (
                       <button
-                        className="px-4 py-2 font-medium text-sm bg-blue-500 text-white rounded-md cursor-pointer transition-all duration-300 transform hover:bg-blue-600 hover:scale-105"
                         onClick={handleLogout}
-                        style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                        className="w-full px-4 py-2 text-center bg-blue-500 text-white rounded-md hover:bg-blue-600"
                       >
                         Logout
                       </button>
                     ) : (
                       <Link
                         to="/login"
-                        className="px-4 py-2 font-medium text-sm bg-blue-500 text-white rounded-md transition-all duration-300 transform hover:bg-blue-600 hover:scale-105"
-                        style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                        className="block w-full px-4 py-2 text-center bg-blue-500 text-white rounded-md hover:bg-blue-600"
                       >
-                        Sign-in
+                        Sign In
                       </Link>
                     )}
                   </div>
 
-                  {user ? (
-                    <div className="flow-root">
-                      <Link to="/">
-                        <img
-                          className="w-10 h-10 rounded-full"
-                          src="https://i.pravatar.cc/300"
-                          alt="Profile Picture"
-                        />
-                      </Link>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </div>
-
-                {user ? (
-                  <div className="border-t border-gray-200 px-4 py-6">
-                    <div className="flex items-center">
-                      <Link to="/">
-                        <img
-                          src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
-                          alt="India Flag"
-                          className="block h-auto w-5"
-                        />
-                      </Link>
-                      <span
-                        className="ml-3 block text-base font-medium"
-                        style={{ color: mode === "dark" ? "white" : "black" }}
-                      >
-                        INDIA
+                  {/* Profile */}
+                  {user && (
+                    <div className="flex items-center space-x-3 pt-4 border-t border-gray-200">
+                      <img
+                        src="https://i.pravatar.cc/300"
+                        alt="Profile"
+                        className="w-10 h-10 rounded-full"
+                      />
+                      <span className="text-sm font-medium">
+                        {user.name || "User"}
                       </span>
                     </div>
-                  </div>
-                ) : (
-                  ""
-                )}
+                  )}
+                </div>
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -186,234 +159,163 @@ function Navbar() {
       </Transition.Root>
 
       {/* desktop  this create Desgin*/}
-      <header className="relative bg-white">
+      {/* Top Header */}
+      <header className="bg-white">
         <p
-          className="flex h-12 items-center justify-center px-4 text-xs sm:text-sm md:text-base lg:text-lg font-medium text-white sm:px-6 lg:px-8"
+          className="flex h-10 items-center justify-center px-4 text-xs sm:text-sm md:text-base font-medium text-white"
           style={{
             backgroundColor: mode === "dark" ? "#333" : "#007bff",
-            transition: "background-color 0.3s ease",
           }}
         >
           🚚 Free shipping on orders ₹300+! Don’t miss out – shop today!
         </p>
 
+        {/* Navbar */}
         <nav
-          aria-label="Top"
-          className="bg-gray-100 px-4 sm:px-6 lg:px-8 shadow-md transition-colors duration-300"
+          className="shadow-md transition-colors duration-300"
           style={{
             backgroundColor: mode === "dark" ? "#1c1c1c" : "#f8f9fa",
             color: mode === "dark" ? "#fff" : "#212529",
           }}
         >
-          <div className="flex h-16 items-center justify-between">
-            {/* mobile menu ko toggle */}
-            <button
-              type="button"
-              className="rounded-md p-2 text-gray-400 lg:hidden hover:text-gray-800 transition-colors duration-300"
-              onClick={() => setOpen(true)}
-              style={{
-                backgroundColor: mode === "dark" ? "#333" : "#fff",
-                color: mode === "dark" ? "#fff" : "#000",
-              }}
-            >
-              <span className="sr-only">Open menu</span>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                {" "}
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                />{" "}
-              </svg>{" "}
-            </button>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between h-16 items-center">
+              {/* Mobile menu button */}
+              <div className="flex lg:hidden">
+                <button
+                  onClick={() => setOpen(true)}
+                  className="p-2 text-gray-500 hover:text-blue-600"
+                  style={{
+                    backgroundColor: mode === "dark" ? "#333" : "#fff",
+                    color: mode === "dark" ? "#fff" : "#000",
+                  }}
+                >
+                  <span className="sr-only">Open menu</span>
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </button>
+              </div>
 
-            {/* Logo */}
-            <div className="ml-4 flex lg:ml-0">
+              {/* Logo */}
               <Link to="/" className="flex items-center">
                 <h1
-                  className="text-3xl font-extrabold px-4 py-3 rounded-lg transition-all duration-300 hover:text-gray-700 hover:scale-105 hover:shadow-lg"
+                  className="text-2xl md:text-3xl font-extrabold px-4 py-2 rounded-lg"
                   style={{
-                    color: mode === "dark" ? "#fff" : "#003366", // Dark Blue
-                    textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+                    color: mode === "dark" ? "#fff" : "#003366",
                     background:
                       mode === "dark"
-                        ? "rgba(0, 0, 0, 0.2)"
-                        : "rgba(255, 255, 255, 0.8)",
+                        ? "rgba(0,0,0,0.2)"
+                        : "rgba(255,255,255,0.8)",
                   }}
                 >
                   <span className="italic">S</span>toreFusion
                 </h1>
               </Link>
-            </div>
 
-            <div className="ml-auto flex items-center space-x-6">
-              {/* Pages */}
-              <div className="hidden lg:flex lg:space-x-6">
-                <Link
-                  to="/allproducts"
-                  className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                >
+              {/* Desktop Links */}
+              <div className="hidden lg:flex lg:items-center lg:space-x-6">
+                {/* AllProducts-Page */}
+                <Link to="/allproducts" className="hover:text-blue-600">
                   All Products
                 </Link>
 
-                <Link
-                  to="/aout"
-                  className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                >
+                  {/* About-Page */}
+                <Link to="/about" className="hover:text-blue-600">
                   About
                 </Link>
 
-                <Link
-                  to="/contact"
-                  className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                >
+                {/* Contact-Page */}
+                <Link to="/contact" className="hover:text-blue-600">
                   Contact
                 </Link>
-
-                {/* Products */}
-                {user ? (
-                  <Link
-                    to="/order"
-                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                  >
+                {user && (
+                  <Link to="/order" className="hover:text-blue-600">
                     Order
                   </Link>
-                ) : (
-                  ""
+                )}
+                {user && user.role === "admin" && (
+                  <Link to="/dashboard" className="hover:text-blue-600">
+                    Admin
+                  </Link>
                 )}
 
-                {/* <Link
-                    to="/dashboard"
-                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                  >
-                    Admin
-                  </Link> */}
-
-                {user && user.role === "admin" ? (
-                  <Link
-                    to="/dashboard"
-                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                  >
-                    Admin
-                  </Link>
-                ) : null}
-
-                {/* SignUp-and Logout */}
+                {/* Auth */}
                 {user ? (
-                  // Show Logout button if the user is logged in
-                  <a
-                    onClick={handleLogout}
-                    className="text-sm font-medium cursor-pointer transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                  >
+                  <button onClick={handleLogout} className="hover:text-red-500">
                     Logout
-                  </a>
+                  </button>
                 ) : (
-                  // Show Sign-in link if no user is logged in
-                  <Link
-                    to="/login"
-                    className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
-                    style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                  >
-                    Sign-in
+                  <Link to="/login" className="hover:text-blue-600">
+                    Sign In
                   </Link>
+                )}
+
+                {/* Flag + Profile */}
+                {user && (
+                  <div className="flex items-center space-x-3">
+                    <img
+                      src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
+                      alt="India"
+                      className="w-6 h-4"
+                    />
+                    <img
+                      src="https://i.pravatar.cc/300"
+                      alt="Profile"
+                      className="w-8 h-8 rounded-full"
+                    />
+                  </div>
                 )}
               </div>
 
-              {/* Flags */}
-              {user ? (
-                <div className="hidden lg:flex items-center space-x-4">
-                  <a
-                    href="#"
-                    className="flex items-center text-gray-700 hover:text-gray-900 transition-all duration-300 transform hover:scale-105"
-                  >
-                    <img
-                      src="https://ecommerce-sk.vercel.app/img/indiaflag.png"
-                      alt="Indian Flag"
-                      className="block h-auto w-6"
-                    />
-                    <span
-                      className="ml-3 text-sm font-medium"
-                      style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-                    >
-                      INDIA
-                    </span>
-                  </a>
+              {/* Right: Mode + Cart */}
+              <div className="flex items-center space-x-4">
+                {/* Dark mode */}
+                <button onClick={toggleMode} className="hover:text-blue-600">
+                  {mode === "light" ? (
+                    <FiSun size={24} />
+                  ) : (
+                    <BsFillCloudSunFill size={24} />
+                  )}
+                </button>
 
-                  <a
-                    href="#"
-                    className="flex items-center transition-all duration-300 transform hover:scale-105"
-                  >
-                    <img
-                      className="w-10 h-10 rounded-full"
-                      src="https://i.pravatar.cc/300"
-                      alt="Profile Picture"
-                    />
-                  </a>
-                </div>
-              ) : (
-                ""
-              )}
-
-              {/* Search */}
-              <button
-                className="transition-all duration-300 transform hover:scale-110 hover:text-indigo-600"
-                onClick={toggleMode}
-              >
-                {mode === "light" ? (
-                  <FiSun size={30} />
-                ) : (
-                  <BsFillCloudSunFill size={30} />
-                )}
-              </button>
-
-              {/* Cart */}
-              <Link
-                to="/cart"
-                className="flex items-center p-2 transition-all duration-300 hover:text-red-600 hover:scale-110 relative"
-                style={{ color: mode === "dark" ? "#fff" : "#212529" }}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
+                {/* Cart */}
+                <Link
+                  to="/cart"
+                  className="relative hover:text-red-600"
+                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"
-                  />
-                </svg>
-
-                {/* Cart Item Count */}
-                {/* <span className="ml-2 text-sm font-medium flex items-center justify-center w-6 h-6 bg-red-600 text-white rounded-full absolute -top-1 -right-2">
-                    {totalQuantity}
-                  </span> */}
-
-                {totalQuantity > 0 && ( //product koi add nhi tab tak ye zero show nho hoga is logi se.
-                  <span className="ml-2 text-sm font-medium flex items-center justify-center w-6 h-6 bg-red-600 text-white rounded-full absolute -top-1 -right-2">
-                    {totalQuantity}
-                  </span>
-                )}
-
-                <span className="sr-only">items in cart, view bag</span>
-              </Link>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="w-6 h-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.5 7h13L17 13M7 13h10M10 21a1 1 0 100-2 1 1 0 000 2zm7 0a1 1 0 100-2 1 1 0 000 2z"
+                    />
+                  </svg>
+                  {totalQuantity > 0 && (
+                    <span className="absolute -top-2 -right-2 w-5 h-5 flex items-center justify-center text-xs bg-red-600 text-white rounded-full">
+                      {totalQuantity}
+                    </span>
+                  )}
+                </Link>
+              </div>
             </div>
           </div>
         </nav>
