@@ -5,7 +5,7 @@ import { fireDB } from "../../firebase/FirebaseConfig";
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'; // Redux dispatch import
 import { clearCart } from '../../redux/cartSlice'; // Import clearCart action
-
+ 
 
 function Razorpay({ cartItems, totalAmount }) {
   const [formData, setFormData] = useState({

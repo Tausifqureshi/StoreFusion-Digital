@@ -17,6 +17,9 @@ import Allproducts from "./pages/allproducts/Allproducts";
 import MyState from "./context api/MySatate";
 // import Razorpay from "./context api/Coustom";
 // import Razorpay from "./pages/cart/Razorpay";
+import Contact from "./components/contact/Contact";
+import About from "./components/about/About";
+
 function App() {
 
   return (
@@ -26,6 +29,8 @@ function App() {
       {/* <h1 className="text-4xl font-extrabold text-center mb-10 bg-green-600 text-red-900">Tausif</h1> */}
         <Routes>  
           <Route path="/" element={<Home />} />
+          <Route path="/aout" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
           <Route path="/order" element={<Order />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/allproducts" element={<Allproducts />} />

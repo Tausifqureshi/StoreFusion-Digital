@@ -264,6 +264,22 @@ function Navbar() {
                   All Products
                 </Link>
 
+                <Link
+                  to="/aout"
+                  className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
+                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                >
+                  About
+                </Link>
+
+                <Link
+                  to="/contact"
+                  className="text-sm font-medium transition-all duration-300 transform hover:bg-indigo-600 hover:text-white hover:scale-105 px-2 py-1 rounded"
+                  style={{ color: mode === "dark" ? "#fff" : "#212529" }}
+                >
+                  Contact
+                </Link>
+
                 {/* Products */}
                 {user ? (
                   <Link
