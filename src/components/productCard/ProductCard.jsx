@@ -63,12 +63,13 @@ function ProductCard() {
     }
   };
 
-  useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-    // window.scrollTo(0, 0);
-  }, [cartItems]);
+  // useEffect(() => {
+  //   localStorage.setItem("cart", JSON.stringify(cartItems));
+  //   // window.scrollTo(0, 0);
+  // }, [cartItems]);
 
   // Apply filters
+  
   const filteredProducts = product
     .filter((item) =>
       // Filter by search key

@@ -5,7 +5,7 @@ import { fireDB } from "../../firebase/FirebaseConfig";
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'; // Redux dispatch import
 import { clearCart } from '../../redux/cartSlice'; // Import clearCart action
- 
+import { addOrder} from '../../redux/orderSlice';
 
 function Razorpay({ cartItems, totalAmount }) {
   const [formData, setFormData] = useState({
@@ -75,6 +75,9 @@ function Razorpay({ cartItems, totalAmount }) {
           const orderRef = collection(fireDB, "orders");
           await addDoc(orderRef, orderInfo); 
           toast.success('Order saved successfully',{ autoClose: 1000 });
+          
+          // ✅ Redux update (immediate UI update)
+          dispatch(addOrder(orderInfo));
 
           // Clear cart from Redux and localStorage
           dispatch(clearCart());  // Clear cart from Redux state

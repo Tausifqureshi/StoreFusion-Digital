@@ -82,21 +82,20 @@ function ProductInfo() {
         }
     };
 
+    // useEffect(() => {
+    //     localStorage.setItem('cart', JSON.stringify(cartItems));
+    //     window.scrollTo(0, 0);
+    // }, [cartItems]);
+
     useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cartItems));
         window.scrollTo(0, 0);
-    }, [cartItems]);
+    },);
 
 
     // Toggle Heart
     const toggleHeart = () => {
         setIsHeartFilled(prev => !prev);
     };
-
-
-
-
-
 
 
 return(

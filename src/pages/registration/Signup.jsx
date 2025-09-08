@@ -1,5 +1,3 @@
-
-
 import React, { useContext, useState } from 'react';
 import { Link, replace, useNavigate } from 'react-router-dom';
 import { MyContext } from '../../context api/myContext';
@@ -21,7 +19,7 @@ function Signup() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handlePasswordToggle = () => {   
+  const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
 
@@ -48,8 +46,8 @@ function Signup() {
   };
 
   const validAdminEmails = [
-    "admin@example.com", 
-    "superuser@example.com", 
+    "admin@example.com",
+    "superuser@example.com",
     "admin@tausifquraishigamil.com" // Allowed admin email
   ];
 
@@ -65,12 +63,12 @@ function Signup() {
         // Check if the email is an admin email
         const role = validAdminEmails.includes(email) ? "admin" : "user"; // Assign role based on email
 
-        const user = { 
-          name: fullName, 
-          uid: userCredential.user.uid, 
-          email: userCredential.user.email, 
+        const user = {
+          name: fullName,
+          uid: userCredential.user.uid,
+          email: userCredential.user.email,
           role: role, // Set role based on email
-          time: Timestamp.now() 
+          time: Timestamp.now()
         };
 
         const userRef = collection(fireDB, "users");
@@ -179,7 +177,7 @@ function Signup() {
         </form>
         <div className='text-center'>
           <h2 className='text-gray-600'>
-            Already have an account? 
+            Already have an account?
             <Link className='text-blue-600 font-semibold hover:underline' to={'/login'}> Log In</Link>
           </h2>
         </div>
@@ -189,3 +187,4 @@ function Signup() {
 }
 
 export default Signup;
+

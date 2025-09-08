@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { MyContext } from '../../context api/myContext';
-import { auth, fireDB } from '../../firebase/FirebaseConfig'; // Ensure you import db for Firestore
-import { getDocs, query, collection, where } from 'firebase/firestore'; // Import Firestore functions
+import { auth, fireDB } from '../../firebase/FirebaseConfig';
+import { getDocs, query, collection, where } from 'firebase/firestore';
+import { setCart } from "../../redux/cartSlice";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const { loading, setLoading } = useContext(MyContext);
@@ -13,15 +15,10 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
-const [searchParams ]= useSearchParams();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
 
-
-const redirectPath = searchParams.get('redirect') ||  '/';
-console.log("Hello",redirectPath)
-
-  // const location = useLocation(); 
-  // console.log("LoginPage", location);
-  // const PreviousPathname = location.state?.PreviousPathname || '/';
+  const redirectPath = searchParams.get('redirect') || '/';
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -48,29 +45,21 @@ console.log("Hello",redirectPath)
     setLoading(true);
 
     if (validateForm()) {
-      // Firestore reference for users collection
-      const usersRef = collection(fireDB, 'users'); // Adjust the collection name as needed
-      const q = query(usersRef, where("email", "==", formData.email)); // Email check
+      const usersRef = collection(fireDB, 'users');
+      const q = query(usersRef, where("email", "==", formData.email));
 
       try {
         const querySnapshot = await getDocs(q);
         if (querySnapshot.empty) {
-          // Agar user nahi mila
           toast.error("User not found. Please check your email.", { autoClose: 1500 });
           setLoading(false);
           return;
         }
 
-        // User data ko fetch karen
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
-        console.log("User Data fetched:", userData); // Log the fetched user data
-        
-        // Check if role is defined
-        console.log("User Role:", userData.role); // Should not be undefined
-        
-        // Save to local storage
-      
+
+        // Save user to local storage
         localStorage.setItem("user", JSON.stringify({
           fullName: userData.name,
           email: userData.email,
@@ -78,18 +67,41 @@ console.log("Hello",redirectPath)
           role: userData.role
         }));
 
-        // Agar user mila, toh login karne ki koshish karte hain
+        // ✅ Cart handling
+        const CART_KEY = `cart_${userData.email}`;
+        const savedCart = JSON.parse(localStorage.getItem(CART_KEY)) ?? [];
+        const guestCart = JSON.parse(localStorage.getItem("cart_guest")) ?? [];
+
+        let finalCart = [...savedCart];
+
+        if (guestCart.length > 0) {
+          guestCart.forEach(item => {
+            const exists = finalCart.find(p => p.id === item.id);
+            if (!exists) {
+              finalCart.push(item);
+            }
+          });
+
+          // Clear guest cart
+          localStorage.removeItem("cart_guest");
+        }
+
+        // Update Redux + LocalStorage
+        dispatch(setCart(finalCart));
+        localStorage.setItem(CART_KEY, JSON.stringify(finalCart));
+
+        // Firebase authentication
         await signInWithEmailAndPassword(auth, formData.email, formData.password);
+
         toast.success("Login Successful!", { autoClose: 1500 });
-        navigate(redirectPath, {replace: true}); // Redirect to home page useSerahParams use.
-        // navigate(PreviousPathname, {replace: true}); // Redirect to home page
+        navigate(redirectPath, { replace: true });
 
       } catch (error) {
         console.error(error);
         if (error.code === 'auth/wrong-password') {
           toast.error("Incorrect password. Please try again.", { autoClose: 1500 });
         } else {
-          toast.error("An unexpected error occurred. Please check your connection or try again later.", { autoClose: 1500 });
+          toast.error("An unexpected error occurred. Please try again later.", { autoClose: 1500 });
         }
       } finally {
         setLoading(false);
@@ -103,11 +115,6 @@ console.log("Hello",redirectPath)
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
       <div className='bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative'>
-        {/* {loading && (
-          <div className='fixed inset-0 flex items-center justify-center bg-gray-50 opacity-75 z-50'>
-            <Loader />
-          </div>
-        )} */}
         <h1 className='text-center text-gray-800 text-2xl mb-4 font-extrabold'>Log In</h1>
         <form onSubmit={login}>
           <div className='mb-4'>

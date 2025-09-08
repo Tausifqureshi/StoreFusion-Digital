@@ -5,7 +5,8 @@ import { RxCross2 } from "react-icons/rx";
 import { Dialog, Transition } from "@headlessui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import {clearCart } from "../../redux/cartSlice"
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -18,12 +19,16 @@ function Navbar() {
   const location = useLocation();
   // console.log("Navbar Location", location);
   console.log("Login location.state:", location);
+  const dispatch = useDispatch(); 
 
   function handleLogout(e) {
     // e.preventDefualt();
     e.preventDefault();
-
     localStorage.removeItem("user"); // Remove specific user item
+    // ✅ Redux cart clear
+  dispatch(clearCart());
+
+
     // navigate(`/login`);
     navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa
 
@@ -241,10 +246,6 @@ return (
     </header>
   </div>
 );
-
-
-
-
 
 }
 
