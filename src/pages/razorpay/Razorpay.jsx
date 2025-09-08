@@ -81,7 +81,11 @@ function Razorpay({ cartItems, totalAmount }) {
 
           // Clear cart from Redux and localStorage
           dispatch(clearCart());  // Clear cart from Redux state
-          localStorage.removeItem('cart');  // Clear cart from local storage
+          // localStorage.removeItem('cart');  // Clear cart from local storage
+              // ✅ LocalStorage clear (user specific)
+          const cartKey = user ? `cart_${user.email}` : "cart_guest";
+          localStorage.removeItem(cartKey);
+
         } catch (error) {
           console.log("Error saving order:", error);
           toast.error('Failed to save order',{ autoClose: 1000 });
