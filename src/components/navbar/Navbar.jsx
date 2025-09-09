@@ -246,7 +246,7 @@ return (
     </header>
   </div>
 );
-
+   
 }
 
 export default Navbar;
