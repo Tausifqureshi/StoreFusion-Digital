@@ -267,4 +267,4 @@ export default Navbar;
 
 
 
-// bro muje ek bigst level and production level aisa project chote mote projct nhi ek bight tailwin react router context api firebase raect ka use kar ke bana hai itna use kar ke bana ne ka matlba fully full stack  project hua backend me han firabse use kjar re hau ius liye ek bada bigst kevel projects sugget jis se reusme me kafi empact pade aiss batuo muje sub se alag uniq hio jio ke 
+// bro muje aisa bigst level and production level aisa project chaiye ke muje aisa chote mote projct nhi chaiye bade se bada bigst project tailwind react-router context api firebase raect ka use kar ke bana hai itna use kar ke bana ne ka matlba fully full stack  project hua backend me han firabse use kjar re hau ius liye ek bada bigst kevel projects sugget jis se reusme me kafi impact pade aisa batuo muje sub se alag uniq ho jo ke interviewer kr liye impresses kar re.
