@@ -63,7 +63,7 @@ function Order() {
     }
 
     setLoading(true);
-    try {
+    try {  
       await deleteDoc(doc(fireDB, "orders", orderItem.id));
  
       // Redux se remove kar turant UI update ke liye
