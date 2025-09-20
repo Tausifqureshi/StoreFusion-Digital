@@ -64,7 +64,7 @@ function Razorpay({ cartItems, totalAmount }) {
             date: new Date().toLocaleString("en-US", {
               month: "short",
               day: "2-digit",
-              year: "numeric",
+              year: "numeric",  
             }),
             email: user.email,
             userid: user.uid,
