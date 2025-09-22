@@ -22,8 +22,10 @@ const cartSlice = createSlice({
   reducers: {
     // ➕ Add product
     addToCart(state, action) {
+      // console.log (state, "State milri hai")
       const cartKey = getCartKey();
       state.push(action.payload);
+      //  console.log("➡️ After Add:", state);
       localStorage.setItem(cartKey, JSON.stringify(state));
     },
 
