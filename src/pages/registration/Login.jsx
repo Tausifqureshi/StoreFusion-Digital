@@ -17,7 +17,7 @@ function Login() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
-
+ 
   const redirectPath = searchParams.get('redirect') || '/';
 
   const handleInputChange = (e) => {
