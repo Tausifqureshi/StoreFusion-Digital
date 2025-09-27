@@ -77,5 +77,3 @@ export function ProtectedRoutesForAdmin({ children }) {
     return <Navigate to='/login' state={{ PreviousPathname: location.pathname,}} replace/>; // Redirect to login if not admin
   }
 }
-
-

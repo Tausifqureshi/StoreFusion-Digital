@@ -11,11 +11,16 @@ function Test() {
     }
   }
 
+  function handleReset (){
+    setCounter((pre)=> pre = 0);
+  }
+
   return (
     <div>
       <h1>Counter: {counter}</h1>
       <button onClick={handleIncrece}>Increment</button>
       <button onClick={handleDecrese}>Decrement</button>
+      <button onClick={handleReset}>Resat</button>
     </div>
   );
 }

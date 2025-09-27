@@ -261,10 +261,10 @@ export default Navbar;
 
 
  
+// bro meri reusme e-commarce ke  proejcts jise same milte huye proejcts muje na sub se alagas or unique proejcts chaiye muje chotte mote proejcts nhi bade levels ke biggets  pro4ejcts chaiye bro aise  projects bona bro please bade se bade level ke ek fresherr ke resume me porjects jo ksisi ke resume me nh hote hai aise proejcts hona please mujue aise aise projects suggets karo please bade bade bigs level lms ya cmp aise chotte motte nhiu bade or sub se unique  ho projects aise projects suggets karo biggets level unique bade bade jis se udmy ko eysly replace kar sako 
 
 
 
 
 
-
-// bro muje aisa bigst level and production level aisa project chaiye ke muje aisa chote mote projct nhi chaiye bade se bada bigst project tailwind react-router context api firebase raect ka use kar ke bana hai itna use kar ke bana ne ka matlba fully full stack  project hua backend me han firabse use kjar re hau ius liye ek bada bigst kevel projects sugget jis se reusme me kafi impact pade aisa batuo muje sub se alag uniq ho jo ke interviewer kr liye impresses kar re. 
+// bhai muje na in se bhi bade level ke [oreject hona but ai proejcts nhi banana hai muie lekin biggets level fresher ke hisbse suggets jis se interviwer impress ho aise aise proejcts suggets karo muje please jaldi bade se nade level lke industry level proejcts 
