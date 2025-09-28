@@ -12,7 +12,7 @@ import ProductInfo from "./pages/productInfo/ProductInfo";
 import AddProduct from "./pages/admin/page-admin/AddProduct";
 import UpdateProduct from "./pages/admin/page-admin/UpdateProduct";
 import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';         
 import Allproducts from "./pages/allproducts/Allproducts";
 import MyState from "./context api/MySatate";
 // import Razorpay from "./context api/Coustom";
@@ -23,7 +23,6 @@ import About from "./components/about/About";
 function App() {
 
   return (
-     
     <BrowserRouter> 
       <MyState> 
       {/* <h1 className="text-4xl font-extrabold text-center mb-10 bg-green-600 text-red-900">Tausif</h1> */}
@@ -44,7 +43,7 @@ function App() {
           <Route path="/*" element={<NoPage />} />
         </Routes>
        {/* <Razorpay /> */}
-        <ToastContainer /> 
+        <ToastContainer />           
       </MyState> 
       {/* MyState se Wrap q ke MyState ek provider hai context api ka use hora hai appcompoents ki MyState se Wrap kar re hai iska matlab ab app componets me jitne componets use hoge us me dircte value pass kar skate hai context api ka use kar ke q ke app componets prants hai ab sub ka. */}
     </BrowserRouter>
