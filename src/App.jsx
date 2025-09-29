@@ -20,7 +20,7 @@ import MyState from "./context api/MySatate";
 import Contact from "./components/contact/Contact";
 import About from "./components/about/About";
 
-function App() {
+function App() { 
 
   return (
     <BrowserRouter> 
