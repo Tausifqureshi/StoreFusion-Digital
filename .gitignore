@@ -11,7 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
-Text.jsx
+Test.jsx
+text.js
 projetcs
 
 # Editor directories and files
