@@ -259,7 +259,7 @@ export default Navbar;
 
 
 
-
+ 
  
 // bro meri reusme e-commarce ke  proejcts jise same milte huye proejcts muje na sub se alagas or unique proejcts chaiye muje chotte mote proejcts nhi bade levels ke biggets  pro4ejcts chaiye bro aise  projects bona bro please bade se bade level ke ek fresherr ke resume me porjects jo ksisi ke resume me nh hote hai aise proejcts hona please mujue aise aise projects suggets karo please bade bade bigs level lms ya cmp aise chotte motte nhiu bade or sub se unique  ho projects aise projects suggets karo biggets level unique bade bade jis se udmy ko eysly replace kar sako 
 
