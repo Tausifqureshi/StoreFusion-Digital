@@ -267,7 +267,7 @@ export default Navbar;
 
 
 
-// bhai muje na in se bhi bade level ke [oreject hona but ai proejcts nhi banana hai muie lekin biggets level fresher ke hisbse suggets jis se interviwer impress ho aise aise proejcts suggets karo muje please jaldi bade se nade level lke industry level proejcts 
+// bhai muje na in se bhi bade level ke poreject hona but ai proejcts nhi banana hai muie lekin biggets level fresher ke hisbse suggets jis se interviwer impress ho aise aise proejcts suggets karo muje please jaldi bade se nade level lke industry level proejcts 
 
 
 
