@@ -43,8 +43,8 @@ function Order() {
       (snapshot) => {
         const fetchedOrders = snapshot.docs.map((doc) => ({
           id: doc.id, // Firestore doc id
-          ...doc.data(),
-        }));
+          ...doc.data(), // us order ka pura data (jisne order kiya uska userid + addressInfo + cartItems etc.)
+        })); 
         dispatch(setOrders(fetchedOrders)); // Redux me set karna
       },
       (error) => {
