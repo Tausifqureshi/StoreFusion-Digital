@@ -26,7 +26,7 @@ function Order() {
   const { orders } = useSelector((state) => state.orders);
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false); 
   const [mode, setMode] = useState("light");
 
   // 🔹 Fetch Orders (Realtime listener from Firestore)
@@ -42,7 +42,7 @@ function Order() {
       q,
       (snapshot) => {
         const fetchedOrders = snapshot.docs.map((doc) => ({
-          id: doc.id, // Firestore doc id
+          id: doc.id, // Firestore document ka unique id
           ...doc.data(), // us order ka pura data (jisne order kiya uska userid + addressInfo + cartItems etc.)
         })); 
         dispatch(setOrders(fetchedOrders)); // Redux me set karna
