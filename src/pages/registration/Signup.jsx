@@ -96,7 +96,7 @@ function Signup() {
         }
       } finally {
         setLoading(false);
-      }
+      } 
     } else {
       toast.error("Please fix the errors in the form.", { autoClose: 1500 });
       setLoading(false);
