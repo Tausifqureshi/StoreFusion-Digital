@@ -84,9 +84,9 @@ function Signup() {
         }));
 
         toast.success("Signup Successful!", { autoClose: 1500 });   
-        setFormData({ fullName: '', email: '', password: '' });
+        setFormData({ fullName: '', email: '', password: '' }); 
         setTermsAccepted(false);
-        navigate('/login',{replace:true}); // Redirect to login page
+        navigate('/login',{replace:true}); // Redirect to login page 
       } catch (error) {
         console.error(error);
         if (error.code === 'auth/email-already-in-use') {
