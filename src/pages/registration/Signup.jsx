@@ -83,7 +83,7 @@ function Signup() {
           role: user.role
         }));
 
-        toast.success("Signup Successful!", { autoClose: 1500 });
+        toast.success("Signup Successful!", { autoClose: 1500 });   
         setFormData({ fullName: '', email: '', password: '' });
         setTermsAccepted(false);
         navigate('/login',{replace:true}); // Redirect to login page
