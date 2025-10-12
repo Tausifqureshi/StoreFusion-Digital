@@ -66,7 +66,7 @@ function Login() {
           uid: userData.uid,
           role: userData.role
         }));
-
+ 
         // ✅ Cart handling
         const CART_KEY = `cart_${userData.email}`;
         const savedCart = JSON.parse(localStorage.getItem(CART_KEY)) ?? [];
