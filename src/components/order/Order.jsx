@@ -92,7 +92,7 @@ function Order() {
     } finally {
       setLoading(false);
     }
-  };
+  }; 
   
   return (
     <Layout>
