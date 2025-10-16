@@ -30,7 +30,7 @@ function HeroSection() {
           alt="Online Shopping 2"
           style={{ width: "100%", height: "auto" }} // Responsive image styling
         />
-      </SwiperSlide>
+      </SwiperSlide> 
       <SwiperSlide>
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/004/858/012/small/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg"
