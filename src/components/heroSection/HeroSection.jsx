@@ -41,5 +41,5 @@ function HeroSection() {
     </Swiper>
   );
 }
-
+                                                                                                                                                                                            
 export default HeroSection;
