@@ -16,7 +16,7 @@ function HeroSection() {
       pagination={{ clickable: true }} // Enable pagination
       navigation // Enable navigation buttons
       autoplay={{ delay: 4000, disableOnInteraction: false }} // Autoplay with a delay of 3 seconds
-    >
+    > 
       <SwiperSlide>
         <img
           src="https://static.vecteezy.com/system/resources/previews/011/871/820/non_2x/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg"
@@ -41,5 +41,5 @@ function HeroSection() {
     </Swiper>
   );
 }
-                                                                                                                                                                                            
+
 export default HeroSection;
