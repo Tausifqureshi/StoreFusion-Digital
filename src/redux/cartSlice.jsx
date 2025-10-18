@@ -17,7 +17,7 @@ const getCartKey = () => {
 const initialState = JSON.parse(localStorage.getItem(getCartKey())) ?? [];
 
 const cartSlice = createSlice({
-  name: "cart",
+  name: "cart", 
   initialState,
   reducers: {
     // ➕ Add product
