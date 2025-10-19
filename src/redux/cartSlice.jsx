@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // Helper function: current cart key 
 const getCartKey = () => { 
   const user = JSON.parse(localStorage.getItem("user"));
-  return user ? `cart_${user.email}` : "cart_guest";
+  return user ? `cart_${user.email}` : "cart_guest"; 
 };
 
 // Initial state: load user-specific cart
