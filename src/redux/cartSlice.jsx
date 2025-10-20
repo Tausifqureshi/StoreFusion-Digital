@@ -20,7 +20,7 @@ const cartSlice = createSlice({
   name: "cart", 
   initialState,
   reducers: {
-    // ➕ Add product
+    // ➕ Add product 
     addToCart(state, action) {
       // console.log (state, "State milri hai")
       const cartKey = getCartKey();
