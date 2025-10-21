@@ -39,7 +39,7 @@ function Navbar() {
   const totalQuantity = cartItems.reduce((accumulator, currentValue) => {
     return accumulator + currentValue.quantity; // quanty bade gi utne hi itme show hoge. agr only products dhekna hai tu cart.length kar sakta hai but amzone me quantity jaisa hi use hai.
   }, 0);
-
+ 
 return (
   <div className="sticky top-0 z-50">
     {/* Mobile Drawer */}
