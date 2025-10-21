@@ -79,7 +79,7 @@ function Footer() {
           </Link>
           
           <p className={`text-sm mt-4 md:mt-0 ${mode === "dark" ? "text-gray-300" : "text-gray-600"} text-center`}>
-            © 2024 StoreFusion —
+            © 2025 StoreFusion —
             <a href="https://www.StoreFusion.com" rel="noopener noreferrer" target="_blank" className={`ml-1 ${mode === "dark" ? "text-gray-300" : "text-blue-600"}`}>
               www.StoreFusion.com
             </a>
