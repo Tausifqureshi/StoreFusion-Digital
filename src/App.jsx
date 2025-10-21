@@ -41,7 +41,7 @@ function App() {
           <Route path="/addProduct/" element={<ProtectedRoutesForAdmin><AddProduct /></ProtectedRoutesForAdmin>} />
           <Route path="/updateProduct/" element={<ProtectedRoutesForAdmin><UpdateProduct /></ProtectedRoutesForAdmin>} />
           <Route path="/*" element={<NoPage />} />
-        </Routes> 
+        </Routes>  
        {/* <Razorpay /> */}
         <ToastContainer />           
       </MyState> 
