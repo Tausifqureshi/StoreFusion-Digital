@@ -261,13 +261,7 @@ export default Navbar;
 
  
  
-// bro meri reusme e-commarce ke  proejcts jise same milte huye proejcts muje na sub se alagas or unique proejcts chaiye muje chotte mote proejcts nhi bade levels ke biggets  pro4ejcts chaiye bro aise  projects bona bro please bade se bade level ke ek fresherr ke resume me porjects jo ksisi ke resume me nh hote hai aise proejcts hona please mujue aise aise projects suggets karo please bade bade bigs level lms ya cmp aise chotte motte nhiu bade or sub se unique  ho projects aise projects suggets karo biggets level unique bade bade jis se udmy ko eysly replace kar sako 
-
-  
-
-
-
-// bhai muje na in se bhi bade level ke poreject hona but ai proejcts nhi banana hai muie lekin biggets level fresher ke hisbse suggets jis se interviwer impress ho aise aise proejcts suggets karo muje please jaldi bade se nade level lke industry level proejcts 
+// bhai muje na ai realive project nhi bana fresher me samje bro muje na clone e-commerce proejcts de o mere resume me hai muje us udemy ko replace karna hai o bhi e-commerce jaisa hi proejcts hai na muje sass jaisa proejcta chaiye na hi muje lsm jaise proejcts haiye na hi muje chotte mote projects chaiye muje na industry levels ke top levels ke proejcts chaiye bade se bade levels ke jo asa a fresher kisi ke resume me jaldi show nhi hota hu aise aise proejcts chaoiye interviewr dehkte hi bolo yaha banda fresher nhui industry level ka hai jaise hi me apne udemy ki jaga pe dalo o proejcts reusme high levels pe puvh jaye aise aise proejcts sugget kar koi fresher sovh hi nhi skata aise aise proejcts suggets akr tu muje smaja mere bhai jo me tere se bolra hu muje top lrvels ke proejcts suggets bade biggets levels jo jo mene mana kiya aise ek bhi proejcts nhi dena as a freser jo soch nhui skata aise aie bade industry levels ke proejcts do muje bade levels ke jis se interviewer impress ho jaye smaje bro 
 
 
 
