@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaTwitter, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 
 function Footer() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(MyContext); 
 
   const socialMediaLinks = [
     { platform: "youtube", icon: <FaYoutube />, href: "https://youtube.com" },
