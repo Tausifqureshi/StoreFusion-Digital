@@ -12,7 +12,7 @@ function Footer() {
     { platform: "instagram", icon: <FaInstagram />, href: "https://instagram.com" },
     { platform: "linkedin", icon: <FaLinkedin />, href: "https://linkedin.com" },
   ];
-         
+          
   return (
     <footer className={`text-gray-600 ${mode === "dark" ? "bg-gray-800" : "bg-white"}`}>
       <div className="container px-5 py-10 mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
