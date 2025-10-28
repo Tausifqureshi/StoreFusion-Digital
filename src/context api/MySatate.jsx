@@ -31,7 +31,7 @@ function MyState({ children}) {
       }
     )
   
-  })
+  }) 
 
   const navigate = useNavigate();
 

@@ -12,7 +12,7 @@ function AddProduct() {
 
   // const produtsAdded = async () => {
   //   await addProduct(); // Wait for addProduct to finish
-  //   navigate('/dashboard'); // Navigate after adding the product
+  //   navigate('/dashboard'); // Navigate after adding the product 
   // };
 
   return (

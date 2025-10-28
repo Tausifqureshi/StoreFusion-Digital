@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../loader/Loader";
 
 function ProductCard() {
-  const {
+  const { 
     mode,
-    product,
+    product, 
     searchkey,
     filterType,
     filterPrice,
