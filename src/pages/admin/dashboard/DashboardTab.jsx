@@ -16,7 +16,7 @@ function DashboardTab() {
 
   const add = () => {
     navigate('/addproduct'); // Navigate to '/addproduct'
-  };
+  }; 
 
   // Animation for tab panel
   const animationProps = useSpring({
