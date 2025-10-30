@@ -258,8 +258,11 @@ export default Navbar;
 
 
   
-
+// ins sub se bhi hat ke ho jo sub se alag ho aise aise proejcts do muje mere bhai please sub se unqiue levels ke sub se hat ke ho jo jaldi kisis fresher ke resume me na mile bus me apne resume me add karo tu interviewer bole yaha banda hi alaga hai aise aise proejcts de muje smaja na bro
  
+
+
+
  
 // bhai muje na ai relative project nhi banana hai fresher me ke time. bro muje na hi clone ya e-commerce proejcts bhi mat de o mere resume me hai. muje us udemy ko replace karna hai. jaise e-commerce proejcts hai sass jaisa proejcta ya enterprice jaise proejcst ya fir lsm jaise proejcts yaha multimedium jaise proejcts ya fir koi replicate projects chaiye hi nhi muje na hi chotte mote projects chaiye. muje chaiye industry levels ke top levels ke proejcts chaiye bade se bade levels ke jo asa a fresher kisi ke resume me jaldi show nhi hota ho aise aise proejcts chaiye jis se interviewr dehkte hi bolo yaha banda fresher nhi industry level ka hai. jaise hi me apne udemy ki jaga pe o proejcts reusme me add karo meri resume ka levels top pe puch jaye aise aise proejcts sugget kar. koi fresher souch hi nhi skata. aise aise proejcts suggets kar muje smaja mere bhai jo me tere se bolra hu muje top levels ke proejcts suggets kar bade biggets levels ge. or jo jo mene mana kiya aise ek bhi proejcts nhi dena as a freser jo soch nhi sakta candinet aise aise bade industry levels ke proejcts do muje. bade levels ke jis se interviewer impress ho jaye smaje bro or muje hire kar le aise aise proejcts suggtes me smaje meri baat ko bro.
 
