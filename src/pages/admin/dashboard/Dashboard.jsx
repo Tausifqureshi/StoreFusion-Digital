@@ -168,7 +168,7 @@ function Dashboard() {
       },
       title: {
         display: true,
-        text: 'Sales and Orders Overview (2024)',
+        text: 'Sales and Orders Overview (2025)',
         font: {
           size: 18,
           weight: 'bold',
