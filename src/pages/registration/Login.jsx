@@ -27,7 +27,7 @@ function Login() {
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
   };
-
+ 
   const validateForm = () => {
     let errors = {};
     if (!formData.email.trim()) {
