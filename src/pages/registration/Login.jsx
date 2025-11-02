@@ -42,7 +42,7 @@ function Login() {
 
   const login = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoading(true); 
 
     if (validateForm()) {
       const usersRef = collection(fireDB, 'users');
