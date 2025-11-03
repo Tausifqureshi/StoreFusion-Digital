@@ -44,7 +44,7 @@ function Login() {
     e.preventDefault();
     setLoading(true); 
 
-    if (validateForm()) {
+    if (validateForm()) { 
       const usersRef = collection(fireDB, 'users');
       const q = query(usersRef, where("email", "==", formData.email));
 
