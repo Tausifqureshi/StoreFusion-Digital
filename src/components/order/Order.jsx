@@ -213,3 +213,20 @@ function Order() {
 }
 
 export default Order;   
+
+
+
+
+// tune jo 4 number ka proejt sugget kiya o shia aise muje is tara ke proejcts sugget kar but industry levls ke jo freshre jaldi soch hi nhi skata apne resume me add karne ko aise aise proekcts sugeta kar tu muje smaja mere bhai or apne tarf se bhi kar bro bade levels ke inse 4guna bade levsl kr proejcts jo sub se alaga sub se unqiue or sub se hat ke ho aise aise proejcts suggets kar tu muje bro smaja mere bhai me jo bolra ho 
+
+
+
+
+
+// hospital and cites jaise bade industyr levek proejcts do j sub se unqiue ho sub se hat ke hi jomjaldi ksisi frehser ke resune me nhi milta ho aise aise proejcts dena industry leveks kr smaje bro top levels ke or apne tarf se bhin industry levels kr dena 
+
+
+
+
+
+// bhai hosptial wale projects me docter ka apprment petion yaha sub bbi rehta na feauter me 
