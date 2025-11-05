@@ -136,7 +136,7 @@ function Login() {
               className={`border px-4 py-3 w-full pr-12 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'}`}
               placeholder='Password'
               onChange={handleInputChange}
-            />
+            /> 
             <button
               type="button"
               onClick={handlePasswordToggle}
