@@ -138,7 +138,7 @@ function Login() {
               onChange={handleInputChange}
             /> 
             <button
-              type="button"
+              type="button" 
               onClick={handlePasswordToggle}
               className='absolute top-3 right-4 flex items-center text-gray-500'
             >
