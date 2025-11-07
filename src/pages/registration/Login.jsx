@@ -148,7 +148,7 @@ function Login() {
           </div>
           <div className='flex justify-center mb-4'>
             <button
-              type='submit'
+              type='submit' 
               className='bg-blue-600 w-full text-white font-bold py-3 rounded-lg hover:bg-blue-500 transition'
               disabled={loading}
             >
