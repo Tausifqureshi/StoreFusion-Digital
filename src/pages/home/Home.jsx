@@ -28,7 +28,7 @@ function Home() {
     dispatch(deleteFromCart("shirt"));
   }
   // const {state , color} = useContext(MyContext);
-  return (
+  return ( 
     <div>
       <Layout>
         {/* <h1>Home Page</h1> */}
