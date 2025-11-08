@@ -16,6 +16,7 @@ function HeroSection() {
       pagination={{ clickable: true }} // Enable pagination
       navigation // Enable navigation buttons
       autoplay={{ delay: 4000, disableOnInteraction: false }} // Autoplay with a delay of 3 seconds
+      loop={true}
     > 
       <SwiperSlide>
         <img
