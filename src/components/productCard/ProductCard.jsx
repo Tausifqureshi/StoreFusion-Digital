@@ -124,7 +124,7 @@ function ProductCard() {
                   item;
                 const isExpanded = showMoreIndex[index];
 
-                return (
+                return ( 
                   <div
                     className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg"
                     key={index}
