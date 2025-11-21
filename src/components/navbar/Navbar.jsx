@@ -31,7 +31,7 @@ function Navbar() {
     // navigate(`/login`);
     navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa
 
-    // navigate("/login", {state: { PreviousPathname: location.pathname },}); useLocation use to aisa
+    // navigate("/login", {state: { PreviousPathname: location.pathname },}); //useLocation use to aisa
   }
 
   const cartItems = useSelector((state) => state.cart);
@@ -306,4 +306,3 @@ function Navbar() {
 }
 
 export default Navbar;
-

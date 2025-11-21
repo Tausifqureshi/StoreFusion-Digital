@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 import Loader from "../../components/loader/Loader";
+// import ProductCard from "../../components/productCard/ProductCard";
 
 function Allproducts() {
   const {

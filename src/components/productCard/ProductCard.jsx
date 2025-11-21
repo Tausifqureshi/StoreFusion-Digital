@@ -7,9 +7,9 @@ import { useNavigate } from "react-router-dom";
 import Loader from "../loader/Loader";
 
 function ProductCard() {
-  const { 
+  const {
     mode,
-    product, 
+    product,
     searchkey,
     filterType,
     filterPrice,
@@ -69,7 +69,7 @@ function ProductCard() {
   // }, [cartItems]);
 
   // Apply filters
-  
+
   const filteredProducts = product
     .filter((item) =>
       // Filter by search key
@@ -124,7 +124,7 @@ function ProductCard() {
                   item;
                 const isExpanded = showMoreIndex[index];
 
-                return ( 
+                return (
                   <div
                     className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg"
                     key={index}

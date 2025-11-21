@@ -5,7 +5,7 @@ function AddProduct() {
   const { products, setProducts, addProduct} = useContext(MyContext);
 
 
-  function inputHandle(e) {
+  function inputHandle(e) { 
     setProducts({ ...products, [e.target.name]: e.target.value });
   }
 

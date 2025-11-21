@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -15,10 +15,13 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const dispatch = useDispatch(); 
+
   const [searchParams] = useSearchParams();
-  const dispatch = useDispatch();
- 
   const redirectPath = searchParams.get('redirect') || '/';
+
+  const location = useLocation();
+  // const redirectPath = location.state?.PreviousPathname || '/';
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

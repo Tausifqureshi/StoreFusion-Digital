@@ -23,7 +23,7 @@ function Order() {
   const user = JSON.parse(localStorage.getItem("user"));
   const userid = user?.uid;  
  
-  const { orders } = useSelector((state) => state.orders);95597560
+  const { orders } = useSelector((state) => state.orders);//95597560
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false); 

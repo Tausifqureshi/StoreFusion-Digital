@@ -7,7 +7,7 @@ function Filter() {
   const resetFilters = () => {
     setSearchkey(""); 
     setFilterType("");
-    setFilterPrice("");
+    setFilterPrice(""); 
     setSortPrice("");
   };
   const uniqueCategories = [...new Set(product.map(item => item.category))]; // Set method duplicate keys ko allow nahi karta, isliye iska istemal kiya jata hai taaki har key sirf ek baar hi store ho sake. Yeh data structure ko unique values ke liye optimize karta hai, jo data management aur lookup ko efficient banata hai.
@@ -58,7 +58,7 @@ function Filter() {
             Reset Filters
           </button>
         </div>
-
+ 
         <div className="flex flex-col md:flex-row md:justify-between mb-4">
           <div className="flex flex-wrap gap-4 mb-4 md:mb-0 w-full md:w-3/4">
             {/* Category Filter */}
