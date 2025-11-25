@@ -106,8 +106,7 @@ function MyState({ children}) {
     });
   };
   
-
-  // ****** get product
+   // ****** get product
   const [product, setProduct] = useState([]);
    // getProductData.
    const getProductData = async () => {
