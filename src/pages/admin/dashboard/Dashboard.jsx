@@ -9,7 +9,6 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 // Register required components with Chart.js
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend);
-
 function Dashboard() {
   const { mode } = useContext(MyContext);
 
