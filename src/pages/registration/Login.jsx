@@ -57,7 +57,7 @@ function Login() {
           toast.error("User not found. Please check your email.", { autoClose: 1500 });
           setLoading(false);
           return; 
-        }
+        } 
 
         const userDoc = querySnapshot.docs[0];
         const userData = userDoc.data();
