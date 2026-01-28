@@ -8,7 +8,10 @@ import { auth, fireDB } from '../../firebase/FirebaseConfig';
 import { getDocs, query, collection, where } from 'firebase/firestore';
 import { setCart } from "../../redux/cartSlice";
 import { useDispatch } from "react-redux";
-
+import { getCartFromFirestore, getGuestCartFromFirestore,clearGuestCartFromFirestore, saveCartToFirestore } from '../cart/cartFirestore';
+// getGuestCartFromFirestore,
+//   clearGuestCartFromFirestore,
+//   saveCartToFirestore
 function Login() {
   const { loading, setLoading } = useContext(MyContext);
   const [errors, setErrors] = useState({});
@@ -43,77 +46,178 @@ function Login() {
     return Object.keys(errors).length === 0;
   };
 
-  const login = async (e) => {
-    e.preventDefault();
-    setLoading(true); 
+  // const login = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true); 
 
-    if (validateForm()) { 
-      const usersRef = collection(fireDB, 'users');
-      const q = query(usersRef, where("email", "==", formData.email));
+  //   if (validateForm()) { 
+  //     const usersRef = collection(fireDB, 'users');
+  //     const q = query(usersRef, where("email", "==", formData.email));
 
-      try {
-        const querySnapshot = await getDocs(q);
-        if (querySnapshot.empty) {
-          toast.error("User not found. Please check your email.", { autoClose: 1500 });
-          setLoading(false);
-          return; 
-        } 
+  //     try {
+  //       const querySnapshot = await getDocs(q);
+  //       if (querySnapshot.empty) {
+  //         toast.error("User not found. Please check your email.", { autoClose: 1500 });
+  //         setLoading(false);
+  //         return; 
+  //       } 
 
-        const userDoc = querySnapshot.docs[0];
-        const userData = userDoc.data();
+  //       const userDoc = querySnapshot.docs[0];
+  //       const userData = userDoc.data();
 
-        // Save user to local storage
-        localStorage.setItem("user", JSON.stringify({
-          fullName: userData.name,
-          email: userData.email,
-          uid: userData.uid,
-          role: userData.role
-        }));
+  //       // Save user to local storage
+  //       localStorage.setItem("user", JSON.stringify({
+  //         fullName: userData.name,
+  //         email: userData.email,
+  //         uid: userData.uid,
+  //         role: userData.role
+  //       }));
  
-        // ✅ Cart handling
-        const CART_KEY = `cart_${userData.email}`;
-        const savedCart = JSON.parse(localStorage.getItem(CART_KEY)) ?? [];
-        const guestCart = JSON.parse(localStorage.getItem("cart_guest")) ?? [];
+  //       // ✅ Cart handling
+  //       const CART_KEY = `cart_${userData.email}`;
+  //       const savedCart = JSON.parse(localStorage.getItem(CART_KEY)) ?? [];
+  //       const guestCart = JSON.parse(localStorage.getItem("cart_guest")) ?? [];
 
-        let finalCart = [...savedCart];
+  //       let finalCart = [...savedCart];
 
-        if (guestCart.length > 0) {
-          guestCart.forEach(item => {
-            const exists = finalCart.find(p => p.id === item.id);
-            if (!exists) {
-              finalCart.push(item);
-            }
-          });
+  //       if (guestCart.length > 0) {
+  //         guestCart.forEach(item => {
+  //           const exists = finalCart.find(p => p.id === item.id);
+  //           if (!exists) {
+  //             finalCart.push(item);
+  //           }
+  //         });
 
-          // Clear guest cart
-          localStorage.removeItem("cart_guest");
-        }
+  //         // Clear guest cart
+  //         localStorage.removeItem("cart_guest");
+  //       }
 
-        // Update Redux + LocalStorage
-        dispatch(setCart(finalCart));
-        localStorage.setItem(CART_KEY, JSON.stringify(finalCart));
+  //       // Update Redux + LocalStorage
+  //       dispatch(setCart(finalCart));
+  //       localStorage.setItem(CART_KEY, JSON.stringify(finalCart));
 
-        // Firebase authentication
-        await signInWithEmailAndPassword(auth, formData.email, formData.password);
+  //       // Firebase authentication
+  //       await signInWithEmailAndPassword(auth, formData.email, formData.password);
 
-        toast.success("Login Successful!", { autoClose: 1500 });
-        navigate(redirectPath, { replace: true });
+  //       toast.success("Login Successful!", { autoClose: 1500 });
+  //       navigate(redirectPath, { replace: true });
 
-      } catch (error) {
-        console.error(error);
-        if (error.code === 'auth/wrong-password') {
-          toast.error("Incorrect password. Please try again.", { autoClose: 1500 });
-        } else {
-          toast.error("An unexpected error occurred. Please try again later.", { autoClose: 1500 });
-        }
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      toast.error("Please fix the errors in the form.", { autoClose: 1500 });
-      setLoading(false);
+  //     } catch (error) {
+  //       console.error(error);
+  //       if (error.code === 'auth/wrong-password') {
+  //         toast.error("Incorrect password. Please try again.", { autoClose: 1500 });
+  //       } else {
+  //         toast.error("An unexpected error occurred. Please try again later.", { autoClose: 1500 });
+  //       }
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   } else {
+  //     toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+  //     setLoading(false);
+  //   }
+  // };
+
+const login = async (e) => {
+  e.preventDefault();
+
+  try {
+    // 1️⃣ user doc nikaalo
+    const q = query(
+      collection(fireDB, "users"),
+      where("email", "==", formData.email)
+    );
+    const snap = await getDocs(q);
+
+    if (snap.empty) {
+      toast.error("User not found", {
+        position: "top-right",
+        autoClose: 1000,
+      });
+      return;
     }
-  };
+
+    const userData = snap.docs[0].data();
+
+    // 2️⃣ Firebase auth login
+    await signInWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+
+    // 3️⃣ user localStorage
+    localStorage.setItem(
+      "user",
+      JSON.stringify({
+        fullName: userData.name,
+        email: userData.email,
+        uid: userData.uid,
+        role: userData.role,
+      })
+    );
+
+    // ================== 🔥 CART MERGE LOGIC ==================
+
+    // user ka cart
+    const userCart = await getCartFromFirestore(userData.uid);
+
+    // guest ka cart
+    const guestCart = await getGuestCartFromFirestore();
+
+    let finalCart = [...userCart]; 
+
+    // guestCart.forEach((gItem) => {
+    //   const existing = finalCart.find((uItem) => uItem.id === gItem.id);
+    //   if (existing) {
+    //     // Amazone style same product add karne par quantity badh jaaye
+    //     existing.quantity += gItem.quantity;
+    //   } else {
+    //     // 🔥 new product
+    //     finalCart.push(gItem);
+    //   } 
+    // });
+
+    if(guestCart.length > 0){
+    guestCart.forEach((gItem) => {
+      const existing = finalCart.find((uItem) => uItem.id === gItem.id);
+      if (existing) {
+        // Amazone style same product add karne par quantity badh jaaye
+        existing.quantity += gItem.quantity;
+      }else{
+         // 🔥 new product
+        finalCart.push(gItem);
+      }
+    }
+    );
+    }
+
+    // 🔥 merged cart save
+    await saveCartToFirestore(userData.uid, finalCart);
+
+    // 🔥 guest cart clear
+    await clearGuestCartFromFirestore();
+
+    // 🔥 redux update
+    dispatch(setCart(finalCart));
+
+    // =========================================================
+
+    toast.success("Login Successful", {
+      position: "top-right",
+      autoClose: 1000,
+    });
+
+    navigate(redirectPath, { replace: true });
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Login failed", {
+      position: "top-right",
+      autoClose: 1000,
+    });
+  }
+};
 
   return (
     <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
@@ -171,3 +275,58 @@ function Login() {
 }
 
 export default Login;
+
+
+
+
+
+
+
+
+
+
+
+
+// // 🔥 SAVE NEW ORDER
+// export const saveOrderToFirestore = async (order) => {
+//   const orderId = order.id || uuidv4();
+//   await setDoc(doc(fireDB, "orders", orderId), {
+//     ...order,
+//     createdAt: Date.now(),
+//   });
+// };
+
+// // 🔥 GET USER ORDERS
+// export const getUserOrdersFromFirestore = async (userid) => {
+//   if (!userid) return [];
+
+//   const q = query(
+//     collection(fireDB, "orders"),
+//     where("userid", "==", userid)
+//   );
+
+//   const snapshot = await getDocs(q);
+
+//   return snapshot.docs.map((docSnap) => ({
+//     id: docSnap.id,
+//     ...docSnap.data(),
+//   }));
+// };
+
+// // 🔥 CLEAR ALL USER ORDERS (PRODUCTION SAFE)
+// export const clearAllOrdersFromFirestore = async (userid) => {
+//   if (!userid) return;
+
+//   const q = query(
+//     collection(fireDB, "orders"),
+//     where("userid", "==", userid)
+//   );
+
+//   const snapshot = await getDocs(q);
+
+//   const deletePromises = snapshot.docs.map((docSnap) =>
+//     deleteDoc(doc(fireDB, "orders", docSnap.id))
+//   );
+
+//   await Promise.all(deletePromises);
+// };

@@ -7,6 +7,9 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 import { useSelector, useDispatch } from "react-redux";
 import { clearCart } from "../../redux/cartSlice";
+import { getCartFromFirestore } from "../../pages/cart/cartFirestore";
+import { setCart } from "../../redux/cartSlice";
+import { useEffect } from "react";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -14,24 +17,43 @@ function Navbar() {
   const errorValue = useContext(MyContext); // Add cartItems and updateCartItems
   // console.log(errorValue);
 
-  const user = JSON.parse(localStorage.getItem("user"));
   const navigate = useNavigate();
   const location = useLocation();
   // console.log("Navbar Location", location);
-  console.log("Login location.state:", location);
+  // console.log("Login location.state:", location);
   const dispatch = useDispatch();
+  const user = JSON.parse(localStorage.getItem("user"));
+  //   const uid = user?.uid;
+
+  //   useEffect(() => {
+  //   const load = async () => {
+  //     const cart = await getCartFromFirestore(uid);
+  //     dispatch(setCart(cart));
+  //   };
+  //   load();
+  // }, []);
+
+  // function handleLogout(e) {
+  //   // e.preventDefualt();
+  //   e.preventDefault();
+  //   localStorage.removeItem("user"); // Remove specific user item
+  //   // ✅ Redux cart clear
+  //   dispatch(clearCart());
+
+  //   // navigate(`/login`);
+  //   navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa
+
+  //   // navigate("/login", {state: { PreviousPathname: location.pathname },}); //useLocation use to aisa
+  // }
+  const orders = useSelector((state) => state.orders.orders);
+  const totalOrders = orders?.length || 0;
 
   function handleLogout(e) {
-    // e.preventDefualt();
     e.preventDefault();
-    localStorage.removeItem("user"); // Remove specific user item
-    // ✅ Redux cart clear
+    localStorage.removeItem("user");
     dispatch(clearCart());
-
-    // navigate(`/login`);
-    navigate(`/login?redirect=${location.pathname}`); // useSearchParams, tu aisa
-
-    // navigate("/login", {state: { PreviousPathname: location.pathname },}); //useLocation use to aisa
+    // navigate("/login");
+    navigate(`/login?redirect=${location.pathname}`);
   }
 
   const cartItems = useSelector((state) => state.cart);
@@ -114,12 +136,18 @@ function Navbar() {
                   {user && (
                     <Link
                       to="/order"
-                      className="block text-base hover:text-blue-600"
+                      className="relative block text-base hover:text-blue-600"
                       style={{ color: mode === "dark" ? "#fff" : "#212529" }}
                     >
                       Order
+                      {totalOrders > 0 && (
+                        <span className="ml-2 px-2 py-0.5 text-xs bg-green-600 text-white rounded-full">
+                          {totalOrders}
+                        </span>
+                      )}
                     </Link>
                   )}
+
                   {user && user.role === "admin" && (
                     <Link
                       to="/dashboard"
@@ -234,10 +262,16 @@ function Navbar() {
                 Contact
               </Link>
               {user && (
-                <Link to="/order" className="hover:text-blue-600">
+                <Link to="/order" className="relative hover:text-blue-600">
                   Order
+                  {totalOrders > 0 && (
+                    <span className="absolute -top-2 -right-4 w-5 h-5 flex items-center justify-center text-xs bg-green-600 text-white rounded-full">
+                      {totalOrders}
+                    </span>
+                  )}
                 </Link>
               )}
+
               {user && user.role === "admin" && (
                 <Link to="/dashboard" className="hover:text-blue-600">
                   Admin

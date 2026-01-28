@@ -3,7 +3,7 @@ import { MyContext } from "../../context api/myContext";
 
 function Filter() {
   const { mode, product, searchkey, setSearchkey, filterType, setFilterType, filterPrice, setFilterPrice, sortPrice, setSortPrice } = useContext(MyContext);
-   console.log(product);
+  //  console.log(product);
   const resetFilters = () => {
     setSearchkey(""); 
     setFilterType("");
@@ -12,7 +12,7 @@ function Filter() {
   };
   const uniqueCategories = [...new Set(product.map(item => item.category))]; // Set method duplicate keys ko allow nahi karta, isliye iska istemal kiya jata hai taaki har key sirf ek baar hi store ho sake. Yeh data structure ko unique values ke liye optimize karta hai, jo data management aur lookup ko efficient banata hai.
 
-  console.log(uniqueCategories)
+  // console.log(uniqueCategories)
   return (
     <div className="container mx-auto px-4 mt-5">
       <div

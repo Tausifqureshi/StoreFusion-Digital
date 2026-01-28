@@ -18,7 +18,7 @@ function Home() {
   const dispatch = useDispatch();
   const cartItem = useSelector((state)=> state.cart)
 
-  console.log(cartItem, "Ininial Satte milri hai ")
+  // console.log(cartItem, "Ininial Satte milri hai ")
 
   const addCart = () => {
     dispatch(addToCart("shirt"));

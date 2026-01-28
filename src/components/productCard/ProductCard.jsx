@@ -5,6 +5,10 @@ import { addToCart } from "../../redux/cartSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loader from "../loader/Loader";
+import {
+  saveCartToFirestore,
+  saveGuestCartToFirestore,
+} from "../../pages/cart/cartFirestore";
 
 function ProductCard() {
   const {
@@ -29,9 +33,10 @@ function ProductCard() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate(); // Use the hook for navigation
+  const user = JSON.parse(localStorage.getItem("user"));
 
-  const addCart = (product) => {
-    const isProductInCart = cartItems.some((item) => item.id === product.id);
+  const addCart = async (product) => {
+    const isProductInCart = cartItems.find((item) => item.id === product.id);
     if (isProductInCart) {
       toast.info(`Product is already in your cart!`, {
         position: "top-right",
@@ -49,7 +54,17 @@ function ProductCard() {
         quantity: 1,
         time: product.time?.seconds ?? Date.now(),
       };
+
       dispatch(addToCart(serializedProduct));
+      // Firebase me save karna cart ko.
+       const updatedCart = [...cartItems, serializedProduct];
+      if (user?.uid) {
+        await saveCartToFirestore(user.uid, updatedCart);
+      } else {
+        // const updatedCart = [...cartItems, serializedProduct];
+        await saveGuestCartToFirestore(updatedCart);
+      }
+
       toast.success("Product added to cart!", {
         position: "top-right",
         autoClose: 1000,
@@ -73,12 +88,12 @@ function ProductCard() {
   const filteredProducts = product
     .filter((item) =>
       // Filter by search key
-      item.title.toLowerCase().includes(searchkey.toLowerCase())
+      item.title.toLowerCase().includes(searchkey.toLowerCase()),
     )
     .filter(
       (item) =>
         // Filter by category (filterType)
-        filterType === "" || item.category === filterType
+        filterType === "" || item.category === filterType,
     )
     .filter((item) => {
       // Filter by price range

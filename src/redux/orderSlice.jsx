@@ -1,7 +1,7 @@
 // redux/orderSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+const initialState = { 
   orders: [], // Initial state for orders
 };
 

@@ -6,7 +6,7 @@ import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import { FaUser, FaCartPlus } from 'react-icons/fa';
 import { AiFillShopping, AiFillPlusCircle, AiFillDelete ,AiFillEdit} from 'react-icons/ai';
 import { useSpring, animated } from 'react-spring';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; 
  
 function DashboardTab() {
   const { mode, product, edithandle, deleteProduct, order, user  } = useContext(MyContext);

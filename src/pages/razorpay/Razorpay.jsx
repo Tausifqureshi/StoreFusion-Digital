@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'; // Redux dispatch import
 import { clearCart } from '../../redux/cartSlice'; // Import clearCart action
 import { addOrder} from '../../redux/orderSlice';
+import { saveCartToFirestore,clearUserCartFromFirestore } from "../cart/cartFirestore";
+import { saveOrderToFirestore } from "../../components/order/orderFirestore"
 
 function Razorpay({ cartItems, totalAmount }) {
   const [formData, setFormData] = useState({
@@ -18,14 +20,23 @@ function Razorpay({ cartItems, totalAmount }) {
   const dispatch = useDispatch(); // Initialize Redux dispatch
 
   const buyNow = async () => {
+    // const user = JSON.parse(localStorage.getItem("user"));
     let user;
+
+    // try {
+    //   const userData = localStorage.getItem("user");
+    //   console.log("User data from localStorage:", userData);
+    //   user = JSON.parse(userData);
+    // } catch (error) {
+    //   console.error("Error parsing user data:", error);
+    //   return toast.error('User data is corrupted or invalid');
+    // }
+    
     try {
-      const userData = localStorage.getItem("user");
-      console.log("User data from localStorage:", userData);
-      user = JSON.parse(userData);
-    } catch (error) {
-      console.error("Error parsing user data:", error);
-      return toast.error('User data is corrupted or invalid');
+      user = JSON.parse(localStorage.getItem("user"));
+    } catch (err) {
+      toast.error("Invalid user data");
+      return;
     }
 
     if (!user || !user.email || !user.uid) {
@@ -44,9 +55,11 @@ function Razorpay({ cartItems, totalAmount }) {
       }),
     };
 
-    var options = {
-      key: "rzp_test_s2VG2G2HwcOQd6",
-      key_secret: "13wTYUM144Kv98GujKu6kkB6",
+    const options = {
+      // key: "rzp_test_s2VG2G2HwcOQd6",
+      // key_secret: "13wTYUM144Kv98GujKu6kkB6",
+      key: "rzp_test_S9C6txeTqRW5Ri",
+      key_secret: "C4qX468lGMuWl1wmyHL2fqEZ",
       amount: parseInt(totalAmount * 100), 
       currency: "INR",
       order_receipt: 'order_rcptid_' + formData.fullName,
@@ -54,7 +67,7 @@ function Razorpay({ cartItems, totalAmount }) {
       description: "for testing purpose",
       handler: async function (response) {
         try {
-          console.log("Razorpay response:", response);
+          // console.log("Razorpay response:", response);
           toast.success('Payment Successful', { autoClose: 1000 });
 
           const paymentId = response.razorpay_payment_id;
@@ -72,19 +85,25 @@ function Razorpay({ cartItems, totalAmount }) {
             totalAmount,
           };
 
-          const orderRef = collection(fireDB, "orders");
-          await addDoc(orderRef, orderInfo); 
+          // const orderRef = collection(fireDB, "orders");
+          // await addDoc(orderRef, orderInfo); 
           toast.success('Order saved successfully',{ autoClose: 1000 });
-          
+          const savedOrder = await saveOrderToFirestore(orderInfo);
           // ✅ Redux update (immediate UI update)
-          dispatch(addOrder(orderInfo));
+          // dispatch(addOrder(orderInfo));
+          dispatch(addOrder(savedOrder)); // use saved order with ID
 
           // Clear cart from Redux and localStorage
           dispatch(clearCart());  // Clear cart from Redux state
           // localStorage.removeItem('cart');  // Clear cart from local storage
-              // ✅ LocalStorage clear (user specific)
-          const cartKey = user ? `cart_${user.email}` : "cart_guest";
-          localStorage.removeItem(cartKey);
+          // ✅ LocalStorage clear (user specific)
+          // const cartKey = user ? `cart_${user.email}` : "cart_guest";
+          // localStorage.removeItem(cartKey);
+
+          
+          // 4️⃣ Firestore → clear cart 🔥
+          // await saveCartToFirestore(user.uid, []);
+          await clearUserCartFromFirestore(user.uid);
 
         } catch (error) {
           console.log("Error saving order:", error);
@@ -108,10 +127,3 @@ function Razorpay({ cartItems, totalAmount }) {
 }
 
 export default Razorpay;
-
-
-
-
-
-
-
