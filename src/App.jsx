@@ -25,36 +25,40 @@ import MyState from "./context api/MySatate";
 import Contact from "./components/contact/Contact";
 import About from "./components/about/About";
 import { getCartFromFirestore,getGuestCartFromFirestore } from "./pages/cart/cartFirestore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCart } from "./redux/cartSlice";
 
 function App() {
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
 
 useEffect(() => { // yaha logic hai ke jab app load ho to firebase se cart ko load kar le or redux me set kar de ui me dikhane ke liye.
-  const user = JSON.parse(localStorage.getItem("user"));
-  const uid = user?.uid;
-  if (!uid) return; // User not logged in
+const loadCart = async() =>{
+  try {
+    setLoading(true);
+    const user = JSON.parse(localStorage.getItem("user"));
+  const cartData = user?.uid
+    ? await getCartFromFirestore(user.uid) //// User logged in hai to user ka cart load karenge
+    : await getGuestCartFromFirestore();
+    dispatch(setCart(cartData)); // Guest user hai to guest cart load karenge
+  } catch (error) {
+    console.error("Failed to load cart:", error);
+    setLoading(false);
+  } finally {
+    setLoading(false);
+  }
+};
+loadCart();
 
-  const load = async () => {
-     const cart = user?.uid
-      ? await getCartFromFirestore(user.uid)
-      : await getGuestCartFromFirestore();
-      dispatch(setCart(cart));
-  };
-
-  load(); 
 }, [dispatch]);
 
-
-
-//  {order.status === "cancelled" && (
-//   <span className="text-red-500">Cancelled</span>
-// )}
-
-
   return (
+    <>
+    {loading && <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
+      <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-32 w-32"></div>
+    </div>
+    }
     <BrowserRouter
       future={{
         v7_startTransition: true,
@@ -112,6 +116,8 @@ useEffect(() => { // yaha logic hai ke jab app load ho to firebase se cart ko lo
       </MyState>
       {/* MyState se Wrap q ke MyState ek provider hai context api ka use hora hai appcompoents ki MyState se Wrap kar re hai iska matlab ab app componets me jitne componets use hoge us me dircte value pass kar skate hai context api ka use kar ke q ke app componets prants hai ab sub ka. */}
     </BrowserRouter>
+    </>
+
   );
 }
 
@@ -161,4 +167,7 @@ export function ProtectedRoutesForAdmin({ children }) {
 
 
 
+//  {order.status === "cancelled" && (
+//   <span className="text-red-500">Cancelled</span>
+// )}
 
