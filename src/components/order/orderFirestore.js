@@ -52,7 +52,6 @@ export const cancelOrderFromFirestore = async (orderId) => {
 // 🔹 Cancel ALL orders of user
 export const cancelAllOrdersFromFirestore = async (uid) => {
   if (!uid) return;
-
   const q = query(
     collection(fireDB, "orders"),
     where("userid", "==", uid),

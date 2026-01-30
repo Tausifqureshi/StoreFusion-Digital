@@ -21,10 +21,14 @@ import {
 import Loader from "../../components/loader/Loader";
 
 function Cart() {
+  const user = JSON.parse(localStorage.getItem("user")); // logged-in user
+console.log("User Object:", user);
+console.log("User UID:", user?.uid);
+
   const { mode } = useContext(MyContext);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
-  const user = JSON.parse(localStorage.getItem("user")); // logged-in user
+  // const user = JSON.parse(localStorage.getItem("user")); // logged-in user
   const [loading, setLoading] = useState(false);
   const [descOpen, setDescOpen] = useState({});
   const toggleDesc = (index) => {
@@ -290,7 +294,6 @@ const shortDesc =
     onClick={() => toggleDesc(index)}
     className="flex items-center gap-1 text-blue-600 text-sm font-semibold"
   >
-    {/* {isDescOpen ? "Hide description" : "View description"} */}
     <span className="hover:underline">
     {isDescOpen ? "Hide description" : "View description"}
   </span>
@@ -303,24 +306,30 @@ const shortDesc =
       ▼
     </span>
   </button>
-
- 
-
-
   {isDescOpen && (
     <div className="mt-1">
       <p className={`text-sm ${mode === "dark" ? "text-gray-300" : "text-gray-700"}`}>
-        {isDescExpanded ? item.description : shortDesc}
+        {isDescExpanded ? item.description : shortDesc} 
+
+        
+        {item.description?.length > 70 && (
+        <span
+          onClick={() => toggleDescExpand(index)}
+          className="text-blue-600 ml-1 cursor-pointer text-xs font-semibold hover:underline mt-1"
+        >
+          {isDescExpanded ? "See Less" : "See More"}
+        </span>
+      )}
       </p>
 
-      {item.description?.length > 70 && (
-        <button
+      {/* {item.description?.length > 70 && (
+        <span
           onClick={() => toggleDescExpand(index)}
           className="text-blue-600 text-xs font-semibold hover:underline mt-1"
         >
           {isDescExpanded ? "See Less" : "See More"}
-        </button>
-      )}
+        </span>
+      )} */}
     </div>
   )}
 </div>
