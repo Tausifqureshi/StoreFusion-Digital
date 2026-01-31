@@ -34,7 +34,7 @@ function ProductCard() {
   const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate(); // Use the hook for navigation
   const user = JSON.parse(localStorage.getItem("user"));
-
+ 
   const addCart = async (product) => {
     const isProductInCart = cartItems.find((item) => item.id === product.id);
     if (isProductInCart) {

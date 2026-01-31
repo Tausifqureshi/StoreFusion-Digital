@@ -76,9 +76,9 @@ loadCart();
           <Route
             path="/cart"
             element={
-              <ProtectedRoutes>
+              // <ProtectedRoutes>
                 <Cart />
-              </ProtectedRoutes>
+              // </ProtectedRoutes>
             }
           />
           <Route path="/allproducts" element={<Allproducts />} />

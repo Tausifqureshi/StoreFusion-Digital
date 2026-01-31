@@ -4,7 +4,7 @@ import { fireDB } from "../../firebase/FirebaseConfig";
 // ================= ORDERS =================//
 
 export const saveOrderToFirestore = async (orderInfo) => {
-  if (!orderInfo) return;
+  if (!orderInfo) return; // No order info
 
   const orderRef = collection(fireDB, "orders");
   const docRef = await addDoc(orderRef, {
@@ -23,7 +23,7 @@ export const saveOrderToFirestore = async (orderInfo) => {
 
 // 🔹 Get user orders (realtime)
 export const getUserOrdersFromFirestore = (uid, callback) => {
-  if (!uid) return () => {};
+  if (!uid) return () => {}; // No user ID
 
   const q = query(collection(fireDB, "orders"), where("userid", "==", uid));
 
@@ -33,7 +33,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
       ...doc.data(),
     }));
 
-    callback(orders);
+    callback(orders); // Firestore se orders mil gaye, ab callback call karo.jab bhi data change ho ga yaha callback chale ga
   });
 
   return unsubscribe;
@@ -41,7 +41,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
 
 // 🔹 Cancel single order (status change)
 export const cancelOrderFromFirestore = async (orderId) => {
-  if (!orderId) return;
+  if (!orderId) return; // No order ID
   await setDoc(
     doc(fireDB, "orders", orderId),
     { status: "cancelled" },
