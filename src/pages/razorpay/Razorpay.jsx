@@ -58,16 +58,17 @@ function Razorpay({ cartItems, totalAmount }) {
     const options = {
       // key: "rzp_test_s2VG2G2HwcOQd6",
       // key_secret: "13wTYUM144Kv98GujKu6kkB6",
-      key: "rzp_test_S9C6txeTqRW5Ri",
-      key_secret: "C4qX468lGMuWl1wmyHL2fqEZ",
+      key: "rzp_test_SAmF1Zz8ccXm1f",
+      key_secret: "0PKAeGJ6Dpv5yPv0HiopwTaJ",
       amount: parseInt(totalAmount * 100), 
       currency: "INR",
       order_receipt: 'order_rcptid_' + formData.fullName,
       name: "StoreFusion",
       description: "for testing purpose",
       handler: async function (response) {
+        //  console.log("Razorpay response received:", response);
         try {
-          // console.log("Razorpay response:", response);
+          console.log("Razorpay response:", response);
           toast.success('Payment Successful', { autoClose: 1000 });
 
           const paymentId = response.razorpay_payment_id;
@@ -87,11 +88,11 @@ function Razorpay({ cartItems, totalAmount }) {
 
           // const orderRef = collection(fireDB, "orders");
           // await addDoc(orderRef, orderInfo); 
-          toast.success('Order saved successfully',{ autoClose: 1000 });
           const savedOrder = await saveOrderToFirestore(orderInfo);
+          toast.success('Order saved successfully',{ autoClose: 1000 });
           // ✅ Redux update (immediate UI update)
-          // dispatch(addOrder(orderInfo));
-          dispatch(addOrder(savedOrder)); // use saved order with ID
+          dispatch(addOrder(savedOrder));
+          // dispatch(addOrder(orderInfo)); // use saved order with ID
 
           // Clear cart from Redux and localStorage
           dispatch(clearCart());  // Clear cart from Redux state

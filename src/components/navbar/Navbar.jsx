@@ -46,7 +46,13 @@ function Navbar() {
   //   // navigate("/login", {state: { PreviousPathname: location.pathname },}); //useLocation use to aisa
   // }
   const orders = useSelector((state) => state.orders.orders);
-  const totalOrders = orders?.length || 0;
+  const totalOrders = orders?.length || 0; //normal count show karne ke liey ye.
+
+// const totalOrders = orders.filter(
+//   // (order) => order.status === "placed").length; // sirf placed orders count karne ke liey ye.
+//   (order)=>{ return order.status === "placed"}
+//   ) .length;
+
 
   function handleLogout(e) {
     e.preventDefault();
@@ -249,7 +255,7 @@ function Navbar() {
               >
                 <span className="italic">S</span>toreFusion
               </h1>
-            </Link>
+            </Link> 
 
             <div className="hidden lg:flex lg:items-center lg:space-x-6">
               <Link to="/allproducts" className="hover:text-blue-600">

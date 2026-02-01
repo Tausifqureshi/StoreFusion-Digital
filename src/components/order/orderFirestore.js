@@ -26,6 +26,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
   if (!uid) return () => {}; // No user ID
 
   const q = query(collection(fireDB, "orders"), where("userid", "==", uid));
+  console.log("Firestore query created for user orders." + uid);
 
   const unsubscribe = onSnapshot(q, (snapshot) => {
     const orders = snapshot.docs.map((doc) => ({
@@ -42,11 +43,12 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
 // 🔹 Cancel single order (status change)
 export const cancelOrderFromFirestore = async (orderId) => {
   if (!orderId) return; // No order ID
-  await setDoc(
-    doc(fireDB, "orders", orderId),
-    { status: "cancelled" },
-    { merge: true },
-  );
+  // await setDoc(
+  //   doc(fireDB, "orders", orderId),
+  //   { status: "cancelled" },
+  //   { merge: true },
+  // );
+  await deleteDoc(doc(fireDB, "orders", orderId));
 };
 
 // 🔹 Cancel ALL orders of user

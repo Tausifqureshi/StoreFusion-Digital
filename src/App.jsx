@@ -4,7 +4,7 @@ import {
   Routes,
   Route,
   Navigate,
-  useLocation,
+  // useLocation,
 } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Order from "./components/order/Order";
@@ -28,14 +28,22 @@ import { getCartFromFirestore,getGuestCartFromFirestore } from "./pages/cart/car
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setCart } from "./redux/cartSlice";
+import { getUserOrdersFromFirestore } from "./components/order/orderFirestore";
+import { setOrders, clearOrders } from "./redux/orderSlice";
+
 
 function App() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  // const location = useLocation();
 
 useEffect(() => { // yaha logic hai ke jab app load ho to firebase se cart ko load kar le or redux me set kar de ui me dikhane ke liye.
 const loadCart = async() =>{
   try {
+//     if (location.pathname === "/cart") {
+//   setLoading(true);
+// }
+
     setLoading(true);
     const user = JSON.parse(localStorage.getItem("user"));
   const cartData = user?.uid
@@ -52,6 +60,26 @@ const loadCart = async() =>{
 loadCart();
 
 }, [dispatch]);
+
+// order ke liye bhi useEffect hai. goblaly order ko manage karne ke liye.
+// useEffect(() => {
+//   const user = JSON.parse(localStorage.getItem("user"));
+//   const userid = user?.uid;
+
+//   if (!userid) {
+//     dispatch(clearOrders( { userid: null })); // Clear orders if no user
+//     return;
+//   }
+
+//   setLoading(true);
+  
+//   const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
+//     dispatch(setOrders(orders));
+//     setLoading(false);
+//   });
+    
+//   return () => unsubscribe();
+// }, [dispatch]);
 
   return (
     <>

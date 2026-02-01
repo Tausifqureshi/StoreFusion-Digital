@@ -42,6 +42,7 @@ function Order() {
     return () => unsubscribe();
   }, [userid]);
 
+
   // ✅ Cancel order (UI se remove, Firestore me status = cancelled)
   const handleCancelOrder = async (order) => {
     setLoading(true);
@@ -104,14 +105,25 @@ function Order() {
               ))}
 
               {/* Cancel button only if order placed */}
-              {order.status === "placed" && (
+              {/* {order.status === "placed" && (
                 <button
                   onClick={() => handleCancelOrder(order)}
                   className="text-red-600 flex items-center mt-3"
                 >
                   <FaTrash className="mr-1" /> Cancel Order
                 </button>
-              )}
+              )}  */}
+              <button
+                  onClick={() => handleCancelOrder(order)}
+                  className="text-red-600 flex items-center mt-3"
+                >
+                  <FaTrash className="mr-1" /> Cancel Order
+                </button>
+
+               {/* {order.status === "cancelled" && (
+                <span className="text-red-500">Cancelled</span>
+                )} */}
+
             </div>
           ))}
         </div>
