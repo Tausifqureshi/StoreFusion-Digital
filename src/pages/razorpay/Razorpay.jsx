@@ -91,7 +91,7 @@ function Razorpay({ cartItems, totalAmount }) {
           const savedOrder = await saveOrderToFirestore(orderInfo);
           toast.success('Order saved successfully',{ autoClose: 1000 });
           // ✅ Redux update (immediate UI update)
-          dispatch(addOrder(savedOrder));
+          // dispatch(addOrder(savedOrder));
           // dispatch(addOrder(orderInfo)); // use saved order with ID
 
           // Clear cart from Redux and localStorage

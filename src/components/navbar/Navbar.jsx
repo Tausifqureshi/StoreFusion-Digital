@@ -10,6 +10,8 @@ import { clearCart } from "../../redux/cartSlice";
 import { getCartFromFirestore } from "../../pages/cart/cartFirestore";
 import { setCart } from "../../redux/cartSlice";
 import { useEffect } from "react";
+import {clearOrders } from "../../redux/orderSlice";
+
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -58,6 +60,7 @@ function Navbar() {
     e.preventDefault();
     localStorage.removeItem("user");
     dispatch(clearCart());
+    dispatch(clearOrders());
     // navigate("/login");
     navigate(`/login?redirect=${location.pathname}`);
   }

@@ -62,24 +62,22 @@ loadCart();
 }, [dispatch]);
 
 // order ke liye bhi useEffect hai. goblaly order ko manage karne ke liye.
-// useEffect(() => {
-//   const user = JSON.parse(localStorage.getItem("user"));
-//   const userid = user?.uid;
+useEffect(() => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userid = user?.uid;
 
-//   if (!userid) {
-//     dispatch(clearOrders( { userid: null })); // Clear orders if no user
-//     return;
-//   }
+  if (!userid) {
+    dispatch(clearOrders());
+    return;
+  }
 
-//   setLoading(true);
-  
-//   const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
-//     dispatch(setOrders(orders));
-//     setLoading(false);
-//   });
-    
-//   return () => unsubscribe();
-// }, [dispatch]);
+  const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
+    dispatch(setOrders(orders));
+  });
+
+  return () => unsubscribe();
+}, [dispatch]);
+
 
   return (
     <>
