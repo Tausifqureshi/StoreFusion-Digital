@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setOrders, cancelOrder } from "../../redux/orderSlice";
 
 import { getUserOrdersFromFirestore, cancelOrderFromFirestore } from "./orderFirestore";
+// 5500 6700 0000 1002 // payment test card number
 
 function Order() {
    const [mode, setMode] = useState("light");
@@ -25,7 +26,7 @@ function Order() {
   const handleOrders = (orders) => {
     dispatch(setOrders(orders));
     setLoading(false); // 👈 yahan loader OFF
-  };
+  }; 
 
   // ✅ Realtime fetch orders
   useEffect(() => {
@@ -134,9 +135,6 @@ function Order() {
       <ScrollToTopButoon />
     </Layout>
   );
-
-
-
 
 }
 
