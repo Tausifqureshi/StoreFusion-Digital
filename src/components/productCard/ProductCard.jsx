@@ -59,7 +59,7 @@ function ProductCard() {
       // Firebase me save karna cart ko.
        const updatedCart = [...cartItems, serializedProduct];
       if (user?.uid) {
-        await saveCartToFirestore(user.uid, updatedCart);
+        await saveCartToFirestore(user.uid, updatedCart); 
       } else {
         // const updatedCart = [...cartItems, serializedProduct];
         await saveGuestCartToFirestore(updatedCart);

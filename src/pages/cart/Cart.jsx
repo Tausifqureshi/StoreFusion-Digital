@@ -456,11 +456,3 @@ const shortDesc =
 }
 
 export default Cart;
-
-// export default Cart;
-
-// quantity change pe debounce save
-
-// checkout ke baad cart clear
-
-// anonymous auth (industry best)

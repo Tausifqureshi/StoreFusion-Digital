@@ -45,7 +45,7 @@ const loadCart = async() =>{
 // }
 
     setLoading(true);
-    const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("user"));
   const cartData = user?.uid
     ? await getCartFromFirestore(user.uid) //// User logged in hai to user ka cart load karenge
     : await getGuestCartFromFirestore();
@@ -60,6 +60,17 @@ const loadCart = async() =>{
 loadCart();
 
 }, [dispatch]);
+
+// useEffect(() => {
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   if (!user?.uid) {
+//     dispatch(clearOrders());
+//   }
+// }, [dispatch]);
+
+
+
 
 // order ke liye bhi useEffect hai. goblaly order ko manage karne ke liye.
 useEffect(() => {
@@ -192,8 +203,4 @@ export function ProtectedRoutesForAdmin({ children }) {
 
 
 
-
-//  {order.status === "cancelled" && (
-//   <span className="text-red-500">Cancelled</span>
-// )}
 
