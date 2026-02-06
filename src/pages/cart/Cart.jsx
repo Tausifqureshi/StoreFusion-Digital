@@ -88,7 +88,7 @@ const toggleDescExpand = (index) => {
     }
   };
 
-  // Delete from cart
+  // Delete from cart  
   const deleteCart = async (item) => {
     dispatch(deleteFromCart(item));
     toast.info("Item deleted from cart", {
