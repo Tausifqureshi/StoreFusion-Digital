@@ -56,7 +56,7 @@ function ProductCard() {
       };
   
       dispatch(addToCart(serializedProduct));
-      // Firebase me save karna cart ko.
+      // Firebase me save karna cart ko. 
        const updatedCart = [...cartItems, serializedProduct];
       if (user?.uid) {
         await saveCartToFirestore(user.uid, updatedCart);  
