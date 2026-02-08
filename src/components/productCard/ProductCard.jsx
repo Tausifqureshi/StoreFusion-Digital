@@ -54,7 +54,7 @@ function ProductCard() {
         quantity: 1,
         time: product.time?.seconds ?? Date.now(),
       };
-
+  
       dispatch(addToCart(serializedProduct));
       // Firebase me save karna cart ko.
        const updatedCart = [...cartItems, serializedProduct];
