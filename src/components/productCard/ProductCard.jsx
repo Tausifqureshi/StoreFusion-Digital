@@ -233,3 +233,40 @@ function ProductCard() {
 }
 
 export default ProductCard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// % \section{Professional Experience}
+// % \begin{onecolentry}
+
+// % \textbf{Freelance Frontend Developer (React / Next.js)} \hfill Sept 2024 -- Present \\
+// % \textit{Client-Based Web Development Projects}
+
+// % \begin{itemize}[left=10pt, topsep=2pt, noitemsep]
+// %   \item Delivered scalable frontend solutions for multiple clients, including e-commerce platforms and admin dashboards.
+// %   \item Built modular and reusable UI components to improve development efficiency and long-term maintainability.
+// %   \item Integrated third-party and internal APIs to support authentication, product management, and dynamic content rendering.
+// %   \item Improved application load time by up to \textbf{30\%} through code-splitting, lazy loading, and optimized rendering.
+// %   \item Ensured consistent user experience across \textbf{5+ device breakpoints} using responsive design principles.
+// %   \item Collaborated with designers and stakeholders to translate UI/UX requirements into functional features.
+// %   \item Conducted code reviews and followed best practices for clean, readable, and testable code.
+// % \end{itemize}
+
+// % \end{onecolentry}
+// % \SectionBreak
