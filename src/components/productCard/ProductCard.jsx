@@ -254,7 +254,7 @@ export default ProductCard;
 
 // % \section{Professional Experience}
 // % \begin{onecolentry}
-
+            
 // % \textbf{Freelance Frontend Developer (React / Next.js)} \hfill Sept 2024 -- Present \\
 // % \textit{Client-Based Web Development Projects}
 
