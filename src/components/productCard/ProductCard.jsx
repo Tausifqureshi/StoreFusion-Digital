@@ -78,7 +78,7 @@ function ProductCard() {
     }
   };
 
-
+   
 
   // useEffect(() => {
   //   localStorage.setItem("cart", JSON.stringify(cartItems));
