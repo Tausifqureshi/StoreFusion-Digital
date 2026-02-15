@@ -31,7 +31,7 @@ function ProductCard() {
   };
 
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart);
+  const cartItems = useSelector((state) => state.cart); 
   const navigate = useNavigate(); // Use the hook for navigation
   const user = JSON.parse(localStorage.getItem("user"));
  
