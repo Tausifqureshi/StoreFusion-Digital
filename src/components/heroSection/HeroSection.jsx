@@ -22,6 +22,7 @@ function HeroSection() {
         <img
           src="https://static.vecteezy.com/system/resources/previews/011/871/820/non_2x/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg"
           alt="Online Shopping 1"
+          loading="lazy" 
           style={{ width: "100%", height: "auto" }} // Responsive image styling
         />
       </SwiperSlide>
@@ -29,6 +30,7 @@ function HeroSection() {
         <img
           src="https://static.vecteezy.com/system/resources/previews/011/871/813/non_2x/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg"
           alt="Online Shopping 2"
+          loading="lazy" 
           style={{ width: "100%", height: "auto" }} // Responsive image styling
         />
       </SwiperSlide> 
@@ -36,6 +38,7 @@ function HeroSection() {
         <img
           src="https://static.vecteezy.com/system/resources/thumbnails/004/858/012/small/online-shopping-on-phone-buy-sell-business-digital-web-banner-application-money-advertising-payment-ecommerce-illustration-search-vector.jpg"
           alt="Online Shopping 2"
+          loading="lazy" 
           style={{ width: "100%", height: "auto" }} // Responsive image styling
         />
       </SwiperSlide>

@@ -162,6 +162,7 @@ function ProductCard() {
                         <img
                           className="rounded-2xl w-full h-64 p-2 object-contain hover:scale-105 transition-transform duration-300 ease-in-out"
                           src={imageUrl}
+                          loading="lazy" 
                           alt="product"
                         />
                       </div>

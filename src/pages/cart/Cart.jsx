@@ -256,6 +256,7 @@ const shortDesc =
                     <img
                       src={item.imageUrl}
                       alt="product"
+                      loading="lazy" 
                       className="w-full h-32 object-contain rounded-lg sm:w-40 sm:h-32"
                     />
 
