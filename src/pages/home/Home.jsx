@@ -15,27 +15,9 @@ import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 
 
 function Home() {
-  const dispatch = useDispatch();
-  const cartItem = useSelector((state)=> state.cart)
-
-  // console.log(cartItem, "Ininial Satte milri hai ")
-
-  const addCart = () => {
-    dispatch(addToCart("shirt"));
-  }
-
-  const deleteCart = () => {
-    dispatch(deleteFromCart("shirt"));
-  }
-  // const {state , color} = useContext(MyContext);
   return ( 
     <div>
       <Layout>
-        {/* <h1>Home Page</h1> */}
-        {/* <div className="flex gap-5 justify-center">
-        <button className=' bg-gray-300 p-5' onClick={()=> addCart()}>add</button>
-        <button className=' bg-gray-300 p-5' onClick={()=> deleteCart()}>del</button>
-       </div> */}
         <HeroSection />
         <Filter />
         <ProductCard />

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Layout from "../../components/layout/Layout";
 import { MyContext } from "../../context api/myContext";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ import {
   clearGuestCartFromFirestore,
 } from "./cartFirestore";
 import Loader from "../../components/loader/Loader";
+import SmallSpinner from "../../components/loader/SmallSipnner";
 
 function Cart() {
   const user = JSON.parse(localStorage.getItem("user")); // logged-in user
@@ -31,6 +32,9 @@ console.log("User UID:", user?.uid);
   // const user = JSON.parse(localStorage.getItem("user")); // logged-in user
   const [loading, setLoading] = useState(false);
   const [descOpen, setDescOpen] = useState({});
+  const [cartItemUpdatingId, setCartItemUpdatingId] = useState(null);
+const [clearLoading, setClearLoading] = useState(false);
+
   const toggleDesc = (index) => {
   setDescOpen((prev) => ({
     ...prev,
@@ -71,7 +75,7 @@ const toggleDescExpand = (index) => {
   // };
 
   const syncCart = async (updatedCart) => {
-    setLoading(true);
+    // setLoading(true);
     try {
       if (user?.uid) {
         await saveCartToFirestore(user.uid, updatedCart);
@@ -80,12 +84,13 @@ const toggleDescExpand = (index) => {
       }
     } catch (err) {
       console.error(err);
-    } finally {
-      // 👇 loader ko dikne ka time milta hai
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
-    }
+    } 
+    // finally {
+    //   // 👇 loader ko dikne ka time milta hai
+    //   setTimeout(() => {
+    //     setLoading(false);
+    //   }, 300);
+    // }
   };
 
   // Delete from cart  
@@ -109,8 +114,8 @@ const toggleDescExpand = (index) => {
   // };
 
   const incrementCartQuantity = async (itemId) => {
-    setLoading(true);
-
+    // setLoading(true);
+    setCartItemUpdatingId(itemId);
     const updatedCart = cartItems.map((item) =>
       item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
     );
@@ -125,7 +130,9 @@ const toggleDescExpand = (index) => {
       console.error("Increment failed:", error);
       toast.error("Failed to update quantity");
     } finally {
-      setLoading(false);
+      // setLoading(false);
+      setCartItemUpdatingId(null);
+
     }
   };
 
@@ -146,6 +153,7 @@ const toggleDescExpand = (index) => {
     if (!item || item.quantity === 1) {
       return; // ❌ NO loader, NO firestore, NO redux
     }
+      setCartItemUpdatingId(itemId);
     const updatedCart = cartItems.map((item) => {
       if (item.id === itemId) {
         // quantity 1 se niche nahi jaane dena
@@ -156,7 +164,7 @@ const toggleDescExpand = (index) => {
       return item;
     });
 
-    setLoading(true);
+    // setLoading(true);
 
     try {
       dispatch(decrementQuantity(itemId));
@@ -165,7 +173,8 @@ const toggleDescExpand = (index) => {
       console.error(err);
     } finally {
       setTimeout(() => {
-        setLoading(false);
+        // setLoading(false);
+         setCartItemUpdatingId(null);
       }, 300);
     }
   };
@@ -210,11 +219,20 @@ const toggleDescExpand = (index) => {
   // };
 
   // Total calculation
-  const totalAmount = cartItems.reduce(
-    (acc, item) =>
-      acc + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0),
-    0,
-  );
+  // const totalAmount = cartItems.reduce(
+  //   (acc, item) =>
+  //     acc + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0),
+  //   0,
+  // );
+
+  const totalAmount = useMemo(() => {
+    return cartItems.reduce(
+      (acc, item) =>
+       acc + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0),
+      0
+    );
+  }, [cartItems]);
+
   const shippingCharge = 20;
   const totalWithShipping =
     totalAmount > 0 ? (totalAmount + shippingCharge).toFixed(2) : 0;
@@ -348,7 +366,12 @@ const shortDesc =
                       </div>
 
                       <div className="mt-4 sm:mt-0 flex flex-col sm:block sm:space-x-6 relative">
-                        <div className="flex items-center space-x-2">
+                        
+                        {/* <div className="flex items-center space-x-2">
+                          {cartItemUpdatingId === item.id ? (
+                           <SmallSpinner size={20} />
+                          ) : (
+                          <>
                           <button
                             onClick={() => decrementCartQuantity(item.id)}
                             className="px-2 py-1 text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400"
@@ -366,7 +389,49 @@ const shortDesc =
                           >
                             +
                           </button>
-                        </div>
+                          </>
+                          )}
+                        </div> */}
+
+                        <div className="flex items-center space-x-2">
+  
+  {/* Decrement Button */}
+  <button
+    onClick={() => decrementCartQuantity(item.id)}
+    disabled={cartItemUpdatingId === item.id}
+    className="w-8 h-8 flex items-center justify-center text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-60"
+  >
+    {cartItemUpdatingId === item.id ? (
+      <span className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin" />
+    ) : (
+      "-"
+    )}
+  </button>
+
+  {/* Quantity */}
+  <span
+    className={`min-w-[24px] text-center text-lg ${
+      mode === "dark" ? "text-white" : "text-gray-900"
+    }`}
+  >
+    {item.quantity}
+  </span>
+
+  {/* Increment Button */}
+  <button
+    onClick={() => incrementCartQuantity(item.id)}
+    disabled={cartItemUpdatingId === item.id}
+    className="w-8 h-8 flex items-center justify-center text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-60"
+  >
+    {cartItemUpdatingId === item.id ? (
+      <span className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin" />
+    ) : (
+      "+"
+    )}
+  </button>
+
+</div>
+
 
                         <div
                           onClick={() => deleteCart(item)}
@@ -457,3 +522,11 @@ const shortDesc =
 }
 
 export default Cart;
+
+
+
+
+
+
+
+

@@ -12,6 +12,10 @@ import { getCartFromFirestore, getGuestCartFromFirestore,clearGuestCartFromFires
 // getGuestCartFromFirestore,
 //   clearGuestCartFromFirestore,
 //   saveCartToFirestore
+
+import { getUserOrdersFromFirestore } from "../../components/order/orderFirestore";
+import { setOrders } from "../../redux/orderSlice";
+
 function Login() {
   const { loading, setLoading } = useContext(MyContext);
   const [errors, setErrors] = useState({});
@@ -120,7 +124,7 @@ function Login() {
 
 const login = async (e) => {
   e.preventDefault();
-
+  if(validateForm()){
   try {
     // 1️⃣ user doc nikaalo
     const q = query(
@@ -202,6 +206,9 @@ const login = async (e) => {
     dispatch(setCart(finalCart));
 
     // =========================================================
+      getUserOrdersFromFirestore(userData.uid, (orders) => {
+      dispatch(setOrders(orders));
+    });
 
     toast.success("Login Successful", {
       position: "top-right",
@@ -217,6 +224,12 @@ const login = async (e) => {
       autoClose: 1000,
     });
   }
+  } else {
+    toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+  }
+  
+
+
 };
 
   return (

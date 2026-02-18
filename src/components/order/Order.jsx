@@ -10,23 +10,26 @@ import ScrollToTopButoon from "../Scroll top/ScrollToTopButoon";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrders, cancelOrder } from "../../redux/orderSlice";
 
-import { getUserOrdersFromFirestore, cancelOrderFromFirestore } from "./orderFirestore";
+import {
+  getUserOrdersFromFirestore,
+  cancelOrderFromFirestore,
+} from "./orderFirestore";
 // 5500 6700 0000 1002 // payment test card number
 
-function Order() {
-   const [mode, setMode] = useState("light");
+function Order({ orderLoading }) {
+  const [mode, setMode] = useState("light");
   const user = JSON.parse(localStorage.getItem("user"));
   // const userid = user?.uid;
 
   const { orders } = useSelector((state) => state.orders);
   const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-  
+  // const [loading, setLoading] = useState(false);
+
   // const handleOrders = (orders) => {
   //   dispatch(setOrders(orders));
   //   setLoading(false); // 👈 yahan loader OFF
-  // }; 
+  // };
 
   // // ✅ Realtime fetch orders
   // useEffect(() => {
@@ -42,7 +45,6 @@ function Order() {
 
   //   return () => unsubscribe();
   // }, [userid]);
-
 
   // ✅ Cancel order (UI se remove, Firestore me status = cancelled)
   const handleCancelOrder = async (order) => {
@@ -135,131 +137,125 @@ function Order() {
   //     <ScrollToTopButoon />
   //   </Layout>
   // );
-return (
-  <Layout>
-    {loading && <Loader />}
+  return (
+    <Layout>
+      {/* {orderloading && <Loader />} */}
 
-    <div className="max-w-6xl mx-auto px-4 py-10">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-10">
-        My Orders
-      </h1>
+      <div className="max-w-6xl mx-auto px-4 py-10">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-10">
+          My Orders
+        </h1>
 
-      {orders.length > 0 ? (
-        <div className="space-y-8">
-          {orders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-300 border"
-            >
-              {/* Header */}
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-6 py-4 border-b bg-gray-50 rounded-t-2xl">
-                <div className="flex items-center gap-2">
-                  <MdPerson className="text-xl text-gray-600" />
-                  <span className="font-semibold text-gray-800">
-                    {user?.fullName}
+        { orderLoading ? (
+           <Loader />
+        ):orders.length > 0 ? (
+          <div className="space-y-8">
+            {orders.map((order) => (
+              <div
+                key={order.id}
+                className="bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-300 border"
+              >
+                {/* Header */}
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 px-6 py-4 border-b bg-gray-50 rounded-t-2xl">
+                  <div className="flex items-center gap-2">
+                    <MdPerson className="text-xl text-gray-600" />
+                    <span className="font-semibold text-gray-800">
+                      {user?.fullName}
+                    </span>
+                  </div>
+
+                  <span className="text-sm text-gray-500">
+                    Order ID: <span className="font-medium">{order.id}</span>
                   </span>
                 </div>
 
-                <span className="text-sm text-gray-500">
-                  Order ID: <span className="font-medium">{order.id}</span>
-                </span>
-              </div>
-
-              {/* Body */}
-              <div className="p-6 grid md:grid-cols-3 gap-6">
-                {/* Address */}
-                <div>
-                  <h3 className="font-semibold mb-2 flex items-center gap-1 text-gray-700">
-                    <FiMapPin /> Delivery Address
-                  </h3>
-                  <div className="text-sm text-gray-600 space-y-1">
-                    {Object.entries(order.addressInfo || {}).map(([k, v]) => (
-                      <p key={k}>
-                        <span className="font-medium capitalize">{k}:</span>{" "}
-                        {v}
-                      </p>
-                    ))}
+                {/* Body */}
+                <div className="p-6 grid md:grid-cols-3 gap-6">
+                  {/* Address */}
+                  <div>
+                    <h3 className="font-semibold mb-2 flex items-center gap-1 text-gray-700">
+                      <FiMapPin /> Delivery Address
+                    </h3>
+                    <div className="text-sm text-gray-600 space-y-1">
+                      {Object.entries(order.addressInfo || {}).map(([k, v]) => (
+                        <p key={k}>
+                          <span className="font-medium capitalize">{k}:</span>{" "}
+                          {v}
+                        </p>
+                      ))}
+                    </div>
                   </div>
-                </div>
 
-                {/* Items */}
-                <div className="md:col-span-2">
-                  <h3 className="font-semibold mb-4 flex items-center gap-1 text-gray-700">
-                    <MdCheckCircle /> Items
-                  </h3>
+                  {/* Items */}
+                  <div className="md:col-span-2">
+                    <h3 className="font-semibold mb-4 flex items-center gap-1 text-gray-700">
+                      <MdCheckCircle /> Items
+                    </h3>
 
-                  <div className="space-y-4">
-                    {order.cartItems.map((item, i) => (
-                      <div
-                        key={i}
-                        className="flex items-center gap-4 p-3 border rounded-xl"
-                      >
-                        <img
-                          src={item.imageUrl}
-                          alt={item.title}
-                          className="w-20 h-20 object-contain rounded-lg border"
-                        />
-                        <div className="flex-1">
-                          <p className="font-semibold text-gray-800">
-                            {item.title}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            ₹{item.price}
-                          </p>
+                    <div className="space-y-4">
+                      {order.cartItems.map((item, i) => (
+                        <div
+                          key={i}
+                          className="flex items-center gap-4 p-3 border rounded-xl"
+                        >
+                          <img
+                            src={item.imageUrl}
+                            alt={item.title}
+                            className="w-20 h-20 object-contain rounded-lg border"
+                          />
+                          <div className="flex-1">
+                            <p className="font-semibold text-gray-800">
+                              {item.title}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              ₹{item.price}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {/* Footer */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 border-t bg-gray-50 rounded-b-2xl">
-                <div className="text-sm">
-                  Status:{" "}
-                  {order.status === "cancelled" ? (
-                    <span className="text-red-600 font-semibold">
-                      Cancelled
-                    </span>
-                  ) : (
-                    <span className="text-green-600 font-semibold">
-                      Placed
-                    </span>
+                {/* Footer */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 px-6 py-4 border-t bg-gray-50 rounded-b-2xl">
+                  <div className="text-sm">
+                    Status:{" "}
+                    {order.status === "cancelled" ? (
+                      <span className="text-red-600 font-semibold">
+                        Cancelled
+                      </span>
+                    ) : (
+                      <span className="text-green-600 font-semibold">
+                        Placed
+                      </span>
+                    )}
+                  </div>
+
+                  {order.status !== "cancelled" && (
+                    <button
+                      onClick={() => handleCancelOrder(order)}
+                      className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700"
+                    >
+                      <FaTrash /> Cancel Order
+                    </button>
                   )}
                 </div>
-
-                {order.status !== "cancelled" && (
-                  <button
-                    onClick={() => handleCancelOrder(order)}
-                    className="flex items-center gap-2 text-sm font-medium text-red-600 hover:text-red-700"
-                  >
-                    <FaTrash /> Cancel Order
-                  </button>
-                )}
               </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-20">
-          <p className="text-2xl font-semibold text-gray-600">
-            No Orders Found
-          </p>
-        </div>
-      )}
-    </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <p className="text-2xl font-semibold text-gray-600">
+              No Orders Found
+            </p>
+          </div>
+        )}
+      </div>
 
-    <ScrollToTopButoon />
-  </Layout>
-);
-
+      <ScrollToTopButoon />
+    </Layout>
+  );
 }
 
 export default Order;
-
-
-
-
- 
-
-

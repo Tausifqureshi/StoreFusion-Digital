@@ -10,6 +10,9 @@ import {
   saveGuestCartToFirestore,
 } from "../../pages/cart/cartFirestore";
 
+import ProductSkeleton from "../loader/ProductSkeleton";
+import ImageWithLoader from "../loader/ImageWithLoader";
+
 function ProductCard() {
   const {
     mode,
@@ -18,8 +21,9 @@ function ProductCard() {
     filterType,
     filterPrice,
     sortPrice,
-    loading,
-    setLoading,
+    // loading,
+    // setLoading,
+    productLoading,
   } = useContext(MyContext);
   const [showMoreIndex, setShowMoreIndex] = useState({});
 
@@ -31,10 +35,10 @@ function ProductCard() {
   };
 
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart); 
+  const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate(); // Use the hook for navigation
   const user = JSON.parse(localStorage.getItem("user"));
- 
+
   const addCart = async (product) => {
     const isProductInCart = cartItems.find((item) => item.id === product.id);
     if (isProductInCart) {
@@ -54,12 +58,12 @@ function ProductCard() {
         quantity: 1,
         time: product.time?.seconds ?? Date.now(),
       };
-  
+
       dispatch(addToCart(serializedProduct));
-      // Firebase me save karna cart ko. 
-       const updatedCart = [...cartItems, serializedProduct];
+      // Firebase me save karna cart ko.
+      const updatedCart = [...cartItems, serializedProduct];
       if (user?.uid) {
-        await saveCartToFirestore(user.uid, updatedCart);  
+        await saveCartToFirestore(user.uid, updatedCart);
       } else {
         // const updatedCart = [...cartItems, serializedProduct];
         await saveGuestCartToFirestore(updatedCart);
@@ -77,8 +81,6 @@ function ProductCard() {
       });
     }
   };
-
-   
 
   // useEffect(() => {
   //   localStorage.setItem("cart", JSON.stringify(cartItems));
@@ -118,10 +120,11 @@ function ProductCard() {
   return (
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-8 md:py-16 mx-auto">
-        {loading ? (
-          <div className="flex justify-center items-center h-64">
-            <Loader />
-          </div>
+        {productLoading ? (
+          // <div className="flex justify-center items-center h-64">
+          //   {/* <Loader /> */}
+          // </div>
+          <ProductSkeleton />
         ) : (
           <>
             <div className="lg:w-1/2 w-full mb-6 lg:mb-10">
@@ -159,12 +162,13 @@ function ProductCard() {
                         onClick={() => navigate(`/productinfo/${item.id}`)}
                         className="flex justify-center cursor-pointer bg-white"
                       >
-                        <img
+                        {/* <img
                           className="rounded-2xl w-full h-64 p-2 object-contain hover:scale-105 transition-transform duration-300 ease-in-out"
                           src={imageUrl}
                           loading="lazy" 
                           alt="product"
-                        />
+                        /> */}
+                        <ImageWithLoader src={imageUrl} alt="product" />
                       </div>
 
                       <div className="p-5 border-t-2 flex flex-col">
@@ -236,4 +240,3 @@ function ProductCard() {
 }
 
 export default ProductCard;
-

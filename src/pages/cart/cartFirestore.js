@@ -1,6 +1,6 @@
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { fireDB } from "../../firebase/FirebaseConfig";
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from "uuid"; 
 
 // ================= USER CART =================
 export const saveCartToFirestore = async (uid, cart) => {

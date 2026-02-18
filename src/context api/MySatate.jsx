@@ -11,7 +11,11 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 function MyState({ children}) {
   const [mode, setMode] = useState("light");
   const [loading, setLoading] = useState(false); //loading ke liye.
-  const [cartItems, setCartItems] = useState([]); // Cart items ki length ke liye hai 0 jab tak product add nhi tab tak na show ho is ke liye ye state.
+  // const [cartItems, setCartItems] = useState([]); // Cart items ki length ke liye hai 0 jab tak product add nhi tab tak na show ho is ke liye ye state.
+  const [productLoading, setProductLoading] = useState(false);
+const [orderLoading, setOrderLoading] = useState(false);
+const [userLoading, setUserLoading] = useState(false);
+
 
   // products ke liye ye state hai .
   const [products, setProducts] = useState({ //
@@ -110,7 +114,7 @@ function MyState({ children}) {
   const [product, setProduct] = useState([]);
    // getProductData.
    const getProductData = async () => {
-    setLoading(true)
+    setProductLoading(true)
     try {
       const q = query(
         collection(fireDB, "products"),
@@ -123,18 +127,22 @@ function MyState({ children}) {
           productsArray.push({ ...doc.data(), id: doc.id });
         });
         setProduct(productsArray)
-        setLoading(false);
+        setProductLoading(false);
+  //        setTimeout(() => {
+  //   setProduct(productsArray);
+  //   setProductLoading(false);
+  // }, 1000);
       });
       return () => data;
     } catch (error) {
       // console.log(error)
-      setLoading(false)
+      setProductLoading(false)
     }
   }
 
-  useEffect(() => {
-    getProductData(); //useEffect ka use sid effect ke liye ie me is ka use hora hai autometic data fect ho is liye is me ye getProducts name ka function dale hai.
-  }, []);
+  // useEffect(() => {
+  //   getProductData(); //useEffect ka use sid effect ke liye ie me is ka use hora hai autometic data fect ho is liye is me ye getProducts name ka function dale hai.
+  // }, []);
 
   // Edidt Function
   const edithandle = (item) => {
@@ -336,7 +344,7 @@ const [sortPrice, setSortPrice] = useState('');
       value={{
         mode : mode,
         toggleMode : toggleMode,
-        cartItems : cartItems,
+        // cartItems : cartItems,
         // updateCartItems: updateCartItems,
         loading : loading, 
         setLoading : setLoading,
@@ -360,6 +368,7 @@ const [sortPrice, setSortPrice] = useState('');
        sortPrice: sortPrice, 
        setSortPrice : setSortPrice,
       //  cancelOrder: cancelOrder, 
+      productLoading: productLoading
 
       }}
     >  

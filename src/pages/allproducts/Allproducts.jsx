@@ -10,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 import Loader from "../../components/loader/Loader";
 // import ProductCard from "../../components/productCard/ProductCard";
+import ProductSkeleton from "../../components/loader/ProductSkeleton";
+
 
 function Allproducts() {
   const {
@@ -20,6 +22,7 @@ function Allproducts() {
     filterPrice,
     loading,
     sortPrice,
+     productLoading,
   } = useContext(MyContext);
   const [showMoreIndex, setShowMoreIndex] = useState({});
   const [visibleProducts, setVisibleProducts] = useState(8); // Start with 8 products
@@ -115,13 +118,13 @@ function Allproducts() {
   return (
     <Layout>
       <Filter />
-
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-8 md:py-16 mx-auto">
-          {loading ? (
-            <div className="flex justify-center items-center h-64">
-              <Loader />
-            </div>
+          { productLoading ? (
+            // <div className="flex justify-center items-center h-64">
+            //   <Loader />
+            // </div>
+              <ProductSkeleton />
           ) : (
             <>
               <div className="lg:w-1/2 w-full mb-6 lg:mb-10">
