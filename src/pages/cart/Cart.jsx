@@ -23,34 +23,33 @@ import SmallSpinner from "../../components/loader/SmallSipnner";
 
 function Cart() {
   const user = JSON.parse(localStorage.getItem("user")); // logged-in user
-console.log("User Object:", user);
-console.log("User UID:", user?.uid);
-
+  // console.log("User Object:", user);
+  // console.log("User UID:", user?.uid);
+   
   const { mode } = useContext(MyContext);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
   // const user = JSON.parse(localStorage.getItem("user")); // logged-in user
   const [loading, setLoading] = useState(false);
   const [descOpen, setDescOpen] = useState({});
-  const [cartItemUpdatingId, setCartItemUpdatingId] = useState(null);
-const [clearLoading, setClearLoading] = useState(false);
+  // const [cartItemUpdatingId, setCartItemUpdatingId] = useState(null);
+  const [cartUpdating, setCartUpdating] = useState(null);
+  // const [clearLoading, setClearLoading] = useState(false);
 
   const toggleDesc = (index) => {
-  setDescOpen((prev) => ({
-    ...prev,
-    [index]: !prev[index],
-  }));
-};
+    setDescOpen((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
-const [descExpanded, setDescExpanded] = useState({});
-const toggleDescExpand = (index) => {
-  setDescExpanded((prev) => ({
-    ...prev,
-    [index]: !prev[index],
-  }));
-};
-
-
+  const [descExpanded, setDescExpanded] = useState({});
+  const toggleDescExpand = (index) => {
+    setDescExpanded((prev) => ({
+      ...prev,
+      [index]: !prev[index],
+    }));
+  };
 
   // See More / See Less (per cart item)
   // const [seeMoreExpanded, setSeeMoreExpanded] = useState({});
@@ -84,7 +83,7 @@ const toggleDescExpand = (index) => {
       }
     } catch (err) {
       console.error(err);
-    } 
+    }
     // finally {
     //   // 👇 loader ko dikne ka time milta hai
     //   setTimeout(() => {
@@ -93,7 +92,7 @@ const toggleDescExpand = (index) => {
     // }
   };
 
-  // Delete from cart  
+  // Delete from cart
   const deleteCart = async (item) => {
     dispatch(deleteFromCart(item));
     toast.info("Item deleted from cart", {
@@ -115,7 +114,8 @@ const toggleDescExpand = (index) => {
 
   const incrementCartQuantity = async (itemId) => {
     // setLoading(true);
-    setCartItemUpdatingId(itemId);
+    // setCartItemUpdatingId(itemId);
+    setCartUpdating({ id: itemId, type: "increment" });
     const updatedCart = cartItems.map((item) =>
       item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
     );
@@ -126,13 +126,14 @@ const toggleDescExpand = (index) => {
 
       // Firestore sync
       await syncCart(updatedCart);
+      setCartUpdating(null);
     } catch (error) {
       console.error("Increment failed:", error);
       toast.error("Failed to update quantity");
     } finally {
       // setLoading(false);
-      setCartItemUpdatingId(null);
-
+      // setCartItemUpdatingId(null);
+      setCartUpdating(null);
     }
   };
 
@@ -153,7 +154,8 @@ const toggleDescExpand = (index) => {
     if (!item || item.quantity === 1) {
       return; // ❌ NO loader, NO firestore, NO redux
     }
-      setCartItemUpdatingId(itemId);
+    // setCartItemUpdatingId(itemId);
+    setCartUpdating({ id: itemId, type: "decrement" });
     const updatedCart = cartItems.map((item) => {
       if (item.id === itemId) {
         // quantity 1 se niche nahi jaane dena
@@ -169,13 +171,15 @@ const toggleDescExpand = (index) => {
     try {
       dispatch(decrementQuantity(itemId));
       await syncCart(updatedCart);
+      setCartUpdating(null);
     } catch (err) {
       console.error(err);
     } finally {
-      setTimeout(() => {
-        // setLoading(false);
-         setCartItemUpdatingId(null);
-      }, 300);
+      // setTimeout(() => {
+      //   // setLoading(false);
+      //    setCartItemUpdatingId(null);
+      // }, 300);
+      setCartUpdating(null);
     }
   };
 
@@ -228,8 +232,8 @@ const toggleDescExpand = (index) => {
   const totalAmount = useMemo(() => {
     return cartItems.reduce(
       (acc, item) =>
-       acc + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0),
-      0
+        acc + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0),
+      0,
     );
   }, [cartItems]);
 
@@ -253,17 +257,10 @@ const toggleDescExpand = (index) => {
                 const isDescOpen = descOpen[index] || false;
                 const isDescExpanded = descExpanded[index] || false;
 
-const shortDesc =
-  item.description?.length > 70
-    ? item.description.slice(0, 70) + "..."
-    : item.description;
-
-            
-
-                // const shortText =
-                //   item.description?.length > 60
-                //     ? item.description.slice(0, 60) + "..."
-                //     : item.description;
+                const shortDesc =
+                  item.description?.length > 70
+                    ? item.description.slice(0, 70) + "..."
+                    : item.description;
                 return (
                   <div
                     key={index}
@@ -274,7 +271,7 @@ const shortDesc =
                     <img
                       src={item.imageUrl}
                       alt="product"
-                      loading="lazy" 
+                      loading="lazy"
                       className="w-full h-32 object-contain rounded-lg sm:w-40 sm:h-32"
                     />
 
@@ -286,75 +283,45 @@ const shortDesc =
                           {item.title}
                         </h2>
 
-                        {/* <p
-                          className={`text-sm ${mode === "dark" ? "text-gray-300" : "text-gray-700"}`}
-                        >
-                          {item.description}
-                        </p> */}
-                        {/* <p
-                          className={`text-sm ${mode === "dark" ? "text-gray-300" : "text-gray-700"}`}
-                        >
-                          {isExpanded ? item.description : shortText}
-                        </p>
-
-                        {item.description?.length > 60 && (
-                          <button
-                            onClick={() => toggleSeeMore(index)}
-                            className="mt-1 text-blue-600 text-sm font-semibold hover:underline"
-                          >
-                            {isExpanded ? "See Less" : "See More"}
-                          </button>
-                        )} */}
-
                         {/* Description Accordion */}
-                         {/* Description Accordion */}
-<div className="mt-2">
-  <button
-    onClick={() => toggleDesc(index)}
-    className="flex items-center gap-1 text-blue-600 text-sm font-semibold"
-  >
-    <span className="hover:underline">
-    {isDescOpen ? "Hide description" : "View description"}
-  </span>
+                        <div className="mt-2">
+                          <button
+                            onClick={() => toggleDesc(index)}
+                            className="flex items-center gap-1 text-blue-600 text-sm font-semibold"
+                          >
+                            <span className="hover:underline">
+                              {isDescOpen
+                                ? "Hide description"
+                                : "View description"}
+                            </span>
 
-    <span
-      className={`transform transition-transform duration-300 ${
-        isDescOpen ? "rotate-180" : "rotate-0"
-      }`}
-    >
-      ▼
-    </span>
-  </button>
-  {isDescOpen && (
-    <div className="mt-1">
-      <p className={`text-sm ${mode === "dark" ? "text-gray-300" : "text-gray-700"}`}>
-        {isDescExpanded ? item.description : shortDesc} 
+                            <span
+                              className={`transform transition-transform duration-300 ${
+                                isDescOpen ? "rotate-180" : "rotate-0"
+                              }`}
+                            >
+                              ▼
+                            </span>
+                          </button>
+                          {isDescOpen && (
+                            <div className="mt-1">
+                              <p
+                                className={`text-sm ${mode === "dark" ? "text-gray-300" : "text-gray-700"}`}
+                              >
+                                {isDescExpanded ? item.description : shortDesc}
 
-        
-        {item.description?.length > 70 && (
-        <span
-          onClick={() => toggleDescExpand(index)}
-          className="text-blue-600 ml-1 cursor-pointer text-xs font-semibold hover:underline mt-1"
-        >
-          {isDescExpanded ? "See Less" : "See More"}
-        </span>
-      )}
-      </p>
-
-      {/* {item.description?.length > 70 && (
-        <span
-          onClick={() => toggleDescExpand(index)}
-          className="text-blue-600 text-xs font-semibold hover:underline mt-1"
-        >
-          {isDescExpanded ? "See Less" : "See More"}
-        </span>
-      )} */}
-    </div>
-  )}
-</div>
-
-
-
+                                {item.description?.length > 70 && (
+                                  <span
+                                    onClick={() => toggleDescExpand(index)}
+                                    className="text-blue-600 ml-1 cursor-pointer text-xs font-semibold hover:underline mt-1"
+                                  >
+                                    {isDescExpanded ? "See Less" : "See More"}
+                                  </span>
+                                )}
+                              </p>
+                            </div>
+                          )}
+                        </div>
 
                         <div
                           className={`mt-2 p-2 rounded-md ${mode === "dark" ? "bg-gray-700" : "bg-gray-50"}`}
@@ -366,72 +333,44 @@ const shortDesc =
                       </div>
 
                       <div className="mt-4 sm:mt-0 flex flex-col sm:block sm:space-x-6 relative">
-                        
-                        {/* <div className="flex items-center space-x-2">
-                          {cartItemUpdatingId === item.id ? (
-                           <SmallSpinner size={20} />
-                          ) : (
-                          <>
-                          <button
-                            onClick={() => decrementCartQuantity(item.id)}
-                            className="px-2 py-1 text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400"
-                          >
-                            -
-                          </button>
-                          <span
-                            className={`px-2 py-1 text-lg ${mode === "dark" ? "text-white" : "text-gray-900"}`}
-                          >
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => incrementCartQuantity(item.id)}
-                            className="px-2 py-1 text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400"
-                          >
-                            +
-                          </button>
-                          </>
-                          )}
-                        </div> */}
 
                         <div className="flex items-center space-x-2">
-  
-  {/* Decrement Button */}
-  <button
-    onClick={() => decrementCartQuantity(item.id)}
-    disabled={cartItemUpdatingId === item.id}
-    className="w-8 h-8 flex items-center justify-center text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-60"
-  >
-    {cartItemUpdatingId === item.id ? (
-      <span className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin" />
-    ) : (
-      "-"
-    )}
-  </button>
+                          {/* Decrement */}
+                          <button
+                            onClick={() => decrementCartQuantity(item.id)}
+                            disabled={
+                              cartUpdating?.id === item.id &&
+                              cartUpdating?.type === "decrement"
+                            }
+                            className="w-8 h-8 bg-gray-300 rounded flex justify-center items-center"
+                          >
+                            {cartUpdating?.id === item.id &&
+                            cartUpdating?.type === "decrement" ? (
+                              <span className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              "-"
+                            )}
+                          </button>
 
-  {/* Quantity */}
-  <span
-    className={`min-w-[24px] text-center text-lg ${
-      mode === "dark" ? "text-white" : "text-gray-900"
-    }`}
-  >
-    {item.quantity}
-  </span>
+                          <span>{item.quantity}</span>
 
-  {/* Increment Button */}
-  <button
-    onClick={() => incrementCartQuantity(item.id)}
-    disabled={cartItemUpdatingId === item.id}
-    className="w-8 h-8 flex items-center justify-center text-lg font-semibold bg-gray-300 rounded hover:bg-gray-400 disabled:opacity-60"
-  >
-    {cartItemUpdatingId === item.id ? (
-      <span className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin" />
-    ) : (
-      "+"
-    )}
-  </button>
-
-</div>
-
+                          {/* Increment */}
+                          <button
+                            onClick={() => incrementCartQuantity(item.id)}
+                            disabled={
+                              cartUpdating?.id === item.id &&
+                              cartUpdating?.type === "increment"
+                            }
+                            className="w-8 h-8 bg-gray-300 rounded flex justify-center items-center"
+                          >
+                            {cartUpdating?.id === item.id &&
+                            cartUpdating?.type === "increment" ? (
+                              <span className="w-4 h-4 border-2 border-gray-700 border-t-transparent rounded-full animate-spin" />
+                            ) : (
+                              "+"
+                            )}
+                          </button>
+                        </div>
 
                         <div
                           onClick={() => deleteCart(item)}
@@ -522,11 +461,3 @@ const shortDesc =
 }
 
 export default Cart;
-
-
-
-
-
-
-
-

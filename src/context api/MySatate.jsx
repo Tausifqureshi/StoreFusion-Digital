@@ -131,7 +131,8 @@ const [userLoading, setUserLoading] = useState(false);
   //        setTimeout(() => {
   //   setProduct(productsArray);
   //   setProductLoading(false);
-  // }, 1000);
+  // }, 6000);
+  
       });
       return () => data;
     } catch (error) {
