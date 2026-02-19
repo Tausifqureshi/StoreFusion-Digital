@@ -22,7 +22,7 @@ import Loader from "../../components/loader/Loader";
 import SmallSpinner from "../../components/loader/SmallSipnner";
 
 function Cart() {
-  const user = JSON.parse(localStorage.getItem("user")); // logged-in user
+  const user = JSON.parse(localStorage.getItem("user")); 
 
   const { mode } = useContext(MyContext);
   const dispatch = useDispatch();
