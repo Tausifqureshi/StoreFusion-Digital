@@ -23,19 +23,14 @@ import SmallSpinner from "../../components/loader/SmallSipnner";
 
 function Cart() {
   const user = JSON.parse(localStorage.getItem("user")); // logged-in user
-  // console.log("User Object:", user);
-  // console.log("User UID:", user?.uid);
-   
+
   const { mode } = useContext(MyContext);
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
-  // const user = JSON.parse(localStorage.getItem("user")); // logged-in user
   const [loading, setLoading] = useState(false);
-  const [descOpen, setDescOpen] = useState({});
-  // const [cartItemUpdatingId, setCartItemUpdatingId] = useState(null);
   const [cartUpdating, setCartUpdating] = useState(null);
-  // const [clearLoading, setClearLoading] = useState(false);
-
+ 
+  const [descOpen, setDescOpen] = useState({});
   const toggleDesc = (index) => {
     setDescOpen((prev) => ({
       ...prev,
@@ -72,7 +67,6 @@ function Cart() {
   //     setLoading(false);
   //   }
   // };
-
   const syncCart = async (updatedCart) => {
     // setLoading(true);
     try {
@@ -111,7 +105,6 @@ function Cart() {
   //   );
   //   await syncCart(updatedCart);
   // };
-
   const incrementCartQuantity = async (itemId) => {
     // setLoading(true);
     // setCartItemUpdatingId(itemId);
@@ -147,7 +140,6 @@ function Cart() {
   //   );
   //   await syncCart(updatedCart);
   // };
-
   const decrementCartQuantity = async (itemId) => {
     const item = cartItems.find((i) => i.id === itemId);
     // 👇 agar quantity 1 hai → kuch bhi mat karo
@@ -189,7 +181,6 @@ function Cart() {
   //   await syncCart([]);
   //   toast.success("Cart cleared", { position: "top-right", autoClose: 1000 });
   // };
-
   const clearCartItems = async () => {
     setLoading(true);
 
@@ -228,7 +219,6 @@ function Cart() {
   //     acc + (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 0),
   //   0,
   // );
-
   const totalAmount = useMemo(() => {
     return cartItems.reduce(
       (acc, item) =>
