@@ -13,7 +13,7 @@ export const getCartFromFirestore = async (uid) => {
   const snap = await getDoc(doc(fireDB, "users", uid));
   return snap.exists() ? snap.data().cart || [] : [];
 };
-
+ 
 export const clearUserCartFromFirestore = async (uid) => {
   if (!uid) return;
   await setDoc(

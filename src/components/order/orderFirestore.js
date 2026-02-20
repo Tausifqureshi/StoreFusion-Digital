@@ -27,7 +27,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
 
   const q = query(collection(fireDB, "orders"), where("userid", "==", uid));
   // console.log("Firestore query created for user orders." + uid);
-
+ 
   const unsubscribe = onSnapshot(q, (snapshot) => {
     const orders = snapshot.docs.map((doc) => ({
       id: doc.id,

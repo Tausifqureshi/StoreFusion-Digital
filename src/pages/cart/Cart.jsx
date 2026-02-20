@@ -20,6 +20,8 @@ import {
 } from "./cartFirestore";
 import Loader from "../../components/loader/Loader";
 import SmallSpinner from "../../components/loader/SmallSipnner";
+import { saveCart, clearCartStorage } from "./cartService";
+
 
 function Cart() {
   const user = JSON.parse(localStorage.getItem("user")); 
@@ -67,26 +69,31 @@ function Cart() {
   //     setLoading(false);
   //   }
   // };
-  const syncCart = async (updatedCart) => {
-    // setLoading(true);
-    try {
-      if (user?.uid) {
-        await saveCartToFirestore(user.uid, updatedCart);
-      } else {
-        await saveGuestCartToFirestore(updatedCart);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-    // finally {
-    //   // 👇 loader ko dikne ka time milta hai
-    //   setTimeout(() => {
-    //     setLoading(false);
-    //   }, 300);
-    // }
-  };
+  // const syncCart = async (updatedCart) => {
+  //   // setLoading(true);
+  //   try {
+  //     if (user?.uid) {
+  //       await saveCartToFirestore(user.uid, updatedCart);
+  //     } else {
+  //       await saveGuestCartToFirestore(updatedCart);
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  //   // finally {
+  //   //   // 👇 loader ko dikne ka time milta hai
+  //   //   setTimeout(() => {
+  //   //     setLoading(false);
+  //   //   }, 300);
+  //   // }
+  // };
 
   // Delete from cart
+ 
+  const syncCart = async (updatedCart) => {
+  await saveCart(updatedCart);
+};
+
   const deleteCart = async (item) => {
     dispatch(deleteFromCart(item));
     toast.info("Item deleted from cart", {
@@ -183,16 +190,15 @@ function Cart() {
   // };
   const clearCartItems = async () => {
     setLoading(true);
-
     dispatch(clearCart());
-
     try {
-      if (user?.uid) {
-        await clearUserCartFromFirestore(user.uid);
-      } else {
-        await clearGuestCartFromFirestore();
-      }
-      toast.success("Cart cleared");
+      // if (user?.uid) {
+      //   await clearUserCartFromFirestore(user.uid);
+      // } else {
+      //   await clearGuestCartFromFirestore();
+      // }
+      // toast.success("Cart cleared");
+      await clearCartStorage();
     } catch (err) {
       console.error(err);
     } finally {

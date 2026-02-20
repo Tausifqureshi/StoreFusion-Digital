@@ -12,6 +12,8 @@ import { getCartFromFirestore, getGuestCartFromFirestore,clearGuestCartFromFires
 // getGuestCartFromFirestore,
 //   clearGuestCartFromFirestore,
 //   saveCartToFirestore
+import { saveCart, loadCart, clearCartStorage } from "../../services/cartService";
+
 
 import { getUserOrdersFromFirestore } from "../../components/order/orderFirestore";
 import { setOrders } from "../../redux/orderSlice";
@@ -204,7 +206,7 @@ const login = async (e) => {
 
     // 🔥 redux update
     dispatch(setCart(finalCart));
-
+ 
     // =========================================================
       getUserOrdersFromFirestore(userData.uid, (orders) => {
       dispatch(setOrders(orders));

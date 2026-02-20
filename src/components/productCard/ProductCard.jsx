@@ -9,6 +9,8 @@ import {
   saveCartToFirestore,
   saveGuestCartToFirestore,
 } from "../../pages/cart/cartFirestore";
+import { saveCart } from "../../pages/cart/cartService";
+
 
 import ProductSkeleton from "../loader/ProductSkeleton";
 import ImageWithLoader from "../loader/ImageWithLoader";
@@ -22,7 +24,7 @@ function ProductCard() {
     filterPrice,
     sortPrice,
     // loading,
-    // setLoading,
+    // setLoading, 
     productLoading,
   } = useContext(MyContext);
   const [showMoreIndex, setShowMoreIndex] = useState({});
@@ -37,7 +39,7 @@ function ProductCard() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate(); // Use the hook for navigation
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
 
   const addCart = async (product) => {
     const isProductInCart = cartItems.find((item) => item.id === product.id);
@@ -62,12 +64,14 @@ function ProductCard() {
       dispatch(addToCart(serializedProduct));
       // Firebase me save karna cart ko.
       const updatedCart = [...cartItems, serializedProduct];
-      if (user?.uid) {
-        await saveCartToFirestore(user.uid, updatedCart);
-      } else {
-        // const updatedCart = [...cartItems, serializedProduct];
-        await saveGuestCartToFirestore(updatedCart);
-      }
+      // if (user?.uid) {
+      //   await saveCartToFirestore(user.uid, updatedCart);
+      // } else {
+      //   // const updatedCart = [...cartItems, serializedProduct];
+      //   await saveGuestCartToFirestore(updatedCart);
+      // }
+      await saveCart(updatedCart);
+
 
       toast.success("Product added to cart!", {
         position: "top-right",

@@ -207,6 +207,8 @@ import { useDispatch } from "react-redux";
 import { setCart } from "./redux/cartSlice";
 import { setOrders, clearOrders } from "./redux/orderSlice";
 import Loader from "./components/loader/Loader";
+import { loadCart } from "./services/cartService";
+
 
 // 🔥 LAZY LOADING (Performance Boost)
 const Home = lazy(() => import("./pages/home/Home"));
@@ -232,26 +234,45 @@ function App() {
 
 
   // 🔥 Load Cart Once
+  // useEffect(() => {
+  //   const loadCart = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const user = JSON.parse(localStorage.getItem("user"));
+
+  //       const cartData = user?.uid
+  //         ? await getCartFromFirestore(user.uid)
+  //         : await getGuestCartFromFirestore();
+
+  //       dispatch(setCart(cartData));
+  //     } catch (error) {
+  //       console.error("Failed to load cart:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   loadCart();
+  // }, [dispatch]);
+
   useEffect(() => {
-    const loadCart = async () => {
-      try {
-        setLoading(true);
-        const user = JSON.parse(localStorage.getItem("user"));
+  const fetchCart = async () => {
+    try {
+      setLoading(true);
+      const cartData = await loadCart();
+      dispatch(setCart(cartData));
+    } catch (error) {
+      console.error("Cart load error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        const cartData = user?.uid
-          ? await getCartFromFirestore(user.uid)
-          : await getGuestCartFromFirestore();
+  fetchCart();
+}, [dispatch]);
 
-        dispatch(setCart(cartData));
-      } catch (error) {
-        console.error("Failed to load cart:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    loadCart();
-  }, [dispatch]);
+
 
   // 🔥 Load Orders
   // useEffect(() => {

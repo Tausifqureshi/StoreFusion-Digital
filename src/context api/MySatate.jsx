@@ -11,10 +11,9 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 function MyState({ children}) {
   const [mode, setMode] = useState("light");
   const [loading, setLoading] = useState(false); //loading ke liye.
-  // const [cartItems, setCartItems] = useState([]); // Cart items ki length ke liye hai 0 jab tak product add nhi tab tak na show ho is ke liye ye state.
   const [productLoading, setProductLoading] = useState(false);
-const [orderLoading, setOrderLoading] = useState(false);
-const [userLoading, setUserLoading] = useState(false);
+// const [orderLoading, setOrderLoading] = useState(false);
+// const [userLoading, setUserLoading] = useState(false);
 
 
   // products ke liye ye state hai .
@@ -132,7 +131,7 @@ const [userLoading, setUserLoading] = useState(false);
   //   setProduct(productsArray);
   //   setProductLoading(false);
   // }, 6000);
-  
+
       });
       return () => data;
     } catch (error) {
