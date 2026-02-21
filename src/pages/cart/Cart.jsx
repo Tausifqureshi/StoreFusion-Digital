@@ -12,15 +12,16 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Razorpay from "../razorpay/Razorpay";
 import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
-import {
-  saveCartToFirestore,
-  clearUserCartFromFirestore,
-  saveGuestCartToFirestore,
-  clearGuestCartFromFirestore,
-} from "./cartFirestore";
+// import {
+//   saveCartToFirestore,
+//   clearUserCartFromFirestore,
+//   saveGuestCartToFirestore,
+//   clearGuestCartFromFirestore,
+// } from "./cartFirestore";
 import Loader from "../../components/loader/Loader";
 import SmallSpinner from "../../components/loader/SmallSipnner";
 import { saveCart, clearCartStorage } from "./cartService";
+import { saveCartDebounce } from "./debounce";
 
 
 function Cart() {
@@ -90,9 +91,9 @@ function Cart() {
 
   // Delete from cart
  
-  const syncCart = async (updatedCart) => {
-  await saveCart(updatedCart);
-};
+//   const syncCart = async (updatedCart) => {
+//   await saveCart(updatedCart);
+// };
 
   const deleteCart = async (item) => {
     dispatch(deleteFromCart(item));
@@ -101,7 +102,10 @@ function Cart() {
       autoClose: 1000,
       icon: "🗑️",
     });
-    await syncCart(cartItems.filter((i) => i.id !== item.id));
+    // await syncCart(cartItems.filter((i) => i.id !== item.id));
+     const updatedCart = cartItems.filter((i) => i.id !== item.id);
+
+   saveCartDebounce(updatedCart);
   };
 
   // Increment quantity
@@ -112,30 +116,48 @@ function Cart() {
   //   );
   //   await syncCart(updatedCart);
   // };
-  const incrementCartQuantity = async (itemId) => {
-    // setLoading(true);
-    // setCartItemUpdatingId(itemId);
-    setCartUpdating({ id: itemId, type: "increment" });
-    const updatedCart = cartItems.map((item) =>
-      item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
-    );
 
-    try {
-      // UI fast response (optimistic update)
-      dispatch(incrementQuantity(itemId));
+  // const incrementCartQuantity = async (itemId) => {
+  //   // setLoading(true);
+  //   // setCartItemUpdatingId(itemId);
+  //   setCartUpdating({ id: itemId, type: "increment" });
+  //   const updatedCart = cartItems.map((item) =>
+  //     item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
+  //   );
 
-      // Firestore sync
-      await syncCart(updatedCart);
-      setCartUpdating(null);
-    } catch (error) {
-      console.error("Increment failed:", error);
-      toast.error("Failed to update quantity");
-    } finally {
-      // setLoading(false);
-      // setCartItemUpdatingId(null);
-      setCartUpdating(null);
-    }
-  };
+  //   try {
+  //     // UI fast response (optimistic update)
+  //     dispatch(incrementQuantity(itemId));
+
+  //     // Firestore sync
+  //     // await syncCart(updatedCart);
+  //     saveCartDebounce(updatedCart);   // 🔥 main change
+  //     setCartUpdating(null);
+  //   } catch (error) {
+  //     console.error("Increment failed:", error);
+  //     toast.error("Failed to update quantity");
+  //   } finally {
+  //     // setLoading(false);
+  //     // setCartItemUpdatingId(null);
+  //     setCartUpdating(null);
+  //   }
+  // };
+  const incrementCartQuantity = (itemId) => {
+  setCartUpdating({ id: itemId, type: "increment" });
+
+  const updatedCart = cartItems.map((item) =>
+    item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+  );
+
+  dispatch(incrementQuantity(itemId));
+  saveCartDebounce(updatedCart);
+
+  setTimeout(() => setCartUpdating(null), 250);
+};
+
+
+
+
 
   // Decrement quantity
   // const decrementCartQuantity = async (itemId) => {
@@ -166,20 +188,11 @@ function Cart() {
     });
 
     // setLoading(true);
+    dispatch(decrementQuantity(itemId));
+    saveCartDebounce(updatedCart);
+    setTimeout(() => setCartUpdating(null), 250);
 
-    try {
-      dispatch(decrementQuantity(itemId));
-      await syncCart(updatedCart);
-      setCartUpdating(null);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      // setTimeout(() => {
-      //   // setLoading(false);
-      //    setCartItemUpdatingId(null);
-      // }, 300);
-      setCartUpdating(null);
-    }
+
   };
 
   // Clear cart

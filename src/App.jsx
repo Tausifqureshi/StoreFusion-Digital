@@ -197,17 +197,17 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import MyState from "./context api/MySatate";
-import {
-  getCartFromFirestore,
-  getGuestCartFromFirestore,
-} from "./pages/cart/cartFirestore";
+// import {
+//   getCartFromFirestore,
+//   getGuestCartFromFirestore,
+// } from "./pages/cart/cartFirestore";
 import { getUserOrdersFromFirestore } from "./components/order/orderFirestore";
 
 import { useDispatch } from "react-redux";
 import { setCart } from "./redux/cartSlice";
 import { setOrders, clearOrders } from "./redux/orderSlice";
 import Loader from "./components/loader/Loader";
-import { loadCart } from "./services/cartService";
+import { loadCart } from "./pages/cart/cartService";
 
 
 // 🔥 LAZY LOADING (Performance Boost)

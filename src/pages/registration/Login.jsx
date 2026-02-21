@@ -12,7 +12,7 @@ import { getCartFromFirestore, getGuestCartFromFirestore,clearGuestCartFromFires
 // getGuestCartFromFirestore,
 //   clearGuestCartFromFirestore,
 //   saveCartToFirestore
-import { saveCart, loadCart, clearCartStorage } from "../../services/cartService";
+// import { saveCart, loadCart, clearCartStorage } from "../../services/cartService";
 
 
 import { getUserOrdersFromFirestore } from "../../components/order/orderFirestore";

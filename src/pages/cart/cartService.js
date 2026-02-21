@@ -7,37 +7,52 @@ import {
   getGuestCartFromFirestore,
   clearUserCartFromFirestore,
   clearGuestCartFromFirestore,
-} from "../pages/cart/cartFirestore";
+} from "./cartFirestore";
 
-// 🔥 Save cart (user ya guest automatically detect karega)
+// 🔥 Save cart
 export const saveCart = async (cart) => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user?.uid) {
-    return await saveCartToFirestore(user.uid, cart);
-  } else {
-    return await saveGuestCartToFirestore(cart);
+    if (user?.uid) {
+      return await saveCartToFirestore(user.uid, cart);
+    } else {
+      return await saveGuestCartToFirestore(cart);
+    }
+  } catch (error) {
+    console.error("❌ saveCart service error:", error);
+    throw error; // 👉 VERY IMPORTANT
   }
 };
 
 // 🔥 Load cart
 export const loadCart = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user?.uid) {
-    return await getCartFromFirestore(user.uid);
-  } else {
-    return await getGuestCartFromFirestore();
+    if (user?.uid) {
+      return await getCartFromFirestore(user.uid);
+    } else {
+      return await getGuestCartFromFirestore();
+    }
+  } catch (error) {
+    console.error("❌ loadCart service error:", error);
+    return []; // 👉 safe fallback
   }
 };
 
 // 🔥 Clear cart
 export const clearCartStorage = async () => {
-  const user = JSON.parse(localStorage.getItem("user"));
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  if (user?.uid) {
-    return await clearUserCartFromFirestore(user.uid);
-  } else {
-    return await clearGuestCartFromFirestore();
+    if (user?.uid) {
+      return await clearUserCartFromFirestore(user.uid);
+    } else {
+      return await clearGuestCartFromFirestore();
+    }
+  } catch (error) {
+    console.error("❌ clearCart service error:", error);
+    throw error;
   }
 };

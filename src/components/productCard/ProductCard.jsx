@@ -5,10 +5,10 @@ import { addToCart } from "../../redux/cartSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import Loader from "../loader/Loader";
-import {
-  saveCartToFirestore,
-  saveGuestCartToFirestore,
-} from "../../pages/cart/cartFirestore";
+// import {
+//   saveCartToFirestore,
+//   saveGuestCartToFirestore,
+// } from "../../pages/cart/cartFirestore";
 import { saveCart } from "../../pages/cart/cartService";
 
 
