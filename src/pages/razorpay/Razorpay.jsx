@@ -68,7 +68,8 @@ function Razorpay({ cartItems, totalAmount }) {
       handler: async function (response) {
         //  console.log("Razorpay response received:", response);
         try {
-          console.log("Razorpay response:", response);
+          window.dispatchEvent(new Event("paymentSuccess"));
+          // console.log("Razorpay response:", response);
           toast.success('Payment Successful', { autoClose: 1000 });
 
           const paymentId = response.razorpay_payment_id;
@@ -91,7 +92,7 @@ function Razorpay({ cartItems, totalAmount }) {
           const savedOrder = await saveOrderToFirestore(orderInfo);
           toast.success('Order saved successfully',{ autoClose: 1000 });
           // ✅ Redux update (immediate UI update)
-          dispatch(addOrder(savedOrder));
+          dispatch(addOrder(savedOrder)); 
           // dispatch(addOrder(orderInfo)); // use saved order with ID
 
           // Clear cart from Redux and localStorage
@@ -111,6 +112,13 @@ function Razorpay({ cartItems, totalAmount }) {
           toast.error('Failed to save order',{ autoClose: 1000 });
         }
       },
+  // ✅ YAHI add karna haia
+  modal: {
+    ondismiss: function () {
+      window.dispatchEvent(new Event("paymentClosed"));
+    },
+  },
+
       theme: {
         color: "#3399cc",
       },
@@ -120,7 +128,7 @@ function Razorpay({ cartItems, totalAmount }) {
     pay.open();
   };
 
-  return (
+  return ( 
     <div>
       <Modal buyNow={buyNow} formData={formData} setFormData={setFormData} />
     </div>

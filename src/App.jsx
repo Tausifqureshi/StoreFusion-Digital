@@ -183,6 +183,7 @@
 //   }
 // }
 
+
 import "./App.css";
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import {
@@ -197,10 +198,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import MyState from "./context api/MySatate";
-// import {
-//   getCartFromFirestore,
-//   getGuestCartFromFirestore,
-// } from "./pages/cart/cartFirestore";
 import { getUserOrdersFromFirestore } from "./components/order/orderFirestore";
 
 import { useDispatch } from "react-redux";
@@ -209,8 +206,7 @@ import { setOrders, clearOrders } from "./redux/orderSlice";
 import Loader from "./components/loader/Loader";
 import { loadCart } from "./pages/cart/cartService";
 
-
-// 🔥 LAZY LOADING (Performance Boost)
+// 🔥 LAZY LOADING
 const Home = lazy(() => import("./pages/home/Home"));
 const Order = lazy(() => import("./components/order/Order"));
 const Cart = lazy(() => import("./pages/cart/Cart"));
@@ -220,116 +216,71 @@ const Signup = lazy(() => import("./pages/registration/Signup"));
 const Login = lazy(() => import("./pages/registration/Login"));
 const ProductInfo = lazy(() => import("./pages/productInfo/ProductInfo"));
 const AddProduct = lazy(() => import("./pages/admin/page-admin/AddProduct"));
-const UpdateProduct = lazy(
-  () => import("./pages/admin/page-admin/UpdateProduct"),
-);
+const UpdateProduct = lazy(() => import("./pages/admin/page-admin/UpdateProduct"));
 const Allproducts = lazy(() => import("./pages/allproducts/Allproducts"));
 const Contact = lazy(() => import("./components/contact/Contact"));
 const About = lazy(() => import("./components/about/About"));
 
 function App() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
+
+  const [cartLoading, setCartLoading] = useState(true);
   const [orderLoading, setOrderLoading] = useState(false);
 
-
-  // 🔥 Load Cart Once
-  // useEffect(() => {
-  //   const loadCart = async () => {
-  //     try {
-  //       setLoading(true);
-  //       const user = JSON.parse(localStorage.getItem("user"));
-
-  //       const cartData = user?.uid
-  //         ? await getCartFromFirestore(user.uid)
-  //         : await getGuestCartFromFirestore();
-
-  //       dispatch(setCart(cartData));
-  //     } catch (error) {
-  //       console.error("Failed to load cart:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   loadCart();
-  // }, [dispatch]);
-
+  // 🔥 CART FIRST LOAD ONLY
   useEffect(() => {
-  const fetchCart = async () => {
-    try {
-      setLoading(true);
-      const cartData = await loadCart();
-      dispatch(setCart(cartData));
-    } catch (error) {
-      console.error("Cart load error:", error);
-    } finally {
-      setLoading(false);
+    const fetchCart = async () => {
+      try {
+        const cartData = await loadCart();
+        dispatch(setCart(cartData));
+      } catch (error) {
+        console.error("Cart load error:", error);
+      } finally {
+        setCartLoading(false);
+      }
+    };
+
+    fetchCart();
+  }, [dispatch]);
+
+  // 🔥 ORDER REALTIME LISTENER
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userid = user?.uid;
+
+    if (!userid) {
+      dispatch(clearOrders());
+      return;
     }
-  };
 
-  fetchCart();
-}, [dispatch]);
+    setOrderLoading(true);
 
+    const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
+      dispatch(setOrders(orders));
+      setOrderLoading(false);
+    });
 
-
-
-  // 🔥 Load Orders
-  // useEffect(() => {
-  //   const user = JSON.parse(localStorage.getItem("user"));
-  //   const userid = user?.uid;
-
-  //   if (!userid) {
-  //     dispatch(clearOrders());
-  //     return;
-  //   }
-
-  //   const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
-  //     dispatch(setOrders(orders));
-  //   });
-
-  //   return () => unsubscribe && unsubscribe();
-  // }, [dispatch]);
-  useEffect(() => {
-  const user = JSON.parse(localStorage.getItem("user"));
-  const userid = user?.uid;
-
-  if (!userid) {
-    dispatch(clearOrders());
-    return;
-  }
-
-  setOrderLoading(true); // 🔥 loader ON
-
-  const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
-    dispatch(setOrders(orders));
-    setOrderLoading(false); // 🔥 loader OFF
-  });
-
-  return () => unsubscribe && unsubscribe();
-}, [dispatch]);
-
+    return () => unsubscribe && unsubscribe();
+  }, [dispatch]);
 
   return (
     <>
-      {loading && (
+      {/* ✅ FULL SCREEN FIRST LOAD ONLY */}
+      {/* {cartLoading && (
         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-          <Loader fullScreen={true} size={60} />
+          <Loader fullScreen size={60} />
         </div>
-      )   }
+      )} */}
 
       <BrowserRouter>
         <MyState>
-          {/* 🔥 Suspense Added */}
-          <Suspense
-            fallback={<Loader />}
-          >
+          <Suspense fallback={<Loader />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/order" element={<Order  orderLoading={orderLoading}/>} />
-              <Route path="/cart" element={<Cart />} />
+              <Route path="/order" element={<Order orderLoading={orderLoading} />} />
+              <Route path="/cart" element={<Cart  cartLoading ={cartLoading } />} />
               <Route path="/allproducts" element={<Allproducts />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
@@ -375,7 +326,7 @@ function App() {
 
 export default App;
 
-// 🔐 User Protected Route
+// 🔐 USER PROTECTED
 export function ProtectedRoutes({ children }) {
   const location = useLocation();
 
@@ -392,7 +343,7 @@ export function ProtectedRoutes({ children }) {
   }
 }
 
-// 🔐 Admin Protected Route
+// 🔐 ADMIN PROTECTED
 export function ProtectedRoutesForAdmin({ children }) {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user"));
@@ -409,3 +360,230 @@ export function ProtectedRoutesForAdmin({ children }) {
     );
   }
 }
+
+// import "./App.css";
+// import React, { Suspense, lazy, useEffect, useState } from "react";
+// import {
+//   BrowserRouter,
+//   Routes,
+//   Route,
+//   Navigate,
+//   useLocation,
+// } from "react-router-dom";
+
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+
+// import MyState from "./context api/MySatate";
+// // import {
+// //   getCartFromFirestore,
+// //   getGuestCartFromFirestore,
+// // } from "./pages/cart/cartFirestore";
+// import { getUserOrdersFromFirestore } from "./components/order/orderFirestore";
+
+// import { useDispatch } from "react-redux";
+// import { setCart } from "./redux/cartSlice";
+// import { setOrders, clearOrders } from "./redux/orderSlice";
+// import Loader from "./components/loader/Loader";
+// import { loadCart } from "./pages/cart/cartService";
+
+
+// // 🔥 LAZY LOADING (Performance Boost)
+// const Home = lazy(() => import("./pages/home/Home"));
+// const Order = lazy(() => import("./components/order/Order"));
+// const Cart = lazy(() => import("./pages/cart/Cart"));
+// const Dashboard = lazy(() => import("./pages/admin/dashboard/Dashboard"));
+// const NoPage = lazy(() => import("./pages/nopage/NoPage"));
+// const Signup = lazy(() => import("./pages/registration/Signup"));
+// const Login = lazy(() => import("./pages/registration/Login"));
+// const ProductInfo = lazy(() => import("./pages/productInfo/ProductInfo"));
+// const AddProduct = lazy(() => import("./pages/admin/page-admin/AddProduct"));
+// const UpdateProduct = lazy(
+//   () => import("./pages/admin/page-admin/UpdateProduct"),
+// );
+// const Allproducts = lazy(() => import("./pages/allproducts/Allproducts"));
+// const Contact = lazy(() => import("./components/contact/Contact"));
+// const About = lazy(() => import("./components/about/About"));
+
+// function App() {
+//   const dispatch = useDispatch();
+//   const [loading, setLoading] = useState(false);
+//   const [orderLoading, setOrderLoading] = useState(false);
+
+
+//   // 🔥 Load Cart Once
+//   // useEffect(() => {
+//   //   const loadCart = async () => {
+//   //     try {
+//   //       setLoading(true);
+//   //       const user = JSON.parse(localStorage.getItem("user"));
+
+//   //       const cartData = user?.uid
+//   //         ? await getCartFromFirestore(user.uid)
+//   //         : await getGuestCartFromFirestore();
+
+//   //       dispatch(setCart(cartData));
+//   //     } catch (error) {
+//   //       console.error("Failed to load cart:", error);
+//   //     } finally {
+//   //       setLoading(false);
+//   //     }
+//   //   };
+
+//   //   loadCart();
+//   // }, [dispatch]);
+
+//   useEffect(() => {
+//   const fetchCart = async () => {
+//     try {
+//       setLoading(true);
+//       const cartData = await loadCart();
+//       dispatch(setCart(cartData));
+//     } catch (error) {
+//       console.error("Cart load error:", error);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   fetchCart();
+// }, [dispatch]);
+
+
+
+
+//   // 🔥 Load Orders
+//   // useEffect(() => {
+//   //   const user = JSON.parse(localStorage.getItem("user"));
+//   //   const userid = user?.uid;
+
+//   //   if (!userid) {
+//   //     dispatch(clearOrders());
+//   //     return;
+//   //   }
+
+//   //   const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
+//   //     dispatch(setOrders(orders));
+//   //   });
+
+//   //   return () => unsubscribe && unsubscribe();
+//   // }, [dispatch]);
+//   useEffect(() => {
+//     const user = JSON.parse(localStorage.getItem("user"));
+//   const userid = user?.uid;
+
+//   if (!userid) {
+//     dispatch(clearOrders());
+//     return;
+//   }
+
+//   setOrderLoading(true); // 🔥 loader ON
+
+//   const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
+//     dispatch(setOrders(orders));
+//     setOrderLoading(false); // 🔥 loader OFF
+//   });
+
+//   return () => unsubscribe && unsubscribe();
+// }, [dispatch]);
+
+
+//   return (
+//     <>
+//       {loading && (
+//         <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
+//           <Loader fullScreen={true} size={60} />
+//         </div>
+//       )   }
+
+//       <BrowserRouter>
+//         <MyState>
+//           {/* 🔥 Suspense Added */}
+//           <Suspense
+//             fallback={<Loader />}
+//           >
+//             <Routes>
+//               <Route path="/" element={<Home />} />
+//               <Route path="/about" element={<About />} />
+//               <Route path="/contact" element={<Contact />} />
+//               <Route path="/order" element={<Order  orderLoading={orderLoading}/>} />
+//               <Route path="/cart" element={<Cart />} />
+//               <Route path="/allproducts" element={<Allproducts />} />
+//               <Route path="/signup" element={<Signup />} />
+//               <Route path="/login" element={<Login />} />
+//               <Route path="/productInfo/:id" element={<ProductInfo />} />
+
+//               <Route
+//                 path="/dashboard"
+//                 element={
+//                   <ProtectedRoutesForAdmin>
+//                     <Dashboard />
+//                   </ProtectedRoutesForAdmin>
+//                 }
+//               />
+
+//               <Route
+//                 path="/addProduct"
+//                 element={
+//                   <ProtectedRoutesForAdmin>
+//                     <AddProduct />
+//                   </ProtectedRoutesForAdmin>
+//                 }
+//               />
+
+//               <Route
+//                 path="/updateProduct"
+//                 element={
+//                   <ProtectedRoutesForAdmin>
+//                     <UpdateProduct />
+//                   </ProtectedRoutesForAdmin>
+//                 }
+//               />
+
+//               <Route path="/*" element={<NoPage />} />
+//             </Routes>
+//           </Suspense>
+
+//           <ToastContainer />
+//         </MyState>
+//       </BrowserRouter>
+//     </>
+//   );
+// }
+
+// export default App;
+
+// // 🔐 User Protected Route
+// export function ProtectedRoutes({ children }) {
+//   const location = useLocation();
+
+//   if (localStorage.getItem("user")) {
+//     return children;
+//   } else {
+//     return (
+//       <Navigate
+//         to="/login"
+//         state={{ PreviousPathname: location.pathname }}
+//         replace
+//       />
+//     );
+//   }
+// }
+
+// // 🔐 Admin Protected Route
+// export function ProtectedRoutesForAdmin({ children }) {
+//   const location = useLocation();
+//   const user = JSON.parse(localStorage.getItem("user"));
+
+//   if (user && user.role === "admin") {
+//     return children;
+//   } else {
+//     return (
+//       <Navigate
+//         to="/login"
+//         state={{ PreviousPathname: location.pathname }}
+//         replace
+//       />
+//     );
+//   }
+// }

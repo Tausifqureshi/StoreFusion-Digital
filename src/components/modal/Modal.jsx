@@ -161,59 +161,99 @@
 
 
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 function Modal({ formData, setFormData, buyNow }) {
   const { fullName, address, pincode, phoneNumber } = formData;
-  const [isOpen, setIsOpen] = useState(false);
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [placingOrder, setPlacingOrder] = useState(false);
+   const [loading, setLoading] = useState(false); // 🔹 loader for Buy Now button
+
+    const handleBuyNowClick = () => {
+    setLoading(true); // loader start
+    setTimeout(() => {
+      setIsOpen(true); // modal open
+      setLoading(false); // loader stop
+    }, 200); // 0.7s delay before modal
+  };
+  // const openModal = () => setIsOpen(true);
+  const closeModal = () => {
+    if (!placingOrder) setIsOpen(false);
+  };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleBuyNow = () => {
-    if (!fullName || !address || !pincode || !phoneNumber) {
-      toast.error("All fields are required", { 
-        position: "top-right" ,
-        autoClose: 1000 ,
-        hideProgressBar: false,
+ // 🔹 Stop loader and close modal on payment events
+  useEffect(() => {
+    const stopLoading = () => {
+      setPlacingOrder(false);
+      setIsOpen(false); // modal bhi close
+    };
 
-      });
+    window.addEventListener("paymentClosed", stopLoading);
+    window.addEventListener("paymentSuccess", stopLoading);
+
+    return () => {
+      window.removeEventListener("paymentClosed", stopLoading);
+      window.removeEventListener("paymentSuccess", stopLoading);
+    };
+  }, []);
+
+
+  // const handleBuyNow = async () => {
+  //   if (!fullName || !address || !pincode || !phoneNumber) {
+  //     toast.error("All fields are required");
+  //     return;
+  //   }
+  //   if (placingOrder) return;
+  //   setPlacingOrder(true);
+  //   setTimeout(() => {
+  //   buyNow();
+  // }, 500);
+  // };
+
+  const handleBuyNow = async () => {
+    if (!fullName || !address || !pincode || !phoneNumber) {
+      toast.error("All fields are required");
       return;
     }
 
-    buyNow();
-    closeModal();
+    if (placingOrder) return;
 
-    setFormData({
-      fullName: "",
-      address: "",
-      pincode: "",
-      phoneNumber: "",
+    setPlacingOrder(true);
+
+    try {
+      await buyNow(); // Razorpay open
+       setFormData({
+      fullName: '',
+      address: '',
+      pincode: '',
+      phoneNumber: '',
     });
+    } catch (err) {
+      setPlacingOrder(false);
+    }
   };
-
   return (
     <>
-      {/* Buy Now Button */}
       <button
-        onClick={openModal}
-        className="w-full bg-blue-600 py-2 text-white font-bold rounded-lg hover:bg-blue-700"
+        onClick={handleBuyNowClick}
+        disabled={loading}
+        className="w-full bg-blue-600 py-2 text-white font-bold rounded-lg hover:bg-blue-700 flex justify-center items-center gap-2"
       >
-        Buy Now
+        {loading ? (
+          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        ) : (
+          "Buy Now"
+        )}
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="relative z-50"
-          onClose={() => {}}   // ❌ outside click disable
-        >
-          {/* Backdrop */}
+      <Dialog as="div" className="relative z-50" onClose={() => {}}>
           <div className="fixed inset-0 bg-black bg-opacity-50" />
 
           <div className="fixed inset-0 flex items-center justify-center px-4">
@@ -226,14 +266,12 @@ function Modal({ formData, setFormData, buyNow }) {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              {/* Modal Box */}
-              <Dialog.Panel
-                onClick={(e) => e.stopPropagation()} // extra safety
-                className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
-              >
-                {/* ❌ CLOSE BUTTON */}
+              <Dialog.Panel className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
+
+                {/* Close */}
                 <button
                   onClick={closeModal}
+                  disabled={placingOrder}
                   className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
                 >
                   ✕
@@ -243,7 +281,6 @@ function Modal({ formData, setFormData, buyNow }) {
                   Complete Your Order
                 </Dialog.Title>
 
-                {/* FORM */}
                 <div className="space-y-3">
                   <input
                     type="text"
@@ -253,7 +290,6 @@ function Modal({ formData, setFormData, buyNow }) {
                     onChange={handleInputChange}
                     className="w-full border p-2 rounded"
                   />
-
                   <input
                     type="text"
                     name="address"
@@ -262,7 +298,6 @@ function Modal({ formData, setFormData, buyNow }) {
                     onChange={handleInputChange}
                     className="w-full border p-2 rounded"
                   />
-
                   <input
                     type="text"
                     name="pincode"
@@ -271,7 +306,6 @@ function Modal({ formData, setFormData, buyNow }) {
                     onChange={handleInputChange}
                     className="w-full border p-2 rounded"
                   />
-
                   <input
                     type="text"
                     name="phoneNumber"
@@ -282,12 +316,22 @@ function Modal({ formData, setFormData, buyNow }) {
                   />
                 </div>
 
+                {/* 🔥 Place Order */}
                 <button
                   onClick={handleBuyNow}
-                  className="mt-5 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+                  disabled={placingOrder}
+                  className="mt-5 w-full bg-blue-600 text-white py-2 rounded flex justify-center items-center gap-2"
                 >
-                  Place Order
+                  {placingOrder ? (
+                    <>
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                      Opening Payment...
+                    </>
+                  ) : (
+                    "Place Order"
+                  )}
                 </button>
+
               </Dialog.Panel>
             </Transition.Child>
           </div>
@@ -298,3 +342,148 @@ function Modal({ formData, setFormData, buyNow }) {
 }
 
 export default Modal;
+
+
+
+// import { Dialog, Transition } from "@headlessui/react";
+// import { Fragment, useState } from "react";
+// import { toast } from "react-toastify";
+
+// function Modal({ formData, setFormData, buyNow }) {
+//   const { fullName, address, pincode, phoneNumber } = formData;
+//   const [isOpen, setIsOpen] = useState(false);
+//   const [placingOrder, setPlacingOrder] = useState(false);
+
+//   const openModal = () => setIsOpen(true);
+//   const closeModal = () => setIsOpen(false);
+
+//   const handleInputChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleBuyNow = () => {
+//     if (!fullName || !address || !pincode || !phoneNumber) {
+//       toast.error("All fields are required", { 
+//         position: "top-right" ,
+//         autoClose: 1000 ,
+//         hideProgressBar: false,
+
+//       });
+//       return;
+//     }
+
+//      if (placingOrder) return; // double click prevention
+//   setPlacingOrder(true);
+
+//     buyNow();
+//     closeModal();
+
+//     setFormData({
+//       fullName: "",
+//       address: "",
+//       pincode: "",
+//       phoneNumber: "",
+//     });
+//   };
+
+//   return (
+//     <>
+//       {/* Buy Now Button */}
+//       <button
+//         onClick={openModal}
+//         className="w-full bg-blue-600 py-2 text-white font-bold rounded-lg hover:bg-blue-700"
+//       >
+//         Buy Now
+//       </button>
+
+//       <Transition appear show={isOpen} as={Fragment}>
+//         <Dialog
+//           as="div"
+//           className="relative z-50"
+//           onClose={() => {}}   // ❌ outside click disable
+//         >
+//           {/* Backdrop */}
+//           <div className="fixed inset-0 bg-black bg-opacity-50" />
+
+//           <div className="fixed inset-0 flex items-center justify-center px-4">
+//             <Transition.Child
+//               as={Fragment}
+//               enter="ease-out duration-300"
+//               enterFrom="opacity-0 scale-95"
+//               enterTo="opacity-100 scale-100"
+//               leave="ease-in duration-200"
+//               leaveFrom="opacity-100 scale-100"
+//               leaveTo="opacity-0 scale-95"
+//             >
+//               {/* Modal Box */}
+//               <Dialog.Panel
+//                 onClick={(e) => e.stopPropagation()} // extra safety
+//                 className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
+//               >
+//                 {/* ❌ CLOSE BUTTON */}
+//                 <button
+//                   onClick={closeModal}
+//                   className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
+//                 >
+//                   ✕
+//                 </button>
+
+//                 <Dialog.Title className="text-lg font-semibold mb-4 text-center">
+//                   Complete Your Order
+//                 </Dialog.Title>
+
+//                 {/* FORM */}
+//                 <div className="space-y-3">
+//                   <input
+//                     type="text"
+//                     name="fullName"
+//                     placeholder="Full Name"
+//                     value={fullName}
+//                     onChange={handleInputChange}
+//                     className="w-full border p-2 rounded"
+//                   />
+
+//                   <input
+//                     type="text"
+//                     name="address"
+//                     placeholder="Address"
+//                     value={address}
+//                     onChange={handleInputChange}
+//                     className="w-full border p-2 rounded"
+//                   />
+
+//                   <input
+//                     type="text"
+//                     name="pincode"
+//                     placeholder="Pincode"
+//                     value={pincode}
+//                     onChange={handleInputChange}
+//                     className="w-full border p-2 rounded"
+//                   />
+
+//                   <input
+//                     type="text"
+//                     name="phoneNumber"
+//                     placeholder="Mobile Number"
+//                     value={phoneNumber}
+//                     onChange={handleInputChange}
+//                     className="w-full border p-2 rounded"
+//                   />
+//                 </div>
+
+//                 <button
+//                   onClick={handleBuyNow}
+//                   className="mt-5 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+//                 >
+//                   Place Order
+//                 </button>
+//               </Dialog.Panel>
+//             </Transition.Child>
+//           </div>
+//         </Dialog>
+//       </Transition>
+//     </>
+//   );
+// }
+
+// export default Modal;

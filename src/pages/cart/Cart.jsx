@@ -24,13 +24,14 @@ import { saveCart, clearCartStorage } from "./cartService";
 import { saveCartDebounce } from "./debounce";
 
 
-function Cart() {
+function Cart({cartLoading }) {
   const user = JSON.parse(localStorage.getItem("user")); 
 
   const { mode } = useContext(MyContext); 
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  const [clearingCart, setClearingCart] = useState(false);
   const [cartUpdating, setCartUpdating] = useState(null);
  
   const [descOpen, setDescOpen] = useState({});
@@ -96,7 +97,7 @@ function Cart() {
 // };
 
   const deleteCart = async (item) => {
-    dispatch(deleteFromCart(item));
+    
     toast.info("Item deleted from cart", {
       position: "top-right",
       autoClose: 1000,
@@ -104,7 +105,7 @@ function Cart() {
     });
     // await syncCart(cartItems.filter((i) => i.id !== item.id));
      const updatedCart = cartItems.filter((i) => i.id !== item.id);
-
+  dispatch(deleteFromCart(updatedCart));
    saveCartDebounce(updatedCart);
   };
 
@@ -201,25 +202,45 @@ function Cart() {
   //   await syncCart([]);
   //   toast.success("Cart cleared", { position: "top-right", autoClose: 1000 });
   // };
+  // const clearCartItems = async () => {
+  //   setLoading(true);
+  //   dispatch(clearCart());
+  //   try {
+  //     // if (user?.uid) {
+  //     //   await clearUserCartFromFirestore(user.uid);
+  //     // } else {
+  //     //   await clearGuestCartFromFirestore();
+  //     // }
+  //     // toast.success("Cart cleared");
+  //     await clearCartStorage();
+  //   } catch (err) {
+  //     console.error(err);
+  //   } finally {
+  //     setTimeout(() => {
+  //       setLoading(false);
+  //     }, 300);
+  //   }
+  // };
+
   const clearCartItems = async () => {
-    setLoading(true);
-    dispatch(clearCart());
-    try {
-      // if (user?.uid) {
-      //   await clearUserCartFromFirestore(user.uid);
-      // } else {
-      //   await clearGuestCartFromFirestore();
-      // }
-      // toast.success("Cart cleared");
-      await clearCartStorage();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
-    }
-  };
+  setClearingCart(true);
+
+  try {
+    await clearCartStorage();
+    toast.success("Cart cleared");
+
+    // 👇 spinner ko dikne ka time
+    setTimeout(() => {
+      dispatch(clearCart());
+      setClearingCart(false);
+    }, 400);
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to clear cart");
+    setClearingCart(false);
+  }
+};
 
   //   const clearCartItems = async () => {
   //   dispatch(clearCart());
@@ -252,7 +273,7 @@ function Cart() {
 
   return (
     <Layout>
-      {loading && <Loader />}
+      {cartLoading && <Loader />}
       <div
         className={`min-h-screen pt-5 ${mode === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}
       >
@@ -435,12 +456,26 @@ function Cart() {
                 </span>
               </p>
 
-              <button
+              {/* <button
                 onClick={clearCartItems}
                 className="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-full"
               >
                 Clear Cart
-              </button>
+              </button> */}
+              <button
+  onClick={clearCartItems}
+  disabled={clearingCart}a
+  className="mb-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 w-full flex justify-center items-center gap-2"
+>
+  {clearingCart ? (
+    <>
+      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+      Clearing...
+    </>
+  ) : (
+    "Clear Cart"
+  )}
+</button>
 
               <Razorpay cartItems={cartItems} totalAmount={totalWithShipping} />
             </div>
@@ -467,6 +502,7 @@ function Cart() {
       <ScrollToTopButoon />
     </Layout>
   );
+  
 }
 
 export default Cart;
