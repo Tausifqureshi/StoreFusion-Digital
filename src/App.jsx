@@ -274,7 +274,7 @@ function App() {
 
       <BrowserRouter>
         <MyState>
-          <Suspense fallback={<Loader />}>
+          <Suspense fallback={<Loader count={8}/>}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
