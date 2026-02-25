@@ -185,7 +185,7 @@
 
 
 import "./App.css";
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState,verison } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -220,6 +220,7 @@ const UpdateProduct = lazy(() => import("./pages/admin/page-admin/UpdateProduct"
 const Allproducts = lazy(() => import("./pages/allproducts/Allproducts"));
 const Contact = lazy(() => import("./components/contact/Contact"));
 const About = lazy(() => import("./components/about/About"));
+const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
 
 function App() {
   const dispatch = useDispatch();
@@ -271,6 +272,7 @@ function App() {
           <Loader fullScreen size={60} />
         </div>
       )} */}
+      <h1> {verison} </h1>
 
       <BrowserRouter>
         <MyState>
@@ -312,6 +314,14 @@ function App() {
                   </ProtectedRoutesForAdmin>
                 }
               />
+              <Route
+  path="/addtestimonial"
+  element={
+    <ProtectedRoutesForAdmin>
+      <AddTestimonial />
+    </ProtectedRoutesForAdmin>
+  }
+/>
 
               <Route path="/*" element={<NoPage />} />
             </Routes>
@@ -360,6 +370,13 @@ export function ProtectedRoutesForAdmin({ children }) {
     );
   }
 }
+
+
+
+
+
+
+
 
 // import "./App.css";
 // import React, { Suspense, lazy, useEffect, useState } from "react";

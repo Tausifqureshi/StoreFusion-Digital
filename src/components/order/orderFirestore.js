@@ -11,6 +11,7 @@ export const saveOrderToFirestore = async (orderInfo) => {
     ...orderInfo,
     status: orderInfo.status ?? "placed",
     createdAt: new Date(),
+
   });
 
   return {
@@ -67,7 +68,7 @@ export const cancelAllOrdersFromFirestore = async (uid) => {
       doc(fireDB, "orders", orderDoc.id),
       { status: "cancelled" },
       { merge: true },
-    ),
+    ), 
   );
 
   await Promise.all(promises);

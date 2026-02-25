@@ -429,17 +429,142 @@ function MyState({ children }) {
     }),
   });
 
+
   const [product, setProduct] = useState([]);
   const [order, setOrder] = useState([]);
   const [user, setUser] = useState([]);
+  
 
   // Filters
   const [searchkey, setSearchkey] = useState("");
   const [filterType, setFilterType] = useState("");
   const [filterPrice, setFilterPrice] = useState("");
   const [sortPrice, setSortPrice] = useState("");
+  const [testimonial, setTestimonial] = useState([]);
 
   const navigate = useNavigate();
+  // testimonial state
+const [testimonialForm, setTestimonialForm] = useState({
+  id: "",
+  name: "",
+  text: "",
+  img: "",
+  role: "",
+  rating: 0,
+  productId: "",
+});
+
+// realtime testimonial (lightweight)
+// const getTestimonialData = useCallback(() => {
+//   const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+
+//   const unsubscribe = onSnapshot(q, (snapshot) => {
+//     setTestimonial(
+//       snapshot.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }))
+//     );
+//   });
+
+//   return unsubscribe;
+// }, []);
+const getTestimonialData = useCallback(() => {
+  const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    setTestimonial(
+      snapshot.docs.map((doc) => ({
+        id: doc.id,  // ⭐ THIS IS CRUCIAL
+        ...doc.data(),
+      }))
+    );
+  });
+
+  return unsubscribe;
+}, []);
+
+// add testimonial
+const addTestimonial = async (data) => {
+  if (!data.name || !data.text) return toast.error("Fill all fields");
+
+  setLoading(true);
+  try {
+    await addDoc(collection(fireDB, "testimonials"), {
+      ...data,
+      productId: data.productId,   // ⭐ VERY IMPORTANT
+      time: Timestamp.now(),
+    });
+
+    toast.success("Added");
+
+    setTestimonialForm({
+      id: "",
+      name: "",
+      text: "",
+      img: "",
+      role: "",
+      rating: 0,
+      productId: "",
+    });
+  } catch {
+    toast.error("Error");
+  }
+  setLoading(false);
+};
+
+// edit
+const editTestimonial = (item) => {
+  setTestimonialForm(item);
+  navigate("/addtestimonial");
+};
+
+// update
+const updateTestimonial = async () => {
+  setLoading(true);
+  try {
+    await setDoc(
+      doc(fireDB, "testimonials", testimonialForm.id),
+      {
+        ...testimonialForm,
+        time: Timestamp.now(),
+      },
+      { merge: true }
+    );
+
+    toast.success("Updated");
+    navigate("/dashboard");
+
+    setTestimonialForm({
+      id: "",
+      name: "",
+      text: "",
+      img: "",
+      role: "",
+      rating: 0,
+      productId: "",
+    });
+  } catch (e) {
+    toast.error("Error");
+  }
+  setLoading(false);
+};
+
+// delete (NO re-fetch)
+const deleteTestimonial = async (id) => {
+  if (!id) {
+    toast.error("Cannot delete: No ID provided");
+    return;
+  }
+  try {
+    await deleteDoc(doc(fireDB, "testimonials", id));
+    toast.success("Deleted successfully");
+    setTestimonial(prev => prev.filter(t => t.id !== id));
+  } catch (err) {
+    console.log("Delete Error:", err);
+    toast.error("Delete failed");
+  }
+};
 
   // --- Reset Product Form (memoized) ---
   const resetProductForm = useCallback(() => {
@@ -503,6 +628,7 @@ function MyState({ children }) {
       setProductLoading(false);
     }
   }, []);
+
 
   const updateProduct = useCallback(async () => {
     setLoading(true);
@@ -602,7 +728,12 @@ function MyState({ children }) {
     };
 
     fetchInitialData();
-  }, [getProductData, getOrderData, getUserData]);
+  }, [getProductData, getOrderData, getUserData, getTestimonialData]);
+  
+  useEffect(() => {
+  const unsubscribe = getTestimonialData();
+  return () => unsubscribe && unsubscribe();
+}, [getTestimonialData]);
 
   // --- Theme toggle ---
   const toggleMode = useCallback(() => {
@@ -653,11 +784,20 @@ function MyState({ children }) {
         productLoading,
         orderLoading,
         userLoading,
+        testimonial,
+       setTestimonial,
+      testimonialForm,
+      setTestimonialForm,
+      addTestimonial,
+      editTestimonial,   // <-- add this
+      deleteTestimonial, // <-- add this
+      updateTestimonial, // <-- add this
       }}
     >
       {children}
     </MyContext.Provider>
   );
+
 }
 
 export default MyState;

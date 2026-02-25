@@ -57,50 +57,147 @@
 
 // export default Loader;
 
+
+
+
+
+// import React from "react";
+
+// // 🔹 Product Skeleton Card
+// function ProductSkeletonCard() {
+//   return (
+//     <div className="border rounded-2xl p-4 flex flex-col animate-pulse bg-gray-50">
+//       {/* Image */}
+//       <div className="h-48 w-full bg-gray-300 rounded-xl mb-4"></div>
+
+//       {/* Category */}
+//       <div className="h-3 bg-gray-300 rounded w-1/3 mb-2"></div>
+
+//       {/* Title */}
+//       <div className="h-4 bg-gray-300 rounded w-3/4 mb-1"></div>
+//       <div className="h-4 bg-gray-300 rounded w-2/3 mb-3"></div>
+
+//       {/* Price */}
+//       <div className="h-4 bg-gray-400 rounded w-1/4 mb-4"></div>
+
+//       {/* Button */}
+//       <div className="h-10 bg-gray-300 rounded-lg mt-auto"></div>
+//     </div>
+//   );
+// }
+
+// // 🔹 Filter Skeleton
+// function FilterSkeleton() {
+//   return (
+//     <div className="max-w-4xl mx-auto p-4 flex flex-wrap gap-4 animate-pulse">
+//       <div className="h-14 w-full md:w-2/3 bg-gray-300 rounded-lg"></div>
+//       <div className="h-14 w-full md:w-1/3 bg-gray-300 rounded-lg"></div>
+//     </div>
+//   );
+// }
+
+// // 🔹 Testimonial Skeleton
+// function TestimonialSkeleton() {
+//   return (
+//     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 p-4 animate-pulse">
+//       {[...Array(3)].map((_, i) => (
+//         <div
+//           key={i}
+//           className="border rounded-2xl p-4 flex flex-col gap-3 bg-gray-50"
+//         >
+//           <div className="h-12 w-12 rounded-full bg-gray-300"></div>
+//           <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+//           <div className="h-3 bg-gray-300 rounded w-full"></div>
+//           <div className="h-3 bg-gray-300 rounded w-5/6"></div>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+// // 🔹 Footer Skeleton
+// function FooterSkeleton() {
+//   return (
+//     <div className="max-w-6xl mx-auto flex flex-wrap justify-between gap-4 p-4 animate-pulse mt-10">
+//       {[...Array(3)].map((_, i) => (
+//         <div key={i} className="h-6 w-32 bg-gray-300 rounded-lg"></div>
+//       ))}
+//     </div>
+//   );
+// }
+
+// // 🔹 Full Page Loader
+// export default function Loader({ productCount = 8 }) {
+//   return (
+//     <div className="space-y-6">
+//       {/* Filter Section */}
+//       <FilterSkeleton />
+
+//       {/* Product Grid */}
+//       <div className="max-w-6xl mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+//         {[...Array(productCount)].map((_, i) => (
+//           <ProductSkeletonCard key={i} />
+//         ))}
+//       </div>
+
+//       {/* Testimonial Section */}
+//       <div className="max-w-6xl mx-auto">
+//         <h2 className="h-6 w-40 bg-gray-300 rounded mb-4 animate-pulse"></h2>
+//         <TestimonialSkeleton />
+//       </div>
+
+//       {/* Footer Section */}
+//       <FooterSkeleton />
+//     </div>
+//   );
+// }
+
+// import React from "react";
+
+/* 🔹 HERO SKELETON */
 import React from "react";
 
-// 🔹 Product Skeleton Card
+function HeroSkeleton() {
+  return (
+    <div className="px-3 md:px-6 mt-3 animate-pulse">
+      {/* progress skeleton */}
+      <div className="h-1 w-full bg-gray-300 rounded mb-2"></div>
+      {/* banner skeleton */}
+      <div className="w-full h-[240px] sm:h-[320px] md:h-[440px] lg:h-[520px] bg-gray-300 rounded-3xl"></div>
+
+    </div>
+  );
+}
+/* 🔹 PRODUCT CARD */
 function ProductSkeletonCard() {
   return (
     <div className="border rounded-2xl p-4 flex flex-col animate-pulse bg-gray-50">
-      {/* Image */}
       <div className="h-48 w-full bg-gray-300 rounded-xl mb-4"></div>
-
-      {/* Category */}
       <div className="h-3 bg-gray-300 rounded w-1/3 mb-2"></div>
-
-      {/* Title */}
       <div className="h-4 bg-gray-300 rounded w-3/4 mb-1"></div>
       <div className="h-4 bg-gray-300 rounded w-2/3 mb-3"></div>
-
-      {/* Price */}
       <div className="h-4 bg-gray-400 rounded w-1/4 mb-4"></div>
-
-      {/* Button */}
       <div className="h-10 bg-gray-300 rounded-lg mt-auto"></div>
     </div>
   );
 }
 
-// 🔹 Filter Skeleton
-function FilterSkeleton() {
+/* 🔹 FILTER */
+export function FilterSkeleton() {
   return (
-    <div className="max-w-4xl mx-auto p-4 flex flex-wrap gap-4 animate-pulse">
+    <div className="max-w-6xl mx-auto p-4 flex flex-wrap gap-4 animate-pulse">
       <div className="h-14 w-full md:w-2/3 bg-gray-300 rounded-lg"></div>
       <div className="h-14 w-full md:w-1/3 bg-gray-300 rounded-lg"></div>
     </div>
   );
 }
 
-// 🔹 Testimonial Skeleton
+/* 🔹 TESTIMONIAL */
 function TestimonialSkeleton() {
   return (
     <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 p-4 animate-pulse">
       {[...Array(3)].map((_, i) => (
-        <div
-          key={i}
-          className="border rounded-2xl p-4 flex flex-col gap-3 bg-gray-50"
-        >
+        <div key={i} className="border rounded-2xl p-4 flex flex-col gap-3 bg-gray-50">
           <div className="h-12 w-12 rounded-full bg-gray-300"></div>
           <div className="h-4 bg-gray-300 rounded w-3/4"></div>
           <div className="h-3 bg-gray-300 rounded w-full"></div>
@@ -111,7 +208,7 @@ function TestimonialSkeleton() {
   );
 }
 
-// 🔹 Footer Skeleton
+/* 🔹 FOOTER */
 function FooterSkeleton() {
   return (
     <div className="max-w-6xl mx-auto flex flex-wrap justify-between gap-4 p-4 animate-pulse mt-10">
@@ -122,27 +219,28 @@ function FooterSkeleton() {
   );
 }
 
-// 🔹 Full Page Loader
+/* 🔥 FULL LOADER */
 export default function Loader({ productCount = 8 }) {
   return (
     <div className="space-y-6">
-      {/* Filter Section */}
+
+      {/* HERO */}
+      <HeroSkeleton />
+
+      {/* FILTER */}
       <FilterSkeleton />
 
-      {/* Product Grid */}
+      {/* PRODUCTS */}
       <div className="max-w-6xl mx-auto p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(productCount)].map((_, i) => (
           <ProductSkeletonCard key={i} />
         ))}
       </div>
 
-      {/* Testimonial Section */}
-      <div className="max-w-6xl mx-auto">
-        <h2 className="h-6 w-40 bg-gray-300 rounded mb-4 animate-pulse"></h2>
-        <TestimonialSkeleton />
-      </div>
+      {/* TESTIMONIAL */}
+      <TestimonialSkeleton />
 
-      {/* Footer Section */}
+      {/* FOOTER */}
       <FooterSkeleton />
     </div>
   );
