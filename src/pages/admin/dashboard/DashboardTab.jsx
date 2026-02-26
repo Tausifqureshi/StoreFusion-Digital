@@ -215,7 +215,7 @@ import { useSpring, animated } from "react-spring";
 import { Link, useNavigate } from "react-router-dom";
 
 function DashboardTab() {
-  const { mode, product, edithandle, deleteProduct, order, user, testimonial, editTestimonial, deleteTestimonial } =
+  const { mode, product, edithandle, deleteProduct, order, user, testimonial, editTestimonial, deleteTestimonial,getAvatar } =
     useContext(MyContext);
 
   const [index, setIndex] = useState(0);
@@ -340,9 +340,9 @@ function DashboardTab() {
           </animated.div>
         </TabPanel> */}
         
-        <TabPanel>
-  <div className="text-center">
-    <h1 className="text-3xl font-bold mb-6">Testimonials</h1>
+      <TabPanel>
+      <div className="text-center">
+      <h1 className="text-3xl font-bold mb-6">Testimonials</h1>
 
     {/* <Link to="/addtestimonial">
       <button className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full hover:scale-105 transition">
@@ -358,7 +358,10 @@ function DashboardTab() {
     <div className="mt-6 grid lg:grid-cols-3 gap-4">
       {testimonial.map(item => (
         <div key={item.id} className="p-4 bg-gray-100 rounded shadow flex flex-col items-center">
-          <img src={item.img || "/default-user.png"} className="w-20 h-20 rounded-full mb-2" />
+          <img 
+          // src={item.img || "https://i.pravatar.cc/300"}
+          src={getAvatar(testimonial)}
+           className="w-20 h-20 rounded-full mb-2" />
           <p className="mb-2 text-center">{item.text}</p>
           <h2 className="font-semibold">{item.name}</h2>
           <p className="text-sm text-gray-500">{item.role}</p>
@@ -372,7 +375,7 @@ function DashboardTab() {
       
     </div>
   </div>
-       </TabPanel>
+      </TabPanel>
 
 
       </Tabs>

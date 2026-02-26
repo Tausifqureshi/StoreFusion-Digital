@@ -5,7 +5,7 @@ import HeroSection from "../../components/heroSection/HeroSection";
 import Filter from "../../components/filter/Filter";
 import ProductCard from "../../components/productCard/ProductCard";
 import Track from "../../components/track/Track";
-import Testimonial from "../../components/testimonial/Testimonial";
+import AllTestimonial from "../../components/testimonial/AllTestimonial";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, deleteFromCart } from "../../redux/cartSlice";
 import Loader from "../../components/loader/Loader";
@@ -29,7 +29,7 @@ function Home() {
           </Link>
         </div>
         <Track />
-        <Testimonial />
+        <AllTestimonial />
         {/* <Loader /> */}
         <ScrollToTopButoon />
       </Layout>

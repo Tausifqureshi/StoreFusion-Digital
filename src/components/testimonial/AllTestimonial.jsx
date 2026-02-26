@@ -1,22 +1,23 @@
 import React, { useContext } from 'react';
 import { MyContext } from '../../context api/myContext';
 
-function Testimonial({ reviews = [] }) {
-  const { mode,getAvatar} = useContext(MyContext);
-    if (!reviews.length) {
-    return <p className="text-center text-gray-400">No reviews yet</p>;
-  }
+function AllTestimonial() {
+  const { mode, testimonial,getAvatar  } = useContext(MyContext);
 
   return (
     <section className={`body-font mb-10 ${mode === 'dark' ? 'bg-gray-800' : 'bg-white'} text-gray-600`}>
       <div className="container px-5 py-10 mx-auto">
-        <h1 className="text-center text-3xl font-bold mb-10">
-           What Our Customers Say
+        {/* Heading */}
+        <h1 className={`text-center text-3xl font-bold ${mode === 'dark' ? 'text-white' : 'text-black'}`}>
+          What Our Customers Are Saying
         </h1>
+        <h2 className={`text-center text-2xl font-semibold mb-10 ${mode === 'dark' ? 'text-white' : 'text-black'}`}>
+          See how our <span className='text-pink-500'>customers</span> love our products!
+        </h2>
 
         {/* Testimonials Section */}
         <div className="flex flex-wrap -m-4">
-          {reviews.map((testimonial, index) => (
+          {testimonial.map((testimonial, index) => (
             <div key={index} className="lg:w-1/3 lg:mb-0 mb-6 p-4">
               <div className={`h-full text-center p-6 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-100'} rounded-lg shadow-lg`}>
                 <div className="flex justify-center">
@@ -44,5 +45,4 @@ function Testimonial({ reviews = [] }) {
   );
 }
 
-export default Testimonial;
-
+export default AllTestimonial;

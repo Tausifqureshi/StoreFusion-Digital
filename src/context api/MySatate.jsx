@@ -428,143 +428,25 @@ function MyState({ children }) {
       year: "numeric",
     }),
   });
-
+const [testimonialForm, setTestimonialForm] = useState({
+  name: "",
+  text: "",
+  img: "",
+  role: "",
+});
 
   const [product, setProduct] = useState([]);
   const [order, setOrder] = useState([]);
   const [user, setUser] = useState([]);
-  
+  const [testimonial, setTestimonial] = useState([]);
 
   // Filters
   const [searchkey, setSearchkey] = useState("");
   const [filterType, setFilterType] = useState("");
   const [filterPrice, setFilterPrice] = useState("");
   const [sortPrice, setSortPrice] = useState("");
-  const [testimonial, setTestimonial] = useState([]);
 
   const navigate = useNavigate();
-  // testimonial state
-const [testimonialForm, setTestimonialForm] = useState({
-  id: "",
-  name: "",
-  text: "",
-  img: "",
-  role: "",
-  rating: 0,
-  productId: "",
-});
-
-// realtime testimonial (lightweight)
-// const getTestimonialData = useCallback(() => {
-//   const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
-
-//   const unsubscribe = onSnapshot(q, (snapshot) => {
-//     setTestimonial(
-//       snapshot.docs.map((doc) => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }))
-//     );
-//   });
-
-//   return unsubscribe;
-// }, []);
-const getTestimonialData = useCallback(() => {
-  const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
-
-  const unsubscribe = onSnapshot(q, (snapshot) => {
-    setTestimonial(
-      snapshot.docs.map((doc) => ({
-        id: doc.id,  // ⭐ THIS IS CRUCIAL
-        ...doc.data(),
-      }))
-    );
-  });
-
-  return unsubscribe;
-}, []);
-
-// add testimonial
-const addTestimonial = async (data) => {
-  if (!data.name || !data.text) return toast.error("Fill all fields");
-
-  setLoading(true);
-  try {
-    await addDoc(collection(fireDB, "testimonials"), {
-      ...data,
-      productId: data.productId,   // ⭐ VERY IMPORTANT
-      time: Timestamp.now(),
-    });
-
-    toast.success("Added");
-
-    setTestimonialForm({
-      id: "",
-      name: "",
-      text: "",
-      img: "",
-      role: "",
-      rating: 0,
-      productId: "",
-    });
-  } catch {
-    toast.error("Error");
-  }
-  setLoading(false);
-};
-
-// edit
-const editTestimonial = (item) => {
-  setTestimonialForm(item);
-  navigate("/addtestimonial");
-};
-
-// update
-const updateTestimonial = async () => {
-  setLoading(true);
-  try {
-    await setDoc(
-      doc(fireDB, "testimonials", testimonialForm.id),
-      {
-        ...testimonialForm,
-        time: Timestamp.now(),
-      },
-      { merge: true }
-    );
-
-    toast.success("Updated");
-    navigate("/dashboard");
-
-    setTestimonialForm({
-      id: "",
-      name: "",
-      text: "",
-      img: "",
-      role: "",
-      rating: 0,
-      productId: "",
-    });
-  } catch (e) {
-    toast.error("Error");
-  }
-  setLoading(false);
-};
-
-// delete (NO re-fetch)
-const deleteTestimonial = async (id) => {
-  if (!id) {
-    toast.error("Cannot delete: No ID provided");
-    return;
-  }
-  try {
-    await deleteDoc(doc(fireDB, "testimonials", id));
-    toast.success("Deleted successfully");
-    setTestimonial(prev => prev.filter(t => t.id !== id));
-  } catch (err) {
-    console.log("Delete Error:", err);
-    toast.error("Delete failed");
-  }
-};
 
   // --- Reset Product Form (memoized) ---
   const resetProductForm = useCallback(() => {
@@ -629,6 +511,174 @@ const deleteTestimonial = async (id) => {
     }
   }, []);
 
+//   const addTestimonial = useCallback(async () => {
+//   if (!testimonialForm.name || !testimonialForm.text) {
+//     return toast.error("Please fill all fields");
+//   }
+//   setLoading(true);
+//   try {
+//     await addDoc(collection(fireDB, "testimonials"), {
+//       ...testimonialForm,
+//       time: Timestamp.now(),
+//     });
+//      navigate("/dashboard");
+//     toast.success("Testimonial added");
+
+//     setTestimonialForm({
+//       name: "",
+//       text: "",
+//       img: "",
+//       role: "",
+//     });
+//   } catch (err) {
+//     console.log(err);
+//     toast.error("Error adding testimonial");
+//   } finally {
+//     setLoading(false);
+//   }
+// }, [testimonialForm]);
+
+
+//   const getTestimonialData = useCallback(() => {
+//   try {
+//     const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+
+//     const unsubscribe = onSnapshot(q, (snapshot) => {
+//       const arr = snapshot.docs.map((doc) => ({
+//         id: doc.id,
+//         ...doc.data(),
+//       }));
+//       setTestimonial(arr);
+//     });
+
+//     return unsubscribe;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// }, []);
+const addTestimonial = useCallback(async (formData) => {
+  if (!formData.name || !formData.text) return toast.error("Please fill all fields");
+  setLoading(true);
+  try {
+    const avatarId = Math.floor(Math.random() * 100);
+    await addDoc(collection(fireDB, "testimonials"), {
+      ...formData,
+      time: Timestamp.now(),
+        avatarId,     // ⭐ save this
+      gender: formData.gender || "male",
+
+    });
+    toast.success("Testimonial added");
+    setTestimonialForm({ name: "", text: "", img: "", role: ""});
+  } catch (err) {
+    console.log(err);
+    toast.error("Error adding testimonial");
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
+const getTestimonialData = useCallback((productId = null) => {
+  try {
+    let q;
+    if (productId) {
+      q = query(
+        collection(fireDB, "testimonials"),
+        where("productId", "==", productId),
+        orderBy("time", "desc")
+      );
+    } else {
+      q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+    }
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const arr = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setTestimonial(arr);
+    });
+
+    return unsubscribe;
+  } catch (err) {
+    console.log(err);
+  }
+}, []);
+
+const editTestimonial = useCallback((item) => {
+  setTestimonialForm(item);
+  navigate("/addtestimonial");
+}, [navigate]);
+
+const deleteTestimonial = useCallback(async (id) => {
+  setLoading(true);
+  try {
+    await deleteDoc(doc(fireDB, "testimonials", id));
+    toast.success("Testimonial deleted!",{
+      autoClose: 50,
+    });
+    getTestimonialData();
+  } catch (err) {
+    console.log(err);
+    toast.error("Error deleting testimonial");
+  } finally {
+    setLoading(false);
+  }
+}, [getTestimonialData]);
+
+const updateTestimonial = useCallback(async (data) => {
+  setLoading(true);
+  try {
+    await setDoc(doc(fireDB, "testimonials", data.id), {
+      ...data,
+      time: Timestamp.now(),
+    avatarId: data.avatarId !== undefined ? data.avatarId: Math.floor(Math.random() * 100),
+    });
+    toast.success("Testimonial updated!");
+    // navigate("/dashboard");
+  } catch (err) {
+    console.log(err);
+    toast.error("Error updating testimonial");
+  } finally {
+    setLoading(false);
+    setTestimonialForm({
+      name: "",
+      text: "",
+      img: "",
+      role: "",
+      productId: "",
+    });
+  }
+}, [navigate]);
+// const updateTestimonial = useCallback(async () => {
+//   setLoading(true);
+//   try {
+//     await setDoc(doc(fireDB, "testimonials", testimonialForm.id), testimonialForm);
+//     toast.success("Testimonial updated!");
+//     getTestimonialData();
+//     navigate("/dashboard");
+//   }
+//     catch (err) {
+//       console.log(err);
+//       toast.error("Error updating testimonial");
+//     } finally {
+//       setLoading(false);
+//       setTestimonialForm({
+//         name: "",
+//         text: "", 
+//         img: "",
+//         role: "",
+//         productId: "",
+//       });
+//     }
+// }, [testimonialForm, navigate, getTestimonialData]);
+
+const getAvatar = (item) => {
+  // user uploaded image
+  if (item?.img) return item.img;
+
+  const id = item?.avatarId ?? 1;
+  const gender = item?.gender === "female" ? "women" : "men";
+
+  return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+};
 
   const updateProduct = useCallback(async () => {
     setLoading(true);
@@ -719,7 +769,8 @@ const deleteTestimonial = async (id) => {
     const fetchInitialData = async () => {
       try {
         setInitialLoading(true);
-        await Promise.all([getProductData(), getOrderData(), getUserData()]);
+        await Promise.all([getProductData(), getOrderData(), getUserData(),]);
+        getTestimonialData();
       } catch (err) {
         console.error("Initial fetch error:", err);
       } finally {
@@ -729,11 +780,6 @@ const deleteTestimonial = async (id) => {
 
     fetchInitialData();
   }, [getProductData, getOrderData, getUserData, getTestimonialData]);
-  
-  useEffect(() => {
-  const unsubscribe = getTestimonialData();
-  return () => unsubscribe && unsubscribe();
-}, [getTestimonialData]);
 
   // --- Theme toggle ---
   const toggleMode = useCallback(() => {
@@ -792,6 +838,7 @@ const deleteTestimonial = async (id) => {
       editTestimonial,   // <-- add this
       deleteTestimonial, // <-- add this
       updateTestimonial, // <-- add this
+      getAvatar 
       }}
     >
       {children}

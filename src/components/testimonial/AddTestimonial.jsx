@@ -80,13 +80,15 @@ function AddTestimonial({ productId = "" }) {
   const { testimonialForm, setTestimonialForm, addTestimonial, loading, updateTestimonial } =
     useContext(MyContext);
 
-  const [rating, setRating] = useState(testimonialForm.rating || 0);
-  //  useEffect(() => {
-  //   setRating(testimonialForm.rating || 0);
-  // }, [testimonialForm]);
+  const [rating, setRating] = useState(0);
+useEffect(() => {
+  if (testimonialForm?.rating) {
+    setRating(testimonialForm.rating);
+  }
+}, [testimonialForm]);
 
 
-  const isEdit = testimonialForm?.id;
+  // const isEdit = testimonialForm?.id;
 
   const handleSubmit = () => {
     if (rating === 0) {
@@ -94,21 +96,15 @@ function AddTestimonial({ productId = "" }) {
       return;
     }
 
-    // const formData = { ...testimonialForm, productId, rating };
-    // setTestimonialForm(formData);
-    // addTestimonial();
-  //    addTestimonial({
-  //   ...testimonialForm,
-  //   rating,
-  //   productId,
-  // });
   if (testimonialForm.id) {
     updateTestimonial();
+    return;
   } else {
     addTestimonial({
       ...testimonialForm,
       rating,
-      productId,
+      // productId,
+       productId: productId || testimonialForm.productId || "",
     });
   }
 
