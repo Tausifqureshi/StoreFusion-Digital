@@ -46,3 +46,43 @@ function AllTestimonial() {
 }
 
 export default AllTestimonial;
+
+
+
+// {similarProducts.map((item) => (
+//                 <div
+//                   key={item.id}
+//                   onClick={() => navigate(`/productinfo/${item.id}`)}
+//                   className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow transform hover:scale-105"
+//                 >
+//                   {/* <img className="w-full h-48 object-contain p-4" src={item.imageUrl} alt={item.title} /> */}
+//                   <div className="relative">
+//         {discount > 0 && (
+//           <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
+//             {discount}% OFF
+//           </span>
+//         )}
+
+//         <img
+//           className="w-full h-48 object-contain p-4"
+//           src={item.imageUrl}
+//           alt={item.title}
+//         />
+//       </div>
+                  
+//                   <div className="p-4">
+//                     <h3 className="text-xs text-gray-500 mb-1">{item.category}</h3>
+//                     <h2 className="text-lg font-medium text-gray-900">{item.title}</h2>
+//                     {/* <p className="mt-1 font-bold">₹{item.price}</p> */}
+//                     <div className="flex items-center gap-2 mt-1">
+//           <span className="font-bold text-green-600">₹{finalPrice}</span>
+
+//           {discount > 0 && (
+//             <span className="line-through text-gray-400 text-sm">
+//               ₹{item.price}
+//             </span>
+//           )}
+//         </div>
+//                   </div>
+//                 </div>
+//               ))}

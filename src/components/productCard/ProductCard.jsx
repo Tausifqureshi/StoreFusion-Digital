@@ -144,8 +144,10 @@ function ProductCard() {
 
             <div className="flex flex-wrap -m-4">
               {filteredProducts.map((item, index) => {
-                const { title, price, imageUrl, category, description, id } =
+                const { title, price, imageUrl,  discount = 0, category, description, id } =
                   item;
+                // const finalPrice = price - (price * discount) / 100;
+                const finalPrice = Math.round(price - (price * discount) / 100);
                 const isExpanded = showMoreIndex[index];
 
                 return (
@@ -164,9 +166,15 @@ function ProductCard() {
                     >
                       <div
                         onClick={() => navigate(`/productinfo/${item.id}`)}
-                        className="flex justify-center cursor-pointer bg-white"
+                        className="flex justify-center cursor-pointer bg-white relative"
                       >
-                        {/* <img
+                          {/* 🔥 Discount badge */}
+                {discount > 0 && (
+                  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
+                    {discount}% OFF
+                  </span>
+                )}
+                                      {/* <img
                           className="rounded-2xl w-full h-64 p-2 object-contain hover:scale-105 transition-transform duration-300 ease-in-out"
                           src={imageUrl}
                           loading="lazy" 
@@ -191,13 +199,29 @@ function ProductCard() {
                           {title}
                         </h1>
 
-                        <p
+                        {/* <p
                           className={`leading-relaxed mb-3 ${
                             mode === "dark" ? "text-white" : ""
                           }`}
                         >
                           ₹ {price}
-                        </p>
+                        </p> */}
+                        <div className="flex items-center gap-2 mb-3">
+  <span className="text-green-600 font-bold">
+    ₹ {finalPrice}
+  </span>
+
+  {discount > 0 && (
+    <>
+      <span className="line-through text-gray-400">
+        ₹ {price}
+      </span>
+      <span className="text-red-500 text-sm font-semibold">
+        {discount}% OFF
+      </span>
+    </>
+  )}
+</div>
 
                         <div
                           className={`overflow-hidden transition-max-height duration-500 ease-in-out ${

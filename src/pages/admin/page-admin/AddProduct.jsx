@@ -2,17 +2,15 @@ import React, { useContext } from "react";
 import { MyContext } from "../../../context api/myContext";
 
 function AddProduct() {
-  const { products, setProducts, addProduct} = useContext(MyContext);
+  const { products, setProducts, addProduct } = useContext(MyContext);
 
-
-  function inputHandle(e) { 
+  function inputHandle(e) {
     setProducts({ ...products, [e.target.name]: e.target.value });
   }
 
-
   // const produtsAdded = async () => {
   //   await addProduct(); // Wait for addProduct to finish
-  //   navigate('/dashboard'); // Navigate after adding the product 
+  //   navigate('/dashboard'); // Navigate after adding the product
   // };
 
   return (
@@ -59,6 +57,15 @@ function AddProduct() {
             value={products.category}
           />
 
+          <input
+            type="number"
+            name="discount"
+            className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Discount % (optional)"
+            onChange={inputHandle}
+            value={products.discount}
+          />
+
           <textarea
             name="description"
             rows="4"
@@ -70,7 +77,9 @@ function AddProduct() {
 
           <div className="flex justify-center">
             <button
-              onClick={()=>{addProduct()}}
+              onClick={() => {
+                addProduct();
+              }}
               className="bg-blue-500 w-full text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >
               Add Product

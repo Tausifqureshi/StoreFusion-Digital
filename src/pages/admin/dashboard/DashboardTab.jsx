@@ -360,7 +360,7 @@ function DashboardTab() {
         <div key={item.id} className="p-4 bg-gray-100 rounded shadow flex flex-col items-center">
           <img 
           // src={item.img || "https://i.pravatar.cc/300"}
-          src={getAvatar(testimonial)}
+          src={getAvatar(item)}
            className="w-20 h-20 rounded-full mb-2" />
           <p className="mb-2 text-center">{item.text}</p>
           <h2 className="font-semibold">{item.name}</h2>

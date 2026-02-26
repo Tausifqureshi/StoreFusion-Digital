@@ -421,6 +421,7 @@ function MyState({ children }) {
     imageUrl: "",
     category: "",
     description: "",
+    discount: "",   // ⭐ ye add kar
     time: Timestamp.now(),
     date: new Date().toLocaleString("en-US", {
       month: "short",
@@ -456,6 +457,7 @@ const [testimonialForm, setTestimonialForm] = useState({
       imageUrl: "",
       category: "",
       description: "",
+      discount: "",   // ⭐ ye add kar
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",
@@ -479,7 +481,12 @@ const [testimonialForm, setTestimonialForm] = useState({
 
     setLoading(true);
     try {
-      await addDoc(collection(fireDB, "products"), products);
+      // await addDoc(collection(fireDB, "products"), products);
+      await addDoc(collection(fireDB, "products"), {
+  ...products,
+  price: Number(products.price),
+  discount: Number(products.discount || 0),
+});
       toast.success("Product added successfully!", { icon: "✅" });
       getProductData();
       navigate("/dashboard");
@@ -683,7 +690,12 @@ const getAvatar = (item) => {
   const updateProduct = useCallback(async () => {
     setLoading(true);
     try {
-      await setDoc(doc(fireDB, "products", products.id), products);
+      // await setDoc(doc(fireDB, "products", products.id), products);
+      await setDoc(doc(fireDB, "products", products.id), {
+  ...products,
+  price: Number(products.price),
+  discount: Number(products.discount || 0),
+});
       toast.success("Product Updated successfully");
       getProductData();
       setTimeout(() => navigate("/dashboard"), 800);

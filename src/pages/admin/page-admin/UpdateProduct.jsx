@@ -52,6 +52,15 @@ return (
     value={products.category}
 />
 
+<input
+  type="number"
+  name="discount"
+  className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  placeholder="Discount %"
+  onChange={inputHandle}
+  value={products.discount}
+/>
+
 <textarea
     name="description"
     rows="4"

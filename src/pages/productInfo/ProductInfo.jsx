@@ -489,6 +489,11 @@ function ProductInfo() {
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate();
+//   const discount = product.discount || 0;
+// const finalPrice = product.price - (product.price * discount) / 100;
+
+
+
 
   const getProductData = async () => {
     setLoading(true);
@@ -540,19 +545,39 @@ function ProductInfo() {
   const toggleHeart = () => setIsHeartFilled((prev) => !prev);
 
   if (loading || !product) return <Loader />;
+    const discount = product?.discount || 0;
+  // const finalPrice = product ? product.price - (product.price * discount) / 100 : 0;
+  const finalPrice = Math.round(
+  product.price - (product.price * discount) / 100
+);
 
   return (
     <Layout>
       {/* Product Hero */}
       <section className="container mx-auto px-5 py-12 flex flex-col lg:flex-row gap-10">
         {/* Product Image */}
-        <div className="lg:w-1/2 bg-white p-6 rounded-2xl shadow-xl flex justify-center items-center hover:shadow-2xl transition-shadow">
+        {/* <div className="lg:w-1/2 bg-white p-6 rounded-2xl shadow-xl flex justify-center items-center hover:shadow-2xl transition-shadow">
           <img
             src={product.imageUrl}
             alt={product.title}
             className="rounded-xl lg:h-[32rem] h-64 object-contain w-full transition-transform hover:scale-105"
           />
-        </div>
+        </div> */}
+        <div className="lg:w-1/2 bg-white p-6 rounded-2xl shadow-xl flex justify-center items-center hover:shadow-2xl transition-shadow relative">
+
+  {/* 🔥 Discount badge */}
+  {discount > 0 && (
+    <span className="absolute top-4 left-4 bg-red-500 text-white px-2 py-1 rounded text-sm z-10">
+      {discount}% OFF
+    </span>
+  )}
+
+  <img
+    src={product.imageUrl}
+    alt={product.title}
+    className="rounded-xl lg:h-[32rem] h-64 object-contain w-full transition-transform hover:scale-105"
+  />
+</div>
 
         {/* Product Info */}
         <div className="lg:w-1/2 flex flex-col justify-between bg-white rounded-2xl shadow-xl p-8 space-y-6">
@@ -573,7 +598,26 @@ function ProductInfo() {
 
           {/* Price & Buttons */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
-            <span className="text-3xl font-bold text-gray-900">₹{product.price}</span>
+
+            {/* <span className="text-3xl font-bold text-gray-900">₹{product.price}</span> */}
+            <div className="flex items-center gap-3">
+  <span className="text-3xl font-bold text-green-600">
+    ₹{finalPrice}
+  </span>
+
+  {discount > 0 && (
+    <>
+      <span className="line-through text-gray-400 text-lg">
+        ₹{product.price}
+      </span>
+
+      <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">
+        {discount}% OFF
+      </span>
+    </>
+  )}
+</div>
+
             <div className="flex gap-3">
               <button
                 onClick={() => addCart(product)}
@@ -613,20 +657,55 @@ function ProductInfo() {
           <div className="container mx-auto px-5">
             <h2 className="text-2xl font-bold mb-6">Similar Products</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {similarProducts.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => navigate(`/productinfo/${item.id}`)}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow transform hover:scale-105"
-                >
-                  <img className="w-full h-48 object-contain p-4" src={item.imageUrl} alt={item.title} />
-                  <div className="p-4">
-                    <h3 className="text-xs text-gray-500 mb-1">{item.category}</h3>
-                    <h2 className="text-lg font-medium text-gray-900">{item.title}</h2>
-                    <p className="mt-1 font-bold">₹{item.price}</p>
-                  </div>
-                </div>
-              ))}
+              {similarProducts.map((item) => {
+  const itemDiscount = item?.discount || 0;
+  // const itemFinalPrice =
+  //   item.price - (item.price * itemDiscount) / 100;
+  const  itemFinalPrice = Math.round(
+  product.price - (product.price * itemDiscount) / 100
+);
+
+  return (
+    <div
+      key={item.id}
+      onClick={() => navigate(`/productinfo/${item.id}`)}
+      className="bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer hover:shadow-2xl transition-shadow transform hover:scale-105"
+    >
+      {/* image */}
+      <div className="relative">
+        {itemDiscount > 0 && (
+          <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
+            {itemDiscount}% OFF
+          </span>
+        )}
+
+        <img
+          className="w-full h-48 object-contain p-4"
+          src={item.imageUrl}
+          alt={item.title}
+        />
+      </div>
+
+      <div className="p-4">
+        <h3 className="text-xs text-gray-500 mb-1">{item.category}</h3>
+        <h2 className="text-lg font-medium text-gray-900">{item.title}</h2>
+
+        <div className="flex items-center gap-2 mt-1">
+          <span className="font-bold text-green-600">
+            ₹{Math.round(itemFinalPrice)}
+          </span>
+
+          {itemDiscount > 0 && (
+            <span className="line-through text-gray-400 text-sm">
+              ₹{item.price}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+})}
+              
             </div>
           </div>
         </section>
