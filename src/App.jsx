@@ -221,6 +221,7 @@ const Allproducts = lazy(() => import("./pages/allproducts/Allproducts"));
 const Contact = lazy(() => import("./components/contact/Contact"));
 const About = lazy(() => import("./components/about/About"));
 const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
+const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts"));
 
 function App() {
   const dispatch = useDispatch();
@@ -287,6 +288,8 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
               <Route path="/productInfo/:id" element={<ProductInfo />} />
+              
+              <Route path="/category/:name" element={<CategoryProducts />} />
 
               <Route
                 path="/dashboard"

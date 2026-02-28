@@ -443,7 +443,7 @@ const [testimonialForm, setTestimonialForm] = useState({
 
   // Filters
   const [searchkey, setSearchkey] = useState("");
-  const [filterType, setFilterType] = useState("");
+  const [filterType, setFilterType] = useState([]);
   const [filterPrice, setFilterPrice] = useState("");
   const [sortPrice, setSortPrice] = useState("");
 

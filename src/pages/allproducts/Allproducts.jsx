@@ -82,32 +82,30 @@ function Allproducts() {
   }, []);
 
   // Apply filters
-  const filteredProducts = product
-    .filter((item) =>
-      // Filter by search key
-      item.title.toLowerCase().includes(searchkey.toLowerCase())
-    )
-    .filter(
-      (item) =>
-        // Filter by category (filterType)
-        filterType === "" || item.category === filterType
-    )
-    .filter((item) => {
-      // Filter by price range
-      if (filterPrice === "") return true; // No price filter
-      const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
-      return item.price >= minPrice && item.price <= maxPrice;
-    })
+  // Allproducts.js ke andar filter logic ko aise badlo:
 
-    //Apply filters and sorting
-    .sort((a, b) => {
-      if (sortPrice === "low-to-high") {
-        return a.price - b.price; // Low to High
-      } else if (sortPrice === "high-to-low") {
-        return b.price - a.price; // High to Low
-      }
-      return 0; // No sorting
-    });
+const filteredProducts = product
+  .filter((item) =>
+    item.title.toLowerCase().includes(searchkey.toLowerCase())
+  )
+  .filter((item) => {
+    // ✅ AGAR filterType khali array hai toh saare products dikhao
+    if (filterType.length === 0) return true;
+    
+    // ✅ Check karo ki product ki category selected categories mein hai ya nahi
+    return filterType.includes(item.category);
+  })
+  .filter((item) => {
+    if (filterPrice === "") return true;
+    const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
+    return item.price >= minPrice && item.price <= maxPrice;
+  })
+  .sort((a, b) => {
+    if (sortPrice === "low-to-high") return a.price - b.price;
+    if (sortPrice === "high-to-low") return b.price - a.price;
+    return 0;
+  });
+ 
   // ...existing code...
   console.log("Products from context:", product);
   // ...existing code...
