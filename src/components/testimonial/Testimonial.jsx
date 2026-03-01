@@ -10,9 +10,9 @@ function Testimonial({ reviews = [] }) {
   return (
     <section className={`body-font mb-10 ${mode === 'dark' ? 'bg-gray-800' : 'bg-white'} text-gray-600`}>
       <div className="container px-5 py-10 mx-auto">
-        <h1 className="text-center text-3xl font-bold mb-10">
+        {/* <h1 className="text-center text-3xl font-bold mb-10">
            What Our Customers Say
-        </h1>
+        </h1> */}
 
         {/* Testimonials Section */}
         <div className="flex flex-wrap -m-4">

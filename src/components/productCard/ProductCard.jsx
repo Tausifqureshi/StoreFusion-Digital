@@ -92,7 +92,7 @@ function ProductCard() {
   // }, [cartItems]);
 
   // Apply filters
-// Allproducts.js ke andar filter logic ko aise badlo:
+
 
 const filteredProducts = product
   .filter((item) =>
@@ -114,7 +114,7 @@ const filteredProducts = product
     if (sortPrice === "low-to-high") return a.price - b.price;
     if (sortPrice === "high-to-low") return b.price - a.price;
     return 0;
-  });
+  }).slice(0, 8);
 
   return (
     <section className="text-gray-600 body-font">

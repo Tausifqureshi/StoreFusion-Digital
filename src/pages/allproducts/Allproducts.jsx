@@ -82,9 +82,7 @@ function Allproducts() {
   }, []);
 
   // Apply filters
-  // Allproducts.js ke andar filter logic ko aise badlo:
-
-const filteredProducts = product
+  const filteredProducts = product
   .filter((item) =>
     item.title.toLowerCase().includes(searchkey.toLowerCase())
   )
@@ -105,7 +103,7 @@ const filteredProducts = product
     if (sortPrice === "high-to-low") return b.price - a.price;
     return 0;
   });
- 
+
   // ...existing code...
   console.log("Products from context:", product);
   // ...existing code...
