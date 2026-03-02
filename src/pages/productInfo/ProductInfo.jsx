@@ -1148,7 +1148,8 @@ function ProductInfo() {
           <div className="mt-20 lg:mt-12 pt-12 lg:pt-10 border-t border-gray-100 dark:border-gray-800 space-y-16 lg:space-y-24">
             <section className="w-full  mx-auto">
               <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-center mb-10 italic">Community <span className="text-orange-500">Feedback</span></h2>
-              <Testimonial reviews={testimonial.filter((item) => item.productId === params.id)} />
+              {/* <Testimonial reviews={testimonial.filter((item) => item.productId === params.id)} /> */}
+              <Testimonial productId={params.id} />
             </section>
 
             <section className="w-full max-w-2xl mx-auto pb-10 px-2">

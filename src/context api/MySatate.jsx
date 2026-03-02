@@ -630,52 +630,33 @@ const deleteTestimonial = useCallback(async (id) => {
   }
 }, [getTestimonialData]);
 
-const updateTestimonial = useCallback(async (data) => {
+const updateTestimonial = useCallback(async () => {
+  // Check karo ki testimonialForm mein ID hai ya nahi
+  if (!testimonialForm.id) return toast.error("No ID found to update");
+
   setLoading(true);
   try {
-    await setDoc(doc(fireDB, "testimonials", data.id), {
-      ...data,
-      time: Timestamp.now(),
-    avatarId: data.avatarId !== undefined ? data.avatarId: Math.floor(Math.random() * 100),
+    // testimonialForm.id ka use karke usi document ko update karo
+    await setDoc(doc(fireDB, "testimonials", testimonialForm.id), {
+      ...testimonialForm,
+      time: Timestamp.now(), // update time
     });
-    toast.success("Testimonial updated!");
-    // navigate("/dashboard");
+
+    toast.success("Testimonial updated successfully!");
+    
+    // Form reset karo
+    setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
+    
+    // Admin ko wapas dashboard bhej do
+    navigate("/dashboard");
+    
   } catch (err) {
-    console.log(err);
+    console.log("Update Error:", err);
     toast.error("Error updating testimonial");
   } finally {
     setLoading(false);
-    setTestimonialForm({
-      name: "",
-      text: "",
-      img: "",
-      role: "",
-      productId: "",
-    });
   }
-}, [navigate]);
-// const updateTestimonial = useCallback(async () => {
-//   setLoading(true);
-//   try {
-//     await setDoc(doc(fireDB, "testimonials", testimonialForm.id), testimonialForm);
-//     toast.success("Testimonial updated!");
-//     getTestimonialData();
-//     navigate("/dashboard");
-//   }
-//     catch (err) {
-//       console.log(err);
-//       toast.error("Error updating testimonial");
-//     } finally {
-//       setLoading(false);
-//       setTestimonialForm({
-//         name: "",
-//         text: "", 
-//         img: "",
-//         role: "",
-//         productId: "",
-//       });
-//     }
-// }, [testimonialForm, navigate, getTestimonialData]);
+}, [testimonialForm, navigate]);
 
 const getAvatar = (item) => {
   // user uploaded image

@@ -213,6 +213,8 @@ import {
 } from "react-icons/ai";
 import { useSpring, animated } from "react-spring";
 import { Link, useNavigate } from "react-router-dom";
+import Testimonial from "../../../components/testimonial/Testimonial";
+
 
 function DashboardTab() {
   const { mode, product, edithandle, deleteProduct, order, user, testimonial, editTestimonial, deleteTestimonial,getAvatar } =
@@ -340,7 +342,7 @@ function DashboardTab() {
           </animated.div>
         </TabPanel> */}
         
-      <TabPanel>
+      {/* <TabPanel>
       <div className="text-center">
       <h1 className="text-3xl font-bold mb-6">Testimonials</h1>
 
@@ -350,12 +352,12 @@ function DashboardTab() {
       </button>
     </Link> */}
 
-    <p className="mt-4 text-gray-500">
+    {/* <p className="mt-4 text-gray-500">
       Admin can add, edit or delete testimonials here.
     </p>
 
     {/* List of testimonials */}
-    <div className="mt-6 grid lg:grid-cols-3 gap-4">
+    {/* <div className="mt-6 grid lg:grid-cols-3 gap-4">
       {testimonial.map(item => (
         <div key={item.id} className="p-4 bg-gray-100 rounded shadow flex flex-col items-center">
           <img 
@@ -374,8 +376,22 @@ function DashboardTab() {
 
       
     </div>
+  </div> */}
+      {/* </TabPanel> */} 
+
+<TabPanel>
+  <div className="text-center">
+    <h1 className="text-3xl font-bold mb-6">Testimonials Management</h1>
+    <p className="mb-8 text-gray-500 italic">Manage all customer feedback from one place</p>
+    
+    {/* Humne wahi smart component use kiya isAdmin prop ke saath */}
+    <Testimonial isAdmin={true} />
   </div>
-      </TabPanel>
+</TabPanel>
+
+
+
+
 
 
       </Tabs>

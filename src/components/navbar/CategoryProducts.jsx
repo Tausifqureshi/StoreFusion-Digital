@@ -10,41 +10,159 @@
 
 
 
-// 1 wala
+// // 1 wala
+// import React, { useContext, useMemo, useEffect } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import Layout from "../../components/layout/Layout";
+// import { MyContext } from "../../context api/myContext";
+// import { FaCheckCircle, FaArrowLeft, FaShoppingBag } from "react-icons/fa";
+
+// function CategoryProducts() {
+//   const { name } = useParams();
+//   // Hum product ko context se utha rahe hain (No Firebase Call)
+//   const { product, mode } = useContext(MyContext);
+//   const navigate = useNavigate();
+//   const isDark = mode === "dark";
+
+//   // ⭐ Scroll to top (User experience ke liye)
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//   }, [name]);
+
+//   // ⭐ Category Filter (Performance Optimized)
+//   const filteredProducts = useMemo(() => {
+//     return product.filter(
+//       (item) => item.category?.toLowerCase() === name.toLowerCase()
+//     );
+//   }, [product, name]);
+
+//   return (
+//     <Layout>
+//       <div className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"}`}>
+//         <div className="max-w-7xl mx-auto px-4">
+          
+//           {/* Header Section (Amazon Style) */}
+//           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-gray-200 dark:border-gray-800 pb-6">
+//             <div>
+//                <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[10px] font-black uppercase text-blue-600 mb-3">
+//                 <FaArrowLeft /> Back to Shopping
+//               </button>
+//               <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic">
+//                 {name} <span className="text-blue-600">Collection</span>
+//               </h1>
+//               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">
+//                 Showing {filteredProducts.length} Premium Results
+//               </p>
+//             </div>
+//           </div>
+
+//           {/* Grid Logic */}
+//           {filteredProducts.length === 0 ? (
+//             <div className="text-center py-20 opacity-50 font-black uppercase tracking-widest">
+//               No Products Found in this Category
+//             </div>
+//           ) : (
+//             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+//               {filteredProducts.map((item) => {
+//                 const finalPrice = Math.round(item.price - (item.price * (item.discount || 0)) / 100);
+
+//                 return (
+//                   <div 
+//                     key={item.id} 
+//                     onClick={() => navigate(`/productInfo/${item.id}`)}
+//                     className={`group cursor-pointer p-4 border flex flex-col h-full transition-all duration-300
+//                       ${isDark ? "bg-[#1e293b] border-gray-800 hover:border-blue-600 shadow-xl" : "bg-white border-gray-100 hover:shadow-2xl shadow-gray-200/50"}`}
+//                   >
+//                     {/* Image Area */}
+//                     <div className="aspect-square w-full mb-4 flex items-center justify-center p-4 bg-white overflow-hidden rounded-xl">
+//                       <img 
+//                         src={item.imageUrl} 
+//                         alt={item.title} 
+//                         className="max-h-full object-contain transition-transform duration-500 group-hover:scale-110" 
+//                       />
+//                     </div>
+
+//                     {/* Details */}
+//                     <div className="flex-1 flex flex-col">
+//                       <p className="text-[8px] font-black text-orange-500 uppercase tracking-widest mb-1">{item.category}</p>
+//                       <h3 className={`font-bold text-xs md:text-sm uppercase tracking-tight line-clamp-2 mb-3 leading-tight ${isDark ? "text-gray-100" : "text-gray-800"}`}>
+//                         {item.title}
+//                       </h3>
+                      
+//                       <div className="mt-auto">
+//                         <div className="flex items-center gap-2 mb-4">
+//                           <span className="text-blue-600 font-black text-lg md:text-xl italic">₹{finalPrice}</span>
+//                           {item.discount > 0 && (
+//                             <span className="line-through text-gray-400 text-[10px] font-bold">₹{item.price}</span>
+//                           )}
+//                         </div>
+                        
+//                         <button className="w-full py-2.5 bg-gray-900 dark:bg-blue-600 text-white text-[9px] font-black uppercase tracking-widest hover:bg-orange-500 transition-colors flex items-center justify-center gap-2">
+//                           <FaShoppingBag size={10} /> View Details
+//                         </button>
+//                       </div>
+//                     </div>
+//                   </div>
+//                 );
+//               })}
+//             </div>
+//           )}
+
+
+
+
+
+
+//         </div>
+//       </div>
+//     </Layout>
+//   );
+// }
+
+// export default CategoryProducts;
+
+
+
 import React, { useContext, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
 import { MyContext } from "../../context api/myContext";
-import { FaCheckCircle, FaArrowLeft, FaShoppingBag } from "react-icons/fa";
+import { FaCheckCircle, FaArrowLeft, FaShoppingBag, FaQuoteLeft } from "react-icons/fa";
+import Testimonial from "../../components/testimonial/Testimonial";
 
 function CategoryProducts() {
   const { name } = useParams();
-  // Hum product ko context se utha rahe hain (No Firebase Call)
-  const { product, mode } = useContext(MyContext);
+  const { product, testimonial, mode } = useContext(MyContext);
   const navigate = useNavigate();
   const isDark = mode === "dark";
 
-  // ⭐ Scroll to top (User experience ke liye)
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [name]);
 
-  // ⭐ Category Filter (Performance Optimized)
+  // ⭐ 1. Category Products Filter (Optimized)
   const filteredProducts = useMemo(() => {
     return product.filter(
       (item) => item.category?.toLowerCase() === name.toLowerCase()
     );
   }, [product, name]);
 
+  // ⭐ 2. Testimonial Filter Logic (Category-wise)
+  // Hum un testimonials ko nikal rahe hain jo is category ke products se linked hain
+  const categoryTestimonials = useMemo(() => {
+    const categoryProductIds = filteredProducts.map(p => p.id);
+    return testimonial.filter((t) => categoryProductIds.includes(t.productId));
+  }, [testimonial, filteredProducts]);
+
   return (
     <Layout>
       <div className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"}`}>
         <div className="max-w-7xl mx-auto px-4">
           
-          {/* Header Section (Amazon Style) */}
+          {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-gray-200 dark:border-gray-800 pb-6">
             <div>
-               <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[10px] font-black uppercase text-blue-600 mb-3">
+              <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[10px] font-black uppercase text-blue-600 mb-3">
                 <FaArrowLeft /> Back to Shopping
               </button>
               <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic">
@@ -70,10 +188,9 @@ function CategoryProducts() {
                   <div 
                     key={item.id} 
                     onClick={() => navigate(`/productInfo/${item.id}`)}
-                    className={`group cursor-pointer p-4 border flex flex-col h-full transition-all duration-300
+                    className={`group cursor-pointer p-4 border flex flex-col h-full transition-all duration-300 rounded-3xl
                       ${isDark ? "bg-[#1e293b] border-gray-800 hover:border-blue-600 shadow-xl" : "bg-white border-gray-100 hover:shadow-2xl shadow-gray-200/50"}`}
                   >
-                    {/* Image Area */}
                     <div className="aspect-square w-full mb-4 flex items-center justify-center p-4 bg-white overflow-hidden rounded-xl">
                       <img 
                         src={item.imageUrl} 
@@ -82,7 +199,6 @@ function CategoryProducts() {
                       />
                     </div>
 
-                    {/* Details */}
                     <div className="flex-1 flex flex-col">
                       <p className="text-[8px] font-black text-orange-500 uppercase tracking-widest mb-1">{item.category}</p>
                       <h3 className={`font-bold text-xs md:text-sm uppercase tracking-tight line-clamp-2 mb-3 leading-tight ${isDark ? "text-gray-100" : "text-gray-800"}`}>
@@ -97,7 +213,7 @@ function CategoryProducts() {
                           )}
                         </div>
                         
-                        <button className="w-full py-2.5 bg-gray-900 dark:bg-blue-600 text-white text-[9px] font-black uppercase tracking-widest hover:bg-orange-500 transition-colors flex items-center justify-center gap-2">
+                        <button className="w-full py-2.5 bg-gray-900 dark:bg-blue-600 text-white text-[9px] font-black uppercase tracking-widest hover:bg-orange-500 transition-colors flex items-center justify-center gap-2 rounded-xl">
                           <FaShoppingBag size={10} /> View Details
                         </button>
                       </div>
@@ -107,6 +223,30 @@ function CategoryProducts() {
               })}
             </div>
           )}
+
+          {/* ⭐ 3. TESTIMONIAL SECTION (Category Specific) */}
+          {categoryTestimonials.length > 0 && (
+            <section className="mt-24 pt-16 border-t border-gray-200 dark:border-gray-800">
+              <div className="text-center mb-12">
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 bg-orange-500 rounded-2xl text-white shadow-lg shadow-orange-500/20">
+                    <FaQuoteLeft size={20} />
+                  </div>
+                </div>
+                <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter italic">
+                  Category <span className="text-blue-600">Feedback</span>
+                </h2>
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.3em] mt-2 italic">What people are saying about {name} items</p>
+              </div>
+
+              {/* Using your existing Testimonial component */}
+              <div className="max-w-5xl mx-auto px-2">
+                 {/* <Testimonial reviews={categoryTestimonials} /> */}
+                 <Testimonial categoryName={name} />
+              </div>
+            </section>
+          )}
+
         </div>
       </div>
     </Layout>
