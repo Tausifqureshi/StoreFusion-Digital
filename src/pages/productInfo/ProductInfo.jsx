@@ -888,6 +888,7 @@ function ProductInfo() {
       dispatch(addToCart({ ...product, quantity: 1, time: Date.now() }));
       toast.success("Added to cart!", { icon: "🛒" });
     }
+    
   };
 
   const handleViewAll = () => {
@@ -1140,10 +1141,6 @@ function ProductInfo() {
     </div>
   </section>
 )}
-
-
-
-
           {/* REVIEWS STACK */}
           <div className="mt-20 lg:mt-12 pt-12 lg:pt-10 border-t border-gray-100 dark:border-gray-800 space-y-16 lg:space-y-24">
             <section className="w-full  mx-auto">

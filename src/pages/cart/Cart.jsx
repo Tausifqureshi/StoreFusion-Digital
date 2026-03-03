@@ -29,7 +29,7 @@ function Cart({cartLoading }) {
 
   const { mode } = useContext(MyContext); 
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart);
+  const cartItems = useSelector((state) => state.cart)|| [];;
   // const [loading, setLoading] = useState(false);
   const [clearingCart, setClearingCart] = useState(false);
   const [cartUpdating, setCartUpdating] = useState(null);
@@ -97,16 +97,15 @@ function Cart({cartLoading }) {
 // };
 
   const deleteCart = async (item) => {
-    
+    // await syncCart(cartItems.filter((i) => i.id !== item.id));
+  const updatedCart = cartItems.filter((i) => i.id !== item.id);
+  dispatch(deleteFromCart( item));
+   saveCartDebounce(updatedCart);
     toast.info("Item deleted from cart", {
       position: "top-right",
       autoClose: 1000,
       icon: "🗑️",
     });
-    // await syncCart(cartItems.filter((i) => i.id !== item.id));
-     const updatedCart = cartItems.filter((i) => i.id !== item.id);
-  dispatch(deleteFromCart(updatedCart));
-   saveCartDebounce(updatedCart);
   };
 
   // Increment quantity
@@ -282,7 +281,7 @@ function Cart({cartLoading }) {
         {cartItems.length > 0 ? (
           <div className="mx-auto max-w-5xl px-6 md:flex md:space-x-6 xl:px-0">
             <div className="md:w-2/3">
-              {cartItems.map((item, index) => {
+              {cartItems?.map?.((item, index) => {
                 // const isExpanded = seeMoreExpanded[index] || false;
                 const isDescOpen = descOpen[index] || false;
                 const isDescExpanded = descExpanded[index] || false;
@@ -403,7 +402,7 @@ function Cart({cartLoading }) {
                         </div>
 
                         <div
-                          onClick={() => deleteCart(item)}
+                          onClick={() => deleteCart(item.id)}
                           className="absolute bottom-0 right-0"
                         >
                           <svg
@@ -506,3 +505,9 @@ function Cart({cartLoading }) {
 }
 
 export default Cart;
+
+
+
+
+
+

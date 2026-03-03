@@ -397,6 +397,17 @@ function Navbar() {
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
   );
 
+//   const totalQuantity = useSelector((state) => {
+//   const cart = state.cart;
+//   // Pehle check karo ki cart array hai ya nahi
+//   if (Array.isArray(cart)) {
+//     return cart.reduce((acc, item) => acc + (item.quantity || 0), 0);
+//   }
+//   // Agar array nahi hai (object ya null hai), toh 0 return karo
+//   return 0;
+// });
+
+
   // ✅ Smooth Close Function: Ye pehle animation chalayega phir navigate karega
   const handleMobileClick = (url) => {
     setOpen(false); // Pehle drawer band karo (Animation start)
@@ -511,7 +522,7 @@ function Navbar() {
               <Dialog.Panel className={`relative w-80 h-full flex flex-col shadow-2xl overflow-hidden ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-900"}`}>
                 <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-[#131921]" : "bg-blue-600 text-white"}`}>
                   <div className="bg-white/20 p-2 rounded-full"><FiUser size={24} /></div>
-                  <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.name?.split(" ")[0] : "Sign In"}</h2>
+                  <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.FullName?.split(" ")[0] : "Sign In"}</h2>
                   <button onClick={() => setOpen(false)}><RxCross2 size={24} /></button>
                 </div>
 

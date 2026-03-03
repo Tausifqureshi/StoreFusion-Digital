@@ -437,7 +437,7 @@ function Filter() {
 
   useEffect(() => {
     const resizeListener = () => {
-      if (window.innerWidth >= 1024) setDrawerOpen(false);
+      if (window.innerWidth >= 768) setDrawerOpen(false);
     };
     window.addEventListener("resize", resizeListener);
     return () => window.removeEventListener("resize", resizeListener);
@@ -552,6 +552,14 @@ function Filter() {
               <FiX onClick={() => toggleCategory(cat)} className="cursor-pointer" size={14} />
             </div>
           ))}
+
+          {sortPrice && (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-tighter">
+              {sortPrice.replace("-", " ")}
+              <FiX onClick={() => setSortPrice("")} className="cursor-pointer" size={14} />
+            </div>
+          )}
+
         </div>
       </div>
 

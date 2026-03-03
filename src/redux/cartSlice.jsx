@@ -117,7 +117,11 @@ const cartSlice = createSlice({
     },
 
     deleteFromCart(state, action) {
-      return state.filter(item => item.id !== action.payload.id);
+      // return state.filter(item => item.id !== action.payload.id);
+      return state.filter(item => item.id !== action.payload);
+      // action.payload sirf ID honi chahiye
+    // const filteredCart = state.filter(item => item.id !== action.payload);
+    // return filteredCart;
     },
 
     clearCart() {

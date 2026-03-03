@@ -87,12 +87,14 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false })
     // Case 2: Agar Category Name aaya hai (CategoryProducts Page)
     if (categoryName) {
       // Pehle us category ke saare products ki IDs nikal lo
-      const categoryProductIds = product
-        .filter(p => p.category?.toLowerCase() === categoryName.toLowerCase())
-        .map(p => p.id);
+      // const categoryProductIds = product
+      //   .filter(p => p.category?.toLowerCase() === categoryName.toLowerCase())
+      //   .map(p => p.id);
+    const categoryProductIds =  product.map(p => p.id);
+    return testimonial.filter((t) => categoryProductIds.includes(t.productId));
       
       // Phir wahi testimonials lo jo un IDs se match karein
-      return testimonial.filter(t => categoryProductIds.includes(t.productId));
+      // return testimonial.filter(t => categoryProductIds.includes(t.productId));
     }
 
     // Case 3: Agar kuch nahi aaya toh saare dikhao (Home Page/Admin)
