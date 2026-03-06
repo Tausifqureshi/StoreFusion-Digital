@@ -85,17 +85,15 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false })
     }
 
     // Case 2: Agar Category Name aaya hai (CategoryProducts Page)
-    if (categoryName) {
-      // Pehle us category ke saare products ki IDs nikal lo
-      // const categoryProductIds = product
-      //   .filter(p => p.category?.toLowerCase() === categoryName.toLowerCase())
-      //   .map(p => p.id);
-    const categoryProductIds =  product.map(p => p.id);
-    return testimonial.filter((t) => categoryProductIds.includes(t.productId));
-      
-      // Phir wahi testimonials lo jo un IDs se match karein
-      // return testimonial.filter(t => categoryProductIds.includes(t.productId));
-    }
+ if (categoryName) {
+  // Step A: Pehle check karo "Fashion" category mein kaun-kaun se products hain
+  const categoryProductIds = product
+    .filter(p => p.category?.toLowerCase() === categoryName.toLowerCase()) // ✅ Sirf "Fashion" wale
+    .map(p => p.id); // ✅ Unki IDs ka array (e.g., ['p1', 'p5', 'p8'])
+
+  // Step B: Ab wahi reviews dikhao jo in IDs se match karte hon
+  return testimonial.filter(t => categoryProductIds.includes(t.productId));
+}
 
     // Case 3: Agar kuch nahi aaya toh saare dikhao (Home Page/Admin)
     return testimonial;

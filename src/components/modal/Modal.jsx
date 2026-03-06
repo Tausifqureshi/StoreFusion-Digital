@@ -170,7 +170,7 @@ function Modal({ formData, setFormData, buyNow }) {
   const [isOpen, setIsOpen] = useState(false);
   const [placingOrder, setPlacingOrder] = useState(false);
    const [loading, setLoading] = useState(false); // 🔹 loader for Buy Now button
-
+ 
     const handleBuyNowClick = () => {
     setLoading(true); // loader start
     setTimeout(() => {

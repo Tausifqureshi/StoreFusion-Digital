@@ -385,6 +385,7 @@ function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mega, setMega] = useState(false);
+  const [query, setQuery] = useState(""); // 👈 Ye line add karo
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -397,15 +398,6 @@ function Navbar() {
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
   );
 
-//   const totalQuantity = useSelector((state) => {
-//   const cart = state.cart;
-//   // Pehle check karo ki cart array hai ya nahi
-//   if (Array.isArray(cart)) {
-//     return cart.reduce((acc, item) => acc + (item.quantity || 0), 0);
-//   }
-//   // Agar array nahi hai (object ya null hai), toh 0 return karo
-//   return 0;
-// });
 
 
   // ✅ Smooth Close Function: Ye pehle animation chalayega phir navigate karega
@@ -475,13 +467,39 @@ function Navbar() {
           <div className={`hidden lg:flex items-center gap-8 font-bold text-[13px] uppercase tracking-wider ${isDark ? "text-gray-200" : "text-gray-600"}`}>
             <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer">
               <span className="flex items-center gap-1 hover:text-orange-500 transition-all">Categories <FiChevronRight className="rotate-90" /></span>
-              {mega && (
+              {/* {mega && (
                 <div className={`absolute top-full left-0 w-64 shadow-2xl rounded-b-xl border-t-2 border-orange-500 p-4 ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
                   {categories.map((cat) => (
                     <div key={cat} onClick={() => navigate(`/category/${cat}`)} className="p-2.5 hover:pl-4 transition-all hover:text-orange-500 cursor-pointer border-b border-gray-100 last:border-0 text-[11px]">{cat.toUpperCase()}</div>
                   ))}
                 </div>
-              )}
+              )} */}
+              {mega && (
+  <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
+    
+    <h3 className="px-3 mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Explore Categories</h3>
+
+    {/* Grid with Max Height & Scroll */}
+    <div className="grid grid-cols-3 gap-2 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
+      {categories.map((cat) => (
+        <div 
+          key={cat} 
+          onClick={() => { navigate(`/category/${cat}`); setMega(false); }} 
+          className={`p-3 rounded-xl transition-all hover:text-orange-500 cursor-pointer text-[11px] font-bold uppercase truncate border border-transparent
+            ${isDark ? "hover:bg-gray-800" : "hover:bg-orange-50 hover:border-orange-100 text-gray-700"}`}
+        >
+          {cat}
+        </div>
+      ))}
+    </div>
+
+    {categories.length > 15 && (
+      <div className="mt-3 text-center text-[9px] text-gray-400 italic border-t border-gray-100 dark:border-gray-700 pt-2">
+        Scroll down to see all {categories.length} categories
+      </div>
+    )}
+  </div>
+               )}
             </div>
             {navItems.map((item) => (
               <Link key={item.name} to={item.URL} className="hover:text-orange-500 transition-colors">{item.name}</Link>
@@ -568,14 +586,73 @@ function Navbar() {
                   </div>
 
                   {/* SUB-MENU LAYER */}
-                  <div className={`absolute inset-0 p-4 space-y-1 transition-transform duration-300 bg-inherit ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
+                  {/* <div className={`absolute inset-0 p-4 space-y-1 transition-transform duration-300 bg-inherit overflow-y-auto ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
                     <button onClick={() => setShowSubMenu(false)} className="flex items-center gap-2 p-3 font-bold text-blue-500 mb-4 border-b w-full"><FiArrowLeft /> MAIN MENU</button>
                     {categories.map((cat) => (
-                      <button key={cat} onClick={() => { setOpen(false); setTimeout(() => navigate(`/category/${cat}`), 300); }} className="w-full text-left p-3 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg uppercase text-sm">
+                      <button key={cat} onClick={() => { setOpen(false); setTimeout(() => navigate(`/category/${cat}`), 300); }} className=" w-full text-left p-3 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg uppercase text-sm">
                         {cat}
                       </button>
                     ))}
-                  </div>
+                  </div> */}
+
+                  {/* SUB-MENU LAYER (Full Screen Overlay Style) */}
+{/* SUB-MENU LAYER (Real Professional UX) */}
+<div className={`absolute inset-0 z-50 flex flex-col transition-transform duration-300 bg-inherit ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
+  
+  {/* 1. Header with Back Button */}
+  <div className={`p-4 border-b sticky top-0 z-20 ${isDark ? "bg-[#232f3e] border-gray-800" : "bg-blue-600 text-white"}`}>
+    <div className="flex items-center gap-3 mb-4">
+      <button onClick={() => {setShowSubMenu(false); setQuery("")}} className="p-1"><FiArrowLeft size={22} /></button>
+      <h2 className="text-sm font-black uppercase tracking-tighter italic">Shop by <span className="text-orange-400">Category</span></h2>
+    </div>
+
+    {/* 2. REAL SEARCH: 200 Categories mein dhundne ke liye */}
+    <div className="relative">
+      <input 
+        type="text"
+        placeholder="Search for categories"
+        value={query} // 👈 State se connect karo
+        onChange={(e) => setQuery(e.target.value)} //
+        className={`w-full p-3 pl-10 rounded-xl text-xs font-bold outline-none transition-all
+          ${isDark ? "bg-[#131921] text-white focus:ring-1 ring-orange-500" : "bg-white text-gray-800 shadow-inner"}`}
+      />
+      <FiMenu className="absolute left-3 top-3.5 opacity-30" size={16} />
+    </div>
+  </div>
+
+  {/* 3. Grid Layout (2 items per row) - Visual Experience */}
+  <div className="flex-1 overflow-y-auto p-4 pb-24 bg-inherit custom-scrollbar">
+    <div className="grid grid-cols-2 gap-3">
+      {categories
+        .filter(cat => cat.toLowerCase().includes(query.toLowerCase())) // Search filter
+        .map((cat) => (
+          <button
+            key={cat}
+            onClick={() => { setOpen(false); setTimeout(() => navigate(`/category/${cat}`), 300); }}
+            className={`flex flex-col items-center justify-center p-5 rounded-2xl border transition-all active:scale-95
+              ${isDark ? "bg-[#1e293b] border-gray-800 text-gray-200" : "bg-gray-50 border-gray-200 text-gray-700 shadow-sm"}`}
+          >
+            {/* Category ka pehla akshar icon ki jagah (Placeholder icon) */}
+            <div className={`w-10 h-10 flex items-center justify-center rounded-full mb-2 font-black text-lg
+              ${isDark ? "bg-orange-500/20 text-orange-500" : "bg-blue-100 text-blue-600"}`}>
+              {cat[0].toUpperCase()}
+            </div>
+            <span className="text-[10px] font-black uppercase tracking-widest text-center truncate w-full">
+              {cat}
+            </span>
+          </button>
+        ))}
+    </div>
+
+    {/* 4. Empty State agar search match na ho */}
+    {categories.filter(cat => cat.toLowerCase().includes(query.toLowerCase())).length === 0 && (
+        <div className="text-center py-20 opacity-30 font-black uppercase text-xs tracking-[0.3em]">
+            No Category Found
+        </div>
+    )}
+  </div>
+</div>
+
                 </div>
               </Dialog.Panel>
             </Transition.Child>
