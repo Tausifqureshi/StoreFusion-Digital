@@ -185,7 +185,7 @@
 
 
 import "./App.css";
-import React, { Suspense, lazy, useEffect, useState,verison } from "react";
+import React, { Suspense, lazy, useEffect, useState} from "react";
 import {
   BrowserRouter,
   Routes,
@@ -273,9 +273,14 @@ function App() {
           <Loader fullScreen size={60} />
         </div>
       )} */}
-      <h1> {verison} </h1>
+      {/* <h1> {version} </h1> */}
 
-      <BrowserRouter>
+      <BrowserRouter
+      future={{
+      v7_startTransition: true,
+      v7_relativeSplatPath: true,
+    }}
+      >
         <MyState>
           <Suspense fallback={<Loader count={8}/>}>
             <Routes>
