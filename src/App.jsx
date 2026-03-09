@@ -222,48 +222,50 @@ const Contact = lazy(() => import("./components/contact/Contact"));
 const About = lazy(() => import("./components/about/About"));
 const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
 const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts"));
+import { useFetchAppData } from "./useFetchAppData";
 
 function App() {
   const dispatch = useDispatch();
 
   const [cartLoading, setCartLoading] = useState(true);
   const [orderLoading, setOrderLoading] = useState(false);
+  useFetchAppData(setCartLoading, setOrderLoading);
 
-  // 🔥 CART FIRST LOAD ONLY
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const cartData = await loadCart();
-        dispatch(setCart(cartData));
-      } catch (error) {
-        console.error("Cart load error:", error);
-      } finally {
-        setCartLoading(false);
-      }
-    };
+  // // 🔥 CART FIRST LOAD ONLY
+  // useEffect(() => {
+  //   const fetchCart = async () => {
+  //     try {
+  //       const cartData = await loadCart();
+  //       dispatch(setCart(cartData));
+  //     } catch (error) {
+  //       console.error("Cart load error:", error);
+  //     } finally {
+  //       setCartLoading(false);
+  //     }
+  //   };
 
-    fetchCart();
-  }, [dispatch]);
+  //   fetchCart();
+  // }, [dispatch]);
 
-  // 🔥 ORDER REALTIME LISTENER
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    const userid = user?.uid;
+  // // 🔥 ORDER REALTIME LISTENER
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   const userid = user?.uid;
 
-    if (!userid) {
-      dispatch(clearOrders());
-      return;
-    }
+  //   if (!userid) {
+  //     dispatch(clearOrders());
+  //     return;
+  //   }
 
-    setOrderLoading(true);
+  //   setOrderLoading(true);
 
-    const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
-      dispatch(setOrders(orders));
-      setOrderLoading(false);
-    });
+  //   const unsubscribe = getUserOrdersFromFirestore(userid, (orders) => {
+  //     dispatch(setOrders(orders));
+  //     setOrderLoading(false);
+  //   });
 
-    return () => unsubscribe && unsubscribe();
-  }, [dispatch]);
+  //   return () => unsubscribe && unsubscribe();
+  // }, [dispatch]);
 
   return (
     <>
