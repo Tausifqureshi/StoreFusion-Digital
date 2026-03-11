@@ -162,7 +162,7 @@
 
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify";  
 
 function Modal({ formData, setFormData, buyNow }) {
   const { fullName, address, pincode, phoneNumber } = formData;
