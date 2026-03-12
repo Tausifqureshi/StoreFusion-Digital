@@ -323,7 +323,9 @@ function Order({ orderLoading }) {
           </div>
 
           {orderLoading ? (
-            <div className="py-20 flex justify-center"><Loader /></div>
+            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/10 backdrop-blur-sm">
+              <Loader />
+              </div>
           ) : orders.length > 0 ? (
             <div className="space-y-10">
               {orders.map((order) => (
@@ -498,7 +500,8 @@ function Order({ orderLoading }) {
       </div>
       <ScrollToTopButoon />
     </Layout>
-  );
+   );
+
 }
 
 export default Order;

@@ -30,7 +30,7 @@ function Home() {
           </Link>
         </div> */}
 
-         <div className="flex justify-center mt-12 mb-16">
+         <div className="flex justify-center md:mb-4 mb-12">
             <Link to={'/allproducts'}>
               <button className="group relative flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-[0.2em] text-[11px] md:text-xs px-8 md:px-12 py-4 rounded-2xl shadow-xl shadow-blue-500/20 transition-all active:scale-95 overflow-hidden">
                 <span className="relative z-10">See All Products</span>
