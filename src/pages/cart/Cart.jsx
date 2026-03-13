@@ -723,6 +723,9 @@
 
 // export default Cart;
 
+
+
+
 import React, { useContext, useMemo, useState } from "react";
 import Layout from "../../components/layout/Layout";
 import { MyContext } from "../../context api/myContext";
@@ -794,7 +797,7 @@ function Cart({ cartLoading }) {
     setTimeout(() => setCartUpdating(null), 250);
   };
 
-  const decrementCartQuantity = (itemId) => {
+  const decrementCartQuantity = (itemId) => { 
     const item = cartItems.find((i) => i.id === itemId);
     if (!item || item.quantity === 1) return;
 
@@ -1186,6 +1189,10 @@ function Cart({ cartLoading }) {
 }
 
 export default Cart;
+
+
+
+
 
 // import React, { useContext, useMemo, useState } from "react";
 // import Layout from "../../components/layout/Layout";
