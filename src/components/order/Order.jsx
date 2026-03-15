@@ -145,7 +145,7 @@
 //         <h1 className="text-3xl md:text-4xl font-extrabold text-center mb-10">
 //           My Orders
 //         </h1>
- 
+
 //         { orderLoading ? (
 //            <Loader />
 //         ):orders.length > 0 ? (
@@ -283,7 +283,7 @@ function Order({ orderLoading }) {
   const isDark = mode === "dark";
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const user = JSON.parse(localStorage.getItem("user"));
   const { orders } = useSelector((state) => state.orders);
   const [cancellingId, setCancellingId] = useState(null);
@@ -303,10 +303,9 @@ function Order({ orderLoading }) {
 
   return (
     <Layout>
-      <div className={`min-h-screen pt-24 pb-12 transition-all duration-300 ${
-        isDark ? "bg-[#131921] text-white" : "bg-[#f8fafc] text-gray-900"
-      }`}>
-        
+      <div className={`min-h-screen pt-24 pb-12 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-[#f8fafc] text-gray-900"
+        }`}>
+
         <div className="max-w-6xl mx-auto px-4">
           {/* Header Section */}
           <div className="mb-10 text-center md:text-left border-b border-gray-200 dark:border-gray-800 pb-6">
@@ -323,24 +322,20 @@ function Order({ orderLoading }) {
           </div>
 
           {orderLoading ? (
-            <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/10 backdrop-blur-sm">
-              <Loader />
-              </div>
+            <Loader />
           ) : orders.length > 0 ? (
             <div className="space-y-10">
               {orders.map((order) => (
                 <div
                   key={order.id}
-                  className={`relative overflow-hidden rounded-[40px] border-2 transition-all duration-500 ${
-                    isDark 
-                    ? "bg-[#1e293b] border-gray-800 shadow-none" 
+                  className={`relative overflow-hidden rounded-[40px] border-2 transition-all duration-500 ${isDark
+                    ? "bg-[#1e293b] border-gray-800 shadow-none"
                     : "bg-white border-gray-100 shadow-2xl shadow-blue-500/5"
-                  }`}
+                    }`}
                 >
                   {/* --- TOP STRIP --- */}
-                  <div className={`px-8 py-5 flex flex-wrap items-center justify-between gap-4 ${
-                    isDark ? "bg-[#131921]" : "bg-gray-50/80"
-                  }`}>
+                  <div className={`px-8 py-5 flex flex-wrap items-center justify-between gap-4 ${isDark ? "bg-[#131921]" : "bg-gray-50/80"
+                    }`}>
                     <div className="flex flex-wrap gap-8">
                       <div className="flex items-center gap-2">
                         <FiCalendar className="text-blue-600" />
@@ -358,30 +353,28 @@ function Order({ orderLoading }) {
                       </div>
                     </div>
                     <div>
-                        <span className={`px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${
-                          order.status === "cancelled" 
-                          ? "bg-red-500 text-white" 
-                          : "bg-green-600 text-white"
+                      <span className={`px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] shadow-sm ${order.status === "cancelled"
+                        ? "bg-red-500 text-white"
+                        : "bg-green-600 text-white"
                         }`}>
-                          {order.status || "Order Placed"}
-                        </span>
+                        {order.status || "Order Placed"}
+                      </span>
                     </div>
                   </div>
 
                   <div className="p-8">
                     <div className="grid lg:grid-cols-12 gap-10">
-                      
+
                       {/* --- LEFT: PRODUCT --- */}
                       <div className="lg:col-span-7 space-y-6">
                         <h3 className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 mb-4 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
                           <FiPackage className="text-blue-600" size={18} /> Package Items
                         </h3>
-                        
+
                         <div className="space-y-4">
                           {order.cartItems.map((item, i) => (
-                            <div key={i} onClick={() => navigate("/productInfo/" + item.id)} className={`flex gap-5 items-center p-4 rounded-[25px] border transition-all cursor-pointer group ${
-                              isDark ? "bg-[#131921] border-gray-700 hover:border-blue-600" : "bg-gray-50 border-gray-100 hover:border-blue-600"
-                            }`}>
+                            <div key={i} onClick={() => navigate("/productInfo/" + item.id)} className={`flex gap-5 items-center p-4 rounded-[25px] border transition-all cursor-pointer group ${isDark ? "bg-[#131921] border-gray-700 hover:border-blue-600" : "bg-gray-50 border-gray-100 hover:border-blue-600"
+                              }`}>
                               <div className="w-24 h-24 bg-white rounded-2xl p-2 shrink-0 shadow-inner flex items-center justify-center border border-gray-100">
                                 <img src={item.imageUrl} alt={item.title} className="max-h-full object-contain group-hover:scale-110 transition-transform" />
                               </div>
@@ -397,81 +390,79 @@ function Order({ orderLoading }) {
                         {/* Order Tracking */}
 
                         <div className="pt-6">
-    <div className="flex justify-between mb-2">
-        <p className={`text-[10px] font-black uppercase ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-            Shipment Status
-        </p>
-        <p className={`text-[10px] font-black uppercase ${isDark ? "text-blue-400" : "text-blue-600"}`}>
-            Arriving in 3 Days
-        </p>
-    </div>
-    
-    <div className="flex items-center w-full gap-1">
-        {/* Step 1 Bar */}
-        <p className="h-1.5 flex-1 bg-blue-600 rounded-full"></p>
+                          <div className="flex justify-between mb-2">
+                            <p className={`text-[10px] font-black uppercase ${isDark ? "text-gray-500" : "text-gray-400"}`}>
+                              Shipment Status
+                            </p>
+                            <p className={`text-[10px] font-black uppercase ${isDark ? "text-blue-400" : "text-blue-600"}`}>
+                              Arriving in 3 Days
+                            </p>
+                          </div>
 
-        {/* Step 2 Bar */}
-        <p className={`h-1.5 flex-1 rounded-full ${isDark ? "bg-gray-700" : "bg-blue-600 opacity-30"}`}></p>
+                          <div className="flex items-center w-full gap-1">
+                            {/* Step 1 Bar */}
+                            <p className="h-1.5 flex-1 bg-blue-600 rounded-full"></p>
 
-        {/* Step 3 Bar */}
-        <p className={`h-1.5 flex-1 rounded-full ${isDark ? "bg-gray-700" : "bg-blue-600 opacity-30"}`}></p>
-    </div>
-</div>
-                        
+                            {/* Step 2 Bar */}
+                            <p className={`h-1.5 flex-1 rounded-full ${isDark ? "bg-gray-700" : "bg-blue-600 opacity-30"}`}></p>
+
+                            {/* Step 3 Bar */}
+                            <p className={`h-1.5 flex-1 rounded-full ${isDark ? "bg-gray-700" : "bg-blue-600 opacity-30"}`}></p>
+                          </div>
                         </div>
+
+                      </div>
                       {/* --- RIGHT: CUSTOMER & ADDRESS --- */}
-                      <div className={`lg:col-span-5 rounded-[30px] p-6 flex flex-col justify-between ${
-                        isDark ? "bg-[#131921] border border-gray-800" : "bg-blue-50/50 border border-blue-100"
-                      }`}>
+                      <div className={`lg:col-span-5 rounded-[30px] p-6 flex flex-col justify-between ${isDark ? "bg-[#131921] border border-gray-800" : "bg-blue-50/50 border border-blue-100"
+                        }`}>
                         <div className="space-y-6">
                           {/* Name & Contact */}
                           <div className="space-y-4">
                             <h3 className={`text-xs font-black uppercase tracking-widest border-b pb-2 flex items-center gap-2 ${isDark ? "border-gray-800 text-blue-400" : "border-blue-200 text-blue-600"}`}>
-                              <MdPerson size={18}/> Customer Info
+                              <MdPerson size={18} /> Customer Info
                             </h3>
                             <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <p className="text-[9px] font-black text-gray-400 uppercase">Full Name</p>
-                                    <p className={`text-xs font-bold uppercase ${isDark ? "text-gray-200" : "text-gray-900"}`}>{user?.fullName}</p>
-                                </div>
-                                <div>
-                                    <p className="text-[9px] font-black text-gray-400 uppercase">Phone Number</p>
-                                    <p className={`text-xs font-bold uppercase flex items-center gap-1 ${isDark ? "text-gray-200" : "text-gray-900"}`}>
-                                        <MdPhone className="text-blue-600"/> {order.addressInfo?.phoneNumber || "N/A"}
-                                    </p>
-                                </div>
+                              <div>
+                                <p className="text-[9px] font-black text-gray-400 uppercase">Full Name</p>
+                                <p className={`text-xs font-bold uppercase ${isDark ? "text-gray-200" : "text-gray-900"}`}>{user?.fullName}</p>
+                              </div>
+                              <div>
+                                <p className="text-[9px] font-black text-gray-400 uppercase">Phone Number</p>
+                                <p className={`text-xs font-bold uppercase flex items-center gap-1 ${isDark ? "text-gray-200" : "text-gray-900"}`}>
+                                  <MdPhone className="text-blue-600" /> {order.addressInfo?.phoneNumber || "N/A"}
+                                </p>
+                              </div>
                             </div>
                           </div>
 
                           {/* Address Info */}
                           <div className="space-y-3">
                             <h3 className={`text-xs font-black uppercase tracking-widest border-b pb-2 flex items-center gap-2 ${isDark ? "border-gray-800 text-orange-400" : "border-blue-200 text-orange-500"}`}>
-                              <MdLocationOn size={18}/> Shipping Address
+                              <MdLocationOn size={18} /> Shipping Address
                             </h3>
                             <div className={`text-xs font-bold uppercase leading-relaxed ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                                <p className={isDark ? "text-gray-200" : "text-gray-900"}>{order.addressInfo?.address}</p>
-                                <p>{order.addressInfo?.pincode}</p>
+                              <p className={isDark ? "text-gray-200" : "text-gray-900"}>{order.addressInfo?.address}</p>
+                              <p>{order.addressInfo?.pincode}</p>
                             </div>
                           </div>
 
                           {/* Payment Status */}
                           <div className={`p-4 rounded-2xl border border-dashed flex items-center justify-between ${isDark ? "bg-black/20 border-gray-700" : "bg-white border-blue-300"}`}>
-                             <div className="flex items-center gap-3">
-                                <MdPayment className="text-blue-600" size={20}/>
-                                <p className={`text-[10px] font-black uppercase ${isDark ? "text-gray-300" : "text-gray-900"}`}>Payment Method</p>
-                             </div>
-                             <p className="text-[10px] font-black text-green-600 uppercase">Verified</p>
+                            <div className="flex items-center gap-3">
+                              <MdPayment className="text-blue-600" size={20} />
+                              <p className={`text-[10px] font-black uppercase ${isDark ? "text-gray-300" : "text-gray-900"}`}>Payment Method</p>
+                            </div>
+                            <p className="text-[10px] font-black text-green-600 uppercase">Verified</p>
                           </div>
                         </div>
 
                         {/* Actions */}
                         <div className="mt-8 grid grid-cols-2 gap-3">
-                          <button className={`py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${
-                            isDark ? "bg-white text-black hover:bg-blue-600 hover:text-white" : "bg-gray-900 text-white hover:bg-blue-600"
-                          }`}>
-                             <MdLocalShipping size={14}/> Invoice
+                          <button className={`py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 ${isDark ? "bg-white text-black hover:bg-blue-600 hover:text-white" : "bg-gray-900 text-white hover:bg-blue-600"
+                            }`}>
+                            <MdLocalShipping size={14} /> Invoice
                           </button>
-                          
+
                           {order.status !== "cancelled" && (
                             <button
                               disabled={cancellingId === order.id}
@@ -500,7 +491,7 @@ function Order({ orderLoading }) {
       </div>
       <ScrollToTopButoon />
     </Layout>
-   );
+  );
 
 }
 

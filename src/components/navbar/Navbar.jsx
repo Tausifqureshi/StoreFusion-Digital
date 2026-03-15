@@ -192,7 +192,7 @@
 //                       >
 //                         Logout
 //                       </button>
-//                     ) : (
+//                      ) : (
 //                       <Link
 //                         to="/login"
 //                         className="block w-full px-4 py-2 text-center bg-blue-500 text-white rounded-md hover:bg-blue-600"
@@ -394,7 +394,6 @@ function Navbar() {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const totalOrders = useSelector((state) => state.orders.orders.length);
-
   const totalQuantity = useSelector((state) =>
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
   );
@@ -468,38 +467,14 @@ function Navbar() {
           <div className={`hidden lg:flex items-center gap-8 font-bold text-[13px] uppercase tracking-wider ${isDark ? "text-gray-200" : "text-gray-600"}`}>
             <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer">
               <span className="flex items-center gap-1 hover:text-orange-500 transition-all">Categories <FiChevronRight className="rotate-90" /></span>
-
-  {mega && (
-  <div
-    className={`absolute top-full left-0 w-[550px] shadow-xl rounded-lg border-t-4 border-orange-500 p-3 z-[100] 
-    ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}
-  >
-    <select
-      onChange={(e) => {
-        if (e.target.value) {
-          navigate(`/category/${e.target.value}`);
-          setMega(false);
-        }
-      }}
-      defaultValue=""
-      className={`w-full p-2 rounded-md text-[12px] font-bold uppercase outline-none cursor-pointer
-      ${isDark ? "bg-[#131921] text-white border border-gray-700" : "bg-gray-50 text-gray-700 border border-gray-300"}`}
-    >
-      <option value="" disabled>
-        Select Category
-      </option>
-
-      {categories.map((cat) => (
-        <option key={cat} value={cat}>
-          {cat.toUpperCase()}
-        </option>
-      ))}
-    </select>
-  </div>
-)}
-
-
-  {mega && (
+              {/* {mega && (
+                <div className={`absolute top-full left-0 w-64 shadow-2xl rounded-b-xl border-t-2 border-orange-500 p-4 ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
+                  {categories.map((cat) => (
+                    <div key={cat} onClick={() => navigate(`/category/${cat}`)} className="p-2.5 hover:pl-4 transition-all hover:text-orange-500 cursor-pointer border-b border-gray-100 last:border-0 text-[11px]">{cat.toUpperCase()}</div>
+                  ))}
+                </div>
+              )} */}
+              {mega && (
   <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
     
     <h3 className="px-3 mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Explore Categories</h3>
@@ -524,10 +499,9 @@ function Navbar() {
       </div>
     )}
   </div>
-  )}
-
-
+               )}
             </div>
+
             {navItems.map((item) => (
               <Link key={item.name} to={item.URL} className="hover:text-orange-500 transition-colors">{item.name}</Link>
             ))}
@@ -622,8 +596,9 @@ function Navbar() {
                     ))}
                   </div> */}
 
+                  {/* SUB-MENU LAYER (Full Screen Overlay Style) */}
 {/* SUB-MENU LAYER (Real Professional UX) */}
-   <div className={`absolute inset-0 z-50 flex flex-col transition-transform duration-300 bg-inherit ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
+<div className={`absolute inset-0 z-50 flex flex-col transition-transform duration-300 bg-inherit ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
   
   {/* 1. Header with Back Button */}
   <div className={`p-4 border-b sticky top-0 z-20 ${isDark ? "bg-[#232f3e] border-gray-800" : "bg-blue-600 text-white"}`}>

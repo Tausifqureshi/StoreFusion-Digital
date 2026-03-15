@@ -157,36 +157,6 @@
 //         </div>
 //     </section>
 
-//     {/* <section className="mt-8 p-6 max-w-md mx-auto bg-gray-50 rounded shadow-lg">
-//   <h2 className="text-2xl font-bold mb-4">Submit Your Review</h2>
-//   <input
-//     placeholder="Name"
-//     className="border p-2 w-full mb-3"
-//     value={testimonialForm.name}
-//     onChange={e => setTestimonialForm({ ...testimonialForm, name: e.target.value })}
-//   />
-//   <textarea
-//     placeholder="Your Feedback"
-//     className="border p-2 w-full mb-3"
-//     value={testimonialForm.text}
-//     onChange={e => setTestimonialForm({ ...testimonialForm, text: e.target.value })}
-//   />
-//   <input
-//     placeholder="Image URL (optional)"
-//     className="border p-2 w-full mb-3"
-//     value={testimonialForm.img}
-//     onChange={e => setTestimonialForm({ ...testimonialForm, img: e.target.value })}
-//   />
-//   <button
-//     onClick={() => {
-//       setTestimonialForm(prev => ({ ...prev, productId: params.id }));
-//       addTestimonial();
-//     }}
-//     className="bg-indigo-600 text-white px-4 py-2 rounded w-full"
-//   >
-//     Submit Review
-//   </button>
-// </section> */}
 
 // </Layout>
 
@@ -195,6 +165,9 @@
 // }
 
 // export default ProductInfo;
+
+
+
 
 // new 1
 // import React, { useContext, useState, useEffect } from "react";
@@ -796,7 +769,7 @@ function ProductInfo() {
                   </div>
                 </div>
               </div> */}
-              
+
               {/* Accordions */}
               <div className="space-y-3 px-1 md:px-0">
                 {accordionData.map((item, index) => {
@@ -805,11 +778,10 @@ function ProductInfo() {
                   return (
                     <div
                       key={item.id}
-                      className={`border rounded-2xl overflow-hidden transition-all duration-300 ${
-                        isDark
+                      className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isDark
                           ? "border-gray-800 bg-[#1e293b]"
                           : "border-gray-50 bg-gray-50 shadow-sm"
-                      }`}
+                        }`}
                     >
                       {/* Header */}
                       <button
@@ -830,11 +802,10 @@ function ProductInfo() {
 
                       {/* Body (Smooth Animation) */}
                       <div
-                        className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                          isOpen
+                        className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen
                             ? "max-h-60 opacity-100 px-4 pb-4"
                             : "max-h-0 opacity-0"
-                        }`}
+                          }`}
                       >
                         <div className="text-xs md:text-sm leading-relaxed opacity-70 text-left">
                           {item.text}

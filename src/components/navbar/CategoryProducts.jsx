@@ -1,14 +1,4 @@
-// import React from 'react'
-
-// function CategoryProducts() {
-//   return (
-//     <div>CategoryProducts</div>
-//   )
-// }
-
-// export default CategoryProducts
-
-// // 1 wala
+// 1 wala
 // import React, { useContext, useMemo, useEffect } from "react";
 // import { useParams, useNavigate } from "react-router-dom";
 // import Layout from "../../components/layout/Layout";
@@ -110,9 +100,11 @@
 //       </div>
 //     </Layout>
 //   );
-// }
+// } 
 
 // export default CategoryProducts;
+
+
 
 import React, { useContext, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -235,19 +227,19 @@ function CategoryProducts() {
           )}
 
           {/* ⭐ 3. TESTIMONIAL SECTION (Category Specific) */}
-        {/* ⭐ TESTIMONIAL SECTION */}
-<section className="mt-24 pt-16 border-t border-gray-200 dark:border-gray-800">
-    <div className="text-center mb-12">
-        <h2 className="text-2xl md:text-4xl font-black uppercase italic">
-            Category <span className="text-blue-600">Feedback</span>
-        </h2>
-    </div>
+          {/* ⭐ TESTIMONIAL SECTION */}
+          <section className="mt-24 pt-16 border-t border-gray-200 dark:border-gray-800">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl md:text-4xl font-black uppercase italic">
+                Category <span className="text-blue-600">Feedback</span>
+              </h2>
+            </div>
 
-    {/* Bas component call karo aur name pass kar do, filter andar apne aap ho jayega */}
-    <div className="max-w-5xl mx-auto px-2">
-        <Testimonial categoryName={name} />
-    </div>
-</section>
+            {/* Bas component call karo aur name pass kar do, filter andar apne aap ho jayega */}
+            <div className="max-w-5xl mx-auto px-2">
+              <Testimonial categoryName={name} />
+            </div>
+          </section>
 
         </div>
       </div>
@@ -256,6 +248,10 @@ function CategoryProducts() {
 }
 
 export default CategoryProducts;
+
+
+
+
 
 
 // import React, { useContext, useState, useEffect } from "react";
