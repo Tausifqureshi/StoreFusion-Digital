@@ -408,24 +408,28 @@ function Navbar() {
     }, 300);
   };
 
-  useEffect(() => {
+   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      if (window.innerWidth < 1024) {
-        setIsVisible(true);
+      // Hide on scroll down, show on scroll up
+      if (window.scrollY > lastScrollY) {
+        setIsVisible(false); // Scroll down → Hide navbar
       } else {
-        if (currentScrollY > lastScrollY && currentScrollY > 100) {
-          setIsVisible(false);
-        } else {
-          setIsVisible(true);
-        }
+        setIsVisible(true); // Scroll up → Show navbar
       }
-      setIsScrolled(currentScrollY > 50);
-      setLastScrollY(currentScrollY);
+      // Change background after scroll 50px
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+
+      setLastScrollY(window.scrollY); // lastScrollY ko update karo
     };
+
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
 
   const navItems = [
     { name: "Home", URL: "/" },
@@ -452,7 +456,10 @@ function Navbar() {
       </div>
 
       {/* MAIN NAV */}
-      <nav className={`transition-all duration-300 ${isScrolled ? (isDark ? "bg-[#232f3e]/95 backdrop-blur-md shadow-xl" : "bg-white/95 backdrop-blur-md shadow-md") : (isDark ? "bg-[#232f3e]" : "bg-white shadow-md")}`}>
+      <nav className={
+        `transition-all duration-300 ${isScrolled ? (isDark ? "bg-[#232f3e]/95 backdrop-blur-md shadow-xl" : "bg-white/95 backdrop-blur-md shadow-md") : (isDark ? "bg-[#232f3e]" : "bg-white shadow-md")}`}
+        >
+
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
           <div className="flex items-center gap-4">

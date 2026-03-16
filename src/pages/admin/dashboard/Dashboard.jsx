@@ -1,4 +1,3 @@
-// Dashboard
 import React, { useContext } from 'react';
 import { FaBox, FaShoppingCart, FaUsers, FaTag } from 'react-icons/fa';
 import { MyContext } from '../../../context api/myContext';
@@ -166,4 +165,3 @@ function Dashboard() {
 }
 
 export default Dashboard;
-

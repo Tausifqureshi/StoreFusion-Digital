@@ -584,8 +584,8 @@ function ProductInfo() {
     return product
       .filter(
         (item) =>
-          item.category === currentProduct.category &&
-          item.id !== currentProduct.id,
+          item.category === currentProduct.category && //Agar current product fashion hai tu filter kar rega.
+          item.id !== currentProduct.id, //Jo product abhi open hai usko remove karo.
       )
       .slice(0, 4);
   }, [product, currentProduct]);
