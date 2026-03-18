@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { MyContext } from "../../context api/myContext";
 import { Link } from "react-router-dom";
 import {
@@ -18,6 +18,13 @@ import { FiMapPin, FiPhone, FiMail, FiSend, FiChevronUp, FiChevronRight } from "
 function Footer() {
   const { mode } = useContext(MyContext);
   const isDark = mode === "dark";
+  const [email, setEmail] = useState("");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(email);
+    setEmail("");
+  }
+
 
   return (
     <footer className={`relative transition-all duration-300 ${isDark ? "bg-[#131921] text-gray-300" : "bg-gray-50 text-gray-700"} font-sans border-t ${isDark ? "border-gray-800" : "border-gray-200"}`}>
@@ -33,16 +40,22 @@ function Footer() {
               Get the latest updates, exclusive deals, and special offers directly in your inbox.
             </p>
           </div>
+
           <div className="w-full md:w-auto flex-1 max-w-md flex relative shadow-lg rounded-full">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className={`w-full py-3 px-5 pr-14 rounded-full text-sm font-medium outline-none transition-all ${isDark ? "bg-[#131921] text-white border border-gray-700 focus:border-orange-500 focus:ring-1 focus:ring-orange-500" : "bg-white text-gray-800 border-none focus:ring-2 focus:ring-orange-400"}`}
-            />
-            <button className="absolute right-1 top-1 bottom-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 flex items-center justify-center transition-colors shadow-md">
-              <FiSend size={16} />
-            </button>
+            <form action="" onSubmit={handleSubmit} className="w-full flex justify-end">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email address"
+                className={`w-full py-3 px-5 pr-14 rounded-full text-sm font-medium outline-none transition-all ${isDark ? "bg-[#131921] text-white border border-gray-700 focus:border-orange-500 focus:ring-1 focus:ring-orange-500" : "bg-white text-gray-800 border-none focus:ring-2 focus:ring-orange-400"}`}
+              />
+              <button className="absolute right-1 top-1 bottom-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 flex items-center justify-center transition-colors shadow-md">
+                <FiSend size={16} />
+              </button>
+            </form>
           </div>
+
         </div>
       </div>
 

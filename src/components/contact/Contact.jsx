@@ -1,488 +1,3 @@
-// import React, { useContext, useState } from "react";
-// import { MyContext } from "../../context api/myContext";
-// import Layout from "../../components/layout/Layout";
-// import {
-//   FaCheckCircle,
-//   FaMapMarkerAlt,
-//   FaPhoneAlt,
-//   FaEnvelope,
-// } from "react-icons/fa";
-// import { motion, AnimatePresence } from "framer-motion";
-
-// function Contact() {
-//   const { mode } = useContext(MyContext);
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     message: "",
-//   });
-//   const [showSuccess, setShowSuccess] = useState(false);
-
-//   const handleChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setShowSuccess(true);
-//     // Reset form after submission
-//     setFormData({ name: "", email: "", message: "" });
-//     // Hide success after 3s
-//     setTimeout(() => setShowSuccess(false), 3000);
-//   };
-
-//   return (
-//     <Layout>
-//       <section
-//         className={`py-16 px-6 md:px-20 min-h-screen flex items-center transition-colors duration-300 ${
-//           mode === "dark" ? "bg-gray-950 text-white" : "bg-gray-100 text-black"
-//         }`}
-//       >
-//         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-//           {/* Left Side - Info */}
-//           <div className="space-y-6">
-//             <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-//               Let’s Connect ✨
-//             </h1>
-//             <p className="text-lg opacity-80">
-//               Have a question, feedback, or collaboration idea? Fill out the
-//               form and we’ll get back to you as soon as possible.
-//             </p>
-
-//             <div className="space-y-4">
-//               <div className="flex items-center gap-3">
-//                 <FaMapMarkerAlt className="text-blue-500 text-xl" />
-//                 <span>Mumbai, India</span>
-//               </div>
-//               <div className="flex items-center gap-3">
-//                 <FaPhoneAlt className="text-blue-500 text-xl" />
-//                 <span>+91 98765 43210</span>
-//               </div>
-//               <div className="flex items-center gap-3">
-//                 <FaEnvelope className="text-blue-500 text-xl" />
-//                 <span>support@storefusion.com</span>
-//               </div>
-//             </div>
-//           </div>
-
-//           {/* Right Side - Form */}
-//           <div
-//             className={`relative shadow-2xl rounded-2xl p-8 backdrop-blur-md border transition ${
-//               mode === "dark"
-//                 ? "bg-gray-900/70 border-gray-700"
-//                 : "bg-white/90 border-gray-200"
-//             }`}
-//           >
-//             {/* Success Message */}
-//             <AnimatePresence>
-//               {showSuccess && (
-//                 <motion.div
-//                   initial={{ opacity: 0, y: -20 }}
-//                   animate={{ opacity: 1, y: 0 }}
-//                   exit={{ opacity: 0, y: -20 }}
-//                   transition={{ duration: 0.4 }}
-//                   className="mb-6 flex items-center justify-center bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg shadow dark:bg-green-900 dark:border-green-700 dark:text-green-200"
-//                 >
-//                   <FaCheckCircle className="w-5 h-5 mr-2" />
-//                   <span>Your message has been sent successfully 🎉</span>
-//                 </motion.div>
-//               )}
-//             </AnimatePresence>
-
-//             <form onSubmit={handleSubmit} className="space-y-6">
-//               <div>
-//                 <label className="block text-sm font-semibold mb-2">Name</label>
-//                 <input
-//                   type="text"
-//                   name="name"
-//                   value={formData.name}
-//                   onChange={handleChange}
-//                   className={`w-full p-3 rounded-lg shadow-sm outline-none focus:ring-2 focus:ring-blue-500 ${
-//                     mode === "dark"
-//                       ? "bg-gray-800 text-white border border-gray-700"
-//                       : "bg-gray-50 text-black border border-gray-300"
-//                   }`}
-//                   required
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-semibold mb-2">
-//                   Email
-//                 </label>
-//                 <input
-//                   type="email"
-//                   name="email"
-//                   value={formData.email}
-//                   onChange={handleChange}
-//                   className={`w-full p-3 rounded-lg shadow-sm outline-none focus:ring-2 focus:ring-blue-500 ${
-//                     mode === "dark"
-//                       ? "bg-gray-800 text-white border border-gray-700"
-//                       : "bg-gray-50 text-black border border-gray-300"
-//                   }`}
-//                   required
-//                 />
-//               </div>
-
-//               <div>
-//                 <label className="block text-sm font-semibold mb-2">
-//                   Message
-//                 </label>
-//                 <textarea
-//                   name="message"
-//                   value={formData.message}
-//                   onChange={handleChange}
-//                   rows="5"
-//                   className={`w-full p-3 rounded-lg shadow-sm outline-none focus:ring-2 focus:ring-blue-500 ${
-//                     mode === "dark"
-//                       ? "bg-gray-800 text-white border border-gray-700"
-//                       : "bg-gray-50 text-black border border-gray-300"
-//                   }`}
-//                   required
-//                 />
-//               </div>
-
-//               <button
-//                 type="submit"
-//                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
-//               >
-//                 Send Message
-//               </button>
-//             </form>
-//           </div>
-//         </div>
-//       </section>
-//     </Layout>
-//   );
-// }
-
-// export default Contact;
-
-
-
-
-// import React, { useContext, useState } from "react";
-// import { MyContext } from "../../context api/myContext";
-// import Layout from "../../components/layout/Layout";
-// import {
-//   FaCheckCircle,
-//   FaMapMarkerAlt,
-//   FaPhoneAlt,
-//   FaEnvelope,
-//   FaHeadset,
-//   FaChevronDown,
-// } from "react-icons/fa";
-// import { motion, AnimatePresence } from "framer-motion";
-
-// function Contact() {
-//   const { mode } = useContext(MyContext);
-//   const isDark = mode === "dark";
-
-//   const [showMap, setShowMap] = useState(false);
-//   const [openIndex, setOpenIndex] = useState(null);
-
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     message: "",
-//   });
-
-//   const [showSuccess, setShowSuccess] = useState(false);
-
-//   const faqData = [
-//     {
-//       title: "How long does delivery take?",
-//       text: "Orders are usually delivered within 3-5 business days depending on your location.",
-//     },
-//     {
-//       title: "Can I return a product?",
-//       text: "Yes, we provide a 7-day return policy for unused products.",
-//     },
-//     {
-//       title: "How do I contact support?",
-//       text: "You can contact us through email, phone, or by submitting the contact form.",
-//     },
-//   ];
-
-//   const handleChange = (e) => {
-//     setFormData((prev) => ({
-//       ...prev,
-//       [e.target.name]: e.target.value,
-//     }));
-//   };
-
-//   const handleSubmit = (e) => {
-//     e.preventDefault();
-
-//     setShowSuccess(true);
-
-//     setFormData({
-//       name: "",
-//       email: "",
-//       message: "",
-//     });
-
-//     setTimeout(() => setShowSuccess(false), 3000);
-//   };
-
-//   const toggleAccordion = (index) => {
-//     setOpenIndex(openIndex === index ? null : index);
-//   };
-
-//   return (
-//     <Layout>
-//       <section
-//         className={`min-h-screen pt-24 pb-16 px-6 transition-all ${
-//           isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"
-//         }`}
-//       >
-//         <div className="max-w-6xl mx-auto">
-
-//           {/* HERO */}
-//           <div className="text-center mb-16">
-//             <h1 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-6">
-//               Contact <span className="text-blue-600 italic">Support</span>
-//             </h1>
-
-//             <p className="max-w-2xl mx-auto opacity-70 text-sm md:text-base">
-//               Have a question or need help with your order? Our team is here
-//               to assist you.
-//             </p>
-//           </div>
-
-//           {/* CONTACT GRID */}
-//           <div className="grid md:grid-cols-2 gap-10 items-start">
-
-//             {/* LEFT INFO */}
-//             <div className="space-y-6">
-
-//               {/* LOCATION CARD (CLICK MAP) */}
-//               <div
-//                 onClick={() => setShowMap(!showMap)}
-//                 className={`cursor-pointer p-6 rounded-3xl border flex gap-4 items-center ${
-//                   isDark
-//                     ? "bg-[#232f3e] border-gray-800"
-//                     : "bg-white border-gray-200"
-//                 }`}
-//               >
-//                 <FaMapMarkerAlt className="text-blue-600 text-2xl" />
-//                 <div>
-//                   <h3 className="font-bold text-sm uppercase">Location</h3>
-//                   <p className="text-sm opacity-70">
-//                     Mumbai, India (Click to view map)
-//                   </p>
-//                 </div>
-//               </div>
-
-//               {/* MAP */}
-//               <AnimatePresence>
-//                 {showMap && (
-//                   <motion.div
-//                     initial={{ opacity: 0, height: 0 }}
-//                     animate={{ opacity: 1, height: 300 }}
-//                     exit={{ opacity: 0, height: 0 }}
-//                     className="overflow-hidden rounded-3xl border"
-//                   >
-//                     <iframe
-//                       title="map"
-//                       src="https://www.google.com/maps?q=mumbai&output=embed"
-//                       className="w-full h-[300px]"
-//                     ></iframe>
-//                   </motion.div>
-//                 )}
-//               </AnimatePresence>
-
-//               {/* PHONE */}
-//               <div
-//                 className={`p-6 rounded-3xl border flex gap-4 items-center ${
-//                   isDark
-//                     ? "bg-[#232f3e] border-gray-800"
-//                     : "bg-white border-gray-200"
-//                 }`}
-//               >
-//                 <FaPhoneAlt className="text-orange-500 text-2xl" />
-//                 <div>
-//                   <h3 className="font-bold text-sm uppercase">Phone</h3>
-//                   <p className="text-sm opacity-70">+91 98765 43210</p>
-//                 </div>
-//               </div>
-
-//               {/* EMAIL */}
-//               <div
-//                 className={`p-6 rounded-3xl border flex gap-4 items-center ${
-//                   isDark
-//                     ? "bg-[#232f3e] border-gray-800"
-//                     : "bg-white border-gray-200"
-//                 }`}
-//               >
-//                 <FaEnvelope className="text-blue-600 text-2xl" />
-//                 <div>
-//                   <h3 className="font-bold text-sm uppercase">Email</h3>
-//                   <p className="text-sm opacity-70">
-//                     support@storefusion.com
-//                   </p>
-//                 </div>
-//               </div>
-
-//               {/* SUPPORT */}
-//               <div
-//                 className={`p-6 rounded-3xl border flex gap-4 items-center ${
-//                   isDark
-//                     ? "bg-[#232f3e] border-gray-800"
-//                     : "bg-white border-gray-200"
-//                 }`}
-//               >
-//                 <FaHeadset className="text-orange-500 text-2xl" />
-//                 <div>
-//                   <h3 className="font-bold text-sm uppercase">
-//                     Customer Support
-//                   </h3>
-//                   <p className="text-sm opacity-70">
-//                     24/7 Dedicated Support Team
-//                   </p>
-//                 </div>
-//               </div>
-
-//               {/* ACCORDION */}
-//               <div className="mt-8 space-y-3">
-//                 {faqData.map((item, index) => (
-//                   <div
-//                     key={index}
-//                     className={`border rounded-xl overflow-hidden ${
-//                       isDark
-//                         ? "border-gray-700 bg-[#232f3e]"
-//                         : "border-gray-200 bg-white"
-//                     }`}
-//                   >
-//                     <button
-//                       onClick={() => toggleAccordion(index)}
-//                       className="w-full flex justify-between items-center p-4 text-left font-semibold text-sm"
-//                     >
-//                       {item.title}
-//                       <FaChevronDown
-//                         className={`transition ${
-//                           openIndex === index ? "rotate-180" : ""
-//                         }`}
-//                       />
-//                     </button>
-
-//                     <AnimatePresence>
-//                       {openIndex === index && (
-//                         <motion.div
-//                           initial={{ height: 0, opacity: 0 }}
-//                           animate={{ height: "auto", opacity: 1 }}
-//                           exit={{ height: 0, opacity: 0 }}
-//                           className="px-4 pb-4 text-sm opacity-80"
-//                         >
-//                           {item.text}
-//                         </motion.div>
-//                       )}
-//                     </AnimatePresence>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-
-//             {/* RIGHT FORM */}
-//             <div
-//               className={`relative p-8 md:p-10 rounded-3xl border shadow-xl max-w-md mx-auto w-full ${
-//                 isDark
-//                   ? "bg-[#232f3e] border-gray-800"
-//                   : "bg-white border-gray-200"
-//               }`}
-//             >
-//               {/* SUCCESS */}
-//               <AnimatePresence>
-//                 {showSuccess && (
-//                   <motion.div
-//                     initial={{ opacity: 0, y: -15 }}
-//                     animate={{ opacity: 1, y: 0 }}
-//                     exit={{ opacity: 0, y: -15 }}
-//                     className="mb-6 flex items-center justify-center bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-lg"
-//                   >
-//                     <FaCheckCircle className="mr-2" />
-//                     Message sent successfully 🎉
-//                   </motion.div>
-//                 )}
-//               </AnimatePresence>
-
-//               <form onSubmit={handleSubmit} className="space-y-5">
-
-//                 <div>
-//                   <label className="text-xs font-black uppercase tracking-wider mb-2 block">
-//                     Name
-//                   </label>
-
-//                   <input
-//                     type="text"
-//                     name="name"
-//                     value={formData.name}
-//                     onChange={handleChange}
-//                     required
-//                     className={`w-full p-3 rounded-xl outline-none border text-sm ${
-//                       isDark
-//                         ? "bg-[#131921] border-gray-700 text-white"
-//                         : "bg-gray-50 border-gray-300"
-//                     }`}
-//                   />
-//                 </div>
-
-//                 <div>
-//                   <label className="text-xs font-black uppercase tracking-wider mb-2 block">
-//                     Email
-//                   </label>
-
-//                   <input
-//                     type="email"
-//                     name="email"
-//                     value={formData.email}
-//                     onChange={handleChange}
-//                     required
-//                     className={`w-full p-3 rounded-xl outline-none border text-sm ${
-//                       isDark
-//                         ? "bg-[#131921] border-gray-700 text-white"
-//                         : "bg-gray-50 border-gray-300"
-//                     }`}
-//                   />
-//                 </div>
-
-//                 <div>
-//                   <label className="text-xs font-black uppercase tracking-wider mb-2 block">
-//                     Message
-//                   </label>
-
-//                   <textarea
-//                     name="message"
-//                     rows="4"
-//                     value={formData.message}
-//                     onChange={handleChange}
-//                     required
-//                     className={`w-full p-3 rounded-xl outline-none border text-sm ${
-//                       isDark
-//                         ? "bg-[#131921] border-gray-700 text-white"
-//                         : "bg-gray-50 border-gray-300"
-//                     }`}
-//                   />
-//                 </div>
-
-//                 <button
-//                   type="submit"
-//                   className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase text-xs tracking-widest rounded-xl transition"
-//                 >
-//                   Send Message
-//                 </button>
-
-//               </form>
-//             </div>
-
-//           </div>
-//         </div>
-//       </section>
-//     </Layout>
-//   );
-// }
-
-// export default Contact;
 import React, { useContext, useState } from "react";
 import { MyContext } from "../../context api/myContext";
 import Layout from "../../components/layout/Layout";
@@ -505,19 +20,43 @@ import { motion, AnimatePresence } from "framer-motion";
 
 function Contact() {
   const { mode } = useContext(MyContext);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
   const isDark = mode === "dark";
   const [openIndex, setOpenIndex] = useState(null);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   const faqData = [
     { title: "WHAT IS THE AVERAGE RESPONSE TIME?", text: "Our dedicated support team typically responds within 2-4 business hours." },
     { title: "DO YOU OFFER INTERNATIONAL SHIPPING?", text: "Currently, StoreFusion operates across all major cities in India with express delivery." },
     { title: "HOW SECURE IS MY PERSONAL DATA?", text: "We use industry-standard SSL encryption to ensure your data is 100% protected." },
+
   ];
+
+  const handleFormChange = (e) => {
+    // const { name, value } = e.target;
+    // setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setError({...error, [e.target.name]: ""});
+
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if(formData.name === "" || formData.email === "" || formData.message === ""){
+      setError("Please fill all the fields");
+      return;
+    }
     setShowSuccess(true);
+    setFormData({
+      name: "",
+      email: "",
+      message: "",
+    });
     setTimeout(() => setShowSuccess(false), 4000);
   };
 
@@ -586,7 +125,7 @@ function Contact() {
                 {showSuccess && (
                   <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-8 p-5 rounded-2xl bg-blue-600 text-white text-[10px] font-black uppercase flex items-center gap-4 shadow-xl">
                     <FaCheckCircle size={22} /> System: Message Deployed Successfully!
-                  </motion.div>
+                  </motion.div> 
                 )}
               </AnimatePresence>
 
@@ -594,17 +133,30 @@ function Contact() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Identity</label>
-                    <input type="text" placeholder="FULL NAME" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required />
+                    <input type="text" placeholder="FULL NAME" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
+                     value={formData.name}
+                     onChange={handleFormChange}
+                     />
+                     {error.name && <p className="text-red-500 text-xs">{error.name}</p>}
                   </div>
+
                   <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Digital Mail</label>
-                    <input type="email" placeholder="EMAIL ADDRESS" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required />
+                    <input type="email" placeholder="EMAIL ADDRESS" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
+                     value={formData.email}
+                     onChange={handleFormChange}
+                     />
+                     {error.email && <p className="text-red-500 text-xs">{error.email}</p>}
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Inquiry Details</label>
-                  <textarea rows="5" placeholder="WHAT'S ON YOUR MIND?" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all resize-none ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required></textarea>
+                  <textarea rows="5" placeholder="WHAT'S ON YOUR MIND?" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all resize-none ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
+                   value={formData.message}
+                   onChange={handleFormChange}
+                   ></textarea>
+                   {error.message && <p className="text-red-500 text-xs">{error.message}</p>}
                 </div>
 
                 <button type="submit" className="w-full py-5 bg-blue-600 hover:bg-orange-500 text-white font-black uppercase tracking-[0.4em] text-[10px] rounded-2xl transition-all shadow-xl shadow-blue-600/20 active:scale-95 flex items-center justify-center gap-3">
@@ -689,7 +241,6 @@ export default Contact;
 
 
 
-// import { MyContext } from "../../context api/myContext";
 // import Layout from "../../components/layout/Layout";
 // import {
 //   FaCheckCircle,
