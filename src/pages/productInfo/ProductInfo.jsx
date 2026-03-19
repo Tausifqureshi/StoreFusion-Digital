@@ -963,4 +963,4 @@ function ProductInfo() {
   );
 }
 
-export default ProductInfo;
+export default ProductInfo;                                    

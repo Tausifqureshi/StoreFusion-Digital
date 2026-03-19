@@ -18,6 +18,7 @@ import { FiMapPin, FiPhone, FiMail, FiSend, FiChevronUp, FiChevronRight } from "
 function Footer() {
   const { mode } = useContext(MyContext);
   const isDark = mode === "dark";
+
   const [email, setEmail] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();

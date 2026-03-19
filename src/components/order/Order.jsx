@@ -264,7 +264,7 @@
 
 
 
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import Layout from "../layout/Layout";
 import Loader from "../loader/Loader";
 import { MdPerson, MdCheckCircle, MdPhone, MdLocationOn, MdPayment, MdLocalShipping } from "react-icons/md";
@@ -300,6 +300,13 @@ function Order({ orderLoading }) {
       setCancellingId(null);
     }
   };
+  // const orderTotals = useMemo(() => {
+  //   return orders.map(order => ({
+  //     id: order.id,
+  //     total: order.cartItems?.reduce((acc, item) =>
+  //       acc + (Number(item.price) || 0) * (item.quantity || 1), 0) || 0
+  //   }));
+  // }, [orders]);
 
   return (
     <Layout>
@@ -349,6 +356,18 @@ function Order({ orderLoading }) {
                         <div>
                           <p className="text-[8px] font-black text-gray-400 uppercase">Order ID</p>
                           <p className={`text-[11px] font-bold uppercase tracking-tight ${isDark ? "text-blue-400" : "text-blue-600"}`}>{order.id}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 border-l pl-4 md:pl-8 border-gray-200 dark:border-gray-700 ml-2 md:ml-4">
+                        <div>
+                          <p className="text-[8px] font-black text-gray-400 uppercase">Grand Total</p>
+                          {/* <p className={`text-[13px] font-black uppercase tracking-tight ${isDark ? "text-green-400" : "text-green-600"}`}>
+                            ₹{orderTotals[order.id]}
+                          </p> */}
+                          <p className={`text-[13px] font-black uppercase tracking-tight ${isDark ? "text-green-400" : "text-green-600"}`}>
+                            ₹{order.cartItems?.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0)}
+                          </p>
                         </div>
                       </div>
                     </div>
