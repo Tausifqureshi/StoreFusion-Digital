@@ -422,6 +422,7 @@ function MyState({ children }) {
     category: "",
     description: "",
     discount: "",   // ⭐ ye add kar
+    stock: "",      // added stock property
     time: Timestamp.now(),
     date: new Date().toLocaleString("en-US", {
       month: "short",
@@ -458,6 +459,7 @@ const [testimonialForm, setTestimonialForm] = useState({
       category: "",
       description: "",
       discount: "",   // ⭐ ye add kar
+      stock: "",      // added stock property
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",
@@ -486,6 +488,7 @@ const [testimonialForm, setTestimonialForm] = useState({
   ...products,
   price: Number(products.price),
   discount: Number(products.discount || 0),
+  stock: Number(products.stock || 0),
 });
       toast.success("Product added successfully!", { icon: "✅" });
       getProductData();
@@ -676,6 +679,7 @@ const getAvatar = (item) => {
   ...products,
   price: Number(products.price),
   discount: Number(products.discount || 0),
+  stock: Number(products.stock || 0),
 });
       toast.success("Product Updated successfully");
       getProductData();

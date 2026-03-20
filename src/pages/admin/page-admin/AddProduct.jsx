@@ -66,6 +66,15 @@ function AddProduct() {
             value={products.discount}
           />
 
+          <input
+            type="number"
+            name="stock"
+            className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Available Stock Quantity"
+            onChange={inputHandle}
+            value={products.stock}
+          />
+
           <textarea
             name="description"
             rows="4"

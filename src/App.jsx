@@ -210,7 +210,7 @@ import { loadCart } from "./pages/cart/cartService";
 const Home = lazy(() => import("./pages/home/Home"));
 const Order = lazy(() => import("./components/order/Order"));
 const Cart = lazy(() => import("./pages/cart/Cart"));
-const Dashboard = lazy(() => import("./pages/admin/dashboard/Dashboard"));
+const Dashboard = lazy(() => import("./pages/admin/dashboard/DashboardView/Dashboard"));
 const NoPage = lazy(() => import("./pages/nopage/NoPage"));
 const Signup = lazy(() => import("./pages/registration/Signup"));
 const Login = lazy(() => import("./pages/registration/Login"));

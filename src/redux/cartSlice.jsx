@@ -100,15 +100,21 @@ const cartSlice = createSlice({
     addToCart(state, action) {
       const item = state.find(p => p.id === action.payload.id);
       if (item) {
-        item.quantity += action.payload.quantity;
+        if (item.quantity < Number(action.payload.stock || 0)) {
+          item.quantity += action.payload.quantity;
+        }
       } else {
-        state.push(action.payload);
+        if (Number(action.payload.stock || 0) > 0) {
+          state.push(action.payload);
+        }
       }
     },
 
     incrementQuantity(state, action) {
       const item = state.find(p => p.id === action.payload);
-      if (item) item.quantity += 1;
+      if (item && item.quantity < Number(item.stock || Infinity)) {
+        item.quantity += 1;
+      }
     },
 
     decrementQuantity(state, action) {

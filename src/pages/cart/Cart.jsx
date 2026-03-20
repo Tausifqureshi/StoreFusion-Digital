@@ -787,9 +787,17 @@ function Cart({ cartLoading }) {
   };
 
   const incrementCartQuantity = (itemId) => {
+    const item = cartItems.find((i) => i.id === itemId);
+    if (!item) return;
+
+    if (item.quantity >= Number(item.stock || Infinity)) {
+      toast.error(`Only ${item.stock || 'this'} left in stock!`, { position: "top-right", autoClose: 1000 });
+      return;
+    }
+
     setCartUpdating({ id: itemId, type: "increment" });
-    const updatedCart = cartItems.map((item) =>
-      item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
+    const updatedCart = cartItems.map((cartItem) =>
+      cartItem.id === itemId ? { ...cartItem, quantity: cartItem.quantity + 1 } : cartItem
     );
     dispatch(incrementQuantity(itemId));
     saveCartDebounce(updatedCart);

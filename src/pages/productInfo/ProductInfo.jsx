@@ -607,6 +607,10 @@ function ProductInfo() {
   };
 
   const handleAddToCart = () => {
+    if (Number(currentProduct.stock || 0) === 0) {
+      toast.error("Product is out of stock!", { icon: "❌" });
+      return;
+    }
     const isProductInCart = cartItems.some(
       (item) => item.id === currentProduct.id,
     );
@@ -733,18 +737,25 @@ function ProductInfo() {
 
               <div className="py-2 md:py-4 border-b border-gray-100 dark:border-gray-800">
                 <div className="flex items-end justify-center lg:justify-start gap-3 mb-1">
-                  <span className="text-3xl md:text-4xl font-black text-blue-600 italic">
+                  <span className={`text-3xl md:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
                     ₹{finalPrice}
                   </span>
                   {discount > 0 && (
-                    <span className="text-lg md:text-xl line-through text-gray-400 font-bold mb-1">
+                    <span className="text-lg md:text-xl line-through text-gray-400 font-medium mb-1">
                       ₹{currentProduct.price}
                     </span>
                   )}
                 </div>
-                <p className="text-[9px] font-black text-orange-500 uppercase tracking-[0.2em]">
-                  Shipping calculated at checkout
-                </p>
+                <div className="flex flex-col gap-1 mt-2 mb-1 text-center lg:text-left">
+                  {Number(currentProduct.stock || 0) > 0 ? (
+                    <span className="text-[10px] font-black uppercase tracking-[0.1em] text-orange-500">Stock Available: {currentProduct.stock}</span>
+                  ) : (
+                    <span className="text-[10px] font-black uppercase tracking-[0.1em] text-red-500">Out of Stock</span>
+                  )}
+                  <p className="text-[9px] font-black text-orange-500 uppercase tracking-[0.2em] mt-1 opacity-80">
+                    Shipping calculated at checkout
+                  </p>
+                </div>
               </div>
 
               {/* Accordions */}
@@ -840,15 +851,26 @@ function ProductInfo() {
 
               {/* Action Buttons */}
               <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <button
-                  onClick={handleAddToCart}
-                  className="flex-[2] py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-blue-500/20 transition-all active:scale-95"
-                >
-                  Add To Shopping Bag
-                </button>
-                <button className="flex-1 py-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-orange-500/20 transition-all active:scale-95">
-                  Buy Now
-                </button>
+                {Number(currentProduct?.stock || 0) === 0 ? (
+                  <button
+                    disabled
+                    className="flex-[3] py-4 rounded-2xl bg-red-400 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] cursor-not-allowed"
+                  >
+                    Out Of Stock
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleAddToCart}
+                      className="flex-[2] py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-blue-500/20 transition-all active:scale-95 flex justify-center items-center gap-2"
+                    >
+                      Add To Shopping Bag
+                    </button>
+                    <button className="flex-1 py-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-orange-500/20 transition-all active:scale-95">
+                      Buy Now
+                    </button>
+                  </>
+                )}
                 <button
                   onClick={() => setIsHeartFilled(!isHeartFilled)}
                   className={`p-4 md:p-5 rounded-2xl border flex items-center justify-center transition-all ${isHeartFilled ? "bg-red-500 border-red-500 text-white" : "border-gray-200 text-gray-400"}`}

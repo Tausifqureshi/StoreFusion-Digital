@@ -1,19 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { MyContext } from "../../context api/myContext";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../redux/cartSlice";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import Loader from "../loader/Loader";
-// import {
-//   saveCartToFirestore,
-//   saveGuestCartToFirestore,
-// } from "../../pages/cart/cartFirestore";
-import { saveCart } from "../../pages/cart/cartService";
-
-
+import SingleProductCard from "./SingleProductCard";
 import ProductSkeleton from "../loader/ProductSkeleton";
-import ImageWithLoader from "../loader/ImageWithLoader";
 
 function ProductCard() {
   const {
@@ -23,106 +11,35 @@ function ProductCard() {
     filterType,
     filterPrice,
     sortPrice,
-    // loading,
-    // setLoading, 
     productLoading,
   } = useContext(MyContext);
-  const [showMoreIndex, setShowMoreIndex] = useState({});
 
-  const toggleShowMore = (index) => {
-    setShowMoreIndex((prevState) => ({
-      ...prevState,
-      [index]: !prevState[index],
-    }));
-  };
+  const [expandedId, setExpandedId] = useState(null);
 
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart);
-  const navigate = useNavigate(); // Use the hook for navigation
-  // const user = JSON.parse(localStorage.getItem("user"));
-
-  const addCart = async (product) => {
-    const isProductInCart = cartItems.find((item) => item.id === product.id);
-    if (isProductInCart) {
-      toast.info(`Product is already in your cart!`, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "🗑️",
-      });
-    } else {
-      const serializedProduct = {
-        ...product,
-        quantity: 1,
-        time: product.time?.seconds ?? Date.now(),
-      };
-
-      dispatch(addToCart(serializedProduct));
-      // Firebase me save karna cart ko.
-      const updatedCart = [...cartItems, serializedProduct];
-      // if (user?.uid) {
-      //   await saveCartToFirestore(user.uid, updatedCart);
-      // } else {
-      //   // const updatedCart = [...cartItems, serializedProduct];
-      //   await saveGuestCartToFirestore(updatedCart);
-      // }
-      await saveCart(updatedCart);
-
-
-      toast.success("Product added to cart!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "🗑️",
-      });
-    }
-  };
-
-  // useEffect(() => {
-  //   localStorage.setItem("cart", JSON.stringify(cartItems));
-  //   // window.scrollTo(0, 0);
-  // }, [cartItems]);
-
-  // Apply filters
-
-
-const filteredProducts = product
-  .filter((item) =>
-    item.title.toLowerCase().includes(searchkey.toLowerCase())
-  )
-  .filter((item) => {
-    // ✅ AGAR filterType khali array hai toh saare products dikhao
-    if (filterType.length === 0) return true;
-    
-    // ✅ Check karo ki product ki category selected categories mein hai ya nahi
-    return filterType.includes(item.category);
-  })
-  .filter((item) => {
-    if (filterPrice === "") return true;
-    const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
-    return item.price >= minPrice && item.price <= maxPrice;
-  })
-  .sort((a, b) => {
-    if (sortPrice === "low-to-high") return a.price - b.price;
-    if (sortPrice === "high-to-low") return b.price - a.price;
-    return 0;
-  }).slice(0, 8);
+  const filteredProducts = product
+    .filter((item) =>
+      item.title.toLowerCase().includes(searchkey.toLowerCase())
+    )
+    .filter((item) => {
+      if (filterType.length === 0) return true;
+      return filterType.includes(item.category);
+    })
+    .filter((item) => {
+      if (filterPrice === "") return true;
+      const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
+      return item.price >= minPrice && item.price <= maxPrice;
+    })
+    .sort((a, b) => {
+      if (sortPrice === "low-to-high") return a.price - b.price;
+      if (sortPrice === "high-to-low") return b.price - a.price;
+      return 0;
+    })
+    .slice(0, 8);
 
   return (
-    <section className="text-gray-600 body-font">
+    <section className="body-font">
       <div className="container px-5 py-8 md:py-16 mx-auto">
         {productLoading ? (
-          // <div className="flex justify-center items-center h-64">
-          //   {/* <Loader /> */}
-          // </div>
           <ProductSkeleton />
         ) : (
           <>
@@ -138,122 +55,14 @@ const filteredProducts = product
             </div>
 
             <div className="flex flex-wrap -m-4">
-              {filteredProducts.map((item, index) => {
-                const { title, price, imageUrl,  discount = 0, category, description, id } =
-                  item;
-                // const finalPrice = price - (price * discount) / 100;
-                const finalPrice = Math.round(price - (price * discount) / 100);
-                const isExpanded = showMoreIndex[index];
-
-                return (
-                  <div
-                    className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg"
-                    key={index}
-                  >
-                    <div
-                      className={`border-2 hover:shadow-2xl transition-shadow duration-300 ease-in-out 
-    ${
-      mode === "dark"
-        ? "bg-gray-800 hover:shadow-gray-900" // dark mode shadow
-        : "border-gray-200 hover:shadow-gray-100" // light mode shadow
-    } 
-    border-opacity-60 rounded-2xl overflow-hidden`}
-                    >
-                      <div
-                        onClick={() => navigate(`/productinfo/${item.id}`)}
-                        className="flex justify-center cursor-pointer bg-white relative"
-                      >
-                          {/* 🔥 Discount badge */}
-                {discount > 0 && (
-                  <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">
-                    {discount}% OFF
-                  </span>
-                )}
-                                      {/* <img
-                          className="rounded-2xl w-full h-64 p-2 object-contain hover:scale-105 transition-transform duration-300 ease-in-out"
-                          src={imageUrl}
-                          loading="lazy" 
-                          alt="product"
-                        /> */}
-                        <ImageWithLoader src={imageUrl} alt="product" />
-                      </div>
-
-                      <div className="p-5 border-t-2 flex flex-col">
-                        <h2
-                          className={`tracking-widest text-xs title-font font-medium text-gray-400 mb-1 ${
-                            mode === "dark" ? "text-white" : ""
-                          }`}
-                        >
-                          {category}
-                        </h2>
-                        <h1
-                          className={`title-font text-lg font-medium mb-3 ${
-                            mode === "dark" ? "text-white" : "text-gray-900"
-                          }`}
-                        >
-                          {title}
-                        </h1>
-
-                        {/* <p
-                          className={`leading-relaxed mb-3 ${
-                            mode === "dark" ? "text-white" : ""
-                          }`}
-                        >
-                          ₹ {price}
-                        </p> */}
-                        <div className="flex items-center gap-2 mb-3">
-  <span className="text-green-600 font-bold">
-    ₹ {finalPrice}
-  </span>
-
-  {discount > 0 && (
-    <>
-      <span className="line-through text-gray-400">
-        ₹ {price}
-      </span>
-      <span className="text-red-500 text-sm font-semibold">
-        {discount}% OFF
-      </span>
-    </>
-  )}
-</div>
-
-                        <div
-                          className={`overflow-hidden transition-max-height duration-500 ease-in-out ${
-                            isExpanded ? "max-h-[600px]" : "max-h-0"
-                          }`}
-                        >
-                          <p
-                            className={`leading-relaxed mb-3 ${
-                              mode === "dark" ? "text-white" : ""
-                            }`}
-                          >
-                            {description}
-                          </p>
-                        </div>
-
-                        <div className="flex justify-between mt-3">
-                          <button
-                            onClick={() => addCart(item)}
-                            type="button"
-                            className="focus:outline-none text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full py-2 mr-2"
-                          >
-                            Add To Cart
-                          </button>
-                          <button
-                            onClick={() => {
-                              toggleShowMore(index);
-                            }}
-                            className="text-gray-600 hover:text-blue-600 font-medium text-sm"
-                          >
-                            {isExpanded ? "See Less" : "See More"}
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {filteredProducts.map((item, index) => (
+                <SingleProductCard
+                  key={index}
+                  item={item}
+                  expandedId={expandedId}
+                  setExpandedId={setExpandedId}
+                />
+              ))}
             </div>
           </>
         )}

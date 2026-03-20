@@ -1,16 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { MyContext } from "../../context api/myContext";
 import Filter from "../../components/filter/Filter";
 import Layout from "../../components/layout/Layout";
-import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../redux/cartSlice";
-import ProductCard from "../../components/productCard/ProductCard";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
 import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
-import Loader from "../../components/loader/Loader";
-// import ProductCard from "../../components/productCard/ProductCard";
 import ProductSkeleton from "../../components/loader/ProductSkeleton";
+import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 
 function Allproducts() {
@@ -24,61 +18,20 @@ function Allproducts() {
     sortPrice,
      productLoading,
   } = useContext(MyContext);
-  const [showMoreIndex, setShowMoreIndex] = useState({});
-  const [visibleProducts, setVisibleProducts] = useState(8); // Start with 8 products
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 8;
+  const [expandedId, setExpandedId] = useState(null);
+  const productsRef = useRef(null);
 
-  const toggleShowMore = (index) => {
-    setShowMoreIndex((prevState) => ({
-      ...prevState,
-      [index]: !prevState[index],
-    }));
-  };
-
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart);
-  console.log(cartItems);
-  const navigate = useNavigate(); // Use the hook for navigation
-
-  const addCart = (product) => {
-    const isProductInCart = cartItems.some((item) => item.id === product.id);
-    if (isProductInCart) {
-      toast.info(`Product is already in your cart!`, {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "🗑️",
-      });
-    } else {
-      const serializedProduct = {
-        ...product,
-        quantity: 1,
-        time: product.time?.seconds ?? Date.now(),
-      };
-      dispatch(addToCart(serializedProduct));
-      toast.success("Product added to cart!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "🗑️",
-      });
+  useEffect(() => {
+    if (productsRef.current) {
+      productsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  };
-
-  // useEffect(() => {
-  //   // localStorage.setItem('cart', JSON.stringify(cartItems));
-  // }, [cartItems]);
+    setExpandedId(null);
+  }, [currentPage]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // scroll ke liye top pe visit hoga is se.
   }, []);
 
   // Apply filters
@@ -104,12 +57,13 @@ function Allproducts() {
     return 0;
   });
 
-  // ...existing code...
-  console.log("Products from context:", product);
-  // ...existing code...
-  const loadMoreProducts = () => {
-    setVisibleProducts((prev) => prev + 4); // Load 4 more products on click
-  };
+  // Pagination calculations
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <Layout>
@@ -123,7 +77,7 @@ function Allproducts() {
               <ProductSkeleton />
           ) : (
             <>
-              <div className="lg:w-1/2 w-full mb-6 lg:mb-10">
+              <div ref={productsRef} className="lg:w-1/2 w-full mb-6 lg:mb-10">
                 <h1
                   className={`sm:text-3xl text-2xl font-medium title-font mb-2 ${
                     mode === "dark" ? "text-white" : "text-gray-900"
@@ -135,112 +89,58 @@ function Allproducts() {
               </div>
 
               <div className="flex flex-wrap -m-4">
-                {filteredProducts
-                  .slice(0, visibleProducts)
-                  .map((item, index) => {
-                    const {
-                      title,
-                      price,
-                      imageUrl,
-                      category,
-                      description,
-                      id,
-                    } = item;
-                    const isExpanded = showMoreIndex[index];
-
-                    return (
-                      <div
-                        className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg"
-                        key={index}
-                      >
-                        <div
-                          className={`border-2 hover:shadow-gray-100 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${
-                            mode === "dark" ? "bg-gray-800" : "border-gray-200"
-                          } border-opacity-60 rounded-2xl overflow-hidden`}
-                        >
-                          <div
-                            onClick={() => navigate(`/productinfo/${item.id}`)}
-                            className="flex justify-center cursor-pointer bg-white"
-                          >
-                            <img
-                              className="rounded-2xl w-full h-64 p-2 object-contain hover:scale-105 transition-transform duration-300 ease-in-out"
-                              src={imageUrl}
-                              alt="product"
-                              loading="lazy" 
-                            />
-                          </div>
-
-                          <div className="p-5 border-t-2 flex flex-col">
-                            <h2
-                              className={`tracking-widest text-xs title-font font-medium text-gray-400 mb-1 ${
-                                mode === "dark" ? "text-white" : ""
-                              }`}
-                            >
-                              {category}
-                            </h2>
-                            <h1
-                              className={`title-font text-lg font-medium mb-3 ${
-                                mode === "dark" ? "text-white" : "text-gray-900"
-                              }`}
-                            >
-                              {title}
-                            </h1>
-
-                            <p
-                              className={`leading-relaxed mb-3 ${
-                                mode === "dark" ? "text-white" : ""
-                              }`}
-                            >
-                              ₹ {price}
-                            </p>
-
-                            <div
-                              className={`overflow-hidden transition-max-height duration-500 ease-in-out ${
-                                isExpanded ? "max-h-[600px]" : "max-h-0"
-                              }`}
-                            >
-                              <p
-                                className={`leading-relaxed mb-3 ${
-                                  mode === "dark" ? "text-white" : ""
-                                }`}
-                              >
-                                {description}
-                              </p>
-                            </div>
-
-                            <div className="flex justify-between mt-3">
-                              <button
-                                onClick={() => addCart(item)}
-                                type="button"
-                                className="focus:outline-none text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full py-2 mr-2"
-                              >
-                                Add To Cart
-                              </button>
-                              <button
-                                onClick={() => {
-                                  toggleShowMore(index);
-                                }}
-                                className="text-gray-600 hover:text-blue-600 font-medium text-sm"
-                              >
-                                {isExpanded ? "See Less" : "See More"}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                {currentProducts.map((item, index) => (
+                  <SingleProductCard key={index} item={item} expandedId={expandedId} setExpandedId={setExpandedId} />
+                ))}
               </div>
 
-              {visibleProducts < filteredProducts.length && (
-                <div className="flex justify-center mt-6">
-                  <button
-                    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out"
-                    onClick={loadMoreProducts}
-                  >
-                    Load more
-                  </button>
-                </div>
+              {totalPages > 1 && (
+                <>
+                  <p className="text-center text-sm text-gray-500 mt-4">
+                    Page <span className="font-semibold">{currentPage}</span> of{" "}
+                    <span className="font-semibold">{totalPages}</span>
+                  </p>
+
+                  <div className="flex justify-center items-center gap-2 mt-4 flex-wrap">
+                    <button
+                      disabled={currentPage === 1}
+                      onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                        currentPage === 1
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-blue-600 text-white hover:bg-blue-700 shadow"
+                      }`}
+                    >
+                      Previous
+                    </button>
+
+                    {Array.from({ length: totalPages }, (_, i) => (
+                      <button
+                        key={i + 1}
+                        onClick={() => setCurrentPage(i + 1)}
+                        className={`px-3 py-2 rounded-xl text-sm font-medium transition ${
+                          currentPage === i + 1
+                            ? "bg-blue-600 text-white shadow"
+                            : "bg-gray-100 hover:bg-gray-200"
+                        }`}
+                      >
+                        {i + 1}
+                      </button>
+                    ))}
+
+                    <button
+                      disabled={currentPage === totalPages}
+                      onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
+                        currentPage === totalPages
+                          ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          : "bg-blue-600 text-white hover:bg-blue-700 shadow"
+                      }`}
+                    >
+                      Next
+                    </button>
+                  </div>
+                </>
               )}
             </>
           )}
