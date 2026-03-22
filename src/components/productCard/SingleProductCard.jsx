@@ -9,7 +9,10 @@ import { saveCart } from "../../pages/cart/cartService";
 
 function SingleProductCard({ item, expandedId, setExpandedId }) {
   const { mode } = useContext(MyContext);
-  const isExpanded = expandedId === item.id;
+  
+  // 👉 Fallback to title if id is missing to prevent all cards matching 'undefined === undefined'
+  const uniqueId = item.id || item.title; 
+  const isExpanded = expandedId !== null && expandedId === uniqueId;
   
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
@@ -56,7 +59,7 @@ function SingleProductCard({ item, expandedId, setExpandedId }) {
   };
 
   return (
-    <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg">
+    <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg self-start">
       <div
         className={`border-2 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${
           mode === "dark"
@@ -148,7 +151,7 @@ function SingleProductCard({ item, expandedId, setExpandedId }) {
                 </button>
               )}
               <button
-                onClick={() => setExpandedId(isExpanded ? null : item.id)}
+                onClick={() => setExpandedId(isExpanded ? null : uniqueId)}
                 className={`font-medium text-[11px] whitespace-nowrap px-3 py-2 rounded-lg transition-colors border ${
                   mode === 'dark' ? 'text-gray-300 border-gray-600 hover:bg-gray-700' : 'text-gray-600 border-gray-200 hover:bg-gray-100'
                 }`}

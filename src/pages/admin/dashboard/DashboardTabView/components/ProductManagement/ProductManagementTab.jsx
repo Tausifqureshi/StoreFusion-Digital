@@ -1,0 +1,174 @@
+import React, { useState, useMemo } from 'react';
+import { FaPlus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+
+// Import subcomponents
+import SummaryCards from './SummaryCards';
+import ProductFilters from './ProductFilters';
+import ProductGrid from './ProductGrid';
+import ProductPagination from './ProductPagination';
+
+const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, deleteProduct }) => {
+  const navigate = useNavigate();
+  
+  // State for Filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterCategory, setFilterCategory] = useState("All Categories");
+  const [filterStatus, setFilterStatus] = useState("All Status");
+  const [sortOrder, setSortOrder] = useState("Name A-Z");
+
+  // State for Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8; // Match design density
+
+  // 👉 saari unique categories filter kar rahe hain taaki dropdown me dikha sakein
+  const availableProductCategories = useMemo(() => {
+    // 👉 "All Categories" ke saath product array se unique categories nikal kar ek array bana rahe hain
+    return ["All Categories", ...new Set(product.map(p => p.category).filter(Boolean))];
+  }, [product]);
+
+  // 👉 backend order API state se total sales count process kar rahe hain har product ke liye
+  const productSalesCountMap = useMemo(() => {
+    // 👉 ek empty object bana rahe hain (map) jo har product id ke acche total quantity store karega
+    const map = {};
+    
+    // 👉 har ek order (jo backend se aya hai) us par loop chala rahe hain
+    order.forEach(o => {
+      // 👉 agar order ke andar cartItems hain aur wo array hai, toh hi process karo
+      if (o.cartItems && Array.isArray(o.cartItems)) {
+        o.cartItems.forEach(item => {
+          // 👉 product id check karte hain
+          if (item.id) {
+            // 👉 us product ki pehle se jo sales hui thi (map[item.id]), usme nayi quantity add kardo (warna 1 add kardo)
+            map[item.id] = (map[item.id] || 0) + (Number(item.quantity) || 1);
+          }
+        });
+      }
+    });
+    // 👉 final object map wapas kar rahe hain, jaise: { "product1_id": 5, "product2_id": 12 }
+    return map;
+  }, [order]);
+
+  // 👉 filtering aur sorting ka combined processing yaha ho raha hai
+  const filteredAndSortedProducts = useMemo(() => {
+    // 👉 step 1: base products array me real sales data map inject kar rahe hain
+    const productsWithSalesData = product.map(p => ({
+      ...p,
+      sales: productSalesCountMap[p.id] || 0
+    }));
+
+    // 👉 step 2: enriched array ko filter aur phir sort karte hain
+    return productsWithSalesData
+      .filter((p) => {
+        // 👉 search query check karte hain product title ya category me
+        const matchesSearch = p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                              p.category?.toLowerCase().includes(searchQuery.toLowerCase());
+        
+        // 👉 dropdown category check
+        const matchesCategory = filterCategory === "All Categories" || p.category === filterCategory;
+        
+        // 👉 stock greater than 0 hai toh product active hai
+        const isActive = Number(p.stock) > 0;
+        const matchesStatus = filterStatus === "All Status" || 
+                             (filterStatus === "Active" && isActive) || 
+                             (filterStatus === "Out of Stock" && !isActive);
+                             
+        // 👉 teeno conditions true honi chahiye product ko grid me dikhane ke liye
+        return matchesSearch && matchesCategory && matchesStatus;
+      })
+      .sort((a, b) => {
+        // 👉 dropdown ki sorting choices handle kar rahe hain
+        if (sortOrder === "Name A-Z") return a.title?.localeCompare(b.title || "");
+        if (sortOrder === "Name Z-A") return b.title?.localeCompare(a.title || "");
+        
+        // 👉 price string se currency symbols aur commas nikal kar float me badal rahe hain
+        const priceA = Number(String(a.price || "0").replace(/[^0-9.-]+/g, ""));
+        const priceB = Number(String(b.price || "0").replace(/[^0-9.-]+/g, ""));
+
+        // 👉 price low to high ya high to low sort kar rahe hain
+        if (sortOrder === "Price Low to High") return priceA - priceB;
+        if (sortOrder === "Price High to Low") return priceB - priceA;
+        
+        return 0; // 👉 default
+      });
+  }, [product, order, productSalesCountMap, searchQuery, filterCategory, filterStatus, sortOrder]);
+
+  // 👉 pagination ka logic - current page ke items calculate karna
+  const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
+  
+  // 👉 array slice kar rahe hain taaki sirf active page ke exactly selected items grid me bheje jaayein
+  const productsOnCurrentPage = filteredAndSortedProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // If filter changes, reset to page 1
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterCategory, filterStatus, sortOrder]);
+
+  return (
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+      
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+        <div>
+          <h1 className={`text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            Product Management
+          </h1>
+          <p className={`text-sm font-bold mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            Manage your inventory with advanced tools and analytics
+          </p>
+        </div>
+        <button 
+          onClick={() => navigate('/addproduct')}
+          className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-500/20 transition-all active:scale-95"
+        >
+          <FaPlus size={14} /> Add Product
+        </button>
+      </div>
+
+      {/* Summary Cards */}
+      <SummaryCards 
+        isDark={isDark} 
+        product={product} 
+        filteredAndSortedProducts={filteredAndSortedProducts} 
+      />
+
+      {/* Search & Filters */}
+      <ProductFilters 
+        isDark={isDark}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        filterCategory={filterCategory}
+        setFilterCategory={setFilterCategory}
+        filterStatus={filterStatus}
+        setFilterStatus={setFilterStatus}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        availableProductCategories={availableProductCategories}
+      />
+
+      {/* Product Grid */}
+      <ProductGrid 
+        productsOnCurrentPage={productsOnCurrentPage} 
+        isDark={isDark} 
+        edithandle={edithandle} 
+        deleteProduct={deleteProduct} 
+      />
+
+      {/* Pagination */}
+      <ProductPagination 
+        isDark={isDark}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={totalPages}
+        itemsPerPage={itemsPerPage}
+        totalItems={filteredAndSortedProducts.length}
+      />
+
+    </div>
+  );
+};
+
+export default ProductManagementTab;
