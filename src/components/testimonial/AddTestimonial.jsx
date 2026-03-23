@@ -63,9 +63,8 @@ import { FaStar } from "react-icons/fa";
 const Star = ({ filled, onClick }) => (
   <FaStar
     onClick={onClick}
-    className={`w-6 h-6 cursor-pointer transition-colors ${
-      filled ? "text-orange-500" : "text-gray-200 dark:text-gray-700"
-    }`}
+    className={`w-6 h-6 cursor-pointer transition-colors ${filled ? "text-orange-500" : "text-gray-200 dark:text-gray-700"
+      }`}
   />
 );
 
@@ -74,7 +73,7 @@ function AddTestimonial({ productId = "" }) {
   const [rating, setRating] = useState(0);
   const isDark = mode === "dark";
 
-  useEffect(() => {
+  useEffect(() => { //ab tu edit mode me jata hai (testimonial edit karne) Tab kya hona chahiye UI me?stars already filled dikhne chahiye (4 stars)
     if (testimonialForm?.rating) setRating(testimonialForm.rating);
   }, [testimonialForm]);
 
@@ -98,7 +97,7 @@ function AddTestimonial({ productId = "" }) {
 
   return (
     <div className={`w-full max-w-lg mx-auto p-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-200 shadow-sm"}`}>
-      
+
       {/* Sharp Header - Your Fonts */}
       <div className="mb-6 border-b pb-4 border-gray-100 dark:border-gray-800">
         <h2 className={`text-xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
@@ -108,7 +107,7 @@ function AddTestimonial({ productId = "" }) {
       </div>
 
       <div className="space-y-5">
-        
+
         {/* Rating Section - Standard Amazon Style */}
         <div>
           <h3 className="text-[10px] font-black uppercase tracking-widest mb-2 opacity-70">Overall Rating</h3>

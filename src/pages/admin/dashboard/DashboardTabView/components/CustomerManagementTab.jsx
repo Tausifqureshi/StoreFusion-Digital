@@ -1,244 +1,240 @@
-import React, { useState } from 'react';
-import { FaSearch, FaUser, FaUserShield, FaUserPlus, FaUserCheck, FaEllipsisH, FaEnvelope, FaBan, FaTrash } from 'react-icons/fa';
+import React, { useState, useMemo, useEffect } from 'react';
+import { FaSearch, FaUserAltSlash, FaEnvelope, FaPhone, FaEllipsisH, FaPlus } from 'react-icons/fa';
 
-const CustomerManagementTab = ({ isDark, user }) => {
+const CustomerManagementTab = ({ isDark, user = [] }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeDropdown, setActiveDropdown] = useState(null);
-
-  // New States for Filters
   const [filterRole, setFilterRole] = useState("All Roles");
   const [sortOrder, setSortOrder] = useState("Newest First");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 8;
 
-  // Dynamically extract unique roles if they exist
-  const uniqueRoles = ["All Roles", ...new Set(user.map(u => (u.role === 'admin' || u.email?.includes('admin') ? 'admin' : 'user')))];
+  // 👉 filter ki hui user list nikal rahe hain (search aur dropdowns ke hisab se)
+  const filteredUsers = useMemo(() => {
+    return user
+      .filter((u) => {
+        // 👉 agar user ka data poora khali hai (ghost user) to usko skip kar do
+        if (!u.name && !u.email && !u.phone) return false;
 
-  const filteredUsers = user
-    .filter((u) => {
-      const matchesSearch = u.name?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            u.email?.toLowerCase().includes(searchQuery.toLowerCase());
-                            
-      const userRole = u.role === 'admin' || u.email?.includes('admin') ? 'admin' : 'user';
-      const matchesRole = filterRole === "All Roles" || userRole === filterRole.toLowerCase();
-      
-      return matchesSearch && matchesRole;
-    })
-    .sort((a, b) => {
-      const dateA = new Date(a.createdAt || a.date || 0).getTime();
-      const dateB = new Date(b.createdAt || b.date || 0).getTime();
-      
-      if (sortOrder === "Newest First") return dateB - dateA;
-      if (sortOrder === "Oldest First") return dateA - dateB;
-      if (sortOrder === "Name A-Z") return a.name?.localeCompare(b.name);
-      return 0;
-    });
+        // 👉 agar search box me kuch likha hai to match check kar rahe hain
+        if (searchQuery) {
+          const s = searchQuery.toLowerCase();
+          const matchesSearch = u.name?.toLowerCase().includes(s) || u.email?.toLowerCase().includes(s) || u.phone?.includes(s);
+          // 👉 agar match nahi hua to user ko list se hata do
+          if (!matchesSearch) return false;
+        }
 
-  const totalUsers = user.length;
-  const adminUsers = user.filter(u => u.role === 'admin').length || 1; // mock 1 admin if none explicitly
-  const activeUsers = Math.max(0, totalUsers - 2); // mock actively logged in
-  const newUsers = Math.min(5, totalUsers);
+        // 👉 role filter check kar rahe hain (Admin ya User)
+        if (filterRole !== "All Roles") {
+          // 👉 agar role nahi hai to email check karke role assign kar rahe hain
+          const roleName = u.role || (u.email?.includes('admin') ? 'Admin' : 'User');
+          if (roleName.toLowerCase() !== filterRole.toLowerCase()) return false;
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        // 👉 Newest ya Oldest ke base par list ko sort kar rahe hain
+        const dateA = a.time?.seconds ? a.time.seconds * 1000 : new Date(a.createdAt || a.date || 0).getTime();
+        const dateB = b.time?.seconds ? b.time.seconds * 1000 : new Date(b.createdAt || b.date || 0).getTime();
+        if (sortOrder === "Newest First") return dateB - dateA;
+        if (sortOrder === "Oldest First") return dateA - dateB;
+        return 0;
+      });
+  }, [user, searchQuery, filterRole, sortOrder]);
+
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const usersOnCurrentPage = filteredUsers.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterRole, sortOrder]);
+
+  const startItem = (currentPage - 1) * itemsPerPage + 1;
+  const endItem = Math.min(currentPage * itemsPerPage, filteredUsers.length);
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full max-w-[1200px] mx-auto">
+
       {/* --- HEADER SECTION --- */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
-          <h1 className={`text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            Customer Directory
+          <h1 className={`text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-gray-800'}`}>
+            User Management
           </h1>
-          <p className={`text-sm font-bold mt-2 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-            Manage your registered users and their account information
+          <p className={`text-sm mt-1 font-semibold ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            Manage your users and their permissions
           </p>
         </div>
-        <button className="flex items-center gap-2 bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-green-500/20 transition-all active:scale-95">
-          <FaUserPlus size={14} /> Add Customer
+
+        <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-md transition-all active:scale-95">
+          <FaPlus size={14} /> Add User
         </button>
       </div>
 
-      {/* --- SUMMARY CARDS ROW --- */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-        <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#eff6ff] text-[#1e40af]'}`}>
-          <div>
-            <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Total Users</h3>
-            <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-blue-900'}`}>{totalUsers}</p>
-          </div>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl bg-blue-500 text-white shadow-lg shadow-blue-500/30 shrink-0">
-            <FaUser />
-          </div>
-        </div>
+      {/* --- SEARCH & FILTERS --- */}
+      <div className={`p-4 rounded-3xl mb-8 flex flex-col md:flex-row items-center justify-start gap-4 transition-all ${isDark ? 'bg-[#1e293b] border border-gray-800 shadow-lg' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
 
-        <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#ecfdf5] text-[#047857]'}`}>
-          <div>
-            <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-green-400' : 'text-green-600'}`}>Active Users</h3>
-            <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-green-900'}`}>{activeUsers}</p>
-          </div>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl bg-green-500 text-white shadow-lg shadow-green-500/30 shrink-0">
-            <FaUserCheck />
-          </div>
-        </div>
-
-        <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#faf5ff] text-[#6d28d9]'}`}>
-          <div>
-            <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>New (30d)</h3>
-            <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-purple-900'}`}>{newUsers}</p>
-          </div>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl bg-purple-500 text-white shadow-lg shadow-purple-500/30 shrink-0">
-            <FaUserPlus />
-          </div>
-        </div>
-
-        <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#fff7ed] text-[#c2410c]'}`}>
-          <div>
-            <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-orange-400' : 'text-orange-600'}`}>Admins</h3>
-            <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-orange-900'}`}>{adminUsers}</p>
-          </div>
-          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl bg-orange-500 text-white shadow-lg shadow-orange-500/30 shrink-0">
-            <FaUserShield />
-          </div>
-        </div>
-      </div>
-
-      {/* --- SEARCH & FILTER ROW --- */}
-      <div className={`p-4 rounded-full flex flex-col md:flex-row items-center justify-between gap-4 mb-8 transition-all ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
-        <div className="relative w-full md:w-1/2 flex items-center">
-          <FaSearch className={`absolute left-4 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+        {/* 👉 Search Input Pill */}
+        <div className="relative w-full md:max-w-md flex items-center shrink-0">
+          <FaSearch className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} size={14} />
           <input
             type="text"
-            placeholder="Search customers by name, email..."
+            placeholder="Search users by name or email..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full pl-12 pr-4 py-3 rounded-full text-sm font-bold outline-none transition-all ${
-              isDark 
-                ? 'bg-[#131921] text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500/50' 
-                : 'bg-gray-50 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-blue-500/20'
-            }`}
+            className={`w-full pl-11 pr-4 py-3 rounded-2xl text-sm font-semibold outline-none transition-all ${isDark
+              ? 'bg-[#131921] border border-gray-700 text-white placeholder-gray-500 focus:border-blue-500/50 focus:bg-[#1a222d]'
+              : 'bg-gray-50/50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:border-blue-400/50 focus:bg-white'
+              }`}
           />
         </div>
-        
-        <div className="flex w-full md:w-auto overflow-x-auto custom-scrollbar gap-3 hide-scrollbar">
-          
-          {/* Role Dropdown */}
-          <div className="relative shrink-0">
-            <select
-              value={filterRole}
-              onChange={(e) => setFilterRole(e.target.value)}
-              className={`appearance-none px-6 py-3 pr-10 rounded-full text-sm font-bold transition-all outline-none cursor-pointer flex items-center gap-2 ${isDark ? 'bg-[#131921] text-gray-300 hover:bg-gray-800 focus:ring-2 focus:ring-green-500/50' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 focus:ring-2 focus:ring-green-500/20'}`}
-            >
-              <option value="All Roles">All Roles</option>
-              <option value="Admin">Admin</option>
-              <option value="User">User</option>
-            </select>
-            <div className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] opacity-60 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>▼</div>
-          </div>
 
-          {/* Sorting Dropdown */}
-          <div className="relative shrink-0">
-            <select
-              value={sortOrder}
-              onChange={(e) => setSortOrder(e.target.value)}
-              className={`appearance-none px-6 py-3 pr-10 rounded-full text-sm font-bold transition-all outline-none cursor-pointer flex items-center gap-2 ${isDark ? 'bg-[#131921] text-gray-300 hover:bg-gray-800 focus:ring-2 focus:ring-green-500/50' : 'bg-gray-50 text-gray-600 hover:bg-gray-100 focus:ring-2 focus:ring-green-500/20'}`}
-            >
-              <option value="Newest First">Newest First</option>
-              <option value="Oldest First">Oldest First</option>
-              <option value="Name A-Z">Name A-Z</option>
-            </select>
-            <div className={`pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[10px] opacity-60 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>▼</div>
+        {/* 👉 Role Dropdown */}
+        <div className="relative w-full md:w-auto shrink-0">
+          <select
+            value={filterRole}
+            onChange={(e) => setFilterRole(e.target.value)}
+            className={`w-full md:w-auto appearance-none pl-4 pr-10 py-3 rounded-xl text-sm font-bold outline-none cursor-pointer transition-all ${isDark
+              ? 'bg-[#131921] border-gray-700 text-gray-300 hover:border-gray-600 focus:border-blue-500/50'
+              : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300 focus:border-blue-400/50'
+              }`}
+          >
+            <option value="All Roles">All Roles</option>
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+          <div className={`absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+            ▼
           </div>
+        </div>
 
+        {/* 👉 Sort Dropdown */}
+        <div className="relative w-full md:w-auto shrink-0">
+          <select
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className={`w-full md:w-auto appearance-none pl-4 pr-10 py-3 rounded-xl text-sm font-bold outline-none cursor-pointer transition-all ${isDark
+              ? 'bg-[#131921] border-gray-700 text-gray-300 hover:border-gray-600 focus:border-blue-500/50'
+              : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300 focus:border-blue-400/50'
+              }`}
+          >
+            <option value="Newest First">Newest First</option>
+            <option value="Oldest First">Oldest First</option>
+          </select>
+          <div className={`absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+            ▼
+          </div>
         </div>
       </div>
 
-      {/* --- CUSTOMERS LIST VIEW --- */}
-      <div className={`rounded-3xl p-6 md:p-8 transition-all duration-300 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
-        <h2 className={`text-xl font-black tracking-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>Customers ({filteredUsers.length})</h2>
-        
-        <div className="flex flex-col gap-4">
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((u, i) => {
-              const isAdmin = u.role === 'admin' || u.email?.includes('admin');
+      {/* --- LIST VIEW --- */}
+      <div className={`w-full rounded-2xl p-6 transition-all duration-300 mb-8 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <h2 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            All Users ({filteredUsers.length})
+          </h2>
+        </div>
+
+        <div className="flex flex-col gap-3">
+          {usersOnCurrentPage.length > 0 ? (
+            usersOnCurrentPage.map((u, i) => {
+              const itemBorder = isDark ? 'bg-[#131921]/50 border-gray-800' : 'bg-gray-50 border-gray-100/50 hover:bg-white hover:shadow-sm';
+
+              // 👉 role decide kar rahe hain aur uske hisab se purple ya blue color de rahe hain
+              const roleName = u.role || (u.email?.includes('admin') ? 'Admin' : 'User');
+              const roleBg = roleName.toLowerCase() === 'admin' ? '#8b5cf6' : '#3b82f6'; 
+
+              // 👉 avatar ke liye first letter nikal rahe hain, agar missing hai to pura blank rahega
+              const initial = u.name ? u.name.charAt(0).toUpperCase() : (u.email ? u.email.charAt(0).toUpperCase() : "");
+
+              // 👉 backend se proper date nikal rahe hain
+              const displayDate = u.date || (u.time ? new Date(u.time.seconds * 1000).toLocaleDateString('en-US', {month: 'short', day: 'numeric', year:'numeric'}) : "");
+
+              // 👉 status set kar rahe hain, agar backend me nahi hai to by default 'Active' rakhega
+              const statusText = u.status || "Active";
+
               return (
-              <div key={i} className={`group relative rounded-2xl p-4 sm:p-6 transition-all duration-300 flex flex-col xl:flex-row xl:items-center justify-between gap-6 border ${isDark ? 'bg-[#131921]/50 border-gray-800 hover:bg-[#131921]' : 'bg-gray-50 border-gray-100/50 hover:bg-white hover:shadow-lg hover:border-gray-200'}`}>
-                
-                {/* Left: Avatar & Main Info */}
-                <div className="flex items-center gap-4 min-w-[300px]">
-                  <div className="w-14 h-14 rounded-full flex shrink-0 items-center justify-center text-xl font-extrabold text-white bg-gradient-to-br from-indigo-500 to-blue-500 shadow-md">
-                    {u.name?.charAt(0).toUpperCase() || "C"}
-                  </div>
-                  <div>
-                    <h3 className={`text-base font-black ${isDark ? 'text-white' : 'text-gray-900'}`}>{u.name || "Customer User"}</h3>
-                    <p className={`text-sm font-semibold mt-0.5 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{u.email}</p>
-                  </div>
-                </div>
-
-                {/* Middle Grid: Stats */}
-                <div className="flex-1 grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 items-center">
-                  
-                  <div className="flex flex-col items-start">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Role</span>
-                    {isAdmin ? (
-                      <span className={`px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isDark ? 'bg-orange-500/10 text-orange-400 border border-orange-500/20' : 'bg-orange-50 text-orange-600'}`}>
-                        <FaUserShield size={10} /> Admin
-                      </span>
-                    ) : (
-                      <span className={`px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 ${isDark ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' : 'bg-blue-50 text-blue-600'}`}>
-                        <FaUser size={10} /> Customer
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Total Spent</span>
-                    <span className={`text-lg font-black tracking-tighter ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                      ${Math.floor(Math.random() * 5000) + 120} {/* Mock Data */}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-col">
-                    <span className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>Joined</span>
-                    <span className={`text-sm font-bold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      {u.createdAt ? new Date(u.createdAt).toISOString().split('T')[0] : '2024-01-15'}
-                    </span>
-                  </div>
-
-                </div>
-
-                {/* Right: Actions */}
-                <div className="relative shrink-0 flex items-center justify-end">
-                  <button 
-                    onClick={() => setActiveDropdown(activeDropdown === i ? null : i)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${isDark ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-200 text-gray-600'}`}
-                  >
-                    <FaEllipsisH />
-                  </button>
-                  
-                  {activeDropdown === i && (
-                    <div className={`absolute top-full right-0 mt-2 w-48 rounded-2xl shadow-2xl overflow-hidden z-20 animate-in fade-in slide-in-from-top-2 ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-white border border-gray-100'}`}>
-                       <button className={`w-full px-4 py-3 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-50'}`}>
-                         <FaEnvelope size={14} /> Send Email
-                       </button>
-                       <button className={`w-full px-4 py-3 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-orange-400 hover:bg-gray-800' : 'text-orange-500 hover:bg-orange-50'}`}>
-                         <FaBan size={14} /> Suspend Account
-                       </button>
-                       <button className={`w-full px-4 py-3 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-red-400 hover:bg-gray-800' : 'text-red-500 hover:bg-red-50'}`}>
-                         <FaTrash size={14} /> Delete User
-                       </button>
+                <div key={u.id || i} className={`relative p-4 md:p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border transition-all ${itemBorder}`}>
+                  <div className="flex items-center gap-4 flex-1">
+                    <div className={`w-12 h-12 rounded-full flex shrink-0 items-center justify-center text-lg font-bold border ${isDark ? 'bg-gray-800 text-gray-300 border-gray-700' : 'bg-gray-100 text-gray-600 border-transparent'}`}>
+                      {initial}
                     </div>
-                  )}
+                    <div>
+                      <h3 className={`text-[15px] font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                        {u.name}
+                      </h3>
+                      <div className={`flex flex-wrap items-center gap-3 text-xs mt-1 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                        {u.email && <span className="flex items-center gap-1.5"><FaEnvelope size={10} className="opacity-70" /> {u.email}</span>}
+                        {u.phone && <span className="flex items-center gap-1.5 ml-2"><FaPhone size={10} className="opacity-70" /> {u.phone}</span>}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-6 md:w-auto shrink-0 justify-end">
+                    <span
+                      style={{ backgroundColor: roleBg }}
+                      className="px-3 py-1 rounded-full text-[11px] font-semibold w-16 text-center tracking-wide text-white shadow-sm"
+                    >
+                      {roleName}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-[11px] font-bold w-16 text-center ${isDark ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-[#e6fcf5] text-[#047857]'}`}>
+                      {statusText}
+                    </span>
+                    <span className={`text-[13px] font-medium hidden sm:block ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                      {displayDate}
+                    </span>
+                    <button className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all ${isDark ? 'border-gray-700 text-gray-400 hover:bg-gray-800' : 'border-gray-200 text-gray-500 hover:bg-white shadow-[0_2px_8px_rgba(0,0,0,0.06)]'}`}>
+                      <FaEllipsisH size={14} />
+                    </button>
+                  </div>
                 </div>
-
-              </div>
-            )})
+              )
+            })
           ) : (
-            <div className="py-20 text-center border-2 border-dashed rounded-3xl border-gray-200 dark:border-gray-800">
-              <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
-                <FaUser className={`text-3xl ${isDark ? 'text-gray-600' : 'text-gray-300'}`} />
-              </div>
-              <p className={`text-sm font-black uppercase tracking-widest ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>No customers found.</p>
+            <div className="py-16 flex flex-col items-center justify-center text-center opacity-50">
+              <FaUserAltSlash size={40} className="mb-3 text-gray-400" />
+              <p className={`text-sm font-semibold uppercase tracking-widest ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No users match your criteria.</p>
             </div>
           )}
         </div>
       </div>
 
+      {/* --- PAGINATION --- */}
+      {totalPages > 1 && (
+        <div className={`flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-3xl transition-all duration-300 mb-8 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+          <span className={`text-sm font-medium text-center md:text-left ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+            Showing <span className="font-semibold">{startItem}</span> to <span className="font-semibold">{endItem}</span> of <span className="font-semibold">{filteredUsers.length}</span> users
+          </span>
+          <div className="flex justify-center items-center gap-2 flex-wrap">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${currentPage === 1 ? (isDark ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed') : 'bg-blue-600 text-white hover:bg-blue-700 shadow'}`}
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`px-3 py-2 rounded-xl text-sm font-medium transition ${currentPage === i + 1 ? 'bg-blue-600 text-white shadow' : (isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-800')}`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${currentPage === totalPages ? (isDark ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed') : 'bg-blue-600 text-white hover:bg-blue-700 shadow'}`}
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

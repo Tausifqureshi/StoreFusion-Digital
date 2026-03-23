@@ -7,7 +7,7 @@
 // import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 
-  
+
 // function MyState({ children}) {
 //   const [mode, setMode] = useState("light");
 //   const [loading, setLoading] = useState(false); //loading ke liye.
@@ -33,7 +33,7 @@
 //         year: "numeric",
 //       }
 //     )
-  
+
 //   }) 
 
 //   const navigate = useNavigate();
@@ -57,7 +57,7 @@
 //     try {
 //       // Add product to Firebase
 //       await addDoc(productRef, products);
-      
+
 //       // Show success notification
 //       toast.success("Product added successfully!", {
 //         position: "top-right",
@@ -69,16 +69,16 @@
 //         progress: undefined,
 //         icon: "✅", // Modern success icon
 //       });
-  
+
 //       // Navigate to dashboard after success
 //       navigate('/dashboard');
-  
+
 //       // Fetch updated product data
 //       getProductData();
 //       setLoading(false);
 //     } catch (error) {
 //       console.log("Error adding product:", error);
-  
+
 //       // Show error notification
 //       toast.error("Error adding product. Please try again.", {
 //         position: "top-right",
@@ -92,7 +92,7 @@
 //       });
 //       setLoading(false);
 //     }
-  
+
 //     // Reset form after submission
 //     setProducts({
 //       title: '',
@@ -108,7 +108,7 @@
 //       }),
 //     });
 //   };
-  
+
 //    // ****** get product
 //   const [product, setProduct] = useState([]);
 //    // getProductData.
@@ -180,7 +180,7 @@
 //       })
 //     });
 //   }
-  
+
 //   // Delete Products Function
 //   const deleteProduct = async (item) => {
 //     setLoading(true);
@@ -224,7 +224,7 @@
 //       document.body.style.backgroundColor = "white";
 //     }
 //   };
-   
+
 //   // Get Order Data ke liye ye function
 //  const [order, setOrder] = useState([]);
 //  const getOrderData = async () => {
@@ -253,15 +253,15 @@
 //       if (!orderItem.userid) {
 //         throw new Error('User ID is undefined');
 //       }
-  
+
 //       // Query to find the order by userId
 //       const q = query(
 //         collection(fireDB, "orders"),
 //         where("userid", "==", orderItem.userid) // Use the defined userid
 //       );
-      
+
 //       const querySnapshot = await getDocs(q);
-      
+
 //       if (querySnapshot.empty) {
 //         toast.warning('No order found to cancel.', {
 //           position: "top-right",
@@ -274,7 +274,7 @@
 //         });
 //         return; // Exit if no orders found
 //       }
-  
+
 //       querySnapshot.forEach(async (doc) => {
 //         await deleteDoc(doc.ref);
 //         toast.success('Order cancelled successfully!', {
@@ -288,7 +288,7 @@
 //           icon: "🗑️", // Icon for successful cancellation
 //         });
 //       });
-  
+
 //     } catch (error) {
 //       console.log('Error cancelling order:', error);
 //       toast.error('Order cancellation failed. Please try again.', {
@@ -332,13 +332,13 @@
 //   getUserData();
 
 // }, []);
-  
+
 // //Filter ke liye ye State.
 // const [searchkey, setSearchkey] = useState('');
 // const [filterType, setFilterType] = useState('');
 // const [filterPrice, setFilterPrice] = useState('');
 // const [sortPrice, setSortPrice] = useState('');
-  
+
 //   return (
 //     <MyContext.Provider
 //       value={{
@@ -372,15 +372,15 @@
 
 //       }}
 //     >  
-    
+
 //       {/* <h1>My State</h1> */}
 //       {children}
 //     </MyContext.Provider>
 //   );
 // }
-  
+
 // export default MyState;
- 
+
 
 
 
@@ -408,8 +408,8 @@ function MyState({ children }) {
   const [mode, setMode] = useState("light");
 
   // --- Loaders ---
-  const [initialLoading, setInitialLoading] = useState(true); 
-  const [loading, setLoading] = useState(false); 
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [productLoading, setProductLoading] = useState(false);
   const [orderLoading, setOrderLoading] = useState(false);
   const [userLoading, setUserLoading] = useState(false);
@@ -430,12 +430,12 @@ function MyState({ children }) {
       year: "numeric",
     }),
   });
-const [testimonialForm, setTestimonialForm] = useState({
-  name: "",
-  text: "",
-  img: "",
-  role: "",
-});
+  const [testimonialForm, setTestimonialForm] = useState({
+    name: "",
+    text: "",
+    img: "",
+    role: "",
+  });
 
   const [product, setProduct] = useState([]);
   const [order, setOrder] = useState([]);
@@ -485,11 +485,11 @@ const [testimonialForm, setTestimonialForm] = useState({
     try {
       // await addDoc(collection(fireDB, "products"), products);
       await addDoc(collection(fireDB, "products"), {
-  ...products,
-  price: Number(products.price),
-  discount: Number(products.discount || 0),
-  stock: Number(products.stock || 0),
-});
+        ...products,
+        price: Number(products.price),
+        discount: Number(products.discount || 0),
+        stock: Number(products.stock || 0),
+      });
       toast.success("Product added successfully!", { icon: "✅" });
       getProductData();
       navigate("/dashboard");
@@ -521,166 +521,166 @@ const [testimonialForm, setTestimonialForm] = useState({
     }
   }, []);
 
-//   const addTestimonial = useCallback(async () => {
-//   if (!testimonialForm.name || !testimonialForm.text) {
-//     return toast.error("Please fill all fields");
-//   }
-//   setLoading(true);
-//   try {
-//     await addDoc(collection(fireDB, "testimonials"), {
-//       ...testimonialForm,
-//       time: Timestamp.now(),
-//     });
-//      navigate("/dashboard");
-//     toast.success("Testimonial added");
+  //   const addTestimonial = useCallback(async () => {
+  //   if (!testimonialForm.name || !testimonialForm.text) {
+  //     return toast.error("Please fill all fields");
+  //   }
+  //   setLoading(true);
+  //   try {
+  //     await addDoc(collection(fireDB, "testimonials"), {
+  //       ...testimonialForm,
+  //       time: Timestamp.now(),
+  //     });
+  //      navigate("/dashboard");
+  //     toast.success("Testimonial added");
 
-//     setTestimonialForm({
-//       name: "",
-//       text: "",
-//       img: "",
-//       role: "",
-//     });
-//   } catch (err) {
-//     console.log(err);
-//     toast.error("Error adding testimonial");
-//   } finally {
-//     setLoading(false);
-//   }
-// }, [testimonialForm]);
+  //     setTestimonialForm({
+  //       name: "",
+  //       text: "",
+  //       img: "",
+  //       role: "",
+  //     });
+  //   } catch (err) {
+  //     console.log(err);
+  //     toast.error("Error adding testimonial");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }, [testimonialForm]);
 
 
-//   const getTestimonialData = useCallback(() => {
-//   try {
-//     const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+  //   const getTestimonialData = useCallback(() => {
+  //   try {
+  //     const q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
 
-//     const unsubscribe = onSnapshot(q, (snapshot) => {
-//       const arr = snapshot.docs.map((doc) => ({
-//         id: doc.id,
-//         ...doc.data(),
-//       }));
-//       setTestimonial(arr);
-//     });
+  //     const unsubscribe = onSnapshot(q, (snapshot) => {
+  //       const arr = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setTestimonial(arr);
+  //     });
 
-//     return unsubscribe;
-//   } catch (err) {
-//     console.log(err);
-//   }
-// }, []);
-const addTestimonial = useCallback(async (formData) => {
-  if (!formData.name || !formData.text) return toast.error("Please fill all fields");
-  setLoading(true);
-  try {
-    const avatarId = Math.floor(Math.random() * 100);
-    await addDoc(collection(fireDB, "testimonials"), {
-      ...formData,
-      time: Timestamp.now(),
+  //     return unsubscribe;
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // }, []);
+  const addTestimonial = useCallback(async (formData) => {
+    if (!formData.name || !formData.text) return toast.error("Please fill all fields");
+    setLoading(true);
+    try {
+      const avatarId = Math.floor(Math.random() * 100);
+      await addDoc(collection(fireDB, "testimonials"), {
+        ...formData,
+        time: Timestamp.now(),
         avatarId,     // ⭐ save this
-      gender: formData.gender || "male",
+        gender: formData.gender || "male",
 
-    });
-    toast.success("Testimonial added");
-    setTestimonialForm({ name: "", text: "", img: "", role: ""});
-  } catch (err) {
-    console.log(err);
-    toast.error("Error adding testimonial");
-  } finally {
-    setLoading(false);
-  }
-}, []);
-
-const getTestimonialData = useCallback((productId = null) => {
-  try {
-    let q;
-    if (productId) {
-      q = query(
-        collection(fireDB, "testimonials"),
-        where("productId", "==", productId),
-        orderBy("time", "desc")
-      );
-    } else {
-      q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+      });
+      toast.success("Testimonial added");
+      setTestimonialForm({ name: "", text: "", img: "", role: "" });
+    } catch (err) {
+      console.log(err);
+      toast.error("Error adding testimonial");
+    } finally {
+      setLoading(false);
     }
+  }, []);
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const arr = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setTestimonial(arr);
-    });
+  const getTestimonialData = useCallback((productId = null) => {
+    try {
+      let q;
+      if (productId) {
+        q = query(
+          collection(fireDB, "testimonials"),
+          where("productId", "==", productId),
+          orderBy("time", "desc")
+        );
+      } else {
+        q = query(collection(fireDB, "testimonials"), orderBy("time", "desc"));
+      }
 
-    return unsubscribe;
-  } catch (err) {
-    console.log(err);
-  }
-}, []);
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const arr = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setTestimonial(arr);
+      });
 
-const editTestimonial = useCallback((item) => {
-  setTestimonialForm(item);
-  navigate("/addtestimonial");
-}, [navigate]);
+      return unsubscribe;
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
-const deleteTestimonial = useCallback(async (id) => {
-  setLoading(true);
-  try {
-    await deleteDoc(doc(fireDB, "testimonials", id));
-    toast.success("Testimonial deleted!",{
-      autoClose: 50,
-    });
-    getTestimonialData();
-  } catch (err) {
-    console.log(err);
-    toast.error("Error deleting testimonial");
-  } finally {
-    setLoading(false);
-  }
-}, [getTestimonialData]);
+  const editTestimonial = useCallback((item) => {
+    setTestimonialForm(item);
+    navigate("/addtestimonial");
+  }, [navigate]);
 
-const updateTestimonial = useCallback(async () => {
-  // Check karo ki testimonialForm mein ID hai ya nahi
-  if (!testimonialForm.id) return toast.error("No ID found to update");
+  const deleteTestimonial = useCallback(async (id) => {
+    setLoading(true);
+    try {
+      await deleteDoc(doc(fireDB, "testimonials", id));
+      toast.success("Testimonial deleted!", {
+        autoClose: 50,
+      });
+      getTestimonialData();
+    } catch (err) {
+      console.log(err);
+      toast.error("Error deleting testimonial");
+    } finally {
+      setLoading(false);
+    }
+  }, [getTestimonialData]);
 
-  setLoading(true);
-  try {
-    // testimonialForm.id ka use karke usi document ko update karo
-    await setDoc(doc(fireDB, "testimonials", testimonialForm.id), {
-      ...testimonialForm,
-      time: Timestamp.now(), // update time
-    });
+  const updateTestimonial = useCallback(async () => {
+    // Check karo ki testimonialForm mein ID hai ya nahi
+    if (!testimonialForm.id) return toast.error("No ID found to update");
 
-    toast.success("Testimonial updated successfully!");
-    
-    // Form reset karo
-    setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
-    
-    // Admin ko wapas dashboard bhej do
-    navigate("/dashboard");
-    
-  } catch (err) {
-    console.log("Update Error:", err);
-    toast.error("Error updating testimonial");
-  } finally {
-    setLoading(false);
-  }
-}, [testimonialForm, navigate]);
+    setLoading(true);
+    try {
+      // testimonialForm.id ka use karke usi document ko update karo
+      await setDoc(doc(fireDB, "testimonials", testimonialForm.id), {
+        ...testimonialForm,
+        time: Timestamp.now(), // update time
+      });
 
-const getAvatar = (item) => {
-  // user uploaded image
-  if (item?.img) return item.img;
+      toast.success("Testimonial updated successfully!");
 
-  const id = item?.avatarId ?? 1;
-  const gender = item?.gender === "female" ? "women" : "men";
+      // Form reset karo
+      setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
 
-  return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
-};
+      // Admin ko wapas dashboard bhej do
+      navigate("/dashboard");
+
+    } catch (err) {
+      console.log("Update Error:", err);
+      toast.error("Error updating testimonial");
+    } finally {
+      setLoading(false);
+    }
+  }, [testimonialForm, navigate]);
+
+  const getAvatar = (item) => {
+    // user uploaded image
+    if (item?.img) return item.img;
+
+    const id = item?.avatarId ?? 1;
+    const gender = item?.gender === "female" ? "women" : "men";
+
+    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+  };
 
   const updateProduct = useCallback(async () => {
     setLoading(true);
     try {
       // await setDoc(doc(fireDB, "products", products.id), products);
       await setDoc(doc(fireDB, "products", products.id), {
-  ...products,
-  price: Number(products.price),
-  discount: Number(products.discount || 0),
-  stock: Number(products.stock || 0),
-});
+        ...products,
+        price: Number(products.price),
+        discount: Number(products.discount || 0),
+        stock: Number(products.stock || 0),
+      });
       toast.success("Product Updated successfully");
       getProductData();
       setTimeout(() => navigate("/dashboard"), 800);
@@ -828,14 +828,14 @@ const getAvatar = (item) => {
         orderLoading,
         userLoading,
         testimonial,
-       setTestimonial,
-      testimonialForm,
-      setTestimonialForm,
-      addTestimonial,
-      editTestimonial,   // <-- add this
-      deleteTestimonial, // <-- add this
-      updateTestimonial, // <-- add this
-      getAvatar 
+        setTestimonial,
+        testimonialForm,
+        setTestimonialForm,
+        addTestimonial,
+        editTestimonial,   // <-- add this
+        deleteTestimonial, // <-- add this
+        updateTestimonial, // <-- add this
+        getAvatar
       }}
     >
       {children}

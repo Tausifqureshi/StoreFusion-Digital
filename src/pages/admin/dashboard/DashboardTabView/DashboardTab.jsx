@@ -7,9 +7,9 @@ import { AiFillShopping, AiFillStar } from "react-icons/ai";
 import { useSpring, animated } from "react-spring";
 import Testimonial from "../../../../components/testimonial/Testimonial";
 
-// New modular Tab contents seamlessly separated for perfect performance and clean arch
+// 👉 Performance badhane aur code clean rakhne ke liye naye tabs ko alag alag file me toda gaya hai
 import ProductManagementTab from "./components/ProductManagement/ProductManagementTab";
-import OrderManagementTab from "./components/OrderManagementTab";
+import OrderManagementTab from './components/OrderManagement/OrderManagementTab';
 import CustomerManagementTab from "./components/CustomerManagementTab";
 
 function DashboardTab() {
@@ -28,7 +28,7 @@ function DashboardTab() {
     <div className="container mx-auto px-4 py-8">
       <Tabs selectedIndex={selectedTabIndex} onSelect={(i) => setSelectedTabIndex(i)} className="w-full relative">
 
-        {/* ⭐ Premium Modern Segmented Control Tab List */}
+        {/* 👉 Premium Modern Tab Menu */}
         <div className="mb-8 w-full flex justify-start">
           <TabList className={`flex overflow-x-auto custom-scrollbar gap-2 sm:gap-4 hide-scrollbar p-2 rounded-[2rem] border transition-all ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
             {[
@@ -41,11 +41,10 @@ function DashboardTab() {
               return (
                 <Tab
                   key={i}
-                  className={`cursor-pointer shrink-0 outline-none flex items-center gap-3 px-6 py-3.5 rounded-full transition-all duration-300 ${
-                    isSelected
+                  className={`cursor-pointer shrink-0 outline-none flex items-center gap-3 px-6 py-3.5 rounded-full transition-all duration-300 ${isSelected
                       ? (isDark ? 'bg-[#131921] text-blue-400 shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]' : 'bg-blue-50 text-blue-700 shadow-[inset_0_1px_4px_rgba(0,0,0,0.05)]')
                       : (isDark ? 'text-gray-400 hover:text-gray-200 hover:bg-[#131921]/50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50')
-                  }`}
+                    }`}
                 >
                   <div className={`flex items-center justify-center transition-transform duration-300 ${isSelected ? 'scale-110' : ''}`}>
                     {tab.icon}
@@ -59,28 +58,28 @@ function DashboardTab() {
           </TabList>
         </div>
 
-        {/* ================= PRODUCT TAB ================= */}
+        {/* 👉 PRODUCT TAB */}
         <TabPanel>
           <animated.div style={tabTransitionAnimationProps}>
-             <ProductManagementTab isDark={isDark} product={product} order={order} edithandle={edithandle} deleteProduct={deleteProduct} />
+            <ProductManagementTab isDark={isDark} product={product} order={order} edithandle={edithandle} deleteProduct={deleteProduct} />
           </animated.div>
         </TabPanel>
 
-        {/* ================= ORDER TAB ================= */}
+        {/* 👉 ORDER TAB */}
         <TabPanel>
           <animated.div style={tabTransitionAnimationProps}>
-             <OrderManagementTab isDark={isDark} order={order} />
+            <OrderManagementTab isDark={isDark} order={order} />
           </animated.div>
         </TabPanel>
 
-        {/* ================= USER TAB ================= */}
+        {/* 👉 USER TAB */}
         <TabPanel>
           <animated.div style={tabTransitionAnimationProps}>
-             <CustomerManagementTab isDark={isDark} user={user} />
+            <CustomerManagementTab isDark={isDark} user={user} />
           </animated.div>
         </TabPanel>
 
-        {/* ================= TESTIMONIAL TAB ================= */}
+        {/* 👉 REVIEWS TAB */}
         <TabPanel>
           <animated.div style={tabTransitionAnimationProps}>
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 border-b border-gray-200 dark:border-gray-800 pb-4">

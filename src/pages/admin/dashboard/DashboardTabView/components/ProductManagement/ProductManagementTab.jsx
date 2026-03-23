@@ -10,7 +10,7 @@ import ProductPagination from './ProductPagination';
 
 const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, deleteProduct }) => {
   const navigate = useNavigate();
-  
+
   // State for Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [filterCategory, setFilterCategory] = useState("All Categories");
@@ -31,7 +31,7 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
   const productSalesCountMap = useMemo(() => {
     // 👉 ek empty object bana rahe hain (map) jo har product id ke acche total quantity store karega
     const map = {};
-    
+
     // 👉 har ek order (jo backend se aya hai) us par loop chala rahe hain
     order.forEach(o => {
       // 👉 agar order ke andar cartItems hain aur wo array hai, toh hi process karo
@@ -61,18 +61,18 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
     return productsWithSalesData
       .filter((p) => {
         // 👉 search query check karte hain product title ya category me
-        const matchesSearch = p.title?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              p.category?.toLowerCase().includes(searchQuery.toLowerCase());
-        
+        const matchesSearch = p.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.category?.toLowerCase().includes(searchQuery.toLowerCase());
+
         // 👉 dropdown category check
         const matchesCategory = filterCategory === "All Categories" || p.category === filterCategory;
-        
+
         // 👉 stock greater than 0 hai toh product active hai
         const isActive = Number(p.stock) > 0;
-        const matchesStatus = filterStatus === "All Status" || 
-                             (filterStatus === "Active" && isActive) || 
-                             (filterStatus === "Out of Stock" && !isActive);
-                             
+        const matchesStatus = filterStatus === "All Status" ||
+          (filterStatus === "Active" && isActive) ||
+          (filterStatus === "Out of Stock" && !isActive);
+
         // 👉 teeno conditions true honi chahiye product ko grid me dikhane ke liye
         return matchesSearch && matchesCategory && matchesStatus;
       })
@@ -80,7 +80,7 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
         // 👉 dropdown ki sorting choices handle kar rahe hain
         if (sortOrder === "Name A-Z") return a.title?.localeCompare(b.title || "");
         if (sortOrder === "Name Z-A") return b.title?.localeCompare(a.title || "");
-        
+
         // 👉 price string se currency symbols aur commas nikal kar float me badal rahe hain
         const priceA = Number(String(a.price || "0").replace(/[^0-9.-]+/g, ""));
         const priceB = Number(String(b.price || "0").replace(/[^0-9.-]+/g, ""));
@@ -88,14 +88,14 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
         // 👉 price low to high ya high to low sort kar rahe hain
         if (sortOrder === "Price Low to High") return priceA - priceB;
         if (sortOrder === "Price High to Low") return priceB - priceA;
-        
+
         return 0; // 👉 default
       });
   }, [product, order, productSalesCountMap, searchQuery, filterCategory, filterStatus, sortOrder]);
 
   // 👉 pagination ka logic - current page ke items calculate karna
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);
-  
+
   // 👉 array slice kar rahe hain taaki sirf active page ke exactly selected items grid me bheje jaayein
   const productsOnCurrentPage = filteredAndSortedProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -109,7 +109,7 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
+
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
@@ -120,7 +120,7 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
             Manage your inventory with advanced tools and analytics
           </p>
         </div>
-        <button 
+        <button
           onClick={() => navigate('/addproduct')}
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-500/20 transition-all active:scale-95"
         >
@@ -129,14 +129,14 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
       </div>
 
       {/* Summary Cards */}
-      <SummaryCards 
-        isDark={isDark} 
-        product={product} 
-        filteredAndSortedProducts={filteredAndSortedProducts} 
+      <SummaryCards
+        isDark={isDark}
+        product={product}
+        filteredAndSortedProducts={filteredAndSortedProducts}
       />
 
       {/* Search & Filters */}
-      <ProductFilters 
+      <ProductFilters
         isDark={isDark}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -150,15 +150,15 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
       />
 
       {/* Product Grid */}
-      <ProductGrid 
-        productsOnCurrentPage={productsOnCurrentPage} 
-        isDark={isDark} 
-        edithandle={edithandle} 
-        deleteProduct={deleteProduct} 
+      <ProductGrid
+        productsOnCurrentPage={productsOnCurrentPage}
+        isDark={isDark}
+        edithandle={edithandle}
+        deleteProduct={deleteProduct}
       />
 
       {/* Pagination */}
-      <ProductPagination 
+      <ProductPagination
         isDark={isDark}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

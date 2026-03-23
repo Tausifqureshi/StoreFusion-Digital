@@ -91,9 +91,13 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
               
               <div className={`absolute bottom-[120%] right-0 w-40 rounded-2xl shadow-xl overflow-hidden z-20 animate-in fade-in slide-in-from-bottom-2 ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-white border border-gray-100'}`}>
                 <div className="py-2">
-                  <button onClick={() => setMenuOpen(false)} className={`w-full px-4 py-2 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`}>
+                  <Link 
+                    to={`/productInfo/${item.id}`}
+                    onClick={() => setMenuOpen(false)} 
+                    className={`w-full px-4 py-2 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`}
+                  >
                     <FaEye size={12} /> View Details
-                  </button>
+                  </Link>
                   <Link 
                     to="/updateProduct" 
                     onClick={() => edithandle(item)}
