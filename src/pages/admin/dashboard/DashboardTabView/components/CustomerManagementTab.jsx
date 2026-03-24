@@ -142,7 +142,7 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
         <div className="flex flex-col gap-3">
           {usersOnCurrentPage.length > 0 ? (
             usersOnCurrentPage.map((u, i) => {
-              const itemBorder = isDark ? 'bg-[#131921]/50 border-gray-800' : 'bg-gray-50 border-gray-100/50 hover:bg-white hover:shadow-sm';
+              const itemBorder = isDark ? 'bg-[#1e293b] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500 hover:-translate-y-1' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1';
 
               // 👉 role decide kar rahe hain aur uske hisab se purple ya blue color de rahe hain
               const roleName = u.role || (u.email?.includes('admin') ? 'Admin' : 'User');
@@ -158,7 +158,7 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
               const statusText = u.status || "Active";
 
               return (
-                <div key={u.id || i} className={`relative p-4 md:p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border transition-all ${itemBorder}`}>
+                <div key={u.id || i} className={`relative p-4 md:p-5 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border transition-all duration-300 ${itemBorder}`}>
                   <div className="flex items-center gap-4 flex-1">
                     <div className={`w-12 h-12 rounded-full flex shrink-0 items-center justify-center text-lg font-bold border ${isDark ? 'bg-gray-800 text-gray-300 border-gray-700' : 'bg-gray-100 text-gray-600 border-transparent'}`}>
                       {initial}
@@ -204,31 +204,61 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
 
       {/* --- PAGINATION --- */}
       {totalPages > 1 && (
-        <div className={`flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-3xl transition-all duration-300 mb-8 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+        <div className={`flex flex-col md:flex-row items-center justify-between gap-4 mt-8 transition-all duration-300 mb-8`}>
           <span className={`text-sm font-medium text-center md:text-left ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
             Showing <span className="font-semibold">{startItem}</span> to <span className="font-semibold">{endItem}</span> of <span className="font-semibold">{filteredUsers.length}</span> users
           </span>
-          <div className="flex justify-center items-center gap-2 flex-wrap">
+          {/* 👉 Premium Modern Pagination Container matching Tabs */}
+          <div className={`inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 sm:rounded-2xl rounded-xl transition-all border ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg shadow-black/20' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)]'}`}>
+            {/* Previous Button */}
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${currentPage === 1 ? (isDark ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed') : 'bg-blue-600 text-white hover:bg-blue-700 shadow'}`}
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 border border-transparent ${currentPage === 1
+                  ? isDark 
+                    ? 'text-gray-600 cursor-not-allowed bg-transparent' 
+                    : 'text-gray-300 cursor-not-allowed bg-transparent'
+                  : isDark 
+                    ? 'bg-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-800/60' 
+                    : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/60'
+                }`}
             >
               Previous
             </button>
-            {Array.from({ length: totalPages }, (_, i) => (
-              <button
-                key={i + 1}
-                onClick={() => setCurrentPage(i + 1)}
-                className={`px-3 py-2 rounded-xl text-sm font-medium transition ${currentPage === i + 1 ? 'bg-blue-600 text-white shadow' : (isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-300' : 'bg-gray-100 hover:bg-gray-200 text-gray-800')}`}
-              >
-                {i + 1}
-              </button>
-            ))}
+
+            {/* Page Numbers */}
+            {Array.from({ length: totalPages }, (_, i) => {
+              const isSelected = currentPage === i + 1;
+              return (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`min-w-[40px] px-3 py-2 rounded-xl text-sm font-bold transition-all duration-300 border ${isSelected
+                      ? isDark
+                        ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/40'
+                        : 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
+                      : isDark
+                        ? 'bg-transparent text-gray-400 border-transparent hover:text-gray-200 hover:bg-gray-800/60'
+                        : 'bg-transparent text-gray-500 border-transparent hover:text-gray-900 hover:bg-gray-100/60'
+                    }`}
+                >
+                  {i + 1}
+                </button>
+              )
+            })}
+
+            {/* Next Button */}
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition ${currentPage === totalPages ? (isDark ? 'bg-gray-800 text-gray-500 cursor-not-allowed' : 'bg-gray-200 text-gray-400 cursor-not-allowed') : 'bg-blue-600 text-white hover:bg-blue-700 shadow'}`}
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 border border-transparent ${currentPage === totalPages
+                  ? isDark 
+                    ? 'text-gray-600 cursor-not-allowed bg-transparent' 
+                    : 'text-gray-300 cursor-not-allowed bg-transparent'
+                  : isDark 
+                    ? 'bg-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-800/60' 
+                    : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/60'
+                }`}
             >
               Next
             </button>

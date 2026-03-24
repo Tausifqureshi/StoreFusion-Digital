@@ -39,7 +39,7 @@ STATUS: ${(o.status || 'PROCESSING').toUpperCase()}
   };
 
   return (
-    <div className={`group relative rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col xl:flex-row xl:items-center justify-between gap-6 border ${isDark ? 'bg-[#131921]/50 border-gray-800 hover:bg-[#131921]' : 'bg-gray-50/50 border-gray-200/60 hover:bg-white hover:shadow-sm'}`}>
+    <div className={`group relative rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col xl:flex-row xl:items-center justify-between gap-6 border hover:-translate-y-1 ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl'}`}>
       
       {/* Left: Avatar & Main Info */}
       <div className="flex items-center gap-4 min-w-[220px]">

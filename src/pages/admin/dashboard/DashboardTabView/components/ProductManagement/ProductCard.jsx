@@ -13,7 +13,7 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
   // Status computation for badge
   let status = "Active";
   let statusColors = isDark ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-green-100 text-green-700";
-  
+
   if (stock === 0) {
     status = "Out of Stock";
     statusColors = isDark ? "bg-red-500/10 text-red-400 border border-red-500/20" : "bg-red-100 text-red-700";
@@ -23,27 +23,23 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
   }
 
   return (
-    <div className={`relative rounded-[2rem] p-5 transition-all duration-300 hover:-translate-y-1 ${isDark ? 'bg-[#1e293b] border border-gray-800 shadow-sm hover:shadow-lg' : 'bg-white border border-gray-100 shadow-sm hover:shadow-xl'}`}>
-      
+    <div className={`relative rounded-[2rem] p-5 transition-all duration-300 hover:-translate-y-1 ${isDark ? 'bg-[#1e293b] border border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500' : 'bg-white border border-gray-100 shadow-sm hover:shadow-xl'}`}>
+
       {/* Image Area */}
       <div className={`relative w-full h-44 rounded-2xl mb-5 flex items-center justify-center p-4 overflow-hidden ${isDark ? 'bg-[#131921]/50' : 'bg-gray-50'}`}>
         {/* Status Badge */}
         <span className={`absolute top-3 right-3 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full z-10 ${statusColors}`}>
           {status}
         </span>
-        
-        {item.imageUrl ? (
+
+        {item.imageUrl && (
           <img src={item.imageUrl} alt={item.title} className="max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform hover:scale-110 duration-500" />
-        ) : (
-          <div className="w-16 h-16 opacity-10 flex items-center justify-center border-2 border-dashed rounded-full border-current">
-            <span className="text-2xl">🖼️</span>
-          </div>
         )}
       </div>
 
       {/* Content */}
       <h2 className={`font-black text-xl leading-tight line-clamp-1 mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.title}</h2>
-      
+
       <p className={`text-xs font-medium line-clamp-2 mb-4 h-8 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
         {item.description || "High-quality product with amazing features and excellent durability."}
       </p>
@@ -77,35 +73,35 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
 
         {/* 3 Dots Menu */}
         <div className="relative">
-          <button 
+          <button
             onClick={() => setMenuOpen(!menuOpen)}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isDark ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-100 text-gray-600'} ${menuOpen ? (isDark ? 'bg-gray-800' : 'bg-gray-100') : ''}`}
           >
             <FaEllipsisH size={14} />
           </button>
-          
+
           {menuOpen && (
             <>
               {/* Overlay to close menu */}
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              
+
               <div className={`absolute bottom-[120%] right-0 w-40 rounded-2xl shadow-xl overflow-hidden z-20 animate-in fade-in slide-in-from-bottom-2 ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-white border border-gray-100'}`}>
                 <div className="py-2">
-                  <Link 
+                  <Link
                     to={`/productInfo/${item.id}`}
-                    onClick={() => setMenuOpen(false)} 
+                    onClick={() => setMenuOpen(false)}
                     className={`w-full px-4 py-2 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-white' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`}
                   >
                     <FaEye size={12} /> View Details
                   </Link>
-                  <Link 
-                    to="/updateProduct" 
+                  <Link
+                    to="/updateProduct"
                     onClick={() => edithandle(item)}
                     className={`w-full px-4 py-2 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-gray-300 hover:bg-gray-800 hover:text-blue-400' : 'text-gray-700 hover:bg-gray-50 hover:text-blue-600'}`}
                   >
                     <FaEdit size={12} /> Edit Product
                   </Link>
-                  <button 
+                  <button
                     onClick={() => { deleteProduct(item); setMenuOpen(false); }}
                     className={`w-full px-4 py-2 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-red-400 hover:bg-gray-800' : 'text-red-500 hover:bg-red-50'}`}
                   >
