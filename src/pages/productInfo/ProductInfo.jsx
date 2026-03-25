@@ -736,13 +736,13 @@ function ProductInfo() {
               </div>
 
               <div className="py-2 md:py-4 border-b border-gray-100 dark:border-gray-800">
-                <div className="flex items-end justify-center lg:justify-start gap-3 mb-1">
-                  <span className={`text-3xl md:text-4xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
-                    ₹{finalPrice}
+                <div className="flex items-center justify-center lg:justify-start gap-3 mb-1">
+                  <span className={`text-3xl md:text-4xl font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                    ₹ {finalPrice}
                   </span>
                   {discount > 0 && (
-                    <span className="text-lg md:text-xl line-through text-gray-400 font-medium mb-1">
-                      ₹{currentProduct.price}
+                    <span className="text-lg md:text-xl line-through text-gray-400 mb-1">
+                      ₹ {currentProduct.price}
                     </span>
                   )}
                 </div>
@@ -939,12 +939,12 @@ function ProductInfo() {
                         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
                           {/* <span className="text-blue-600 font-black text-xs md:text-base lg:text-lg italic">₹{item.price}</span> */}
                           <div className="flex items-center gap-2 mb-4">
-                            <span className="text-blue-600 font-black text-lg md:text-xl italic">
-                              ₹{finalPrice}
+                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                              ₹ {finalPrice}
                             </span>
                             {item.discount > 0 && (
-                              <span className="line-through text-gray-400 text-[10px] font-bold">
-                                ₹{item.price}
+                              <span className="line-through text-gray-400 text-[10px] font-semibold">
+                                ₹ {item.price}
                               </span>
                             )}
                           </div>

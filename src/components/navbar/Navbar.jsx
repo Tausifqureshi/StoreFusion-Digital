@@ -410,12 +410,18 @@ function Navbar() {
 
    useEffect(() => {
     const handleScroll = () => {
-      // Hide on scroll down, show on scroll up
-      if (window.scrollY > lastScrollY) {
-        setIsVisible(false); // Scroll down → Hide navbar
+      // ✅ MOBILE FIXED LOGIC: Chote devices par navbar hamesha fixed rahega
+      if (window.innerWidth < 1024) {
+        setIsVisible(true);
       } else {
-        setIsVisible(true); // Scroll up → Show navbar
+        // Bade devices par Hide on scroll down, show on scroll up
+        if (window.scrollY > lastScrollY && window.scrollY > 50) {
+          setIsVisible(false); // Scroll down → Hide navbar
+        } else {
+          setIsVisible(true); // Scroll up → Show navbar
+        }
       }
+
       // Change background after scroll 50px
       if (window.scrollY > 50) {
         setIsScrolled(true);
@@ -455,10 +461,8 @@ function Navbar() {
         🚚 Free delivery on ₹300+ | Fast Checkout ⚡
       </div>
 
-      {/* MAIN NAV */}
-      <nav className={
-        `transition-all duration-300 ${isScrolled ? (isDark ? "bg-[#232f3e]/95 backdrop-blur-md shadow-xl" : "bg-white/95 backdrop-blur-md shadow-md") : (isDark ? "bg-[#232f3e]" : "bg-white shadow-md")}`}
-        >
+      {/* MAIN NAV (with prominent drop shadow to distinctly separate from hero section) */}
+      <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
 
         <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
@@ -525,9 +529,19 @@ function Navbar() {
               {totalQuantity > 0 && <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{totalQuantity}</span>}
             </Link>
             {user ? (
-              <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300">
-                <img src={user.profilePic || "https://i.pravatar.cc/100"} className="w-8 h-8 rounded-full border-2 border-orange-500" alt="p" />
-                <button onClick={handleLogout} className="text-[11px] font-black text-red-500 hover:underline">LOGOUT</button>
+              <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
+                <div className="flex flex-col items-start leading-tight pr-1">
+                  <span className={`text-[10px] font-bold ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+                    Hello, {user.fullName?.split(" ")[0] || "User"}
+                  </span>
+                  <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>
+                    Account
+                  </span>
+                </div>
+                <img src={user.profilePic || "https://i.pravatar.cc/100"} className="w-8 h-8 rounded-full border-2 border-orange-500 shadow-sm" alt="p" />
+                <button onClick={handleLogout} className="text-[9px] font-black text-white bg-red-500 px-3 py-1.5 rounded-lg hover:bg-red-600 transition-colors shadow-sm ml-1 tracking-widest">
+                  LOGOUT
+                </button>
               </div>
             ) : (
               <Link to="/login" className={`hidden sm:block px-5 py-1.5 rounded text-xs font-bold ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}`}>SIGN IN</Link>
@@ -548,7 +562,7 @@ function Navbar() {
               <Dialog.Panel className={`relative w-80 h-full flex flex-col shadow-2xl overflow-hidden ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-900"}`}>
                 <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-[#131921]" : "bg-blue-600 text-white"}`}>
                   <div className="bg-white/20 p-2 rounded-full"><FiUser size={24} /></div>
-                  <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.FullName?.split(" ")[0] : "Sign In"}</h2>
+                  <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.fullName?.split(" ")[0] : "Sign In"}</h2>
                   <button onClick={() => setOpen(false)}><RxCross2 size={24} /></button>
                 </div>
 
@@ -562,24 +576,24 @@ function Navbar() {
                     <div className="my-4 border-t border-gray-100 dark:border-gray-700" />
                     <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">Programs & Features</h3>
                     
-                    {/* ✅ Smooth Navigation for Nav Items */}
+                    {/* ✅ Smooth Navigation for Nav Items (Brand Colors) */}
                     {navItems.map((item) => (
-                      <button key={item.name} onClick={() => handleMobileClick(item.URL)} className="w-full text-left block p-3 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+                      <button key={item.name} onClick={() => handleMobileClick(item.URL)} className={`w-full text-left block p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
                         {item.name}
                       </button>
                     ))}
 
-                    {/* ✅ Smooth Navigation for Orders */}
+                    {/* ✅ Smooth Navigation for Orders (Brand Colors) */}
                     {user && (
-                      <button onClick={() => handleMobileClick("/order")} className="w-full text-left flex items-center justify-between p-3 font-medium hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+                      <button onClick={() => handleMobileClick("/order")} className={`w-full text-left flex items-center justify-between p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
                         <span className="flex items-center gap-3"><FiPackage className="text-blue-500" /> My Orders</span>
                         {totalOrders > 0 && <span className="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded-full">{totalOrders}</span>}
                       </button>
                     )}
 
-                    {/* ✅ Smooth Navigation for Admin */}
+                    {/* ✅ Smooth Navigation for Admin (Brand Colors) */}
                     {user?.role === "admin" && (
-                      <button onClick={() => handleMobileClick("/dashboard")} className="w-full text-left flex items-center gap-2 p-3 font-medium text-orange-500 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg">
+                      <button onClick={() => handleMobileClick("/dashboard")} className={`w-full text-left flex items-center gap-2 p-3 font-medium text-orange-500 rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-orange-50 active:bg-orange-100"}`}>
                         <FiShield /> Admin Panel
                       </button>
                     )}

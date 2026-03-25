@@ -9,11 +9,11 @@ import { saveCart } from "../../pages/cart/cartService";
 
 function SingleProductCard({ item, expandedId, setExpandedId }) {
   const { mode } = useContext(MyContext);
-  
+
   // 👉 Fallback to title if id is missing to prevent all cards matching 'undefined === undefined'
-  const uniqueId = item.id || item.title; 
+  const uniqueId = item.id || item.title;
   const isExpanded = expandedId !== null && expandedId === uniqueId;
-  
+
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate();
@@ -61,11 +61,10 @@ function SingleProductCard({ item, expandedId, setExpandedId }) {
   return (
     <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg self-start">
       <div
-        className={`border-2 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${
-          mode === "dark"
+        className={`border-2 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${mode === "dark"
             ? "bg-gray-800 hover:shadow-gray-900 border-gray-700"
             : "border-gray-200 hover:shadow-gray-100 bg-white"
-        } border-opacity-60 rounded-2xl overflow-hidden flex flex-col h-full`}
+          } border-opacity-60 rounded-2xl overflow-hidden flex flex-col h-full`}
       >
         <div
           onClick={() => navigate(`/productinfo/${id}`)}
@@ -81,16 +80,14 @@ function SingleProductCard({ item, expandedId, setExpandedId }) {
 
         <div className="p-5 border-t-2 flex flex-col flex-1">
           <h2
-            className={`tracking-widest text-xs title-font font-medium text-gray-400 mb-1 ${
-              mode === "dark" ? "text-white" : ""
-            }`}
+            className={`tracking-widest text-xs title-font font-medium text-gray-400 mb-1 ${mode === "dark" ? "text-white" : ""
+              }`}
           >
             {category}
           </h2>
           <h1
-            className={`title-font text-lg font-medium mb-3 line-clamp-2 ${
-              mode === "dark" ? "text-white" : "text-gray-900"
-            }`}
+            className={`title-font text-lg font-medium mb-3 line-clamp-2 ${mode === "dark" ? "text-white" : "text-gray-900"
+              }`}
           >
             {title}
           </h1>
@@ -111,20 +108,18 @@ function SingleProductCard({ item, expandedId, setExpandedId }) {
               </>
             )}
           </div>
-          
+
           <div className="mb-3 text-[10px] font-black uppercase tracking-widest text-orange-500">
             {Number(stock) > 0 ? `Stock Available: ${stock}` : <span className="text-red-500">Out of Stock</span>}
           </div>
 
           <div
-            className={`overflow-hidden transition-all duration-500 ease-in-out ${
-              isExpanded ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
-            }`}
+            className={`overflow-hidden transition-all duration-500 ease-in-out ${isExpanded ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0"
+              }`}
           >
             <p
-              className={`leading-relaxed mb-3 text-sm ${
-                mode === "dark" ? "text-gray-300" : "text-gray-600"
-              }`}
+              className={`leading-relaxed mb-3 text-sm ${mode === "dark" ? "text-gray-300" : "text-gray-600"
+                }`}
             >
               {description}
             </p>
@@ -152,9 +147,8 @@ function SingleProductCard({ item, expandedId, setExpandedId }) {
               )}
               <button
                 onClick={() => setExpandedId(isExpanded ? null : uniqueId)}
-                className={`font-medium text-[11px] whitespace-nowrap px-3 py-2 rounded-lg transition-colors border ${
-                  mode === 'dark' ? 'text-gray-300 border-gray-600 hover:bg-gray-700' : 'text-gray-600 border-gray-200 hover:bg-gray-100'
-                }`}
+                className={`font-medium text-[11px] whitespace-nowrap px-3 py-2 rounded-lg transition-colors border ${mode === 'dark' ? 'text-gray-300 border-gray-600 hover:bg-gray-700' : 'text-gray-600 border-gray-200 hover:bg-gray-100'
+                  }`}
               >
                 {isExpanded ? "See Less" : "See More"}
               </button>

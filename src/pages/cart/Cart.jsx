@@ -901,7 +901,7 @@ function Cart({ cartLoading }) {
 
                             {/* Price & Quantity */}
                             <div className="flex items-center justify-between mt-4">
-                              <span className="text-lg md:text-xl font-black text-blue-600 tracking-tighter">₹{item.price}</span>
+                              <span className={`text-lg md:text-xl font-medium ${isDark ? "text-white" : "text-gray-900"}`}>₹ {item.price}</span>
                               <div className={`flex items-center gap-3 px-3 py-1 rounded-xl border ${isDark ? "bg-[#131921] border-gray-700" : "bg-gray-50 border-gray-100"}`}>
                                 <button onClick={() => decrementCartQuantity(item.id)} disabled={cartUpdating?.id === item.id} className="text-xs hover:text-blue-600 transition-colors">
                                   {cartUpdating?.id === item.id && cartUpdating?.type === "decrement" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiMinus />}
@@ -927,15 +927,15 @@ function Cart({ cartLoading }) {
                     <div className="space-y-4 mb-6">
                       <div className="flex justify-between text-[11px] font-black uppercase tracking-widest text-gray-500">
                         <span>Bag Total</span>
-                        <span className={isDark ? "text-white" : "text-black"}>₹{totalAmount.toFixed(2)}</span>
+                        <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>₹ {totalAmount.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between text-[11px] font-black uppercase tracking-widest text-gray-500">
                         <span>Shipping Fee</span>
-                        <span className="text-green-600">₹{shippingCharge}</span>
+                        <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>₹ {shippingCharge}</span>
                       </div>
                       <div className="border-t border-dashed border-gray-200 dark:border-gray-700 pt-4 flex justify-between items-center">
                         <span className="text-sm font-black uppercase">Total Payable</span>
-                        <span className="text-2xl font-black text-blue-600 tracking-tighter">₹{totalWithShipping}</span>
+                        <span className={`text-2xl font-medium ${isDark ? "text-white" : "text-gray-900"}`}>₹ {totalWithShipping}</span>
                       </div>
                     </div>
 
@@ -946,17 +946,32 @@ function Cart({ cartLoading }) {
 
                     <div className="space-y-3">
                       <Razorpay cartItems={cartItems} totalAmount={totalWithShipping} />
-                      <button onClick={clearCartItems} disabled={clearingCart} className={`w-full py-3 text-[9px] font-black uppercase tracking-widest rounded-xl border transition-all ${isDark ? "border-gray-700 hover:bg-red-500/10 hover:text-red-500" : "border-gray-200 hover:bg-red-50 text-gray-400 hover:text-red-500"}`}>
+                      <button onClick={clearCartItems} disabled={clearingCart} className={`w-full py-3 text-[10px] font-black uppercase tracking-widest rounded-xl border transition-all duration-300 ${isDark ? "border-gray-700 text-gray-400 hover:bg-red-600 hover:text-white hover:border-red-600 hover:shadow-[0_0_15px_rgba(220,38,38,0.3)]" : "border-gray-200 text-gray-500 hover:bg-red-600 hover:text-white hover:border-red-600 hover:shadow-md"}`}>
                         {clearingCart ? "Processing..." : "Clear Shopping Bag"}
                       </button>
                     </div>
 
-                    <div className="mt-8 flex justify-between items-center opacity-30">
-                      <div className="flex flex-col items-center gap-1"><FiTruck size={20} /><span className="text-[7px] font-black uppercase">Fast Ship</span></div>
-                      <div className="h-8 w-px bg-gray-400"></div>
-                      <div className="flex flex-col items-center gap-1"><FiShield size={20} /><span className="text-[7px] font-black uppercase">Warranty</span></div>
-                      <div className="h-8 w-px bg-gray-400"></div>
-                      <div className="flex flex-col items-center gap-1"><FiPlus size={20} /><span className="text-[7px] font-black uppercase">Support</span></div>
+                    <div className="mt-8 flex justify-between items-center">
+                      <div className="flex flex-col items-center gap-2 group cursor-pointer">
+                        <div className={`p-2 rounded-full transition-all duration-300 ${isDark ? 'bg-green-500/10 text-green-400 group-hover:bg-green-500/20' : 'bg-green-50 text-green-600 group-hover:bg-green-100'}`}>
+                          <FiTruck size={20} />
+                        </div>
+                        <span className="text-[8px] font-black uppercase tracking-wider text-gray-500 group-hover:text-green-600 transition-colors">Fast Ship</span>
+                      </div>
+                      <div className="h-8 w-px bg-gray-200 dark:bg-gray-800"></div>
+                      <div className="flex flex-col items-center gap-2 group cursor-pointer">
+                        <div className={`p-2 rounded-full transition-all duration-300 ${isDark ? 'bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20' : 'bg-blue-50 text-blue-600 group-hover:bg-blue-100'}`}>
+                          <FiShield size={20} />
+                        </div>
+                        <span className="text-[8px] font-black uppercase tracking-wider text-gray-500 group-hover:text-blue-600 transition-colors">Warranty</span>
+                      </div>
+                      <div className="h-8 w-px bg-gray-200 dark:bg-gray-800"></div>
+                      <div className="flex flex-col items-center gap-2 group cursor-pointer">
+                        <div className={`p-2 rounded-full transition-all duration-300 ${isDark ? 'bg-orange-500/10 text-orange-400 group-hover:bg-orange-500/20' : 'bg-orange-50 text-orange-600 group-hover:bg-orange-100'}`}>
+                          <FiPlus size={20} />
+                        </div>
+                        <span className="text-[8px] font-black uppercase tracking-wider text-gray-500 group-hover:text-orange-600 transition-colors">Support</span>
+                      </div>
                     </div>
                   </div>
                 </div>

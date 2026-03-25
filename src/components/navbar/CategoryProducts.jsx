@@ -205,12 +205,12 @@ function CategoryProducts() {
 
                       <div className="mt-auto">
                         <div className="flex items-center gap-2 mb-4">
-                          <span className="text-blue-600 font-black text-lg md:text-xl italic">
-                            ₹{finalPrice}
+                          <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
+                            ₹ {finalPrice}
                           </span>
                           {item.discount > 0 && (
-                            <span className="line-through text-gray-400 text-[10px] font-bold">
-                              ₹{item.price}
+                            <span className="line-through text-gray-400 text-[10px] font-semibold">
+                              ₹ {item.price}
                             </span>
                           )}
                         </div>

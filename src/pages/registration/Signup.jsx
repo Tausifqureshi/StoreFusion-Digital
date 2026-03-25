@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link, replace, useNavigate } from 'react-router-dom';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 import { MyContext } from '../../context api/myContext';
 import { toast } from 'react-toastify';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -8,7 +9,9 @@ import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import Loader from '../../components/loader/Loader';
 
 function Signup() {
-  const { loading, setLoading } = useContext(MyContext);
+  const { mode } = useContext(MyContext);
+  const isDark = mode === 'dark';
+  const [authLoading, setAuthLoading] = useState(false);
   const [formData, setFormData] = useState({ fullName: '', email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -53,9 +56,9 @@ function Signup() {
 
   const signup = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
     if (validateForm()) {
+      setAuthLoading(true);
       try {
         const { email, password, fullName } = formData;
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -76,17 +79,17 @@ function Signup() {
 
         // Store user data in localStorage
         // localStorage.setItem("user", JSON.stringify(user));
-         localStorage.setItem("user", JSON.stringify({
+        localStorage.setItem("user", JSON.stringify({
           fullName: user.name,
           email: user.email,
           uid: user.uid,
           role: user.role
         }));
 
-        toast.success("Signup Successful!", { autoClose: 1500 });   
-        setFormData({ fullName: '', email: '', password: '' }); 
+        toast.success("Signup Successful!", { autoClose: 1500 });
+        setFormData({ fullName: '', email: '', password: '' });
         setTermsAccepted(false);
-        navigate('/login',{replace:true}); // Redirect to login page 
+        navigate('/login', { replace: true }); // Redirect to login page 
       } catch (error) {
         console.error(error);
         if (error.code === 'auth/email-already-in-use') {
@@ -95,93 +98,120 @@ function Signup() {
           toast.error("Signup failed. Please try again.", { autoClose: 1500 });
         }
       } finally {
-        setLoading(false);
-      } 
+        setAuthLoading(false);
+      }
     } else {
       toast.error("Please fix the errors in the form.", { autoClose: 1500 });
-      setLoading(false);
     }
   };
 
   return (
-    <div className='flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300'>
-      <div className='bg-white shadow-lg rounded-lg max-w-md w-full p-6 relative'>
-        {/* {loading && (
-          <div className='fixed inset-0 flex items-center justify-center bg-gray-50 opacity-75 z-50'>
-            <Loader />
-          </div>
-        )} */}
-        <h1 className='text-center text-gray-800 text-2xl mb-4 font-extrabold'>Create Your Account</h1>
+    <div className={`flex justify-center flex-col items-center min-h-screen py-10 ${isDark ? "bg-[#131921]" : "bg-gradient-to-b from-gray-50 to-gray-200"}`}>
+      <div className={`shadow-xl rounded-2xl max-w-md w-full p-8 relative border ${isDark ? "bg-[#1f2937] border-gray-800" : "bg-white border-gray-100"}`}>
+        <h1 className={`text-center text-2xl mb-8 font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>Create Account</h1>
         <form onSubmit={signup} action=''>
           <div className='mb-4'>
             <input
               type="text"
               value={formData.fullName}
               name='fullName'
-              className={`border px-4 py-3 w-full rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 ${errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'}`}
+              className={`border px-4 py-3 w-full rounded-xl focus:outline-none focus:ring-2 transition-all ${isDark
+                  ? "bg-[#131921] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+                  : "bg-white border-gray-200 text-gray-800 placeholder-gray-400 focus:ring-blue-500"
+                } ${errors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
               placeholder='Full Name'
               onChange={handleInputChange}
             />
-            {errors.fullName && <p className='text-red-500 text-sm mt-2'>{errors.fullName}</p>}
+            {errors.fullName && <p className='text-red-500 text-xs font-bold mt-2 ml-1'>{errors.fullName}</p>}
           </div>
           <div className='mb-4'>
             <input
               type="email"
               value={formData.email}
               name='email'
-              className={`border px-4 py-3 w-full rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 ${errors.email ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'}`}
-              placeholder='Email'
+              className={`border px-4 py-3 w-full rounded-xl focus:outline-none focus:ring-2 transition-all ${isDark
+                  ? "bg-[#131921] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+                  : "bg-white border-gray-200 text-gray-800 placeholder-gray-400 focus:ring-blue-500"
+                } ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
+              placeholder='Email Address'
               onChange={handleInputChange}
             />
-            {errors.email && <p className='text-red-500 text-sm mt-2'>{errors.email}</p>}
+            {errors.email && <p className='text-red-500 text-xs font-bold mt-2 ml-1'>{errors.email}</p>}
           </div>
           <div className='mb-4 relative'>
             <input
               type={showPassword ? "text" : "password"}
               value={formData.password}
               name='password'
-              className={`border px-4 py-3 w-full pr-12 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 ${errors.password ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-black'}`}
+              className={`border px-4 py-3 w-full pr-12 rounded-xl focus:outline-none focus:ring-2 transition-all ${isDark
+                  ? "bg-[#131921] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+                  : "bg-white border-gray-200 text-gray-800 placeholder-gray-400 focus:ring-blue-500"
+                } ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
               placeholder='Password'
               onChange={handleInputChange}
             />
             <button
               type="button"
               onClick={handlePasswordToggle}
-              className='absolute top-3 right-4 flex items-center text-gray-500'
+              className={`absolute top-3.5 right-4 flex items-center transition-colors ${isDark ? "text-gray-400 hover:text-white" : "text-gray-400 hover:text-gray-600"}`}
             >
-              {showPassword ? '🙈' : '👁️'}
+              {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
             </button>
-            {errors.password && <p className='text-red-500 text-sm mt-2'>{errors.password}</p>}
+            {errors.password && <p className='text-red-500 text-xs font-bold mt-2 ml-1'>{errors.password}</p>}
           </div>
-          <div className='mb-4 flex items-center'>
+          <div className='mb-6 flex items-center pl-1'>
             <input
               type="checkbox"
               checked={termsAccepted}
               onChange={handleTermsChange}
-              className={`mr-2 ${errors.terms ? 'border-red-500' : ''}`}
+              className={`mr-2 w-4 h-4 rounded Accent-orange-500 cursor-pointer ${errors.terms ? 'border-red-500' : ''}`}
             />
-            <label className={`text-gray-600 ${errors.terms ? 'text-red-500' : ''}`}>
-              I agree to the <a href="#" className='text-blue-600 font-semibold hover:underline'>terms and conditions</a>
+            <label className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"} ${errors.terms ? 'text-red-500' : ''}`}>
+              I agree to the <Link to="#" className={`font-semibold hover:underline ${isDark ? "text-orange-400" : "text-blue-600"}`}>terms and conditions</Link>
             </label>
           </div>
-          {errors.terms && <p className='text-red-500 text-sm mb-4'>{errors.terms}</p>}
-          <div className='flex justify-center mb-4'>
+          {errors.terms && <p className='text-red-500 text-xs font-bold -mt-4 mb-4 ml-1'>{errors.terms}</p>}
+          <div className='flex justify-center mb-6'>
             <button
               type='submit'
-              className='bg-blue-600 w-full text-white font-bold py-3 rounded-lg hover:bg-blue-500 transition'
-              disabled={loading}
+              className={`w-full font-bold py-3.5 rounded-xl uppercase tracking-widest transition-all flex justify-center items-center gap-3 ${isDark
+                  ? "bg-orange-500 text-white hover:bg-orange-600 shadow-md shadow-orange-500/20"
+                  : "bg-blue-600 text-white hover:bg-blue-700 shadow-md shadow-blue-500/20"
+                } ${authLoading ? "opacity-70 cursor-not-allowed" : ""}`}
+              disabled={authLoading}
             >
-              Sign Up
+              {authLoading ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  PROCESSING...
+                </>
+              ) : "SIGN UP"}
             </button>
           </div>
         </form>
-        <div className='text-center'>
-          <h2 className='text-gray-600'>
+        <div className='text-center mt-2'>
+          <h2 className={`text-sm ${isDark ? "text-gray-400" : "text-gray-600"}`}>
             Already have an account?
-            <Link className='text-blue-600 font-semibold hover:underline' to={'/login'}> Log In</Link>
+            <Link className={`font-black ml-1 hover:underline ${isDark ? "text-orange-400" : "text-blue-600"}`} to={'/login'}>
+              Log In
+            </Link>
           </h2>
         </div>
       </div>
+
+      {/* AMAZON-STYLE AUTH FOOTER */}
+      <div className={`mt-10 text-center text-[11px] flex flex-col items-center gap-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+        <div className="flex items-center gap-6 font-medium">
+          <Link to="#" className={`hover:underline ${isDark ? "hover:text-orange-300" : "hover:text-blue-600"}`}>Conditions of Use</Link>
+          <Link to="#" className={`hover:underline ${isDark ? "hover:text-orange-300" : "hover:text-blue-600"}`}>Privacy Notice</Link>
+          <Link to="#" className={`hover:underline ${isDark ? "hover:text-orange-300" : "hover:text-blue-600"}`}>Help</Link>
+        </div>
+        <p className="mt-1 flex items-center gap-1">© 2026 StoreFusion Technologies <span className="hidden sm:inline">| Elevating E-Commerce</span></p>
+      </div>
+
     </div>
   );
 }

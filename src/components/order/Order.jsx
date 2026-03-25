@@ -365,8 +365,8 @@ function Order({ orderLoading }) {
                           {/* <p className={`text-[13px] font-black uppercase tracking-tight ${isDark ? "text-green-400" : "text-green-600"}`}>
                             ₹{orderTotals[order.id]}
                           </p> */}
-                          <p className={`text-[13px] font-black uppercase tracking-tight ${isDark ? "text-green-400" : "text-green-600"}`}>
-                            ₹{order.cartItems?.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0)}
+                          <p className={`text-[13px] font-medium uppercase tracking-tight ${isDark ? "text-white" : "text-gray-900"}`}>
+                            ₹ {order.cartItems?.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0)}
                           </p>
                         </div>
                       </div>
@@ -392,14 +392,14 @@ function Order({ orderLoading }) {
 
                         <div className="space-y-4">
                           {order.cartItems.map((item, i) => (
-                            <div key={i} onClick={() => navigate("/productInfo/" + item.id)} className={`flex gap-5 items-center p-4 rounded-[25px] border transition-all cursor-pointer group ${isDark ? "bg-[#131921] border-gray-700 hover:border-blue-600" : "bg-gray-50 border-gray-100 hover:border-blue-600"
+                            <div key={i} onClick={() => navigate("/productInfo/" + item.id)} className={`flex gap-5 items-center p-4 rounded-[25px] border transition-all duration-300 cursor-pointer group ${isDark ? "bg-[#131921] border-gray-700 hover:bg-gray-800/50 hover:border-gray-600 hover:shadow-lg hover:shadow-black/20" : "bg-gray-50 border-gray-100 hover:bg-white hover:border-gray-200 hover:shadow-xl hover:shadow-gray-200/50"
                               }`}>
                               <div className="w-24 h-24 bg-white rounded-2xl p-2 shrink-0 shadow-inner flex items-center justify-center border border-gray-100">
-                                <img src={item.imageUrl} alt={item.title} className="max-h-full object-contain group-hover:scale-110 transition-transform" />
+                                <img src={item.imageUrl} alt={item.title} className="max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
                               </div>
                               <div className="flex-1">
                                 <h4 className={`text-sm md:text-base font-black uppercase leading-tight line-clamp-1 ${isDark ? "text-white" : "text-gray-900"}`}>{item.title}</h4>
-                                <p className="text-blue-600 font-black text-lg italic mt-1">₹{item.price}</p>
+                                <p className={`font-medium mt-1 ${isDark ? "text-white" : "text-gray-900"}`}>₹ {item.price}</p>
                                 <p className="text-[10px] font-bold text-gray-400 uppercase mt-1">Qty: 01 | Color: Default</p>
                               </div>
                             </div>

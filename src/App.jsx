@@ -185,7 +185,7 @@
 
 
 import "./App.css";
-import React, { Suspense, lazy, useEffect, useState} from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -271,38 +271,40 @@ function App() {
     <>
       {/* ✅ FULL SCREEN FIRST LOAD ONLY */}
       {/* {cartLoading && (
-        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-          <Loader fullScreen size={60} />
+        <div className="fixed top-0 left-0 w-full h-full overflow-y-auto bg-white dark:bg-[#131921] z-[9999]">
+          <Loader type="spinner" fullScreen />
         </div>
       )} */}
       {/* <h1> {version} </h1> */}
 
       <BrowserRouter
-      future={{
-      v7_startTransition: true,
-      v7_relativeSplatPath: true,
-    }}
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
       >
         <MyState>
-          <Suspense fallback={<Loader count={8}/>}>
+          <Suspense fallback={<Loader type="spinner" fullScreen />}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/order" element={<Order orderLoading={orderLoading} />} />
-              <Route path="/cart" element={<Cart  cartLoading ={cartLoading } />} />
+              <Route path="/cart" element={<Cart cartLoading={cartLoading} />} />
               <Route path="/allproducts" element={<Allproducts />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<Login />} />  
               <Route path="/productInfo/:id" element={<ProductInfo />} />
-              
+
               <Route path="/category/:name" element={<CategoryProducts />} />
 
               <Route
                 path="/dashboard"
                 element={
                   <ProtectedRoutesForAdmin>
-                    <Dashboard />
+                    <Suspense fallback={<Loader type="admin" />}>
+                      <Dashboard />
+                    </Suspense>
                   </ProtectedRoutesForAdmin>
                 }
               />
@@ -325,13 +327,13 @@ function App() {
                 }
               />
               <Route
-  path="/addtestimonial"
-  element={
-    <ProtectedRoutesForAdmin>
-      <AddTestimonial />
-    </ProtectedRoutesForAdmin>
-  }
-/>
+                path="/addtestimonial"
+                element={
+                  <ProtectedRoutesForAdmin>
+                    <AddTestimonial />
+                  </ProtectedRoutesForAdmin>
+                }
+              />
 
               <Route path="/*" element={<NoPage />} />
             </Routes>
