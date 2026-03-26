@@ -430,6 +430,7 @@ function MyState({ children }) {
       year: "numeric",
     }),
   });
+
   const [testimonialForm, setTestimonialForm] = useState({
     name: "",
     text: "",
@@ -790,13 +791,13 @@ function MyState({ children }) {
   }, [mode]);
 
   // --- Initial loader render ---
-  // if (initialLoading) {
-  //   return (
-  //     <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
-  //       <Loader fullScreen size={60} />
-  //     </div>
-  //   );
-  // }
+  if (initialLoading) {
+    return (
+      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-50">
+        <Loader fullScreen size={60} />
+      </div>
+    );
+  }
 
   return (
     <MyContext.Provider

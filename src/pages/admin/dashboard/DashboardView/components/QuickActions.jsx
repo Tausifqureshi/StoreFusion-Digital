@@ -10,7 +10,7 @@ const QuickActions = ({ isDark, navigate }) => {
   ];
 
   return (
-    <div className={`p-8 rounded-3xl border transition-all flex flex-col justify-center h-full w-full ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)] shadow-sm'}`}>
+    <div className={`p-8 rounded-3xl border transition-all flex flex-col justify-center h-full w-full ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
       <h3 className={`text-xl font-extrabold mb-6 flex items-center gap-3 ${isDark ? 'text-white' : 'text-gray-800'}`}>
         <span className="text-orange-500 text-2xl">⚡</span> Quick Actions
       </h3>

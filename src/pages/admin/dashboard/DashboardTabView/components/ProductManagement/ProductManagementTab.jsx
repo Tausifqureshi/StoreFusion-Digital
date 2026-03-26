@@ -19,7 +19,7 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
 
   // State for Pagination
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8; // Match design density
+  const itemsPerPage = 8;
 
   // 👉 saari unique categories filter kar rahe hain taaki dropdown me dikha sakein
   const availableProductCategories = useMemo(() => {
@@ -27,27 +27,37 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
     return ["All Categories", ...new Set(product.map(p => p.category).filter(Boolean))];
   }, [product]);
 
-  // 👉 backend order API state se total sales count process kar rahe hain har product ke liye
+  // 👉 Har product ki TOTAL BIKRI (sales) calculate kar rahe hain — saare orders milake
   const productSalesCountMap = useMemo(() => {
-    // 👉 ek empty object bana rahe hain (map) jo har product id ke acche total quantity store karega
-    const map = {};
 
-    // 👉 har ek order (jo backend se aya hai) us par loop chala rahe hain
-    order.forEach(o => {
-      // 👉 agar order ke andar cartItems hain aur wo array hai, toh hi process karo
-      if (o.cartItems && Array.isArray(o.cartItems)) {
-        o.cartItems.forEach(item => {
-          // 👉 product id check karte hain
-          if (item.id) {
-            // 👉 us product ki pehle se jo sales hui thi (map[item.id]), usme nayi quantity add kardo (warna 1 add kardo)
-            map[item.id] = (map[item.id] || 0) + (Number(item.quantity) || 1);
-          }
-        });
-      }
+    // 👉 khali object jo har product ki bikri store karega — { "product_id": totalSales }
+    const salesByProductId = {};
+
+    // 👉 har ek order pe loop chal raha hai
+    order.forEach(orderItem => {
+
+      // 👉 agar cartItems array nahi hai to is order ko skip karo
+      if (!Array.isArray(orderItem.cartItems)) return;
+
+      // 👉 us order ke har ek product pe loop
+      orderItem.cartItems.forEach(product => {
+
+        // 👉 agar product ki ID nahi hai to skip karo — bina ID ke track nahi kar sakte
+        if (!product.id) return;
+
+        // 👉 quantity nikaalo, agar invalid ho to default 1
+        const quantity = Number(product.quantity) || 1;
+
+        // 👉 product.id DYNAMIC KEY ban raha hai — purani bikri lo (ya 0), usme nayi quantity jodo
+        salesByProductId[product.id] = //Dynamic Key
+          (salesByProductId[product.id] || 0) + quantity; //Dynamic Value
+      });
     });
-    // 👉 final object map wapas kar rahe hain, jaise: { "product1_id": 5, "product2_id": 12 }
-    return map;
-  }, [order]);
+
+    // 👉 final object return — { "abc123": 15, "xyz789": 7 }
+    return salesByProductId;
+
+  }, [order]); // 👉 sirf jab order change ho tabhi dobara chalega
 
   // 👉 filtering aur sorting ka combined processing yaha ho raha hai
   const filteredAndSortedProducts = useMemo(() => {
@@ -91,7 +101,7 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
 
         return 0; // 👉 default
       });
-  }, [product, order, productSalesCountMap, searchQuery, filterCategory, filterStatus, sortOrder]);
+  }, [product, productSalesCountMap, searchQuery, filterCategory, filterStatus, sortOrder]);
 
   // 👉 pagination ka logic - current page ke items calculate karna
   const totalPages = Math.ceil(filteredAndSortedProducts.length / itemsPerPage);

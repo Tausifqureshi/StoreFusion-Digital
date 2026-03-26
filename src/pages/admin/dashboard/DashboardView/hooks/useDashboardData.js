@@ -3,20 +3,20 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 export const useDashboardData = (allProducts, allOrders, allUsers) => {
   // 👉 Default range 'All Time' set kar diya, taake refresh pe saara data show ho
   const [selectedRange, setSelectedRange] = useState("All Time");
-  const [selectedDate, setSelectedDate] = useState(new Date("2026-03-20"));
+  const [calendarDate, setCalendarDate] = useState(new Date("2026-03-20"));
 
   // 👉 Ye function array ko date aur selected range ke hisaab se filter karega
   const filterByDate = useCallback((items) => {
     // 👉 Agar data khali hai to blank array return kardo
     if (!items || items.length === 0) return [];
-    
+
     // 👉 Agar user ne "All Time" select kiya hai to filter mat lagao, seedha sab return kardo
     if (selectedRange === "All Time") return items;
 
     // 👉 Calendar wali date ko base maan ke end of the day set kar rahe hain
-    const anchorTime = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 23, 59, 59, 999).getTime();
+    const anchorTime = new Date(calendarDate.getFullYear(), calendarDate.getMonth(), calendarDate.getDate(), 23, 59, 59, 999).getTime();
     const oneDay = 24 * 60 * 60 * 1000;
-    
+
     // 👉 Check kar rahe hain ki kitne din peeche ka data chahiye
     let daysToSubtract = 0;
     if (selectedRange === "Last 7 days") daysToSubtract = 7;
@@ -31,29 +31,33 @@ export const useDashboardData = (allProducts, allOrders, allUsers) => {
     // 👉 Final return jo dates match karegi us limit ke andar
     return items.filter(item => {
       const itemDate = new Date(item.date || item.createdAt || item.time || Date.now()).getTime();
-      return itemDate >= thresholdTime && itemDate <= anchorTime; 
+      return itemDate >= thresholdTime && itemDate <= anchorTime;
     });
-  }, [selectedRange, selectedDate]);
+  }, [selectedRange, calendarDate]);
 
   const order = useMemo(() => filterByDate(allOrders || []), [allOrders, filterByDate]);
   const product = useMemo(() => filterByDate(allProducts || []), [allProducts, filterByDate]);
   const user = useMemo(() => filterByDate(allUsers || []), [allUsers, filterByDate]);
 
-  const [monthlyOrders, setMonthlyOrders] = useState(Array(12).fill(0));
-  const [monthlyRevenue, setMonthlyRevenue] = useState(Array(12).fill(0));
+  const [monthlyOrders, setMonthlyOrders] = useState(Array(12).fill(0)); // 🟡 Page load pe chart zero se start karo — data aane se pehle kuch show na ho
+  const [monthlyRevenue, setMonthlyRevenue] = useState(Array(12).fill(0)); // 🟡 Page load pe revenue chart zero se start karo — data aane se pehle kuch show na ho
 
   // -------------------------------------------------------------------------
   // USER EXACT USE-EFFECT LOGIC PRESERVED BELOW
   // -------------------------------------------------------------------------
   useEffect(() => {
 
-    // 👉 agar order empty hai ya undefined hai to kuch mat karo
-    if (!order || order.length === 0) return;
+    // 👉 agar order empty hai ya undefined hai to chart ke arrays ko khali (zero) kardo
+    if (!order || order.length === 0) {
+      setMonthlyOrders(Array(12).fill(0));  // 🔴 Order empty hai → chart wapas zero pe reset karo, purana data mat dikhao
+      setMonthlyRevenue(Array(12).fill(0)); // 🔴 Order empty hai → revenue chart bhi zero pe reset karo, purana data mat dikhao
+      return;
+    }
 
     // 👉 12 months ke liye array bana rahe hain (Jan–Dec)
     // har index ek month ko represent karega (0 = Jan, 11 = Dec)
-    const ordersCount = Array(12).fill(0);   // orders count store karega
-    const revenueAcc = Array(12).fill(0);    // revenue store karega
+    const ordersCount = Array(12).fill(0);   // 🟢 Data aa gaya — 12 months ke liye fresh khali array, orders count yahan store hoga
+    const revenueAcc = Array(12).fill(0);    // 🟢 Data aa gaya — 12 months ke liye fresh khali array, revenue amount yahan store hoga
 
     // 👉 har order pe loop chala rahe hain
     order.forEach((item) => {
@@ -93,9 +97,14 @@ export const useDashboardData = (allProducts, allOrders, allUsers) => {
 
   return {
     selectedRange, setSelectedRange,
-    selectedDate, setSelectedDate,
+    calendarDate, setCalendarDate,
     order, product, user,
     monthlyOrders, monthlyRevenue,
     totalRevenue, newDiscounts
   };
 };
+
+
+
+
+

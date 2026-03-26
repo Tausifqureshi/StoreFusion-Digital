@@ -25,7 +25,7 @@ function Dashboard() {
   // are beautifully extracted and memoized inside this high-performance custom hook
   const {
     selectedRange, setSelectedRange,
-    selectedDate, setSelectedDate,
+    calendarDate, setCalendarDate,   // 👉 Naam change kiya tha hook me, yahan bhi match karna zaroori tha
     order, product, user,
     monthlyOrders, monthlyRevenue,
     totalRevenue, newDiscounts
@@ -88,8 +88,8 @@ function Dashboard() {
             isDark={isDark}
             selectedRange={selectedRange}
             setSelectedRange={setSelectedRange}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
+            selectedDate={calendarDate}       
+            setSelectedDate={setCalendarDate} 
           />
 
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6 relative z-10">

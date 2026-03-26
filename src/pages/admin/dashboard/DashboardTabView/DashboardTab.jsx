@@ -55,7 +55,7 @@ function DashboardTab() {
     { 
       id: "Reviews", 
       lightActive: "bg-purple-600 text-white shadow-inner border-2 border-white/50",
-      lightInactive: "bg-purple-500 text-white border-2 border-transparent hover:bg-purple-600 hover:shadow-md hover:shadow-purple-500/40",
+      lightInactive: "bg-purple-500 text-white border-2 bozrder-transparent hover:bg-purple-600 hover:shadow-md hover:shadow-purple-500/40",
       darkActive: "bg-purple-600 text-white shadow-inner border-2 border-black/30",
       darkInactive: "bg-purple-500 text-white border-2 border-transparent hover:bg-purple-600 hover:shadow-md hover:shadow-purple-900/60",
       icon: <FiMessageSquare size={19} strokeWidth={2.5} className="transition-colors drop-shadow-sm" />, 
