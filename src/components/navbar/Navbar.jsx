@@ -393,7 +393,9 @@ function Navbar() {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const totalOrders = useSelector((state) => state.orders.orders.length);
+  const totalOrders = useSelector((state) => 
+    state.orders.orders.filter(order => order.status?.toLowerCase() !== "delivered").length
+  );
   const totalQuantity = useSelector((state) =>
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
   );

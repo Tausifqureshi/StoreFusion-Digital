@@ -28,7 +28,6 @@ const ProductCategories = ({ isDark, products }) => {
     // }, {}); // {} = khali object, yahan se counting shuru hogi
     // 👉 Category counts — sales wale style me
     const categoryCountMap = {}; // khali object
-
     products.forEach(product => {
       // agar category nahi hai → 'Others'
       const cat = product.category || 'Others';

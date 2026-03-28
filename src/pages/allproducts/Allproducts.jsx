@@ -79,11 +79,11 @@ function Allproducts() {
             <>
               <div ref={productsRef} className="lg:w-1/2 w-full mb-6 lg:mb-10">
                 <h1
-                  className={`sm:text-3xl text-2xl font-medium title-font mb-2 ${
-                    mode === "dark" ? "text-white" : "text-gray-900"
+                  className={`sm:text-3xl text-2xl font-black uppercase tracking-tighter mb-2 ${
+                    mode === "dark" ? "text-white" : "text-blue-600"
                   }`}
                 >
-                  Our Latest Collection
+                  Our Latest <span className="text-orange-500">Collection</span>
                 </h1>
                 <div className="h-1 w-20 bg-blue-800 rounded transition-all duration-300 ease-in-out hover:bg-blue-600"></div>
               </div>

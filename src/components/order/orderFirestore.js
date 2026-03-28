@@ -68,6 +68,19 @@ export const cancelOrderFromFirestore = async (orderId) => {
   await deleteDoc(doc(fireDB, "orders", orderId));
 };
 
+// 🔹 Update order status (placed → shipped → delivered etc.)
+export const updateOrderStatus = async (orderId, newStatus) => {
+  if (!orderId || !newStatus) return;
+  const statusDateField = `${newStatus}Date`; // e.g., shippedDate, deliveredDate
+  const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true };
+  const formattedDate = new Date().toLocaleString("en-US", options);
+  
+  await setDoc(doc(fireDB, "orders", orderId), { 
+    status: newStatus,
+    [statusDateField]: formattedDate
+  }, { merge: true });
+};
+
 // 🔹 Cancel ALL orders of user
 export const cancelAllOrdersFromFirestore = async (uid) => {
   if (!uid) return;
@@ -87,5 +100,15 @@ export const cancelAllOrdersFromFirestore = async (uid) => {
     ),
   );
 
+  await Promise.all(promises);
+};
+
+// 🔹 Delete ALL orders of user (Permanent)
+export const deleteUserOrdersFromFirestore = async (uid) => {
+  if (!uid) return;
+  const q = query(collection(fireDB, "orders"), where("userid", "==", uid));
+  const snap = await getDocs(q);
+
+  const promises = snap.docs.map((orderDoc) => deleteDoc(doc(fireDB, "orders", orderDoc.id)));
   await Promise.all(promises);
 };

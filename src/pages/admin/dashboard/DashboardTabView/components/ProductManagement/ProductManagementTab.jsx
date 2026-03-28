@@ -27,37 +27,52 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
     return ["All Categories", ...new Set(product.map(p => p.category).filter(Boolean))];
   }, [product]);
 
-  // 👉 Har product ki TOTAL BIKRI (sales) calculate kar rahe hain — saare orders milake
-  const productSalesCountMap = useMemo(() => {
+  // // 👉 Har product ki TOTAL BIKRI (sales) calculate kar rahe hain — saare orders milake
+  // const productSalesCountMap = useMemo(() => {
 
-    // 👉 khali object jo har product ki bikri store karega — { "product_id": totalSales }
-    const salesByProductId = {};
+  //   // 👉 khali object jo har product ki bikri store karega — { "product_id": totalSales }
+  //   const salesByProductId = {};
 
-    // 👉 har ek order pe loop chal raha hai
-    order.forEach(orderItem => {
+  //   // 👉 har ek order pe loop chal raha hai
+  //   order.forEach(orderItem => {
 
-      // 👉 agar cartItems array nahi hai to is order ko skip karo
-      if (!Array.isArray(orderItem.cartItems)) return;
+  //     // 👉 agar cartItems array nahi hai to is order ko skip karo
+  //     if (!Array.isArray(orderItem.cartItems)) return;
 
-      // 👉 us order ke har ek product pe loop
-      orderItem.cartItems.forEach(product => {
+  //     // 👉 us order ke har ek product pe loop
+  //     orderItem.cartItems.forEach(product => {
 
-        // 👉 agar product ki ID nahi hai to skip karo — bina ID ke track nahi kar sakte
-        if (!product.id) return;
+  //       // 👉 agar product ki ID nahi hai to skip karo — bina ID ke track nahi kar sakte
+  //       if (!product.id) return;
 
-        // 👉 quantity nikaalo, agar invalid ho to default 1
-        const quantity = Number(product.quantity) || 1;
+  //       // 👉 quantity nikaalo, agar invalid ho to default 1
+  //       const quantity = Number(product.quantity) || 1;
 
-        // 👉 product.id DYNAMIC KEY ban raha hai — purani bikri lo (ya 0), usme nayi quantity jodo
-        salesByProductId[product.id] = //Dynamic Key
-          (salesByProductId[product.id] || 0) + quantity; //Dynamic Value
-      });
+  //       // 👉 product.id DYNAMIC KEY ban raha hai — purani bikri lo (ya 0), usme nayi quantity jodo
+  //       salesByProductId[product.id] = //Dynamic Key
+  //         (salesByProductId[product.id] || 0) + quantity; //Dynamic Value
+  //     });
+  //   });
+
+  //   // 👉 final object return — { "abc123": 15, "xyz789": 7 }
+  //   return salesByProductId;
+
+  // }, [order]); // 👉 sirf jab order change ho tabhi dobara chalega
+
+  const productSalesCountMap = order.reduce((acc, orderItem) => {
+    // agar cartItems array nahi hai to skip
+    if (!Array.isArray(orderItem.cartItems)) return acc;
+
+    orderItem.cartItems.forEach(product => {
+      if (!product.id) return;
+      const quantity = Number(product.quantity) || 1;
+
+      // dynamic key + accumulation
+      acc[product.id] = (acc[product.id] || 0) + quantity;
     });
 
-    // 👉 final object return — { "abc123": 15, "xyz789": 7 }
-    return salesByProductId;
-
-  }, [order]); // 👉 sirf jab order change ho tabhi dobara chalega
+    return acc;
+  }, {}); // initial value empty object hai reducer me jo bhi initial value hoti hai o accumulator ban jata hai is me initial value empty object hai tu yaha accumulator ban gaya ab jo bhi value aye gi is obejct me stor hogi same kaam forEach waela upper command hai lekin react me aisa hi use hota jayda.
 
   // 👉 filtering aur sorting ka combined processing yaha ho raha hai
   const filteredAndSortedProducts = useMemo(() => {
