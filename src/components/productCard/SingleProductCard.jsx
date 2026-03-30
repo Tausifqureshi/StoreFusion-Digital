@@ -7,8 +7,8 @@ import { useNavigate } from "react-router-dom";
 import ImageWithLoader from "../loader/ImageWithLoader";
 import { saveCart } from "../../pages/cart/cartService";
 
-function SingleProductCard({ item, expandedId, setExpandedId }) {
-  const { mode } = useContext(MyContext);
+function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
+  // const { mode } = useContext(MyContext);
 
   // 👉 Fallback to title if id is missing to prevent all cards matching 'undefined === undefined'
   const uniqueId = item.id || item.title;

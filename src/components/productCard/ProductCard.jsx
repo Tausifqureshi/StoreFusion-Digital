@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useMemo } from "react";
 import { MyContext } from "../../context api/myContext";
 import SingleProductCard from "./SingleProductCard";
 import ProductSkeleton from "../loader/ProductSkeleton";
@@ -16,25 +16,27 @@ function ProductCard() {
 
   const [expandedId, setExpandedId] = useState(null);
 
-  const filteredProducts = product
-    .filter((item) =>
-      item.title.toLowerCase().includes(searchkey.toLowerCase())
-    )
-    .filter((item) => {
-      if (filterType.length === 0) return true;
-      return filterType.includes(item.category);
-    })
-    .filter((item) => {
-      if (filterPrice === "") return true;
-      const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
-      return item.price >= minPrice && item.price <= maxPrice;
-    })
-    .sort((a, b) => {
-      if (sortPrice === "low-to-high") return a.price - b.price;
-      if (sortPrice === "high-to-low") return b.price - a.price;
-      return 0;
-    })
-    .slice(0, 8);
+  const filteredProducts = useMemo(() => {
+    return product
+      .filter((item) =>
+        item.title.toLowerCase().includes(searchkey.toLowerCase())
+      )
+      .filter((item) => {
+        if (filterType.length === 0) return true;
+        return filterType.includes(item.category);
+      })
+      .filter((item) => {
+        if (filterPrice === "") return true;
+        const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
+        return item.price >= minPrice && item.price <= maxPrice;
+      })
+      .sort((a, b) => {
+        if (sortPrice === "low-to-high") return a.price - b.price;
+        if (sortPrice === "high-to-low") return b.price - a.price;
+        return 0;
+      })
+      .slice(0, 8);
+  }, [product, searchkey, filterType, filterPrice, sortPrice]);
 
   return (
     <section className="body-font">
@@ -61,6 +63,7 @@ function ProductCard() {
                   item={item}
                   expandedId={expandedId}
                   setExpandedId={setExpandedId}
+                  mode={mode}
                 />
               ))}
             </div>

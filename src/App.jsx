@@ -186,7 +186,7 @@
 
 import "./App.css";
 import React, { Suspense, lazy, useEffect, useState } from "react";
-import OrderDetails from "./components/order/OrderDetails";
+import OrderDetails from "./components/order/order-details/OrderDetails";
 import {
   BrowserRouter,
   Routes,
@@ -291,8 +291,8 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/order" element={<Order orderLoading={orderLoading} />} />
-              <Route path="/order-details/:id" element={<OrderDetails />} />
-              <Route path="/order-details" element={<OrderDetails />} />
+              <Route path="/order-details/:id" element={<OrderDetails orderLoading={orderLoading} />} />
+              <Route path="/order-details" element={<OrderDetails orderLoading={orderLoading} />} />
               <Route path="/cart" element={<Cart cartLoading={cartLoading} />} />
               <Route path="/allproducts" element={<Allproducts />} />
               <Route path="/signup" element={<Signup />} />

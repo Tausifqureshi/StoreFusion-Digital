@@ -61,9 +61,9 @@ import { Link } from "react-router-dom";
 import { useState, useContext } from "react";
 import { MyContext } from "../../context api/myContext";
 
-function HeroSection() {
+function HeroSection({ mode }) {
   const [active, setActive] = useState(0);
-  const { mode } = useContext(MyContext);
+  // const { mode } = useContext(MyContext);
   const isDark = mode === "dark";
 
   const slides = [

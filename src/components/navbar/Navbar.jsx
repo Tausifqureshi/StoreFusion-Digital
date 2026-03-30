@@ -356,7 +356,7 @@
 
 
 
-import React, { Fragment, useContext, useState, useEffect } from "react";
+import React, { Fragment, useContext, useState, useEffect, useMemo } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
@@ -439,14 +439,15 @@ function Navbar() {
   }, [lastScrollY]);
 
 
-  const navItems = [
+
+  const navItems = useMemo(() => [
     { name: "Home", URL: "/" },
     { name: "All Products", URL: "/allproducts" },
     { name: "About", URL: "/about" },
     { name: "Contact", URL: "/contact" },
-  ];
+  ], []);
 
-  const categories = [...new Set(product.map((p) => p.category))];
+  const categories = useMemo(() => [...new Set(product.map((p) => p.category))], [product]);
   const isDark = mode === "dark";
 
   function handleLogout() {

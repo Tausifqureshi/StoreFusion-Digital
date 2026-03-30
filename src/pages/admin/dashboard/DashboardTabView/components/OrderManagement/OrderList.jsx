@@ -7,13 +7,13 @@ const OrderList = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropd
     <div className="flex flex-col gap-4">
       {ordersOnCurrentPage.length > 0 ? (
         ordersOnCurrentPage.map((o, i) => (
-          <OrderItem 
+          <OrderItem
             key={o.id || i}
-            isDark={isDark} 
-            o={o} 
-            i={i} 
-            activeDropdown={activeDropdown} 
-            setActiveDropdown={setActiveDropdown} 
+            isDark={isDark}
+            o={o}
+            i={i}
+            activeDropdown={activeDropdown}
+            setActiveDropdown={setActiveDropdown}
           />
         ))
       ) : (
@@ -28,4 +28,4 @@ const OrderList = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropd
   );
 };
 
-export default OrderList;
+export default React.memo(OrderList);

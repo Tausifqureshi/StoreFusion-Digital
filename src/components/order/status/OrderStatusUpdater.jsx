@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { FiTruck, FiCheckCircle, FiClock, FiXCircle, FiRefreshCw, FiBox } from 'react-icons/fi';
-import { updateOrderStatus } from './orderFirestore';
+import { updateOrderStatus } from '../orderFirestore';
 
 // 👉 Har status ke liye button config — label, icon, color
 const STATUS_BUTTONS = [
   { label: 'placed', icon: FiBox, color: 'bg-orange-500 hover:bg-orange-600' },
-  { label: 'shipped', icon: FiTruck, color: 'bg-purple-500 hover:bg-purple-600' },
-  { label: 'delivered', icon: FiCheckCircle, color: 'bg-green-500  hover:bg-green-600' },
   { label: 'pending', icon: FiClock, color: 'bg-yellow-500 hover:bg-yellow-600' },
-  { label: 'cancelled', icon: FiXCircle, color: 'bg-red-500    hover:bg-red-600' },
-  { label: 'refunded', icon: FiRefreshCw, color: 'bg-blue-500   hover:bg-blue-600' },
+  { label: 'processing', icon: FiRefreshCw, color: 'bg-blue-500 hover:bg-blue-600' },
+  { label: 'shipped', icon: FiTruck, color: 'bg-purple-500 hover:bg-purple-600' },
+  { label: 'hub', icon: FiBox, color: 'bg-indigo-500 hover:bg-indigo-600' },
+  { label: 'delivered', icon: FiCheckCircle, color: 'bg-green-500 hover:bg-green-600' },
+  { label: 'returned', icon: FiRefreshCw, color: 'bg-gray-500 hover:bg-gray-600' },
+  { label: 'refunded', icon: FiRefreshCw, color: 'bg-blue-400 hover:bg-blue-500' },
+  { label: 'cancelled', icon: FiXCircle, color: 'bg-red-500 hover:bg-red-600' },
 ];
 
 const OrderStatusUpdater = ({ orderId, currentStatus, isDark, onClose }) => {
@@ -20,7 +23,7 @@ const OrderStatusUpdater = ({ orderId, currentStatus, isDark, onClose }) => {
     setLoading(newStatus);
     try {
       // 👉 Firestore mein status update karo — onSnapshot se automatically reflect hoga
-      await updateOrderStatus(orderId, newStatus);
+      await updateOrderStatus(orderId, newStatus, currentStatus);
       onClose?.(); // modal/dropdown band karo
     } catch (err) {
       console.error('Status update failed:', err);

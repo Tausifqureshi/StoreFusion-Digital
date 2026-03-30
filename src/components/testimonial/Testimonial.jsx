@@ -73,8 +73,8 @@ import { MyContext } from '../../context api/myContext';
 import { FaEdit, FaTrash, FaQuoteLeft, FaStar } from 'react-icons/fa'; // Ye ensure kar lena
 
 // Props mein productId ya categoryName bhej sakte ho
-function Testimonial({ productId = null, categoryName = null, isAdmin = false }) {
-  const { mode, testimonial, product, getAvatar, editTestimonial, deleteTestimonial } = useContext(MyContext);
+function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode }) {
+  const { testimonial, product, getAvatar, editTestimonial, deleteTestimonial } = useContext(MyContext);
   const isDark = mode === 'dark';
 
   // ⭐ Sara Filter Logic ab yahan move ho gaya

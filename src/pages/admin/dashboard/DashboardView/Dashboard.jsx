@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useMemo } from 'react';
 import { FaBox, FaShoppingCart, FaUsers, FaTags } from 'react-icons/fa';
 import { MyContext } from '../../../../context api/myContext';
 import Layout from '../../../../components/layout/Layout';
@@ -31,7 +31,7 @@ function Dashboard() {
     totalRevenue, newDiscounts
   } = useDashboardData(allProducts, allOrders, allUsers);
 
-  const stats = [
+  const stats = useMemo(() => [
     {
       title: "Total Revenue",
       value: `₹${totalRevenue.toLocaleString()}`,
@@ -77,7 +77,7 @@ function Dashboard() {
       trend: "down",
       trendValue: "-2.4%"
     },
-  ];
+  ], [totalRevenue, newDiscounts, product?.length, order?.length, user?.length]);
 
   return (
     <Layout>

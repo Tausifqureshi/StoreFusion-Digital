@@ -384,7 +384,7 @@
 
 
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import { MyContext } from "./myContext";
 import Loader from "../components/loader/Loader";
 import { fireDB } from "../firebase/FirebaseConfig";
@@ -662,7 +662,7 @@ function MyState({ children }) {
     }
   }, [testimonialForm, navigate]);
 
-  const getAvatar = (item) => {
+  const getAvatar = useCallback((item) => {
     // user uploaded image
     if (item?.img) return item.img;
 
@@ -670,7 +670,7 @@ function MyState({ children }) {
     const gender = item?.gender === "female" ? "women" : "men";
 
     return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
-  };
+  }, []);
 
   const updateProduct = useCallback(async () => {
     setLoading(true);
@@ -790,6 +790,28 @@ function MyState({ children }) {
     }
   }, [mode]);
 
+  const contextValue = useMemo(
+    () => ({
+      mode, toggleMode, loading, setLoading,
+      addProduct, products, setProducts, product, edithandle,
+      updateProduct, deleteProduct, order, setOrder, cancelOrder,
+      user, searchkey, setSearchkey, filterType, setFilterType,
+      filterPrice, setFilterPrice, sortPrice, setSortPrice,
+      productLoading, orderLoading, userLoading, testimonial,
+      setTestimonial, testimonialForm, setTestimonialForm,
+      addTestimonial, editTestimonial, deleteTestimonial,
+      updateTestimonial, getAvatar
+    }),
+    [
+      mode, toggleMode, loading, addProduct, products, product,
+      edithandle, updateProduct, deleteProduct, order, cancelOrder,
+      user, searchkey, filterType, filterPrice, sortPrice,
+      productLoading, orderLoading, userLoading, testimonial,
+      testimonialForm, addTestimonial, editTestimonial,
+      deleteTestimonial, updateTestimonial, getAvatar
+    ]
+  );
+
   // --- Initial loader render ---
   if (initialLoading) {
     return (
@@ -800,45 +822,7 @@ function MyState({ children }) {
   }
 
   return (
-    <MyContext.Provider
-      value={{
-        mode,
-        toggleMode,
-        loading,
-        setLoading,
-        addProduct,
-        products,
-        setProducts,
-        product,
-        edithandle,
-        updateProduct,
-        deleteProduct,
-        order,
-        setOrder,
-        cancelOrder,
-        user,
-        searchkey,
-        setSearchkey,
-        filterType,
-        setFilterType,
-        filterPrice,
-        setFilterPrice,
-        sortPrice,
-        setSortPrice,
-        productLoading,
-        orderLoading,
-        userLoading,
-        testimonial,
-        setTestimonial,
-        testimonialForm,
-        setTestimonialForm,
-        addTestimonial,
-        editTestimonial,   // <-- add this
-        deleteTestimonial, // <-- add this
-        updateTestimonial, // <-- add this
-        getAvatar
-      }}
-    >
+    <MyContext.Provider value={contextValue}>
       {children}
     </MyContext.Provider>
   );

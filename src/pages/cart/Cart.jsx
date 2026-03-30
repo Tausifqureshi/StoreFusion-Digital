@@ -739,7 +739,7 @@
 
 
 
-import React, { useContext, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState, useCallback } from "react";
 import Layout from "../../components/layout/Layout";
 import { MyContext } from "../../context api/myContext";
 import { useDispatch, useSelector } from "react-redux";
@@ -753,10 +753,11 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import Razorpay from "../razorpay/Razorpay";
 import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
-import Loader from "../../components/loader/Loader";
+import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import { clearCartStorage } from "./cartService";
 import { saveCartDebounce } from "./debounce";
 import { FiTrash2, FiMinus, FiPlus, FiChevronDown, FiShield, FiTruck } from "react-icons/fi";
+import CartItemCard from "./CartItemCard";
 
 function Cart({ cartLoading }) {
   const { mode } = useContext(MyContext);
@@ -765,28 +766,19 @@ function Cart({ cartLoading }) {
   const [clearingCart, setClearingCart] = useState(false);
   const [cartUpdating, setCartUpdating] = useState(null);
 
-  // --- SAME LOGIC JO TUJHE CHAHIYE THA ---
-  const [descOpen, setDescOpen] = useState({});
-  const toggleDesc = (index) => {
-    setDescOpen((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
 
-  const [descExpanded, setDescExpanded] = useState({});
-  const toggleDescExpand = (index) => {
-    setDescExpanded((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
 
   const isDark = mode === "dark";
 
   // Actions Logic
-  const deleteCart = (itemId) => {
+  const deleteCart = useCallback((itemId) => {
     const updatedCart = cartItems.filter((i) => i.id !== itemId);
     dispatch(deleteFromCart(itemId));
     saveCartDebounce(updatedCart);
     toast.info("Removed from bag", { position: "bottom-right", autoClose: 1000 });
-  };
+  }, [cartItems, dispatch]);
 
-  const incrementCartQuantity = (itemId) => {
+  const incrementCartQuantity = useCallback((itemId) => {
     const item = cartItems.find((i) => i.id === itemId);
     if (!item) return;
 
@@ -802,19 +794,19 @@ function Cart({ cartLoading }) {
     dispatch(incrementQuantity(itemId));
     saveCartDebounce(updatedCart);
     setTimeout(() => setCartUpdating(null), 250);
-  };
+  }, [cartItems, dispatch]);
 
-  const decrementCartQuantity = (itemId) => {
+  const decrementCartQuantity = useCallback((itemId) => {
     const item = cartItems.find((i) => i.id === itemId);
     if (!item || item.quantity === 1) return;
     setCartUpdating({ id: itemId, type: "decrement" });
-    const updatedCart = cartItems.map((item) =>
-      item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
+    const updatedCart = cartItems.map((cartItem) =>
+      cartItem.id === itemId ? { ...cartItem, quantity: cartItem.quantity - 1 } : cartItem
     );
     dispatch(decrementQuantity(itemId));
     saveCartDebounce(updatedCart);
     setTimeout(() => setCartUpdating(null), 250);
-  };
+  }, [cartItems, dispatch]);
 
   const clearCartItems = async () => {
     setClearingCart(true);
@@ -837,7 +829,7 @@ function Cart({ cartLoading }) {
 
   return (
     <Layout>
-      {cartLoading ? <Loader /> : (
+      {cartLoading ? <LoaderSpinner isDark={isDark} label="Loading bag..." /> : (
         <div className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"}`}>
           <div className="max-w-7xl mx-auto px-4">
 
@@ -856,67 +848,18 @@ function Cart({ cartLoading }) {
 
                 {/* Left: Cart Items List */}
                 <div className="w-full lg:flex-1 space-y-4">
-                  {cartItems.map((item, index) => {
-                    const isDescOpen = descOpen[index] || false;
-                    const isDescExpanded = descExpanded[index] || false;
-                    const shortDesc = item.description?.length > 60 ? item.description.slice(0, 60) + "..." : item.description;
-
-                    return (
-                      <div key={index} className={`p-4 md:p-6 rounded-[24px] border transition-all ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-white border-gray-100 shadow-sm"}`}>
-                        <div className="flex flex-row gap-4 md:gap-6">
-                          {/* Image */}
-                          <div className={`w-24 h-24 md:w-32 md:h-32 rounded-2xl p-2 flex shrink-0 items-center justify-center overflow-hidden border ${isDark ? "bg-white border-gray-700" : "bg-white border-gray-50 shadow-inner"}`}>
-                            <img src={item.imageUrl} alt="product" className="max-h-full object-contain" />
-                          </div>
-
-                          {/* Info */}
-                          <div className="flex-1 min-w-0">
-                            <div className="flex justify-between items-start gap-2">
-                              <div>
-                                <p className="text-[8px] font-black text-orange-500 uppercase tracking-widest">{item.category}</p>
-                                <h2 className="text-sm md:text-lg font-black uppercase tracking-tight truncate leading-tight">{item.title}</h2>
-                              </div>
-                              <button onClick={() => deleteCart(item.id)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0">
-                                <FiTrash2 size={18} />
-                              </button>
-                            </div>
-
-                            {/* --- DESCRIPTION LOGIC (Wahi Jo Aapne Manga) --- */}
-                            <div className="mt-2">
-                              <button onClick={() => toggleDesc(index)} className="flex items-center gap-1 text-blue-600 text-[10px] font-black uppercase tracking-widest">
-                                {isDescOpen ? "Close Details" : "View Details"}
-                                <FiChevronDown className={`transition-transform duration-300 ${isDescOpen ? "rotate-180" : ""}`} />
-                              </button>
-                              {isDescOpen && (
-                                <div className={`mt-2 p-3 rounded-xl text-[11px] leading-relaxed font-bold ${isDark ? "bg-[#131921] text-gray-400" : "bg-gray-50 text-gray-600"}`}>
-                                  {isDescExpanded ? item.description : shortDesc}
-                                  {item.description?.length > 60 && (
-                                    <span onClick={() => toggleDescExpand(index)} className="text-blue-600 ml-1 cursor-pointer underline">
-                                      {isDescExpanded ? "See Less" : "See More"}
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </div>
-
-                            {/* Price & Quantity */}
-                            <div className="flex items-center justify-between mt-4">
-                              <span className={`text-lg md:text-xl font-medium ${isDark ? "text-white" : "text-gray-900"}`}>₹ {item.price}</span>
-                              <div className={`flex items-center gap-3 px-3 py-1 rounded-xl border ${isDark ? "bg-[#131921] border-gray-700" : "bg-gray-50 border-gray-100"}`}>
-                                <button onClick={() => decrementCartQuantity(item.id)} disabled={cartUpdating?.id === item.id} className="text-xs hover:text-blue-600 transition-colors">
-                                  {cartUpdating?.id === item.id && cartUpdating?.type === "decrement" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiMinus />}
-                                </button>
-                                <span className="text-xs font-black w-4 text-center">{item.quantity}</span>
-                                <button onClick={() => incrementCartQuantity(item.id)} disabled={cartUpdating?.id === item.id} className="text-xs hover:text-blue-600 transition-colors">
-                                  {cartUpdating?.id === item.id && cartUpdating?.type === "increment" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiPlus />}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {cartItems.map((item, index) => (
+                    <CartItemCard 
+                      key={item.id || index}
+                      item={item}
+                      index={index}
+                      isDark={isDark}
+                      deleteCart={deleteCart}
+                      decrementCartQuantity={decrementCartQuantity}
+                      incrementCartQuantity={incrementCartQuantity}
+                      cartUpdating={cartUpdating}
+                    />
+                  ))}
                 </div>
 
                 {/* Right: Modern Sticky Sidebar */}

@@ -9,7 +9,7 @@ import OrderPagination from './OrderPagination';
 const OrderManagementTab = ({ isDark, order = [] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
-  
+
   // 👉 Filters ke liye state
   const [filterStatus, setFilterStatus] = useState("All Status");
   const [sortOrder, setSortOrder] = useState("Newest First");
@@ -27,18 +27,18 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
   const filteredAndSortedOrders = useMemo(() => {
     return order
       .filter((o) => {
-        const matchesSearch = o.email?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              o.paymentId?.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                              o.id?.toLowerCase().includes(searchQuery.toLowerCase());
-        
+        const matchesSearch = o.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          o.paymentId?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          o.id?.toLowerCase().includes(searchQuery.toLowerCase());
+
         const matchesStatus = filterStatus === "All Status" || (o.status || 'processing').toLowerCase() === filterStatus.toLowerCase();
-        
+
         return matchesSearch && matchesStatus;
       })
       .sort((a, b) => {
         const dateA = new Date(a.date || a.createdAt || 0).getTime();
         const dateB = new Date(b.date || b.createdAt || 0).getTime();
-        
+
         if (sortOrder === "Newest First") return dateB - dateA;
         if (sortOrder === "Oldest First") return dateA - dateB;
         if (sortOrder === "Amount High to Low") return Number(b.grandTotal || b.price || 0) - Number(a.grandTotal || a.price || 0);
@@ -60,7 +60,7 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      
+
       {/* 👉 HEADER SECTION */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
         <div>
@@ -79,13 +79,13 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
       </div>
 
       {/* 👉 SUMMARY CARDS */}
-      <OrderSummaryCards 
-        isDark={isDark} 
-        order={order} 
+      <OrderSummaryCards
+        isDark={isDark}
+        order={order}
       />
 
       {/* 👉 SEARCH & FILTERS */}
-      <OrderFilters 
+      <OrderFilters
         isDark={isDark}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -101,8 +101,8 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
         <h2 className={`text-xl font-black tracking-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           Orders ({filteredAndSortedOrders.length})
         </h2>
-        
-        <OrderList 
+
+        <OrderList
           isDark={isDark}
           ordersOnCurrentPage={ordersOnCurrentPage}
           activeDropdown={activeDropdown}
@@ -111,7 +111,7 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
       </div>
 
       {/* 👉 PAGINATION */}
-      <OrderPagination 
+      <OrderPagination
         isDark={isDark}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
@@ -124,4 +124,4 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
   );
 };
 
-export default OrderManagementTab;
+export default React.memo(OrderManagementTab);

@@ -196,4 +196,4 @@ const ProductManagementTab = ({ isDark, product = [], order = [], edithandle, de
   );
 };
 
-export default ProductManagementTab;
+export default React.memo(ProductManagementTab);

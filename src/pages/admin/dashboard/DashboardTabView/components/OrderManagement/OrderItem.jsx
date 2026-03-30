@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { FaEllipsisH, FaEye, FaEdit, FaTrash, FaDownload } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import OrderStatusBadge from '../../../../../../components/order/OrderStatusBadge';
-import OrderStatusUpdater from '../../../../../../components/order/OrderStatusUpdater';
+import OrderStatusUpdater from '../../../../../../components/order/status/OrderStatusUpdater';
 
 const OrderItem = ({ isDark, o, i, activeDropdown, setActiveDropdown }) => {
   const [showStatusUpdater, setShowStatusUpdater] = useState(false); // 👉 status updater panel toggle
 
-  // 👉 Handle text-based invoice generation and download
-  const handleDownloadInvoice = () => {
+  // 👉 Handle text-based invoice generation and download (Memoized for performance)
+  const handleDownloadInvoice = useCallback(() => {
     const invoiceContent = `
 =================================
 INVOICE - E-COMMERCE STORE
@@ -38,7 +38,7 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
     setActiveDropdown(null);
-  };
+  }, [o, i, setActiveDropdown]);
 
   return (
     <>
@@ -149,4 +149,4 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
   );
 };
 
-export default OrderItem;
+export default React.memo(OrderItem);

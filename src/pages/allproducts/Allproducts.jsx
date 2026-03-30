@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
 import { MyContext } from "../../context api/myContext";
 import Filter from "../../components/filter/Filter";
 import Layout from "../../components/layout/Layout";
@@ -35,27 +35,29 @@ function Allproducts() {
   }, []);
 
   // Apply filters
-  const filteredProducts = product
-  .filter((item) =>
-    item.title.toLowerCase().includes(searchkey.toLowerCase())
-  )
-  .filter((item) => {
-    // ✅ AGAR filterType khali array hai toh saare products dikhao
-    if (filterType.length === 0) return true;
-    
-    // ✅ Check karo ki product ki category selected categories mein hai ya nahi
-    return filterType.includes(item.category);
-  })
-  .filter((item) => {
-    if (filterPrice === "") return true;
-    const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
-    return item.price >= minPrice && item.price <= maxPrice;
-  })
-  .sort((a, b) => {
-    if (sortPrice === "low-to-high") return a.price - b.price;
-    if (sortPrice === "high-to-low") return b.price - a.price;
-    return 0;
-  });
+  const filteredProducts = useMemo(() => {
+    return product
+      .filter((item) =>
+        item.title.toLowerCase().includes(searchkey.toLowerCase())
+      )
+      .filter((item) => {
+        // ✅ AGAR filterType khali array hai toh saare products dikhao
+        if (filterType.length === 0) return true;
+        
+        // ✅ Check karo ki product ki category selected categories mein hai ya nahi
+        return filterType.includes(item.category);
+      })
+      .filter((item) => {
+        if (filterPrice === "") return true;
+        const [minPrice, maxPrice] = filterPrice.split("-").map(Number);
+        return item.price >= minPrice && item.price <= maxPrice;
+      })
+      .sort((a, b) => {
+        if (sortPrice === "low-to-high") return a.price - b.price;
+        if (sortPrice === "high-to-low") return b.price - a.price;
+        return 0;
+      });
+  }, [product, searchkey, filterType, filterPrice, sortPrice]);
 
   // Pagination calculations
   const indexOfLastProduct = currentPage * productsPerPage;
@@ -67,7 +69,7 @@ function Allproducts() {
 
   return (
     <Layout>
-      <Filter />
+      <Filter mode={mode} />
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-8 md:py-16 mx-auto">
           { productLoading ? (
@@ -90,7 +92,7 @@ function Allproducts() {
 
               <div className="flex flex-wrap -m-4">
                 {currentProducts.map((item, index) => (
-                  <SingleProductCard key={index} item={item} expandedId={expandedId} setExpandedId={setExpandedId} />
+                  <SingleProductCard key={index} item={item} expandedId={expandedId} setExpandedId={setExpandedId} mode={mode} />
                 ))}
               </div>
 
@@ -146,7 +148,7 @@ function Allproducts() {
           )}
         </div>
       </section>
-      <ScrollToTopButoon />
+      <ScrollToTopButoon mode={mode} />
     </Layout>
   );
 }

@@ -15,20 +15,13 @@ import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 
 
 function Home() {
+  const { mode } = useContext(MyContext);
   return ( 
     <div>
       <Layout>
-        <HeroSection />
-        <Filter />
+        <HeroSection mode={mode} />
+        <Filter mode={mode} />
         <ProductCard />
-
-        {/* <div className="flex justify-center -mt-10 mb-4">
-              <Link to={'/allproducts'}>
-             <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 ease-in-out">
-              See more
-            </button>
-          </Link>
-        </div> */}
 
          <div className="flex justify-center md:mb-4 mb-12">
             <Link to={'/allproducts'}>
@@ -47,10 +40,10 @@ function Home() {
             </Link>
           </div>
 
-        <Track />
-        <Testimonial />
+        <Track mode={mode} />
+        <Testimonial mode={mode} />
         {/* <Loader /> */}
-        <ScrollToTopButoon />
+        <ScrollToTopButoon mode={mode} />
       </Layout>
     </div>
   );

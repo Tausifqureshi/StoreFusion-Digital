@@ -27,10 +27,18 @@ export const useFetchAppData = (setCartLoading, setOrderLoading) => {
       return;
     }
     setOrderLoading(true);
+
+    // ⛑️ Safety: agar 6 sec mein koi response nahi → loader force-off
+    const safetyTimer = setTimeout(() => setOrderLoading(false), 6000);
+
     const unsubscribe = getUserOrdersFromFirestore(user.uid, (orders) => {
+      clearTimeout(safetyTimer);
       dispatch(setOrders(orders));
       setOrderLoading(false);
     });
-    return () => unsubscribe && unsubscribe();
+    return () => {
+      clearTimeout(safetyTimer);
+      unsubscribe && unsubscribe();
+    };
   }, [dispatch]);
 };

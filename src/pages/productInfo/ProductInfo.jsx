@@ -541,7 +541,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "../../redux/cartSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
-import Loader from "../../components/loader/Loader";
+import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import {
   FaHeart,
   FaTruck,
@@ -559,6 +559,7 @@ function ProductInfo() {
   const [mainImage, setMainImage] = useState("");
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0, show: false });
   const [isHeartFilled, setIsHeartFilled] = useState(false);
+  const [expandedId, setExpandedId] = useState(null);
   // const [openTab, setOpenTab] = useState("desc");
 
   const params = useParams();
@@ -650,7 +651,7 @@ function ProductInfo() {
   }, [currentProduct]);
 
   // ✅ Important: Show loader if data is not yet available
-  if (loading || !currentProduct) return <Loader />;
+  if (loading || !currentProduct) return <LoaderSpinner isDark={false} label="Loading product..." />;
 
   const discount = currentProduct?.discount || 0;
   const finalPrice = Math.round(
@@ -790,8 +791,8 @@ function ProductInfo() {
                     <div
                       key={item.id}
                       className={`border rounded-2xl overflow-hidden transition-all duration-300 ${isDark
-                          ? "border-gray-800 bg-[#1e293b]"
-                          : "border-gray-50 bg-gray-50 shadow-sm"
+                        ? "border-gray-800 bg-[#1e293b]"
+                        : "border-gray-50 bg-gray-50 shadow-sm"
                         }`}
                     >
                       {/* Header */}
@@ -814,8 +815,8 @@ function ProductInfo() {
                       {/* Body (Smooth Animation) */}
                       <div
                         className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen
-                            ? "max-h-60 opacity-100 px-4 pb-4"
-                            : "max-h-0 opacity-0"
+                          ? "max-h-60 opacity-100 px-4 pb-4"
+                          : "max-h-0 opacity-0"
                           }`}
                       >
                         <div className="text-xs md:text-sm leading-relaxed opacity-70 text-left">
@@ -901,68 +902,16 @@ function ProductInfo() {
                 </button>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-4 lg:gap-6">
-                {similarProducts.map((item) => {
-                  const discount = item.discount || 0;
-                  const finalPrice = Math.round(
-                    item.price - (item.price * discount) / 100,
-                  );
-                  return (
-                    <div
-                      key={item.id}
-                      onClick={() => navigate(`/productinfo/${item.id}`)}
-                      className={`group cursor-pointer p-3 md:p-4 border transition-all duration-300 relative flex flex-col h-full ${isDark ? "bg-[#131921] border-gray-800 hover:border-blue-600" : "bg-white border-gray-100 hover:shadow-xl hover:shadow-gray-200/50"}`}
-                    >
-                      <div className="aspect-square w-full mb-3 flex items-center justify-center p-2 overflow-hidden bg-white rounded-lg">
-                        {discount > 0 && (
-                          <span className="absolute top-4 left-4 md:top-6 md:left-6 bg-red-600 text-white px-3 py-1 rounded-full text-[10px] font-black z-10 shadow-lg">
-                            {discount}% OFF
-                          </span>
-                        )}
-                        <img
-                          src={item.imageUrl}
-                          alt={item.title}
-                          className="max-h-full w-auto object-contain transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-                      <div className="flex-1 flex flex-col justify-between">
-                        <div>
-                          <p className="text-[7px] md:text-[9px] font-black text-orange-500 uppercase tracking-widest mb-1">
-                            {item.category}
-                          </p>
-                          <h3
-                            className={`font-bold text-[10px] md:text-xs lg:text-sm uppercase tracking-tight line-clamp-2 leading-tight mb-2 ${isDark ? "text-gray-200" : "text-gray-800"}`}
-                          >
-                            {item.title}
-                          </h3>
-                        </div>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mt-auto">
-                          {/* <span className="text-blue-600 font-black text-xs md:text-base lg:text-lg italic">₹{item.price}</span> */}
-                          <div className="flex items-center gap-2 mb-4">
-                            <span className={`font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                              ₹ {finalPrice}
-                            </span>
-                            {item.discount > 0 && (
-                              <span className="line-through text-gray-400 text-[10px] font-semibold">
-                                ₹ {item.price}
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="flex items-center gap-1">
-                            <span className="hidden sm:inline-block text-[7px] font-black bg-blue-50 text-blue-600 px-1.5 py-0.5 rounded uppercase border border-blue-100">
-                              Premium
-                            </span>
-                            <FaCheckCircle
-                              className="text-blue-600 shrink-0"
-                              size={12}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="flex flex-wrap -m-4">
+                {similarProducts.map((item, index) => (
+                  <SingleProductCard 
+                    key={index} 
+                    item={item} 
+                    expandedId={expandedId} 
+                    setExpandedId={setExpandedId} 
+                    mode={mode} 
+                  />
+                ))}
               </div>
             </section>
           )}
@@ -973,7 +922,7 @@ function ProductInfo() {
               <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-center mb-10 italic">
                 Community <span className="text-orange-500">Feedback</span>
               </h2>
-              <Testimonial productId={params.id} />
+              <Testimonial productId={params.id} mode={mode} />
             </section>
             <section className="w-full max-w-2xl mx-auto pb-10 px-2">
               <AddTestimonial productId={params.id} />

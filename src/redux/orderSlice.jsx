@@ -16,9 +16,10 @@ const orderSlice = createSlice({
       state.orders = []; // Clear all orders
     },
     cancelOrder(state, action) {
-      state.orders = state.orders.filter(
-        (order) => order.id !== action.payload.id
-      ); // Remove cancelled order
+      const orderToCancel = state.orders.find((order) => order.id === action.payload.id);
+      if (orderToCancel) {
+        orderToCancel.status = "cancelled";
+      }
     },
     setOrders(state, action) {
       state.orders = action.payload; // Replace with fresh orders (from Firebase fetch)

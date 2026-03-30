@@ -29,4 +29,4 @@ const ProductGrid = ({ productsOnCurrentPage, isDark, edithandle, deleteProduct 
   );
 };
 
-export default ProductGrid;
+export default React.memo(ProductGrid);

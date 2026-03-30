@@ -395,9 +395,9 @@ import { useLocation } from "react-router-dom";
 import { FiRefreshCw, FiSearch, FiSliders, FiX } from "react-icons/fi";
 import { Drawer, IconButton } from "@mui/material";
 
-function Filter() {
+function Filter({ mode }) {
   const {
-    mode,
+    // mode,
     product,
     searchkey,
     setSearchkey,
@@ -458,7 +458,7 @@ function Filter() {
         }`}
       >
         <div className="flex items-center justify-between w-full gap-4">
-          <div className="relative flex-1">z
+          <div className="relative flex-1">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
               value={searchkey}
