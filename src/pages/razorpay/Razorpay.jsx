@@ -19,6 +19,58 @@ function Razorpay({ cartItems, totalAmount }) {
 
   const dispatch = useDispatch(); // Initialize Redux dispatch
 
+  const cashOnDelivery = async () => {
+    let user;
+    try {
+      user = JSON.parse(localStorage.getItem("user"));
+    } catch (err) {
+      toast.error("Invalid user data");
+      return;
+    }
+
+    if (!user || !user.email || !user.uid) {
+      return toast.error('User information is missing or invalid');
+    }
+
+    const addressInfo = {
+      name: formData.fullName,
+      address: formData.address,
+      pincode: formData.pincode,
+      phoneNumber: formData.phoneNumber,
+      date: new Date().toLocaleString("en-US", {
+        month: "short",
+        day: "2-digit",
+        year: "numeric",
+      }),
+    };
+
+    try {
+      const orderInfo = {
+        cartItems,
+        addressInfo,
+        date: new Date().toLocaleString("en-US", {
+          month: "short",
+          day: "2-digit",
+          year: "numeric",
+        }),
+        email: user.email,
+        userid: user.uid,
+        paymentId: "COD",
+        totalAmount,
+      };
+
+      const savedOrder = await saveOrderToFirestore(orderInfo);
+      toast.success('Order placed successfully via COD', { autoClose: 1000 });
+      dispatch(addOrder(savedOrder));
+      dispatch(clearCart());
+      await clearUserCartFromFirestore(user.uid);
+      window.dispatchEvent(new Event("paymentSuccess"));
+    } catch (error) {
+      console.log("Error saving COD order:", error);
+      toast.error('Failed to place COD order', { autoClose: 1000 });
+    }
+  };
+
   const buyNow = async () => {
     // const user = JSON.parse(localStorage.getItem("user"));
     let user;
@@ -130,7 +182,7 @@ function Razorpay({ cartItems, totalAmount }) {
 
   return ( 
     <div>
-      <Modal buyNow={buyNow} formData={formData} setFormData={setFormData} />
+      <Modal buyNow={buyNow} cashOnDelivery={cashOnDelivery} formData={formData} setFormData={setFormData} />
     </div>
   );
 }

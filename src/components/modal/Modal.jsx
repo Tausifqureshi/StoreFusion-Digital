@@ -1,197 +1,43 @@
-// import { Dialog, Transition } from "@headlessui/react";
-// import { Fragment, useState } from "react";
-// import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-// function Modal({ formData, setFormData, buyNow }) {
-//   const { fullName, address, pincode, phoneNumber } = formData;
-//   const [isOpen, setIsOpen] = useState(false);
-
-//   function closeModal() {
-//     setIsOpen(false);
-//   }
-
-//   function openModal() {
-//     setIsOpen(true);
-//   }
-
-//   const handleInputChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleBuyNow = () => {
-//     if (!fullName || !address || !pincode || !phoneNumber) {
-//       toast.error("All fields are required.");
-//       return; // Modal will not close until form is complete
-//     }
-
-//     buyNow();
-//     closeModal();
-//     // Reset the formData after successful submission
-//     setFormData({
-//       fullName: '',
-//       address: '',
-//       pincode: '',
-//       phoneNumber: '',
-//     });
-//   };
-
-//   return (
-//     <>
-//       <div className="text-center">
-//         <button
-//           type="button"
-//           onClick={openModal}
-//           className="w-full bg-blue-600 py-2 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors"
-//         >
-//           Buy Now
-//         </button>
-//       </div>
-
-//       <Transition appear show={isOpen} as={Fragment}>
-//         <Dialog as="div" className="relative z-10" onClose={closeModal}>
-//           <Transition.Child
-//             as={Fragment}
-//             enter="ease-out duration-300"
-//             enterFrom="opacity-0"
-//             enterTo="opacity-100"
-//             leave="ease-in duration-200"
-//             leaveFrom="opacity-100"
-//             leaveTo="opacity-0"
-//           >
-//             <div className="fixed inset-0 bg-black bg-opacity-50" />
-//           </Transition.Child>
-
-//           <div className="fixed inset-0 overflow-y-auto">
-//             <div className="flex min-h-full items-start justify-center pt-28 px-4 text-center sm:items-start sm:pt-[7.1rem]">
-//               <Transition.Child
-//                 as={Fragment}
-//                 enter="ease-out duration-300"
-//                 enterFrom="opacity-0 scale-95"
-//                 enterTo="opacity-100 scale-100"
-//                 leave="ease-in duration-200"
-//                 leaveFrom="opacity-100 scale-100"
-//                 leaveTo="opacity-0 scale-95"
-//               >
-//                 <Dialog.Panel className="w-full max-w-lg transform overflow-hidden rounded-lg bg-white p-6 shadow-xl transition-all">
-//                   <div className="flex flex-col items-center justify-center">
-//                     <h2 className="text-lg font-semibold text-gray-900 mb-4">
-//                       Complete Your Order
-//                     </h2>
-
-//                     <form className="w-full space-y-3">
-//                       <div>
-//                         <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-//                           Full Name
-//                         </label>
-//                         <input
-//                           type="text"
-//                           name="fullName"
-//                           id="fullName"
-//                           className="w-full border border-gray-300 rounded-md p-2 bg-gray-100 outline-none focus:ring-blue-500 focus:border-blue-500"
-//                           value={fullName}
-//                           onChange={handleInputChange}
-//                         />
-//                       </div>
-
-//                       <div>
-//                         <label htmlFor="address" className="block text-sm font-medium text-gray-700">
-//                           Address
-//                         </label>
-//                         <input
-//                           type="text"
-//                           name="address"
-//                           id="address"
-//                           className="w-full border border-gray-300 rounded-md p-2 bg-gray-100 outline-none focus:ring-blue-500 focus:border-blue-500"
-//                           value={address}
-//                           onChange={handleInputChange}
-//                         />
-//                       </div>
-
-//                       <div>
-//                         <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">
-//                           Pincode
-//                         </label>
-//                         <input
-//                           type="text"
-//                           name="pincode"
-//                           id="pincode"
-//                           className="w-full border border-gray-300 rounded-md p-2 bg-gray-100 outline-none focus:ring-blue-500 focus:border-blue-500"
-//                           value={pincode}
-//                           onChange={handleInputChange}
-//                         />
-//                       </div>
-
-//                       <div>
-//                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">
-//                           Mobile Number
-//                         </label>
-//                         <input
-//                           type="text"
-//                           name="phoneNumber"
-//                           id="phoneNumber"
-//                           className="w-full border border-gray-300 rounded-md p-2 bg-gray-100 outline-none focus:ring-blue-500 focus:border-blue-500"
-//                           value={phoneNumber}
-//                           onChange={handleInputChange}
-//                         />
-//                       </div>
-//                     </form>
-
-//                     <button
-//                       onClick={handleBuyNow}
-//                       type="button"
-//                       className="mt-5 w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
-//                     >
-//                       Place Order
-//                     </button>
-//                   </div>
-//                 </Dialog.Panel>
-//               </Transition.Child>
-//             </div>
-//           </div>
-//         </Dialog>
-//       </Transition>
-//     </>
-//   );
-// }
-
-// export default Modal;
-
-
-
-
-
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
-import { toast } from "react-toastify";  
-
-function Modal({ formData, setFormData, buyNow }) {
+function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
   const { fullName, address, pincode, phoneNumber } = formData;
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [placingOrder, setPlacingOrder] = useState(false);
-   const [loading, setLoading] = useState(false); // 🔹 loader for Buy Now button
- 
-    const handleBuyNowClick = () => {
-    setLoading(true); // loader start
+  const [loading, setLoading] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("razorpay");
+
+  const handleBuyNowClick = () => {
+    setLoading(true);
     setTimeout(() => {
-      setIsOpen(true); // modal open
-      setLoading(false); // loader stop
-    }, 200); // 0.7s delay before modal
+      setIsVisible(true);
+      // Small delay to allow element to render before adding opacity class for animation
+      setTimeout(() => setIsOpen(true), 10);
+      setLoading(false);
+    }, 200);
   };
-  // const openModal = () => setIsOpen(true);
+
   const closeModal = () => {
-    if (!placingOrder) setIsOpen(false);
+    if (!placingOrder) {
+      setIsOpen(false);
+      // Wait for animation to finish before removing from DOM
+      setTimeout(() => setIsVisible(false), 300);
+    }
   };
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
- // 🔹 Stop loader and close modal on payment events
   useEffect(() => {
     const stopLoading = () => {
       setPlacingOrder(false);
-      setIsOpen(false); // modal bhi close
+      // modal ko close kar rahe hain setIsOpen(false) and setIsVisible(false)
+      setIsOpen(false);
+      setTimeout(() => setIsVisible(false), 300);
     };
 
     window.addEventListener("paymentClosed", stopLoading);
@@ -203,22 +49,20 @@ function Modal({ formData, setFormData, buyNow }) {
     };
   }, []);
 
-
-  // const handleBuyNow = async () => {
-  //   if (!fullName || !address || !pincode || !phoneNumber) {
-  //     toast.error("All fields are required");
-  //     return;
-  //   }
-  //   if (placingOrder) return;
-  //   setPlacingOrder(true);
-  //   setTimeout(() => {
-  //   buyNow();
-  // }, 500);
-  // };
+  useEffect(() => {
+    if (isVisible) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isVisible]);
 
   const handleBuyNow = async () => {
     if (!fullName || !address || !pincode || !phoneNumber) {
-      toast.error("All fields are required");
+      toast.error("All fields are required", {
+        autoClose: 1000,
+
+      });
       return;
     }
 
@@ -227,116 +71,203 @@ function Modal({ formData, setFormData, buyNow }) {
     setPlacingOrder(true);
 
     try {
-      await buyNow(); // Razorpay open
-       setFormData({
-      fullName: '',
-      address: '',
-      pincode: '',
-      phoneNumber: '',
-    });
+      if (paymentMethod === "cod") {
+        await cashOnDelivery();
+      } else {
+        await buyNow(); // Razorpay open
+      }
+      setFormData({
+        fullName: '',
+        address: '',
+        pincode: '',
+        phoneNumber: '',
+      });
     } catch (err) {
       setPlacingOrder(false);
     }
   };
+
   return (
     <>
       <button
         onClick={handleBuyNowClick}
         disabled={loading}
-        className="w-full bg-blue-600 py-2 text-white font-bold rounded-lg hover:bg-blue-700 flex justify-center items-center gap-2"
+        className="w-full bg-blue-600 py-3.5 text-white font-bold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all flex justify-center items-center gap-2 shadow-lg shadow-blue-600/20"
       >
         {loading ? (
-          <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+          <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
         ) : (
           "Buy Now"
         )}
       </button>
 
-      <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-50" onClose={() => {}}>
-          <div className="fixed inset-0 bg-black bg-opacity-50" />
+      {isVisible && (
+        <div className="fixed inset-0 z-[99999] flex items-start justify-center p-4 pt-24 sm:pt-28 pb-6">
+          {/* Backdrop */}
+          <div
+            className={`fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity duration-300 ease-out ${isOpen ? "opacity-100" : "opacity-0"
+              }`}
+            onClick={closeModal}
+          ></div>
 
-          <div className="fixed inset-0 flex items-center justify-center px-4">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl">
+          {/* Modal Panel */}
+          <div
+            className={`relative flex flex-col w-full max-w-lg bg-white rounded-2xl shadow-2xl max-h-[85vh] overflow-hidden transition-all duration-300 ease-out transform ${isOpen
+              ? "translate-y-0 opacity-100 sm:scale-100"
+              : "translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
+              }`}
+          >
+            {/* Header */}
+            <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 flex-shrink-0">
+              <h3 className="text-lg font-bold text-gray-800 tracking-tight">
+                Complete Your Order
+              </h3>
+              <button
+                onClick={closeModal}
+                disabled={placingOrder}
+                className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-red-500 transition-colors"
+                aria-label="Close modal"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
 
-                {/* Close */}
-                <button
-                  onClick={closeModal}
-                  disabled={placingOrder}
-                  className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
-                >
-                  ✕
-                </button>
+            {/* Body */}
+            <div className="px-5 py-4 overflow-y-auto custom-scrollbar flex-1">
+              <div className="space-y-4">
+                {/* Payment Method */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
+                    Select Payment Method
+                  </label>
+                  <div className="flex flex-col sm:flex-row gap-2.5">
+                    <label
+                      className={`flex-1 relative px-3 py-2.5 rounded-xl cursor-pointer border-2 transition-all duration-200 ${paymentMethod === "razorpay"
+                        ? "border-blue-600 bg-blue-50/50 shadow-sm"
+                        : "border-gray-100 hover:border-blue-200 bg-white"
+                        }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "razorpay" ? "border-blue-600" : "border-gray-300"}`}>
+                          {paymentMethod === "razorpay" && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
+                        </div>
+                        <span className="text-[13px] font-bold text-gray-800">Online Pay</span>
+                      </div>
+                      <p className="text-[10px] text-gray-500 mt-0.5 ml-6.5">Cards, UPI, NetBanking</p>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="razorpay"
+                        checked={paymentMethod === "razorpay"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="sr-only"
+                      />
+                    </label>
 
-                <Dialog.Title className="text-lg font-semibold mb-4 text-center">
-                  Complete Your Order
-                </Dialog.Title>
+                    <label
+                      className={`flex-1 relative px-3 py-2.5 rounded-xl cursor-pointer border-2 transition-all duration-200 ${paymentMethod === "cod"
+                        ? "border-green-600 bg-green-50/50 shadow-sm"
+                        : "border-gray-100 hover:border-green-200 bg-white"
+                        }`}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "cod" ? "border-green-600" : "border-gray-300"}`}>
+                          {paymentMethod === "cod" && <div className="w-2 h-2 bg-green-600 rounded-full" />}
+                        </div>
+                        <span className="text-[13px] font-bold text-gray-800">Pay on Delivery</span>
+                      </div>
 
-                <div className="space-y-3">
-                  <input
-                    type="text"
-                    name="fullName"
-                    placeholder="Full Name"
-                    value={fullName}
-                    onChange={handleInputChange}
-                    className="w-full border p-2 rounded"
-                  />
-                  <input
-                    type="text"
-                    name="address"
-                    placeholder="Address"
-                    value={address}
-                    onChange={handleInputChange}
-                    className="w-full border p-2 rounded"
-                  />
-                  <input
-                    type="text"
-                    name="pincode"
-                    placeholder="Pincode"
-                    value={pincode}
-                    onChange={handleInputChange}
-                    className="w-full border p-2 rounded"
-                  />
-                  <input
-                    type="text"
-                    name="phoneNumber"
-                    placeholder="Mobile Number"
-                    value={phoneNumber}
-                    onChange={handleInputChange}
-                    className="w-full border p-2 rounded"
-                  />
+                      <p className="text-[10px] text-gray-500 mt-0.5 ml-6.5">Cash or UPI at doorstep</p>
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="cod"
+                        checked={paymentMethod === "cod"}
+                        onChange={(e) => setPaymentMethod(e.target.value)}
+                        className="sr-only"
+                      />
+                    </label>
+                  </div>
                 </div>
 
-                {/* 🔥 Place Order */}
+                {/* Shipping Details */}
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
+                    Shipping Details
+                  </label>
+                  <div className="space-y-3">
+
+                    {/* Full Name */}
+                    <div>
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={fullName}
+                        onChange={handleInputChange}
+                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        placeholder="Full Name"
+                      />
+                    </div>
+                    {/* Mobile Number */}
+                    <div>
+                      <input
+                        type="text"
+                        name="phoneNumber"
+                        value={phoneNumber}
+                        onChange={handleInputChange}
+                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        placeholder="Mobile Number"
+                      />
+                    </div>
+                    {/* Complete Address */}
+                    <div>
+                      <input
+                        type="text"
+                        name="address"
+                        value={address}
+                        onChange={handleInputChange}
+                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        placeholder="Complete Address"
+                      />
+                    </div>
+                    {/* Pincode */}
+                    <div>
+                      <input
+                        type="text"
+                        name="pincode"
+                        value={pincode}
+                        onChange={handleInputChange}
+                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        placeholder="Pincode"
+                      />
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* Submit Button */}
                 <button
                   onClick={handleBuyNow}
                   disabled={placingOrder}
-                  className="mt-5 w-full bg-blue-600 text-white py-2 rounded flex justify-center items-center gap-2"
+                  className="mt-1 w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold flex justify-center items-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
                 >
                   {placingOrder ? (
                     <>
-                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                      Opening Payment...
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                      <span className="text-sm">Processing...</span>
                     </>
                   ) : (
-                    "Place Order"
+                    <span className="text-sm">Place Order Now</span>
                   )}
                 </button>
-
-              </Dialog.Panel>
-            </Transition.Child>
+              </div>
+            </div>
           </div>
-        </Dialog>
-      </Transition>
+        </div>
+      )}
     </>
   );
 }
@@ -344,146 +275,3 @@ function Modal({ formData, setFormData, buyNow }) {
 export default Modal;
 
 
-
-// import { Dialog, Transition } from "@headlessui/react";
-// import { Fragment, useState } from "react";
-// import { toast } from "react-toastify";
-
-// function Modal({ formData, setFormData, buyNow }) {
-//   const { fullName, address, pincode, phoneNumber } = formData;
-//   const [isOpen, setIsOpen] = useState(false);
-//   const [placingOrder, setPlacingOrder] = useState(false);
-
-//   const openModal = () => setIsOpen(true);
-//   const closeModal = () => setIsOpen(false);
-
-//   const handleInputChange = (e) => {
-//     setFormData({ ...formData, [e.target.name]: e.target.value });
-//   };
-
-//   const handleBuyNow = () => {
-//     if (!fullName || !address || !pincode || !phoneNumber) {
-//       toast.error("All fields are required", { 
-//         position: "top-right" ,
-//         autoClose: 1000 ,
-//         hideProgressBar: false,
-
-//       });
-//       return;
-//     }
-
-//      if (placingOrder) return; // double click prevention
-//   setPlacingOrder(true);
-
-//     buyNow();
-//     closeModal();
-
-//     setFormData({
-//       fullName: "",
-//       address: "",
-//       pincode: "",
-//       phoneNumber: "",
-//     });
-//   };
-
-//   return (
-//     <>
-//       {/* Buy Now Button */}
-//       <button
-//         onClick={openModal}
-//         className="w-full bg-blue-600 py-2 text-white font-bold rounded-lg hover:bg-blue-700"
-//       >
-//         Buy Now
-//       </button>
-
-//       <Transition appear show={isOpen} as={Fragment}>
-//         <Dialog
-//           as="div"
-//           className="relative z-50"
-//           onClose={() => {}}   // ❌ outside click disable
-//         >
-//           {/* Backdrop */}
-//           <div className="fixed inset-0 bg-black bg-opacity-50" />
-
-//           <div className="fixed inset-0 flex items-center justify-center px-4">
-//             <Transition.Child
-//               as={Fragment}
-//               enter="ease-out duration-300"
-//               enterFrom="opacity-0 scale-95"
-//               enterTo="opacity-100 scale-100"
-//               leave="ease-in duration-200"
-//               leaveFrom="opacity-100 scale-100"
-//               leaveTo="opacity-0 scale-95"
-//             >
-//               {/* Modal Box */}
-//               <Dialog.Panel
-//                 onClick={(e) => e.stopPropagation()} // extra safety
-//                 className="relative w-full max-w-lg rounded-lg bg-white p-6 shadow-xl"
-//               >
-//                 {/* ❌ CLOSE BUTTON */}
-//                 <button
-//                   onClick={closeModal}
-//                   className="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold"
-//                 >
-//                   ✕
-//                 </button>
-
-//                 <Dialog.Title className="text-lg font-semibold mb-4 text-center">
-//                   Complete Your Order
-//                 </Dialog.Title>
-
-//                 {/* FORM */}
-//                 <div className="space-y-3">
-//                   <input
-//                     type="text"
-//                     name="fullName"
-//                     placeholder="Full Name"
-//                     value={fullName}
-//                     onChange={handleInputChange}
-//                     className="w-full border p-2 rounded"
-//                   />
-
-//                   <input
-//                     type="text"
-//                     name="address"
-//                     placeholder="Address"
-//                     value={address}
-//                     onChange={handleInputChange}
-//                     className="w-full border p-2 rounded"
-//                   />
-
-//                   <input
-//                     type="text"
-//                     name="pincode"
-//                     placeholder="Pincode"
-//                     value={pincode}
-//                     onChange={handleInputChange}
-//                     className="w-full border p-2 rounded"
-//                   />
-
-//                   <input
-//                     type="text"
-//                     name="phoneNumber"
-//                     placeholder="Mobile Number"
-//                     value={phoneNumber}
-//                     onChange={handleInputChange}
-//                     className="w-full border p-2 rounded"
-//                   />
-//                 </div>
-
-//                 <button
-//                   onClick={handleBuyNow}
-//                   className="mt-5 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-//                 >
-//                   Place Order
-//                 </button>
-//               </Dialog.Panel>
-//             </Transition.Child>
-//           </div>
-//         </Dialog>
-//       </Transition>
-//     </>
-//   );
-// }
-
-// export default Modal;

@@ -25,9 +25,10 @@ function OrderDetails({ orderLoading }) {
   const [cancellingId, setCancellingId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(2);
 
-  const handleSeeMore = () => setVisibleCount((prev) => prev + 2);
-  const handleSeeLess = () => setVisibleCount(2);
+  const handleSeeMore = useCallback(() => setVisibleCount((prev) => prev + 2), []);
+  const handleSeeLess = useCallback(() => setVisibleCount(2), []);
 
+  // yah id se ham dynamic order ko find kar rahe hain
   const order = useMemo(() => {
     return orders?.find((o) => o.id === id || o.paymentId === id);
   }, [id, orders]);
@@ -37,7 +38,13 @@ function OrderDetails({ orderLoading }) {
   }, [id]);
 
   const addressInfo = order?.addressInfo;
-  const totalPrice = order?.cartItems?.reduce((acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1), 0);
+
+  const totalPrice = useMemo(() => {
+    return order?.cartItems?.reduce(
+      (acc, item) => acc + (Number(item.price) || 0) * (item.quantity || 1),
+      0
+    );
+  }, [order?.cartItems]);
 
   const handleCancelOrder = useCallback(async (orderId) => {
     if (!window.confirm("Bhai, kya aap sach mein cancel karna chahte ho?")) return;
@@ -101,6 +108,16 @@ function OrderDetails({ orderLoading }) {
                       <div>
                         <p className="text-[8px] font-black text-gray-400 uppercase">Grand Total</p>
                         <p className={`text-[13px] font-black uppercase tracking-tight ${isDark ? "text-white" : "text-gray-900"}`}>₹ {totalPrice}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 border-l pl-8 border-gray-200 dark:border-gray-700">
+                      <div>
+                        <p className="text-[8px] font-black text-gray-400 uppercase">Payment Status</p>
+                        {order.paymentId === "COD" ? (
+                          <p className={`text-[11px] font-bold uppercase tracking-tight ${isDark ? "text-orange-400" : "text-orange-600"}`}>Cash on Delivery</p>
+                        ) : (
+                          <p className="text-[11px] font-bold uppercase tracking-tight text-green-500 flex items-center gap-1">Verified <span className="text-xs">✅</span></p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -183,9 +200,9 @@ function OrderDetails({ orderLoading }) {
                             </div>
                             <div className="mt-6 pt-6 border-t border-gray-700/30 flex flex-row justify-between gap-4">
                               {!["cancelled", "delivered", "returned", "refunded"].includes(order.status?.toLowerCase()) && (
-                                <button 
-                                  disabled={cancellingId === order.id} 
-                                  onClick={() => handleCancelOrder(order.id)} 
+                                <button
+                                  disabled={cancellingId === order.id}
+                                  onClick={() => handleCancelOrder(order.id)}
                                   className="flex-1 py-3 px-4 rounded-xl border-2 border-red-500 text-red-500 text-[10px] md:text-[11px] font-black uppercase tracking-widest hover:bg-red-500 hover:text-white transition-all shadow-lg active:scale-95 flex items-center justify-center"
                                 >
                                   {cancellingId === order.id ? "Processing..." : "Cancel Order"}

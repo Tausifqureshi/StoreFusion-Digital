@@ -6,7 +6,7 @@ import { FaCube, FaChartPie } from 'react-icons/fa';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ProductCategories = ({ isDark, products }) => {
-  const { labels, percentages, backgroundColors } = useMemo(() => {
+  const chartData = useMemo(() => {
     // 👉 1. Products nahi hain → khali/default chart dikhao
     if (!products || products.length === 0) {
       return {
@@ -72,11 +72,11 @@ const ProductCategories = ({ isDark, products }) => {
   }, [products, isDark]); // 👉 Dependency me isDark add kiya (bug fix) taaki jab dark mode badle to "No Data" color bhi badal jaye
 
   const data = {
-    labels: labels,
+    labels: chartData.labels,
     datasets: [
       {
-        data: percentages,
-        backgroundColor: backgroundColors,
+        data: chartData.percentages,
+        backgroundColor: chartData.backgroundColors,
         borderWidth: 0,
         hoverOffset: 4,
       },

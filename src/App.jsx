@@ -186,7 +186,6 @@
 
 import "./App.css";
 import React, { Suspense, lazy, useEffect, useState } from "react";
-import OrderDetails from "./components/order/order-details/OrderDetails";
 import {
   BrowserRouter,
   Routes,
@@ -210,6 +209,7 @@ import { loadCart } from "./pages/cart/cartService";
 // 🔥 LAZY LOADING
 const Home = lazy(() => import("./pages/home/Home"));
 const Order = lazy(() => import("./components/order/Order"));
+const OrderDetails = lazy(() => import("./components/order/order-details/OrderDetails"));
 const Cart = lazy(() => import("./pages/cart/Cart"));
 const Dashboard = lazy(() => import("./pages/admin/dashboard/DashboardView/Dashboard"));
 const NoPage = lazy(() => import("./pages/nopage/NoPage"));
@@ -291,8 +291,7 @@ function App() {
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/order" element={<Order orderLoading={orderLoading} />} />
-              <Route path="/order-details/:id" element={<OrderDetails orderLoading={orderLoading} />} />
-              <Route path="/order-details" element={<OrderDetails orderLoading={orderLoading} />} />
+              <Route path="/order-details/:id?" element={<OrderDetails orderLoading={orderLoading} />} />
               <Route path="/cart" element={<Cart cartLoading={cartLoading} />} />
               <Route path="/allproducts" element={<Allproducts />} />
               <Route path="/signup" element={<Signup />} />

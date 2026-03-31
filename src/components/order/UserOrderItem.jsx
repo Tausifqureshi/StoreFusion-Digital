@@ -5,8 +5,8 @@ import { FaArrowRight, FaEdit } from 'react-icons/fa';
 
 const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId, updatingOrderId }) => {
   return (
-    <div 
-      onClick={() => navigate(`/order-details/${order.id}`)} 
+    <div
+      onClick={() => navigate(`/order-details/${order.id}`)}
       className={`rounded-[30px] border-2 p-5 md:p-6 transition-all hover:shadow-xl cursor-pointer ${isDark ? "bg-[#1e293b] border-gray-800 shadow-none" : "bg-white border-gray-100 shadow-blue-500/5"}`}
     >
       {/* Top Row: Order ID & Badge */}
@@ -52,12 +52,12 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId, updatingOr
             <button onClick={(e) => { e.stopPropagation(); navigate(`/order-details/${order.id}`); }} className={`flex-1 md:flex-none px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${isDark ? "bg-[#131921] border border-gray-700 text-white hover:border-gray-500" : "bg-gray-100 text-gray-900 border border-transparent hover:bg-gray-200"}`}>
               View Details
             </button>
-            {!["cancelled", "refunded", "returned"].includes(order.status?.toLowerCase()) && (
-              <button 
-                onClick={(e) => { 
-                  e.stopPropagation(); 
-                  setUpdatingOrderId(updatingOrderId !== order.id ? order.id : null); 
-                }} 
+            {!["cancelled", "refunded", "returned"].includes(order.status?.toLowerCase()) && ( //agar order cancelled, refunded, returned nahi hai to hi update status button dikhega waran agar order cancelled, refunded, returned hai to update status button nahi dikhega 
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setUpdatingOrderId(updatingOrderId !== order.id ? order.id : null);
+                }}
                 className="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 bg-blue-600 text-white hover:bg-blue-700"
               >
                 <FaEdit size={12} /> Update status

@@ -20,7 +20,7 @@ function CategoryProducts() {
     window.scrollTo(0, 0);
   }, [name]);
 
-  // ⭐ 1. Category Products Filter (Optimized)
+  // category wise product ko filter kar rahe hain lekin yaha dynamic ara hai name ka use kar re is me.
   const filteredProducts = useMemo(() => {
     return product.filter(
       (item) => item.category?.toLowerCase() === name.toLowerCase(),
@@ -61,12 +61,12 @@ function CategoryProducts() {
           ) : (
             <div className="flex flex-wrap -m-4">
               {filteredProducts.map((item, index) => (
-                <SingleProductCard 
-                  key={index} 
-                  item={item} 
-                  expandedId={expandedId} 
-                  setExpandedId={setExpandedId} 
-                  mode={mode} 
+                <SingleProductCard
+                  key={index}
+                  item={item}
+                  expandedId={expandedId}
+                  setExpandedId={setExpandedId}
+                  mode={mode}
                 />
               ))}
             </div>

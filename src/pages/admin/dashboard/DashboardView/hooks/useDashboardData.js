@@ -85,7 +85,7 @@ export const useDashboardData = (allProducts, allOrders, allUsers) => {
     });
 
     // 👉 final calculated data state me save kar rahe hain
-    setMonthlyOrders(ordersCount);   // chart ke liye orders data
+    setMonthlyOrders(ordersCount);   // chart ke liye ordezrs data
     setMonthlyRevenue(revenueAcc);   // chart ke liye revenue data
 
     // 👉 ye code sirf tab chalega jab "order" change hoga

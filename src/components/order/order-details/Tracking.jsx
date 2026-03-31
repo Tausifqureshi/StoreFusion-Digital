@@ -147,4 +147,4 @@ const Tracking = ({ order, isDark }) => {
   );
 };
 
-export default Tracking;
+export default React.memo(Tracking);

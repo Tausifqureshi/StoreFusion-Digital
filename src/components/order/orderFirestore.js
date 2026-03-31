@@ -131,16 +131,22 @@ import { fireDB } from "../../firebase/FirebaseConfig";
 // ================= ORDERS =================//
 
 export const saveOrderToFirestore = async (orderInfo) => {
+  // 👉 Agar order data hi pass nahi hua, toh aage mat badho
   if (!orderInfo) return;
 
+  // 👉 Firebase mein "orders" naam ki ek box/collection ready kar rahe hain
   const orderRef = collection(fireDB, "orders");
 
+  // 👉 Naya order Firebase mein seedha save kar do
   const docRef = await addDoc(orderRef, {
     ...orderInfo,
+    // 👉 Agar orderInfo mein status miss hai, toh default "placed" set kar do (NULLISH)
     status: orderInfo.status ?? "placed",
-    createdAt: serverTimestamp(), // server time
+    // 👉 Jab order save ho raha hai, us exact time ka server stamp laga do (Secure time)
+    createdAt: serverTimestamp(), 
   });
 
+  // 👉 Database se mila naya ID (docRef.id) waapas return bhej do, jisse UI me dikha sake
   return {
     id: docRef.id,
     ...orderInfo,
@@ -151,8 +157,14 @@ export const saveOrderToFirestore = async (orderInfo) => {
 
 // 🔹 Get user orders (realtime)
 export const getUserOrdersFromFirestore = (uid, callback) => {
+  // 👉 getUserOrdersFromFirestore yaha 2 chize le raha hai: uid aur 'callback' function.
+  // 👉 Callback ek messenger hai: Jab data nikal jayega, toh yeh callback data ko wapas 
+  // frontend (components) mein bhejne ka kaam karega.
+  
+  // 👉 Agar User ki ID hi gayab hai, toh functions directly empty bhej do
   if (!uid) return () => { };
 
+  // 👉 Query: "Orders" box se sirf us user ka data uthao jiski uid match karti hai
   const q = query(
     collection(fireDB, "orders"),
     where("userid", "==", uid)
@@ -160,32 +172,43 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
     // Without index the snapshot silently fails and loader never stops
   );
 
+  // 👉 onSnapshot Firestore ka ek bahut powerful method hai.
+  // 👉 Ye ek CCTV camera ki tarah Realtime monitoring karta hai. 
+  // Agar database me koi New order aaye, Delete ho jaye, ya Update ho jaye... 
+  // toh ye automatic turant activate hoga aur updated data bata dega bina page refresh kiye!
   const unsubscribe = onSnapshot(
     q,
     (snapshot) => {
+      // 👉 Database se aaye raw data ko ek clean list (Array) mein dhal/convert rahe hain
       const orders = snapshot.docs.map((docSnap) => {
         const data = docSnap.data();
         return {
-          id: docSnap.id,
+          id: docSnap.id,  // 🟢 Naya Data ki ID
           ...data,
+          // 👉 Safely Date ko read kar rahe hain jisse application crash na ho (ISO string format)
           createdAt: data.createdAt?.toDate?.()?.toISOString() ?? null,
         };
       });
-      // Sort client-side: newest first
+
+      // 👉 Client-side pe date sorting: Naye Orders sabse upar dikhaane ke liye logic (Newest first ⏳)
       orders.sort((a, b) => {
         if (!a.createdAt && !b.createdAt) return 0;
         if (!a.createdAt) return 1;
         if (!b.createdAt) return -1;
         return new Date(b.createdAt) - new Date(a.createdAt);
       });
+      
+      // 🟢 Saara fresh aur clean order ka data wapas page / component ko bhej diya jata hai
       callback(orders);
     },
     (error) => {
+      // 🔴 Agar internet band hai ya permission error aaye toh ye block chalega
       console.error("Firestore orders listener error:", error.message);
-      callback([]); // ← loader band hoga, empty state dikhega
+      callback([]); // ← Error aane pe list ko zero kardo aur loader hatwa do!
     }
   );
 
+  // 👉 Ye isliye bhej rahe taaki component hatne pe radar (onSnapshot) listening band ho jaye. (Saves Memory 🧠)
   return unsubscribe;
 };
 
@@ -193,10 +216,13 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
 
 // 🔹 Cancel single order
 export const cancelOrderFromFirestore = async (orderId) => {
+  // 👉 ID hi required hai update karne ke liye
   if (!orderId) return;
 
   const now = new Date().toISOString();
 
+  // 👉 yahan "setDoc" + "merge: true" lagaana bohot jaruri tha! 
+  // Ye puraana content nahi mitayega, sirf Status aur cancelledDate waly field overwrite karke naya set kardega.
   await setDoc(
     doc(fireDB, "orders", orderId),
     {
@@ -226,13 +252,15 @@ export const updateOrderStatus = async (orderId, newStatus, currentStatus) => {
   if (!orderId || !newStatus) return;
 
   const now = new Date().toISOString();
+  // 👉 Bahot dimagi line! Ye update hone wali field ka dynamic naam set kar rahi hai
+  // Jaise shipped aega toh -> 'shippedDate' change hogi.
   const statusDateField = `${newStatus}Date`;
 
   await setDoc(
     doc(fireDB, "orders", orderId),
     {
       status: newStatus,
-      [statusDateField]: now
+      [statusDateField]: now  // 🟢 dynamic state me us exact din/time object save kardo 
     },
     { merge: true }
   );
