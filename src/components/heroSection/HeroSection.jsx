@@ -122,7 +122,7 @@ function HeroSection({ mode }) {
       >
         {slides.map((item, i) => (
           <SwiperSlide key={i}>
-            <div className="relative w-full h-[380px] sm:h-[480px] md:h-[580px] lg:h-[640px] overflow-hidden bg-black">
+            <div className="relative w-full h-[450px] sm:h-[480px] md:h-[580px] lg:h-[640px] overflow-hidden bg-black">
 
               {/* --- IMAGE --- */}
               <img
@@ -167,14 +167,14 @@ function HeroSection({ mode }) {
                   </p>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-wrap items-center gap-4">
-                    <Link to={item.link}>
-                      <button className="bg-blue-600 hover:bg-blue-700 text-white px-8 md:px-12 py-3.5 md:py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl transition-all active:scale-95">
+                  <div className="flex flex-col sm:flex-row items-center gap-3 md:gap-4 w-full sm:w-auto">
+                    <Link to={item.link} className="w-full sm:w-auto">
+                      <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-8 md:px-12 py-3.5 md:py-4 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl transition-all active:scale-95">
                         {item.btnText}
                       </button>
                     </Link>
 
-                    <Link to="/allproducts" className="group flex items-center gap-2 px-6 py-4 rounded-2xl border border-white/30 backdrop-blur-md hover:bg-white hover:text-black transition-all">
+                    <Link to="/allproducts" className="w-full sm:w-auto group flex items-center justify-center gap-2 px-8 md:px-12 py-3.5 md:py-4 rounded-2xl border border-white/30 backdrop-blur-md hover:bg-white hover:text-black transition-all text-white active:scale-95">
                       <span className="font-black text-[11px] uppercase tracking-widest">Shop All</span>
                       <span className="group-hover:translate-x-1 transition-transform">→</span>
                     </Link>

@@ -72,12 +72,6 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
       toast.error("Product is out of stock!", {
         position: "top-right",
         autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "❌",
       });
       return;
     }
@@ -89,9 +83,8 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
     };
 
     const updatedCart = [...cartItems, serializedProductForDispatch]; // Sirf naya item add hoga
-
     // Redux aur Firebase Update
-    dispatch(addToCart(serializedProductForDispatch)); 
+    dispatch(addToCart(serializedProductForDispatch));
     await saveCart(updatedCart);
 
     toast.success("Product added to cart!", {
@@ -134,7 +127,7 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
             {category}
           </h2>
           <h1
-            className={`title-font text-lg font-medium mb-3 line-clamp-2 ${mode === "dark" ? "text-white" : "text-gray-900"
+            className={`title-font text-lg font-medium mb-3 truncate ${mode === "dark" ? "text-white" : "text-gray-900"
               }`}
           >
             {title}
@@ -180,7 +173,7 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
                 <button
                   disabled
                   type="button"
-                  className="focus:outline-none text-white bg-red-400 font-medium rounded-lg text-sm w-full py-2 cursor-not-allowed uppercase tracking-wider text-[11px] max-w-[124px] px-0"
+                  className="focus:outline-none text-white bg-red-500 font-medium rounded-lg text-sm w-full py-2 cursor-not-allowed uppercase tracking-wider text-[11px] max-w-[124px] px-0"
                 >
                   Out of Stock
                 </button>

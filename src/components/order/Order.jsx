@@ -1,7 +1,6 @@
 import React, { useContext, useState, useMemo, useEffect } from "react";
 import Layout from "../layout/Layout";
 import LoaderSpinner from "../loader/LoaderSpinner";
-
 import { MdInfoOutline } from "react-icons/md";
 import { FaTrash, FaArrowLeft, FaBoxOpen } from "react-icons/fa";
 import OrderStatusUpdater from "./status/OrderStatusUpdater";
@@ -100,22 +99,22 @@ function Order({ orderLoading }) {
               {activeOrders.map((order) => {
                 return (
                   <div key={order.id}>
-                    <UserOrderItem 
-                      order={order} 
-                      isDark={isDark} 
-                      navigate={navigate} 
-                      setUpdatingOrderId={setUpdatingOrderId} 
-                      updatingOrderId={updatingOrderId} 
+                    <UserOrderItem
+                      order={order}
+                      isDark={isDark}
+                      navigate={navigate}
+                      setUpdatingOrderId={setUpdatingOrderId}
+                      updatingOrderId={updatingOrderId}
                     />
 
                     {/* Status Updater Dropdown */}
                     {updatingOrderId === order.id && (
                       <div className="mt-6 flex justify-end" onClick={(e) => e.stopPropagation()}>
-                        <OrderStatusUpdater 
-                          orderId={order.id} 
-                          currentStatus={order.status || 'placed'} 
-                          isDark={isDark} 
-                          onClose={() => setUpdatingOrderId(null)} 
+                        <OrderStatusUpdater
+                          orderId={order.id}
+                          currentStatus={order.status || 'placed'}
+                          isDark={isDark}
+                          onClose={() => setUpdatingOrderId(null)}
                         />
                       </div>
                     )}

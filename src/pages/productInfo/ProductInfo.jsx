@@ -554,6 +554,7 @@ import {
 } from "react-icons/fa";
 import Testimonial from "../../components/testimonial/Testimonial";
 import AddTestimonial from "../../components/testimonial/AddTestimonial";
+import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 function ProductInfo() {
   const { product, loading, mode } = useContext(MyContext);
@@ -615,12 +616,6 @@ function ProductInfo() {
       toast.error(`Only ${currentProduct.stock} left in stock!`, {
         position: "top-right",
         autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "❌",
       });
       return;
     }
@@ -642,7 +637,7 @@ function ProductInfo() {
     }
 
     //Firebase ko batne ke liye yaha logic hai.
-    const updatedCart = isProductInCart?.quantity === 1
+    const updatedCart = isProductInCart?.quantity === 1 // Agr quantity 1 thi, toh array se uda do
       ? cartItems.filter((c) => c.id !== currentProduct.id) // Agr quantity 1 thi, toh array se uda do
       : cartItems.map((c) => // agr quantity 1 se jyada hai to quantity 1 se kam kr do 
         c.id === currentProduct.id ? { ...c, quantity: c.quantity - 1 } : c
@@ -658,12 +653,6 @@ function ProductInfo() {
       toast.error("Product is out of stock!", {
         position: "top-right",
         autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "❌",
       });
       return;
     }
@@ -682,12 +671,6 @@ function ProductInfo() {
     toast.success("Product added to cart!", {
       position: "top-right",
       autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      icon: "🛍️",
     });
   };
 
@@ -923,7 +906,7 @@ function ProductInfo() {
                 {Number(currentProduct?.stock || 0) === 0 ? (
                   <button
                     disabled
-                    className="flex-[3] py-4 rounded-2xl bg-red-400 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] cursor-not-allowed"
+                    className="flex-[3] py-4 rounded-2xl bg-red-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] cursor-not-allowed"
                   >
                     Out Of Stock
                   </button>
