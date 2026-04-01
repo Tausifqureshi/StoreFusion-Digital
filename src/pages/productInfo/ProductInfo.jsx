@@ -632,42 +632,30 @@ function ProductInfo() {
   };
 
   const handleDecrement = async () => {
-    // 1. Pehle Redux Action chalega
     if (isProductInCart?.quantity === 1) {
+      //Redux ko update krne ke liye yaha logic hai.
       dispatch(deleteFromCart(currentProduct.id));
       toast.info("Product removed from cart!", { icon: "🗑️", autoClose: 1000, position: "top-right" });
     } else {
+      //Redux ko update krne ke liye yaha logic hai.
       dispatch(decrementQuantity(currentProduct.id));
     }
 
-    // 2. Bina kisi 'let' variable ke direct Array banega Firebase ke liye
+    //Firebase ko batne ke liye yaha logic hai.
     const updatedCart = isProductInCart?.quantity === 1
       ? cartItems.filter((c) => c.id !== currentProduct.id) // Agr quantity 1 thi, toh array se uda do
-      : cartItems.map((c) =>
-          c.id === currentProduct.id ? { ...c, quantity: c.quantity - 1 } : c // Warna quantity -1 kardo
-        );
+      : cartItems.map((c) => // agr quantity 1 se jyada hai to quantity 1 se kam kr do 
+        c.id === currentProduct.id ? { ...c, quantity: c.quantity - 1 } : c
+      );
 
     // 3. Firebase Save hoga
     await saveCart(updatedCart);
   };
 
   const handleAddToCart = async () => {
+    // Sirf naya item first time add karne ke liye (Increment ke liye handleIncrement use hoga)
     if (Number(currentProduct.stock || 0) === 0) {
       toast.error("Product is out of stock!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "❌",
-      });
-      return;
-    }
-
-    if (isProductInCart && isProductInCart.quantity >= Number(currentProduct.stock || Infinity)) {
-      toast.error(`Only ${currentProduct.stock} left in stock!`, {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -686,16 +674,12 @@ function ProductInfo() {
       time: currentProduct.time?.seconds ?? Date.now(),
     };
 
-    const updatedCart = isProductInCart
-      ? cartItems.map((item) =>
-        item.id === currentProduct.id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-      : [...cartItems, serializedProductForDispatch];
+    const updatedCart = [...cartItems, serializedProductForDispatch]; // Direct array push
 
     dispatch(addToCart(serializedProductForDispatch));
     await saveCart(updatedCart);
 
-    toast.success(isProductInCart ? "Cart quantity increased!" : "Product added to cart!", {
+    toast.success("Product added to cart!", {
       position: "top-right",
       autoClose: 1000,
       hideProgressBar: false,

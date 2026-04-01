@@ -34,28 +34,30 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
       });
       return;
     }
+    //Redux ko update krne ke liye yaha logic hai.
     dispatch(incrementQuantity(item.id));
     const updatedCart = cartItems.map((c) =>
       c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c
     );
+    // Firebase ko batne ke liye yaha logic hai.
     await saveCart(updatedCart);
   };
 
   const handleDecrement = async () => {
     // 1. Pehle Redux Action chalega
-    if (isProductInCart?.quantity === 1) { 
-      dispatch(deleteFromCart(item.id));
+    if (isProductInCart?.quantity === 1) {
+      dispatch(deleteFromCart(item.id)); //agr quantity 1 hai to delete kr do 
       toast.info("Product removed from cart!", { icon: "🗑️", autoClose: 1000, position: "top-right" });
-    } else { 
-      dispatch(decrementQuantity(item.id));
+    } else {
+      dispatch(decrementQuantity(item.id)); // agr quantity 1 se jyada hai to quantity 1 se kam kr do 
     }
 
-    // 2. Bina kisi 'let' variable ke direct Array banega Firebase ke liye
+    // Firebase ko batne ke liye yaha logic hai.
     const updatedCart = isProductInCart?.quantity === 1
       ? cartItems.filter((c) => c.id !== item.id) // Agr quantity 1 thi, toh array se uda do
-      : cartItems.map((c) =>
-          c.id === item.id ? { ...c, quantity: c.quantity - 1 } : c // Warna quantity -1 kardo
-        );
+      : cartItems.map((c) => // agr quantity 1 se jyada hai to quantity 1 se kam kr do 
+        c.id === item.id ? { ...c, quantity: c.quantity - 1 } : c
+      );
 
     // 3. Firebase Save hoga
     await saveCart(updatedCart);
@@ -65,24 +67,9 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
   const finalPrice = Math.round(price - (price * discount) / 100);
 
   const addCart = async (product) => {
+    // Sirf naya item first time add karne ke liye (Increment ke liye handleIncrement use hoga)
     if (Number(product.stock || 0) === 0) {
       toast.error("Product is out of stock!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "❌",
-      });
-      return;
-    }
-
-    const isProductInCart = cartItems.find((cartItem) => cartItem.id === product.id);
-
-    if (isProductInCart && isProductInCart.quantity >= Number(product.stock || Infinity)) {
-      toast.error(`Only ${product.stock} left in stock!`, {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -101,16 +88,13 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
       time: product.time?.seconds ?? Date.now(),
     };
 
-    const updatedCart = isProductInCart // agr cart me item hai to quantity badha do 
-      ? cartItems.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-      : [...cartItems, serializedProductForDispatch]; // agr cart me item nhi hai to new item add kr do 
+    const updatedCart = [...cartItems, serializedProductForDispatch]; // Sirf naya item add hoga
 
-    dispatch(addToCart(serializedProductForDispatch)); // ui update ke liye 
-    await saveCart(updatedCart); //firebase update ke liye 
+    // Redux aur Firebase Update
+    dispatch(addToCart(serializedProductForDispatch)); 
+    await saveCart(updatedCart);
 
-    toast.success(isProductInCart ? "Cart quantity increased!" : "Product added to cart!", {
+    toast.success("Product added to cart!", {
       position: "top-right",
       autoClose: 1000,
       hideProgressBar: false,
