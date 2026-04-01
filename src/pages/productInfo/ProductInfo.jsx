@@ -538,10 +538,11 @@ import React, { useContext, useState, useEffect, useMemo } from "react";
 import Layout from "../../components/layout/Layout";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../redux/cartSlice";
+import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../redux/cartSlice";
 import { useParams, useNavigate } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
 import LoaderSpinner from "../../components/loader/LoaderSpinner";
+import { saveCart } from "../../pages/cart/cartService";
 import {
   FaHeart,
   FaTruck,
@@ -607,20 +608,103 @@ function ProductInfo() {
     setZoomPos({ x, y, show: true });
   };
 
-  const handleAddToCart = () => {
-    if (Number(currentProduct.stock || 0) === 0) {
-      toast.error("Product is out of stock!", { icon: "❌" });
+  const isProductInCart = cartItems.find((cartItem) => cartItem?.id === currentProduct?.id);
+
+  const handleIncrement = async () => {
+    if (isProductInCart && isProductInCart.quantity >= Number(currentProduct.stock || Infinity)) {
+      toast.error(`Only ${currentProduct.stock} left in stock!`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "❌",
+      });
       return;
     }
-    const isProductInCart = cartItems.some(
-      (item) => item.id === currentProduct.id,
+    dispatch(incrementQuantity(currentProduct.id));
+    const updatedCart = cartItems.map((c) =>
+      c.id === currentProduct.id ? { ...c, quantity: c.quantity + 1 } : c
     );
-    if (isProductInCart) {
-      toast.info(`Already in your cart!`, { icon: "🛒" });
+    await saveCart(updatedCart);
+  };
+
+  const handleDecrement = async () => {
+    // 1. Pehle Redux Action chalega
+    if (isProductInCart?.quantity === 1) {
+      dispatch(deleteFromCart(currentProduct.id));
+      toast.info("Product removed from cart!", { icon: "🗑️", autoClose: 1000, position: "top-right" });
     } else {
-      dispatch(addToCart({ ...currentProduct, quantity: 1, time: Date.now() }));
-      toast.success("Added to cart!", { icon: "🛒" });
+      dispatch(decrementQuantity(currentProduct.id));
     }
+
+    // 2. Bina kisi 'let' variable ke direct Array banega Firebase ke liye
+    const updatedCart = isProductInCart?.quantity === 1
+      ? cartItems.filter((c) => c.id !== currentProduct.id) // Agr quantity 1 thi, toh array se uda do
+      : cartItems.map((c) =>
+          c.id === currentProduct.id ? { ...c, quantity: c.quantity - 1 } : c // Warna quantity -1 kardo
+        );
+
+    // 3. Firebase Save hoga
+    await saveCart(updatedCart);
+  };
+
+  const handleAddToCart = async () => {
+    if (Number(currentProduct.stock || 0) === 0) {
+      toast.error("Product is out of stock!", {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "❌",
+      });
+      return;
+    }
+
+    if (isProductInCart && isProductInCart.quantity >= Number(currentProduct.stock || Infinity)) {
+      toast.error(`Only ${currentProduct.stock} left in stock!`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "❌",
+      });
+      return;
+    }
+
+    const serializedProductForDispatch = {
+      ...currentProduct,
+      quantity: 1,
+      time: currentProduct.time?.seconds ?? Date.now(),
+    };
+
+    const updatedCart = isProductInCart
+      ? cartItems.map((item) =>
+        item.id === currentProduct.id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+      : [...cartItems, serializedProductForDispatch];
+
+    dispatch(addToCart(serializedProductForDispatch));
+    await saveCart(updatedCart);
+
+    toast.success(isProductInCart ? "Cart quantity increased!" : "Product added to cart!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      icon: "🛍️",
+    });
   };
 
   const handleViewAll = () => {
@@ -861,12 +945,26 @@ function ProductInfo() {
                   </button>
                 ) : (
                   <>
-                    <button
-                      onClick={handleAddToCart}
-                      className="flex-[2] py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-blue-500/20 transition-all active:scale-95 flex justify-center items-center gap-2"
-                    >
-                      Add To Shopping Bag
-                    </button>
+                    {isProductInCart ? (
+                      <div className="flex-[2] flex justify-between items-center bg-blue-600 text-white rounded-2xl overflow-hidden shadow-xl shadow-blue-500/20">
+                        <button onClick={handleDecrement} className="py-4 px-6 sm:px-8 hover:bg-blue-700 font-bold transition-colors flex justify-center items-center text-xl active:scale-90">
+                          -
+                        </button>
+                        <span className="text-sm md:text-base font-black pointer-events-none flex-1 pt-4 pb-[14px] text-center border-x border-blue-500/30 flex items-center justify-center">
+                          {isProductInCart.quantity}
+                        </span>
+                        <button onClick={handleIncrement} className="py-4 px-6 sm:px-8 hover:bg-blue-700 font-bold transition-colors flex justify-center items-center text-xl active:scale-90">
+                          +
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={handleAddToCart}
+                        className="flex-[2] py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-blue-500/20 transition-all active:scale-95 flex justify-center items-center gap-2"
+                      >
+                        Add To Shopping Bag
+                      </button>
+                    )}
                     <button className="flex-1 py-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase tracking-widest text-[10px] md:text-[11px] shadow-xl shadow-orange-500/20 transition-all active:scale-95">
                       Buy Now
                     </button>
@@ -904,12 +1002,12 @@ function ProductInfo() {
 
               <div className="flex flex-wrap -m-4">
                 {similarProducts.map((item, index) => (
-                  <SingleProductCard 
-                    key={index} 
-                    item={item} 
-                    expandedId={expandedId} 
-                    setExpandedId={setExpandedId} 
-                    mode={mode} 
+                  <SingleProductCard
+                    key={index}
+                    item={item}
+                    expandedId={expandedId}
+                    setExpandedId={setExpandedId}
+                    mode={mode}
                   />
                 ))}
               </div>

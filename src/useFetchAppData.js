@@ -10,6 +10,7 @@ export const useFetchAppData = (setCartLoading, setOrderLoading) => {
 
   useEffect(() => {
     const fetchCart = async () => {
+      setCartLoading(true);
       try {
         const cartData = await loadCart();
         dispatch(setCart(cartData));

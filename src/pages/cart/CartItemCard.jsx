@@ -29,8 +29,8 @@ const CartItemCard = ({
         {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex justify-between items-start gap-2">
-            <div>
-              <p className="text-[8px] font-black text-orange-500 uppercase tracking-widest">{item.category}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[8px] font-black text-orange-500 uppercase tracking-widest truncate">{item.category}</p>
               <h2 className="text-sm md:text-lg font-black uppercase tracking-tight truncate leading-tight">{item.title}</h2>
             </div>
             <button onClick={() => deleteCart(item.id)} className="text-gray-400 hover:text-red-500 transition-colors shrink-0">

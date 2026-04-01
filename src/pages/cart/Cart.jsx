@@ -783,7 +783,7 @@ function Cart({ cartLoading }) {
     if (!item) return;
 
     if (item.quantity >= Number(item.stock || Infinity)) {
-      toast.error(`Only ${item.stock || 'this'} left in stock!`, { position: "top-right", autoClose: 1000 });
+      toast.error(`Only ${item.stock || 'this'} left izn stock!`, { position: "top-right", autoClose: 1000 });
       return;
     }
 
@@ -849,7 +849,7 @@ function Cart({ cartLoading }) {
                 {/* Left: Cart Items List */}
                 <div className="w-full lg:flex-1 space-y-4">
                   {cartItems.map((item, index) => (
-                    <CartItemCard 
+                    <CartItemCard
                       key={item.id || index}
                       item={item}
                       index={index}

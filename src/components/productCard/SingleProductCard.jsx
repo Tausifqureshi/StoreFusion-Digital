@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { MyContext } from "../../context api/myContext";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "../../redux/cartSlice";
+import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../redux/cartSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ImageWithLoader from "../loader/ImageWithLoader";
@@ -18,13 +18,55 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
   const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate();
 
+  const isProductInCart = cartItems.find((cartItem) => cartItem.id === item.id);
+
+  const handleIncrement = async () => {
+    if (isProductInCart && isProductInCart.quantity >= Number(item.stock || Infinity)) {
+      toast.error(`Only ${item.stock} left in stock!`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "❌",
+      });
+      return;
+    }
+    dispatch(incrementQuantity(item.id));
+    const updatedCart = cartItems.map((c) =>
+      c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c
+    );
+    await saveCart(updatedCart);
+  };
+
+  const handleDecrement = async () => {
+    // 1. Pehle Redux Action chalega
+    if (isProductInCart?.quantity === 1) { 
+      dispatch(deleteFromCart(item.id));
+      toast.info("Product removed from cart!", { icon: "🗑️", autoClose: 1000, position: "top-right" });
+    } else { 
+      dispatch(decrementQuantity(item.id));
+    }
+
+    // 2. Bina kisi 'let' variable ke direct Array banega Firebase ke liye
+    const updatedCart = isProductInCart?.quantity === 1
+      ? cartItems.filter((c) => c.id !== item.id) // Agr quantity 1 thi, toh array se uda do
+      : cartItems.map((c) =>
+          c.id === item.id ? { ...c, quantity: c.quantity - 1 } : c // Warna quantity -1 kardo
+        );
+
+    // 3. Firebase Save hoga
+    await saveCart(updatedCart);
+  };
+
   const { title, price, imageUrl, discount = 0, category, description, id, stock = 0 } = item;
   const finalPrice = Math.round(price - (price * discount) / 100);
 
   const addCart = async (product) => {
-    const isProductInCart = cartItems.find((cartItem) => cartItem.id === product.id);
-    if (isProductInCart) {
-      toast.info(`Product is already in your cart!`, {
+    if (Number(product.stock || 0) === 0) {
+      toast.error("Product is out of stock!", {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -32,38 +74,60 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        icon: "🗑️",
+        icon: "❌",
       });
-    } else {
-      const serializedProduct = {
-        ...product,
-        quantity: 1,
-        time: product.time?.seconds ?? Date.now(),
-      };
-
-      dispatch(addToCart(serializedProduct));
-      const updatedCart = [...cartItems, serializedProduct];
-      await saveCart(updatedCart);
-
-      toast.success("Product added to cart!", {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        icon: "🗑️",
-      });
+      return;
     }
+
+    const isProductInCart = cartItems.find((cartItem) => cartItem.id === product.id);
+
+    if (isProductInCart && isProductInCart.quantity >= Number(product.stock || Infinity)) {
+      toast.error(`Only ${product.stock} left in stock!`, {
+        position: "top-right",
+        autoClose: 1000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        icon: "❌",
+      });
+      return;
+    }
+
+    const serializedProductForDispatch = {
+      ...product,
+      quantity: 1,
+      time: product.time?.seconds ?? Date.now(),
+    };
+
+    const updatedCart = isProductInCart // agr cart me item hai to quantity badha do 
+      ? cartItems.map((item) =>
+        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+      )
+      : [...cartItems, serializedProductForDispatch]; // agr cart me item nhi hai to new item add kr do 
+
+    dispatch(addToCart(serializedProductForDispatch)); // ui update ke liye 
+    await saveCart(updatedCart); //firebase update ke liye 
+
+    toast.success(isProductInCart ? "Cart quantity increased!" : "Product added to cart!", {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      icon: "🛍️",
+    });
   };
 
   return (
     <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg self-start">
       <div
         className={`border-2 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${mode === "dark"
-            ? "bg-gray-800 hover:shadow-gray-900 border-gray-700"
-            : "border-gray-200 hover:shadow-gray-100 bg-white"
+          ? "bg-gray-800 hover:shadow-gray-900 border-gray-700"
+          : "border-gray-200 hover:shadow-gray-100 bg-white"
           } border-opacity-60 rounded-2xl overflow-hidden flex flex-col h-full`}
       >
         <div
@@ -136,11 +200,23 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
                 >
                   Out of Stock
                 </button>
+              ) : isProductInCart ? (
+                <div className="flex items-center justify-between w-full max-w-[124px] bg-blue-600 text-white rounded-lg h-[34px] shadow-sm overflow-hidden">
+                  <button onClick={handleDecrement} className="h-full hover:bg-blue-700 font-bold transition-colors w-9 flex items-center justify-center text-lg active:scale-90">
+                    -
+                  </button>
+                  <span className="text-[13px] font-black pointer-events-none flex-1 text-center border-x border-blue-500/30 flex items-center justify-center h-full">
+                    {isProductInCart.quantity}
+                  </span>
+                  <button onClick={handleIncrement} className="h-full hover:bg-blue-700 font-bold transition-colors w-9 flex items-center justify-center text-lg active:scale-90">
+                    +
+                  </button>
+                </div>
               ) : (
                 <button
                   onClick={() => addCart(item)}
                   type="button"
-                  className="focus:outline-none text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full py-2 flex justify-center items-center gap-2 uppercase tracking-wider text-[11px] transition-all active:scale-95 max-w-[124px] px-0"
+                  className="focus:outline-none text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm w-full flex justify-center items-center gap-2 uppercase tracking-wider text-[11px] transition-all active:scale-95 max-w-[124px] h-[34px] px-0"
                 >
                   Add To Cart
                 </button>

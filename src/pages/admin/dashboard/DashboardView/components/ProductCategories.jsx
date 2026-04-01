@@ -24,14 +24,14 @@ const ProductCategories = ({ isDark, products }) => {
     //   const cat = product.category || 'Others';
     //   const formattedCat = cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
     //   acc[formattedCat] = (acc[formattedCat] || 0) + 1; // pehle se hai → +1 karo, nahi hai → 1 se shuru karo
-    //   return acc;
+    //   return acc; 
     // }, {}); // {} = khali object, yahan se counting shuru hogi
     // 👉 Category counts — sales wale style me
     const categoryCountMap = {}; // khali object
     products.forEach(product => {
       // agar category nahi hai → 'Others'
       const cat = product.category || 'Others';
-      // format: first letter capital, rest small
+      // format: first letter capital, rest small + yaha puls nhi concating kar raha hai joind 
       const formattedCat = cat.charAt(0).toUpperCase() + cat.slice(1).toLowerCase();
 
       // dynamic key use karke count add karo

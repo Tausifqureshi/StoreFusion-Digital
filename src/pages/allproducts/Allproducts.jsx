@@ -16,13 +16,14 @@ function Allproducts() {
     filterPrice,
     loading,
     sortPrice,
-     productLoading,
+    productLoading,
   } = useContext(MyContext);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
   const [expandedId, setExpandedId] = useState(null);
   const productsRef = useRef(null);
 
+  //kisi dusre page pe gaya user pagintion ka use kar ke us se dusre page pe upper wali ui show karwao. pehele page ki koi seemore open hai us ko band kar do null.
   useEffect(() => {
     if (productsRef.current) {
       productsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -43,7 +44,7 @@ function Allproducts() {
       .filter((item) => {
         // ✅ AGAR filterType khali array hai toh saare products dikhao
         if (filterType.length === 0) return true;
-        
+
         // ✅ Check karo ki product ki category selected categories mein hai ya nahi
         return filterType.includes(item.category);
       })
@@ -72,18 +73,17 @@ function Allproducts() {
       <Filter mode={mode} />
       <section className="text-gray-600 body-font">
         <div className="container px-5 py-8 md:py-16 mx-auto">
-          { productLoading ? (
+          {productLoading ? (
             // <div className="flex justify-center items-center h-64">
             //   <Loader />
             // </div>
-              <ProductSkeleton />
+            <ProductSkeleton />
           ) : (
             <>
               <div ref={productsRef} className="lg:w-1/2 w-full mb-6 lg:mb-10">
                 <h1
-                  className={`sm:text-3xl text-2xl font-black uppercase tracking-tighter mb-2 ${
-                    mode === "dark" ? "text-white" : "text-blue-600"
-                  }`}
+                  className={`sm:text-3xl text-2xl font-black uppercase tracking-tighter mb-2 ${mode === "dark" ? "text-white" : "text-blue-600"
+                    }`}
                 >
                   Our Latest <span className="text-orange-500">Collection</span>
                 </h1>
@@ -107,11 +107,10 @@ function Allproducts() {
                     <button
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-                        currentPage === 1
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition ${currentPage === 1
                           ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                           : "bg-blue-600 text-white hover:bg-blue-700 shadow"
-                      }`}
+                        }`}
                     >
                       Previous
                     </button>
@@ -120,11 +119,10 @@ function Allproducts() {
                       <button
                         key={i + 1}
                         onClick={() => setCurrentPage(i + 1)}
-                        className={`px-3 py-2 rounded-xl text-sm font-medium transition ${
-                          currentPage === i + 1
+                        className={`px-3 py-2 rounded-xl text-sm font-medium transition ${currentPage === i + 1
                             ? "bg-blue-600 text-white shadow"
                             : "bg-gray-100 hover:bg-gray-200"
-                        }`}
+                          }`}
                       >
                         {i + 1}
                       </button>
@@ -133,11 +131,10 @@ function Allproducts() {
                     <button
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                      className={`px-4 py-2 rounded-xl text-sm font-medium transition ${
-                        currentPage === totalPages
+                      className={`px-4 py-2 rounded-xl text-sm font-medium transition ${currentPage === totalPages
                           ? "bg-gray-200 text-gray-400 cursor-not-allowed"
                           : "bg-blue-600 text-white hover:bg-blue-700 shadow"
-                      }`}
+                        }`}
                     >
                       Next
                     </button>

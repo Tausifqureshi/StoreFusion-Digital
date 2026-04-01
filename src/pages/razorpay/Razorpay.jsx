@@ -5,8 +5,8 @@ import { fireDB } from "../../firebase/FirebaseConfig";
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'; // Redux dispatch import
 import { clearCart } from '../../redux/cartSlice'; // Import clearCart action
-import { addOrder} from '../../redux/orderSlice';
-import { saveCartToFirestore,clearUserCartFromFirestore } from "../cart/cartFirestore";
+import { addOrder } from '../../redux/orderSlice';
+import { saveCartToFirestore, clearUserCartFromFirestore } from "../cart/cartFirestore";
 import { saveOrderToFirestore } from "../../components/order/orderFirestore"
 
 function Razorpay({ cartItems, totalAmount }) {
@@ -61,9 +61,13 @@ function Razorpay({ cartItems, totalAmount }) {
 
       const savedOrder = await saveOrderToFirestore(orderInfo);
       toast.success('Order placed successfully via COD', { autoClose: 1000 });
+      // Red  ux store me order ko add kar rahe hain
       dispatch(addOrder(savedOrder));
+      // Redux store se cart ko clear kar rahe hain
       dispatch(clearCart());
+      // Firestore se cart ko clear kar rahe hain
       await clearUserCartFromFirestore(user.uid);
+      // paymentSuccess event ko dispatch kar rahe hain
       window.dispatchEvent(new Event("paymentSuccess"));
     } catch (error) {
       console.log("Error saving COD order:", error);
@@ -83,7 +87,7 @@ function Razorpay({ cartItems, totalAmount }) {
     //   console.error("Error parsing user data:", error);
     //   return toast.error('User data is corrupted or invalid');
     // }
-    
+
     try {
       user = JSON.parse(localStorage.getItem("user"));
     } catch (err) {
@@ -112,7 +116,7 @@ function Razorpay({ cartItems, totalAmount }) {
       // key_secret: "13wTYUM144Kv98GujKu6kkB6",
       key: "rzp_test_SAmF1Zz8ccXm1f",
       key_secret: "0PKAeGJ6Dpv5yPv0HiopwTaJ",
-      amount: parseInt(totalAmount * 100), 
+      amount: parseInt(totalAmount * 100),
       currency: "INR",
       order_receipt: 'order_rcptid_' + formData.fullName,
       name: "StoreFusion",
@@ -126,12 +130,12 @@ function Razorpay({ cartItems, totalAmount }) {
 
           const paymentId = response.razorpay_payment_id;
           const orderInfo = {
-            cartItems, 
+            cartItems,
             addressInfo,
             date: new Date().toLocaleString("en-US", {
               month: "short",
               day: "2-digit",
-              year: "numeric",  
+              year: "numeric",
             }),
             email: user.email,
             userid: user.uid,
@@ -142,9 +146,9 @@ function Razorpay({ cartItems, totalAmount }) {
           // const orderRef = collection(fireDB, "orders");
           // await addDoc(orderRef, orderInfo); 
           const savedOrder = await saveOrderToFirestore(orderInfo);
-          toast.success('Order saved successfully',{ autoClose: 1000 });
+          toast.success('Order saved successfully', { autoClose: 1000 });
           // ✅ Redux update (immediate UI update)
-          dispatch(addOrder(savedOrder)); 
+          dispatch(addOrder(savedOrder));
           // dispatch(addOrder(orderInfo)); // use saved order with ID
 
           // Clear cart from Redux and localStorage
@@ -154,22 +158,22 @@ function Razorpay({ cartItems, totalAmount }) {
           // const cartKey = user ? `cart_${user.email}` : "cart_guest";
           // localStorage.removeItem(cartKey);
 
-          
+
           // 4️⃣ Firestore → clear cart 🔥
           // await saveCartToFirestore(user.uid, []);
           await clearUserCartFromFirestore(user.uid);
 
         } catch (error) {
           console.log("Error saving order:", error);
-          toast.error('Failed to save order',{ autoClose: 1000 });
+          toast.error('Failed to save order', { autoClose: 1000 });
         }
       },
-  // ✅ YAHI add karna haia
-  modal: {
-    ondismiss: function () {
-      window.dispatchEvent(new Event("paymentClosed"));
-    },
-  },
+      // ✅ YAHI add karna haia
+      modal: {
+        ondismiss: function () {
+          window.dispatchEvent(new Event("paymentClosed"));
+        },
+      },
 
       theme: {
         color: "#3399cc",
@@ -180,7 +184,7 @@ function Razorpay({ cartItems, totalAmount }) {
     pay.open();
   };
 
-  return ( 
+  return (
     <div>
       <Modal buyNow={buyNow} cashOnDelivery={cashOnDelivery} formData={formData} setFormData={setFormData} />
     </div>

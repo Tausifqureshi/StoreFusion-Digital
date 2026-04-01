@@ -13,7 +13,7 @@
 //   const snap = await getDoc(doc(fireDB, "users", uid));
 //   return snap.exists() ? snap.data().cart || [] : [];
 // };
- 
+
 // export const clearUserCartFromFirestore = async (uid) => {
 //   if (!uid) return;
 //   await setDoc(
@@ -169,4 +169,4 @@ export const clearGuestCartFromFirestore = async () => {
     console.error("❌ clearGuestCart:", error);
     throw error;
   }
-};
+}; 

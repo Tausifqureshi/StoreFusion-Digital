@@ -101,6 +101,8 @@ const cartSlice = createSlice({
       const item = state.find(p => p.id === action.payload.id);
       if (item) {
         if (item.quantity < Number(action.payload.stock || 0)) {
+          // Cart me jo quantity hai, < kya wo stock se chhoti hai?
+          // < check karta hai: left wala right se chhota hai ya nahi
           item.quantity += action.payload.quantity;
         }
       } else {
@@ -126,8 +128,8 @@ const cartSlice = createSlice({
       // return state.filter(item => item.id !== action.payload.id);
       return state.filter(item => item.id !== action.payload);
       // action.payload sirf ID honi chahiye
-    // const filteredCart = state.filter(item => item.id !== action.payload);
-    // return filteredCart;
+      // const filteredCart = state.filter(item => item.id !== action.payload);
+      // return filteredCart;
     },
 
     clearCart() {
