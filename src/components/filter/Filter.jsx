@@ -1,5 +1,6 @@
+import { MyContext } from '../../context api/myContext';
 // import React, { useContext } from "react";
-// import { MyContext } from "../../context api/myContext";
+// ;
 
 // function Filter() {
 //   const { mode, product, searchkey, setSearchkey, filterType, setFilterType, filterPrice, setFilterPrice, sortPrice, setSortPrice } = useContext(MyContext);
@@ -125,7 +126,7 @@
 
 
 // import React, { useContext, useState, useEffect } from "react";
-// import { MyContext } from "../../context api/myContext";
+// ;
 // import { useLocation } from "react-router-dom"; // Route check karne ke liye
 // import { FiRefreshCw, FiSearch, FiSliders, FiX } from "react-icons/fi";
 // import { Drawer, IconButton } from "@mui/material";
@@ -396,15 +397,15 @@
 
 
 import React, { useContext, useState, useEffect } from "react";
-import { MyContext } from "../../context api/myContext";
+;
+;
 import { useLocation } from "react-router-dom";
 import { FiRefreshCw, FiSearch, FiSliders, FiX } from "react-icons/fi";
 import { Drawer, IconButton } from "@mui/material";
 
 function Filter({ mode }) {
+  const { product } = useContext(MyContext);
   const {
-    // mode,
-    product,
     searchkey,
     setSearchkey,
     filterType,
@@ -422,9 +423,24 @@ function Filter({ mode }) {
   const isDark = mode === "dark";
   const marginTopClass = location.pathname === "/" ? "mt-8" : "mt-28";
 
+  // 👉 Local state and debounce for Search to fix global re-render lag
+  const [localSearch, setLocalSearch] = useState(searchkey);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearchkey(localSearch);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [localSearch, setSearchkey]);
+
+  // 👉 Keep localSearch in sync if searchkey is cleared externally (e.g. from Clear All)
+  useEffect(() => {
+    if (searchkey === "") setLocalSearch("");
+  }, [searchkey]);
+
   const resetFilters = () => {
     setIsRotating(true);
-    setSearchkey("");
+    setLocalSearch(""); // clear local
+    setSearchkey(""); // clear global
     setFilterType([]);
     setFilterPrice("");
     setSortPrice("");
@@ -466,8 +482,8 @@ function Filter({ mode }) {
           <div className="relative flex-1">
             <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
             <input
-              value={searchkey}
-              onChange={(e) => setSearchkey(e.target.value)}
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
               type="text"
               placeholder="Search products..."
               className={`w-full pl-12 pr-4 py-2.5 rounded-xl border outline-none text-sm font-medium transition-all ${isDark
@@ -527,8 +543,8 @@ function Filter({ mode }) {
         <div className="relative">
           <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
           <input
-            value={searchkey}
-            onChange={(e) => setSearchkey(e.target.value)}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
             type="text"
             placeholder="Search StoreFusion..."
             className={`w-full pl-12 pr-4 py-3 rounded-xl border shadow-md outline-none text-sm font-medium ${isDark ? "bg-[#232f3e] border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"
@@ -637,7 +653,7 @@ function Filter({ mode }) {
   );
 }
 
-export default Filter;
+export default React.memo(Filter);
 
 
 

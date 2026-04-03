@@ -1,8 +1,11 @@
-import React, { useContext } from 'react';
 import { MyContext } from '../../context api/myContext';
+import React, { useContext } from 'react';
+;
+;
 
 function AllTestimonial() {
-  const { mode, testimonial,getAvatar  } = useContext(MyContext);
+  const { mode } = useContext(MyContext);
+  const { testimonial, getAvatar } = useContext(MyContext);
 
   return (
     <section className={`body-font mb-10 ${mode === 'dark' ? 'bg-gray-800' : 'bg-white'} text-gray-600`}>

@@ -1,6 +1,10 @@
+import { MyContext } from '../../../../context api/myContext';
 import React, { useContext, useMemo } from 'react';
 import { FaBox, FaShoppingCart, FaUsers, FaTags } from 'react-icons/fa';
-import { MyContext } from '../../../../context api/myContext';
+;
+;
+;
+;
 import Layout from '../../../../components/layout/Layout';
 import DashboardTab from '../DashboardTabView/DashboardTab';
 import ScrollToTopButton from '../../../../components/Scroll top/ScrollToTopButoon';
@@ -17,7 +21,10 @@ import DashboardHeader from './components/DashboardHeader';
 import { useDashboardData } from './hooks/useDashboardData';
 
 function Dashboard() {
-  const { mode, product: allProducts, order: allOrders, user: allUsers } = useContext(MyContext);
+  const { mode } = useContext(MyContext);
+  const { product: allProducts } = useContext(MyContext);
+  const { order: allOrders } = useContext(MyContext);
+  const { user: allUsers } = useContext(MyContext);
   const isDark = mode === 'dark';
   const navigate = useNavigate();
 

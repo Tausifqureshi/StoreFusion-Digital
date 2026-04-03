@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../navbar/Navbar";
+import Navbar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
 
 function Layout({ children }) {
@@ -7,7 +7,7 @@ function Layout({ children }) {
     <div>
       {/* <h1>Layout Page </h1> */}
       <Navbar />
-      <div className="content">
+      <div className="content relative z-40">
         {children}
 
         {/* Yeh content bar-bar change hota rahega, isliye hum `children` prop ka use karte hain. Lekin, `Layout` component me Navbar aur Footer same rehte hain har page pe. */}

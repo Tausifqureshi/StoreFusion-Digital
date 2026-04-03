@@ -1,6 +1,7 @@
+import { MyContext } from '../../context api/myContext';
 // import React, { useContext, useMemo, useState } from "react";
 // import Layout from "../../components/layout/Layout";
-// import { MyContext } from "../../context api/myContext";
+// ;
 // import { useDispatch, useSelector } from "react-redux";
 // import {
 //   deleteFromCart,
@@ -517,7 +518,7 @@
 
 // import React, { useContext, useMemo, useState } from "react";
 // import Layout from "../../components/layout/Layout";
-// import { MyContext } from "../../context api/myContext";
+// ;
 // import { useDispatch, useSelector } from "react-redux";
 // import {
 //   deleteFromCart,
@@ -741,7 +742,7 @@
 
 import React, { useContext, useMemo, useState, useCallback } from "react";
 import Layout from "../../components/layout/Layout";
-import { MyContext } from "../../context api/myContext";
+;
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteFromCart,

@@ -13,18 +13,18 @@ import LoaderSpinner from "../../../../components/loader/LoaderSpinner";
 
 function DashboardTab() {
   // 🎯 Destructuring specific loading states for granular control
-  const { 
-    mode, 
-    product, 
-    edithandle, 
-    deleteProduct, 
-    order, 
-    user, 
-    productLoading, 
-    orderLoading, 
-    userLoading 
+  const {
+    mode,
+    product,
+    edithandle,
+    deleteProduct,
+    order,
+    user,
+    productLoading,
+    orderLoading,
+    userLoading
   } = useContext(MyContext);
-  
+
   const isDark = mode === 'dark';
 
   // 👉 Tab State
@@ -114,13 +114,13 @@ function DashboardTab() {
           <animated.div style={tabTransitionAnimationProps}>
             {productLoading
               ? <LoaderSpinner isDark={isDark} label="Loading products..." />
-              : <ProductManagementTab 
-                  isDark={isDark} 
-                  product={product} 
-                  order={order} 
-                  edithandle={edithandle} 
-                  deleteProduct={deleteProduct} 
-                />
+              : <ProductManagementTab
+                isDark={isDark}
+                product={product}
+                order={order}
+                edithandle={edithandle}
+                deleteProduct={deleteProduct}
+              />
             }
           </animated.div>
         )}

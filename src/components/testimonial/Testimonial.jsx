@@ -1,5 +1,6 @@
+import { MyContext } from '../../context api/myContext';
 // import React, { useContext } from 'react';
-// import { MyContext } from '../../context api/myContext';
+// ;
 
 // function Testimonial({ reviews = [] }) {
 //   const { mode,getAvatar} = useContext(MyContext);
@@ -69,12 +70,14 @@
 
 
 import React, { useContext, useMemo } from 'react';
-import { MyContext } from '../../context api/myContext';
+;
+;
 import { FaEdit, FaTrash, FaQuoteLeft, FaStar } from 'react-icons/fa'; // Ye ensure kar lena
 
 // Props mein productId ya categoryName bhej sakte ho
 function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode }) {
-  const { testimonial, product, getAvatar, editTestimonial, deleteTestimonial } = useContext(MyContext);
+  const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(MyContext);
+  const { product } = useContext(MyContext);
   const isDark = mode === 'dark';
 
   // ⭐ Sara Filter Logic ab yahan move ho gaya
@@ -170,4 +173,4 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
 
 }
 
-export default Testimonial;
+export default React.memo(Testimonial);

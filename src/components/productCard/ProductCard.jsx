@@ -1,17 +1,24 @@
+import { MyContext } from '../../context api/myContext';
 import React, { useContext, useState, useMemo } from "react";
-import { MyContext } from "../../context api/myContext";
+;
+;
+;
 import SingleProductCard from "./SingleProductCard";
 import ProductSkeleton from "../loader/ProductSkeleton";
 
 function ProductCard() {
+  const { mode } = useContext(MyContext);
+
   const {
-    mode,
     product,
+    productLoading,
+  } = useContext(MyContext);
+
+  const {
     searchkey,
     filterType,
     filterPrice,
     sortPrice,
-    productLoading,
   } = useContext(MyContext);
 
   const [expandedId, setExpandedId] = useState(null);
@@ -56,9 +63,9 @@ function ProductCard() {
             </div>
 
             <div className="flex flex-wrap -m-4">
-              {filteredProducts.map((item, index) => (
+              {filteredProducts.map((item) => (
                 <SingleProductCard
-                  key={index}
+                  key={item.id || item.title}
                   item={item}
                   expandedId={expandedId}
                   setExpandedId={setExpandedId}
@@ -73,4 +80,4 @@ function ProductCard() {
   );
 }
 
-export default ProductCard;
+export default React.memo(ProductCard);

@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react";
-import { MyContext } from "../../context api/myContext";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../redux/cartSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ImageWithLoader from "../loader/ImageWithLoader";
 import { saveCart } from "../../pages/cart/cartService";
+import { store } from "../../redux/store";
 
 function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
   // const { mode } = useContext(MyContext);
@@ -15,10 +15,12 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
   const isExpanded = expandedId !== null && expandedId === uniqueId;
 
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate();
 
-  const isProductInCart = cartItems.find((cartItem) => cartItem.id === item.id);
+  // 👉 Select specific cart item to heavily optimize performance!
+  const isProductInCart = useSelector((state) => 
+    state.cart.find((cartItem) => cartItem.id === item.id)
+  );
 
   const handleIncrement = async () => {
     if (isProductInCart && isProductInCart.quantity >= Number(item.stock || Infinity)) {
@@ -36,11 +38,11 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
     }
     //Redux ko update krne ke liye yaha logic hai.
     dispatch(incrementQuantity(item.id));
-    const updatedCart = cartItems.map((c) =>
-      c.id === item.id ? { ...c, quantity: c.quantity + 1 } : c
-    );
+    
+    // Get updated cart instantly from store to avoid reactivity overhead
+    const latestCart = store.getState().cart;
     // Firebase ko batne ke liye yaha logic hai.
-    await saveCart(updatedCart);
+    await saveCart(latestCart);
   };
 
   const handleDecrement = async () => {
@@ -53,14 +55,8 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
     }
 
     // Firebase ko batne ke liye yaha logic hai.
-    const updatedCart = isProductInCart?.quantity === 1
-      ? cartItems.filter((c) => c.id !== item.id) // Agr quantity 1 thi, toh array se uda do
-      : cartItems.map((c) => // agr quantity 1 se jyada hai to quantity 1 se kam kr do 
-        c.id === item.id ? { ...c, quantity: c.quantity - 1 } : c
-      );
-
-    // 3. Firebase Save hoga
-    await saveCart(updatedCart);
+    const latestCart = store.getState().cart;
+    await saveCart(latestCart);
   };
 
   const { title, price, imageUrl, discount = 0, category, description, id, stock = 0 } = item;
@@ -82,10 +78,11 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
       time: product.time?.seconds ?? Date.now(),
     };
 
-    const updatedCart = [...cartItems, serializedProductForDispatch]; // Sirf naya item add hoga
     // Redux aur Firebase Update
     dispatch(addToCart(serializedProductForDispatch));
-    await saveCart(updatedCart);
+    
+    const latestCart = store.getState().cart;
+    await saveCart(latestCart);
 
     toast.success("Product added to cart!", {
       position: "top-right",
@@ -213,4 +210,4 @@ function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
   );
 }
 
-export default SingleProductCard;
+export default React.memo(SingleProductCard);

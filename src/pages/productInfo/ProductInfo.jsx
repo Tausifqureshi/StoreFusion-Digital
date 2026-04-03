@@ -1,3 +1,4 @@
+import { MyContext } from '../../context api/myContext';
 // // import React, { useContext, useState, useEffect } from 'react';
 // // import Layout from '../../components/layout/Layout';
 // // import { toast } from 'react-toastify';
@@ -6,7 +7,7 @@
 // // import { fireDB } from '../../firebase/FirebaseConfig';
 // // import { useParams, Link  } from 'react-router-dom';
 // // import { doc, getDoc } from 'firebase/firestore';
-// // import { MyContext } from '../../context api/myContext';
+// // ;
 // // import Loader from '../../components/loader/Loader';
 // // import { FaHeart, FaShoppingCart, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
 
@@ -185,7 +186,7 @@
 //   where,
 //   getDocs,
 // } from "firebase/firestore";
-// import { MyContext } from "../../context api/myContext";
+// ;
 // import Loader from "../../components/loader/Loader";
 // import {
 //   FaHeart,
@@ -540,7 +541,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../redux/cartSlice";
 import { useParams, useNavigate } from "react-router-dom";
-import { MyContext } from "../../context api/myContext";
+;
+;
 import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import { saveCart } from "../../pages/cart/cartService";
 import {
@@ -557,7 +559,8 @@ import AddTestimonial from "../../components/testimonial/AddTestimonial";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 function ProductInfo() {
-  const { product, loading, mode } = useContext(MyContext);
+  const { product, loading } = useContext(MyContext);
+  const { mode } = useContext(MyContext);
   const [mainImage, setMainImage] = useState("");
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0, show: false });
   const [isHeartFilled, setIsHeartFilled] = useState(false);

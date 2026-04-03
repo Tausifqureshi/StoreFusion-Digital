@@ -1,5 +1,6 @@
+import { MyContext } from '../../context api/myContext';
 // import React, { useContext } from "react";
-// import { MyContext } from "../../context api/myContext";
+// ;
 
 // function AddTestimonial() {
 //   const { testimonialForm, setTestimonialForm, addTestimonial, loading } =
@@ -57,7 +58,8 @@
 
 
 import React, { useContext, useState, useEffect } from "react";
-import { MyContext } from "../../context api/myContext";
+;
+;
 import { FaStar } from "react-icons/fa";
 
 const Star = ({ filled, onClick }) => (
@@ -69,7 +71,8 @@ const Star = ({ filled, onClick }) => (
 );
 
 function AddTestimonial({ productId = "" }) {
-  const { testimonialForm, setTestimonialForm, addTestimonial, loading, updateTestimonial, mode } = useContext(MyContext);
+  const { testimonialForm, setTestimonialForm, addTestimonial, loading, updateTestimonial } = useContext(MyContext);
+  const { mode } = useContext(MyContext);
   const [rating, setRating] = useState(0);
   const isDark = mode === "dark";
 
@@ -178,7 +181,7 @@ function AddTestimonial({ productId = "" }) {
 export default AddTestimonial;
 
 // import React, { useContext, useState, useEffect } from "react";
-// import { MyContext } from "../../context api/myContext";
+// ;
 
 // const Star = ({ filled, onClick }) => (
 //   <svg

@@ -1,5 +1,6 @@
+import { MyContext } from '../../context api/myContext';
 import React, { useContext, useState } from "react";
-import { MyContext } from "../../context api/myContext";
+;
 import { Link } from "react-router-dom";
 import {
   FaFacebookF,

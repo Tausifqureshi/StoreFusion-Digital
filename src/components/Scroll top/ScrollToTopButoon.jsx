@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { MyContext } from "../../context api/myContext";
+
 import { FiArrowUp } from "react-icons/fi";
 
 function ScrollToTopButoon({ mode }) {

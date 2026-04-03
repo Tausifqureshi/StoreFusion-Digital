@@ -1,7 +1,8 @@
+import { MyContext } from '../../context api/myContext';
 import React, { useContext, useState } from 'react';
 import { Link, replace, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { MyContext } from '../../context api/myContext';
+;
 import { toast } from 'react-toastify';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { fireDB, auth } from '../../firebase/FirebaseConfig';

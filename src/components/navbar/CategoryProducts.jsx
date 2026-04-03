@@ -1,7 +1,9 @@
+import { MyContext } from '../../context api/myContext';
 import React, { useContext, useMemo, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Layout from "../../components/layout/Layout";
-import { MyContext } from "../../context api/myContext";
+;
+;
 import {
   FaArrowLeft,
 } from "react-icons/fa";
@@ -11,7 +13,8 @@ import ProductSkeleton from "../loader/ProductSkeleton";
 
 function CategoryProducts() {
   const { name } = useParams();
-  const { product, mode, productLoading } = useContext(MyContext);
+  const { product, productLoading } = useContext(MyContext);
+  const { mode } = useContext(MyContext);
   const navigate = useNavigate();
   const isDark = mode === "dark";
   const [expandedId, setExpandedId] = useState(null);

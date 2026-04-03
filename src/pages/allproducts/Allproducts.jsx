@@ -1,5 +1,8 @@
+import { MyContext } from '../../context api/myContext';
 import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
-import { MyContext } from "../../context api/myContext";
+;
+;
+;
 import Filter from "../../components/filter/Filter";
 import Layout from "../../components/layout/Layout";
 import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
@@ -8,15 +11,18 @@ import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 
 function Allproducts() {
+  const { mode } = useContext(MyContext);
   const {
-    mode,
     product,
+    loading,
+    productLoading,
+  } = useContext(MyContext);
+  
+  const {
     searchkey,
     filterType,
     filterPrice,
-    loading,
     sortPrice,
-    productLoading,
   } = useContext(MyContext);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;

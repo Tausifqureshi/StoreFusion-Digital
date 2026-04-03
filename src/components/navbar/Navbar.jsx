@@ -356,7 +356,7 @@
 
 
 
-import React, { Fragment, useContext, useState, useEffect, useMemo } from "react";
+import React, { Fragment, useContext, useState, useEffect, useMemo, useRef } from "react";
 import { Drawer } from "@mui/material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { MyContext } from "../../context api/myContext";
@@ -383,7 +383,7 @@ function Navbar() {
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollY = useRef(0);
   const [mega, setMega] = useState(false);
   const [query, setQuery] = useState(""); // 👈 Ye line add karo
 
@@ -400,8 +400,6 @@ function Navbar() {
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
   );
 
-
-
   // ✅ Smooth Close Function: Ye pehle animation chalayega phir navigate karega
   const handleMobileClick = (url) => {
     setOpen(false); // Pehle drawer band karo (Animation start)
@@ -412,31 +410,30 @@ function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // ✅ MOBILE FIXED LOGIC: Chote devices par navbar hamesha fixed rahega
+      const currentScrollY = window.scrollY;
+
       if (window.innerWidth < 1024) {
         setIsVisible(true);
       } else {
-        // Bade devices par Hide on scroll down, show on scroll up
-        if (window.scrollY > lastScrollY && window.scrollY > 50) {
-          setIsVisible(false); // Scroll down → Hide navbar
+        if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+          setIsVisible(false);
         } else {
-          setIsVisible(true); // Scroll up → Show navbar
+          setIsVisible(true);
         }
       }
 
-      // Change background after scroll 50px
-      if (window.scrollY > 50) {
+      if (currentScrollY > 50) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
 
-      setLastScrollY(window.scrollY); // lastScrollY ko update karo
+      lastScrollY.current = currentScrollY;
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
 
 

@@ -1,10 +1,11 @@
+import { MyContext } from '../../context api/myContext';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { MyContext } from '../../context api/myContext';
+;
 import { auth, fireDB } from '../../firebase/FirebaseConfig';
 import { getDocs, query, collection, where } from 'firebase/firestore';
 import { setCart } from "../../redux/cartSlice";
