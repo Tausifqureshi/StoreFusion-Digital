@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from "react";
 ;
 import { Link } from "react-router-dom";
@@ -17,7 +17,7 @@ import {
 import { FiMapPin, FiPhone, FiMail, FiSend, FiChevronUp, FiChevronRight } from "react-icons/fi";
 
 function Footer() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const isDark = mode === "dark";
 
   const [email, setEmail] = useState("");

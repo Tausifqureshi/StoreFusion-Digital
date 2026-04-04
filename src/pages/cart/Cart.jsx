@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext } from '../../context api/AllContext';
 // import React, { useContext, useMemo, useState } from "react";
 // import Layout from "../../components/layout/Layout";
 // ;
@@ -27,7 +27,7 @@ import { MyContext } from '../../context api/myContext';
 // function Cart({ cartLoading }) {
 //   const user = JSON.parse(localStorage.getItem("user"));
 
-//   const { mode } = useContext(MyContext);
+//   const { mode } = useContext(ThemeContext);;
 //   const dispatch = useDispatch();
 //   const cartItems = useSelector((state) => state.cart) || [];
 //   // const [loading, setLoading] = useState(false);
@@ -98,7 +98,7 @@ import { MyContext } from '../../context api/myContext';
 
 //   const deleteCart = async (itemId) => {
 //     // await syncCart(cartItems.filter((i) => i.id !== item.id));
-//     const updatedCart = cartItems.filter((i) => i.id !== itemId);
+//     const updatedCart = cartItemsRef.current.filter((i) => i.id !== itemId);
 //     dispatch(deleteFromCart(itemId));
 //     saveCartDebounce(updatedCart);
 //     toast.info("Item deleted from cart", {
@@ -111,7 +111,7 @@ import { MyContext } from '../../context api/myContext';
 //   // Increment quantity
 //   // const incrementCartQuantity = async (itemId) => {
 //   //   dispatch(incrementQuantity(itemId));
-//   //   const updatedCart = cartItems.map((item) =>
+//   //   const updatedCart = cartItemsRef.current.map((item) =>
 //   //     item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
 //   //   );
 //   //   await syncCart(updatedCart);
@@ -121,7 +121,7 @@ import { MyContext } from '../../context api/myContext';
 //   //   // setLoading(true);
 //   //   // setCartItemUpdatingId(itemId);
 //   //   setCartUpdating({ id: itemId, type: "increment" });
-//   //   const updatedCart = cartItems.map((item) =>
+//   //   const updatedCart = cartItemsRef.current.map((item) =>
 //   //     item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
 //   //   );
 
@@ -145,7 +145,7 @@ import { MyContext } from '../../context api/myContext';
 //   const incrementCartQuantity = (itemId) => {
 //     setCartUpdating({ id: itemId, type: "increment" });
 
-//     const updatedCart = cartItems.map((item) =>
+//     const updatedCart = cartItemsRef.current.map((item) =>
 //       item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item,
 //     );
 
@@ -157,23 +157,23 @@ import { MyContext } from '../../context api/myContext';
 
 //   // Decrement quantity
 //   // const decrementCartQuantity = async (itemId) => {
-//   //   const item = cartItems.find((i) => i.id === itemId);
+//   //   const item = cartItemsRef.current.find((i) => i.id === itemId);
 //   //   if (!item || item.quantity <= 1) return;
 //   //   dispatch(decrementQuantity(itemId));
-//   //   const updatedCart = cartItems.map((item) =>
+//   //   const updatedCart = cartItemsRef.current.map((item) =>
 //   //     item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
 //   //   );
 //   //   await syncCart(updatedCart);
 //   // };
 //   const decrementCartQuantity = async (itemId) => {
-//     const item = cartItems.find((i) => i.id === itemId);
+//     const item = cartItemsRef.current.find((i) => i.id === itemId);
 //     // 👇 agar quantity 1 hai → kuch bhi mat karo
 //     if (!item || item.quantity === 1) {
 //       return; // ❌ NO loader, NO firestore, NO redux
 //     }
 //     // setCartItemUpdatingId(itemId);
 //     setCartUpdating({ id: itemId, type: "decrement" });
-//     const updatedCart = cartItems.map((item) => {
+//     const updatedCart = cartItemsRef.current.map((item) => {
 //       if (item.id === itemId) {
 //         // quantity 1 se niche nahi jaane dena
 //         if (item.quantity === 1) return item;
@@ -536,7 +536,7 @@ import { MyContext } from '../../context api/myContext';
 // import { FiTrash2, FiMinus, FiPlus, FiChevronDown, FiShield, FiTruck } from "react-icons/fi";
 
 // function Cart({ cartLoading }) {
-//   const { mode } = useContext(MyContext);
+//   const { mode } = useContext(ThemeContext);;
 //   const dispatch = useDispatch();
 //   const cartItems = useSelector((state) => state.cart) || [];
 //   const [clearingCart, setClearingCart] = useState(false);
@@ -552,7 +552,7 @@ import { MyContext } from '../../context api/myContext';
 
 //   // Actions
 //   const deleteCart = (itemId) => {
-//     const updatedCart = cartItems.filter((i) => i.id !== itemId);
+//     const updatedCart = cartItemsRef.current.filter((i) => i.id !== itemId);
 //     dispatch(deleteFromCart(itemId));
 //     saveCartDebounce(updatedCart);
 //     toast.error("Item Removed", { position: "bottom-right", autoClose: 1000 });
@@ -560,7 +560,7 @@ import { MyContext } from '../../context api/myContext';
 
 //   const incrementCartQuantity = (itemId) => {
 //     setCartUpdating({ id: itemId, type: "increment" });
-//     const updatedCart = cartItems.map((item) =>
+//     const updatedCart = cartItemsRef.current.map((item) =>
 //       item.id === itemId ? { ...item, quantity: item.quantity + 1 } : item
 //     );
 //     dispatch(incrementQuantity(itemId));
@@ -569,10 +569,10 @@ import { MyContext } from '../../context api/myContext';
 //   };
 
 //   const decrementCartQuantity = (itemId) => {
-//     const item = cartItems.find((i) => i.id === itemId);
+//     const item = cartItemsRef.current.find((i) => i.id === itemId);
 //     if (!item || item.quantity === 1) return;
 //     setCartUpdating({ id: itemId, type: "decrement" });
-//     const updatedCart = cartItems.map((item) =>
+//     const updatedCart = cartItemsRef.current.map((item) =>
 //       item.id === itemId ? { ...item, quantity: item.quantity - 1 } : item
 //     );
 //     dispatch(decrementQuantity(itemId));
@@ -761,7 +761,7 @@ import { FiTrash2, FiMinus, FiPlus, FiChevronDown, FiShield, FiTruck } from "rea
 import CartItemCard from "./CartItemCard";
 
 function Cart({ cartLoading }) {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const dispatch = useDispatch();
   const cartItems = useSelector((state) => state.cart) || [];
   const [clearingCart, setClearingCart] = useState(false);
@@ -784,7 +784,7 @@ function Cart({ cartLoading }) {
     if (!item) return;
 
     if (item.quantity >= Number(item.stock || Infinity)) {
-      toast.error(`Only ${item.stock || 'this'} left izn stock!`, { position: "top-right", autoClose: 1000 });
+      toast.error(`Only ${item.stock || 'this'} left in stock!`, { position: "top-right", autoClose: 1000 });
       return;
     }
 
@@ -858,7 +858,7 @@ function Cart({ cartLoading }) {
                       deleteCart={deleteCart}
                       decrementCartQuantity={decrementCartQuantity}
                       incrementCartQuantity={incrementCartQuantity}
-                      cartUpdating={cartUpdating}
+                      cartUpdatingType={cartUpdating?.id === item.id ? cartUpdating.type : null}
                     />
                   ))}
                 </div>
@@ -935,4 +935,4 @@ function Cart({ cartLoading }) {
   );
 }
 
-export default Cart;
+export default React.memo(Cart);

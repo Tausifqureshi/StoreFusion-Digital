@@ -1,20 +1,24 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
+import throttle from "lodash/throttle";
 
 import { FiArrowUp } from "react-icons/fi";
 
 function ScrollToTopButoon({ mode }) {
-  // const { mode } = useContext(MyContext);
+  // const { mode } = useContext(ThemeContext);;
   const [isVisible, setIsVisible] = useState(false);
   const isDark = mode === "dark";
 
   // Show the button when the user scrolls down 300px
-  const toggleVisibility = () => {
-    if (window.scrollY > 300) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  };
+  const toggleVisibility = useCallback(
+    throttle(() => {
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    }, 200),
+    []
+  );
 
   // Scroll the user to the top of the page
   const scrollToTop = () => {
@@ -25,11 +29,11 @@ function ScrollToTopButoon({ mode }) {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener('scroll', toggleVisibility, { passive: true });
     return () => {
       window.removeEventListener('scroll', toggleVisibility);
     };
-  }, []);
+  }, [toggleVisibility]);
 
   return (
     <div className="fixed bottom-6 right-6 z-[100] transition-all duration-500 pointer-events-none flex justify-end">
@@ -58,4 +62,4 @@ function ScrollToTopButoon({ mode }) {
   );
 }
 
-export default ScrollToTopButoon;
+export default React.memo(ScrollToTopButoon);

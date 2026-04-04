@@ -8,7 +8,7 @@ const CartItemCard = ({
   deleteCart, 
   decrementCartQuantity, 
   incrementCartQuantity, 
-  cartUpdating 
+  cartUpdatingType 
 }) => {
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
@@ -60,12 +60,12 @@ const CartItemCard = ({
           <div className="flex items-center justify-between mt-4">
             <span className={`text-lg md:text-xl font-medium ${isDark ? "text-white" : "text-gray-900"}`}>₹ {item.price}</span>
             <div className={`flex items-center gap-3 px-3 py-1 rounded-xl border ${isDark ? "bg-[#131921] border-gray-700" : "bg-gray-50 border-gray-100"}`}>
-              <button onClick={() => decrementCartQuantity(item.id)} disabled={cartUpdating?.id === item.id} className="text-xs hover:text-blue-600 transition-colors">
-                {cartUpdating?.id === item.id && cartUpdating?.type === "decrement" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiMinus />}
+              <button onClick={() => decrementCartQuantity(item.id)} disabled={cartUpdatingType === "decrement"} className="text-xs hover:text-blue-600 transition-colors">
+                {cartUpdatingType === "decrement" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiMinus />}
               </button>
               <span className="text-xs font-black w-4 text-center">{item.quantity}</span>
-              <button onClick={() => incrementCartQuantity(item.id)} disabled={cartUpdating?.id === item.id} className="text-xs hover:text-blue-600 transition-colors">
-                {cartUpdating?.id === item.id && cartUpdating?.type === "increment" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiPlus />}
+              <button onClick={() => incrementCartQuantity(item.id)} disabled={cartUpdatingType === "increment"} className="text-xs hover:text-blue-600 transition-colors">
+                {cartUpdatingType === "increment" ? <span className="w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full animate-spin block" /> : <FiPlus />}
               </button>
             </div>
           </div>
@@ -75,4 +75,11 @@ const CartItemCard = ({
   );
 };
 
-export default React.memo(CartItemCard);
+export default React.memo(CartItemCard, (prevProps, nextProps) => {
+  if (prevProps.isDark !== nextProps.isDark) return false;
+  if (prevProps.cartUpdatingType !== nextProps.cartUpdatingType) return false;
+  if (prevProps.item.id !== nextProps.item.id) return false;
+  if (prevProps.item.quantity !== nextProps.item.quantity) return false;
+  if (prevProps.item.price !== nextProps.item.price) return false;
+  return true;
+});

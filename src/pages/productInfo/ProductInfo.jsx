@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ProductAdminContext, ProductContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
 // // import React, { useContext, useState, useEffect } from 'react';
 // // import Layout from '../../components/layout/Layout';
 // // import { toast } from 'react-toastify';
@@ -26,7 +26,7 @@ import { MyContext } from '../../context api/myContext';
 // // );
 
 // function ProductInfo() {
-//     const { loading, setLoading } = useContext(MyContext);
+//     const { loading, setLoading } = useContext(ProductAdminContext);;
 //     const [products, setProducts] = useState('');
 //     const [isHeartFilled, setIsHeartFilled] = useState(false);
 //     const params = useParams();
@@ -201,7 +201,9 @@ import { MyContext } from '../../context api/myContext';
 // import AddTestimonial from "../../components/testimonial/AddTestimonial";
 
 // function ProductInfo() {
-//   const { loading, setLoading, testimonial, mode } = useContext(MyContext);
+//   const { loading, setLoading } = useContext(ProductAdminContext);
+  // const { testimonial } = useContext(TestimonialContext);
+// const { mode } = useContext(ThemeContext);;
 //   const [product, setProduct] = useState(null);
 //   const [mainImage, setMainImage] = useState("");
 //   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0, show: false });
@@ -559,8 +561,9 @@ import AddTestimonial from "../../components/testimonial/AddTestimonial";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 function ProductInfo() {
-  const { product, loading } = useContext(MyContext);
-  const { mode } = useContext(MyContext);
+  const { product } = useContext(ProductContext);
+  const { loading } = useContext(ProductAdminContext);;
+  const { mode } = useContext(ThemeContext);;
   const [mainImage, setMainImage] = useState("");
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0, show: false });
   const [isHeartFilled, setIsHeartFilled] = useState(false);

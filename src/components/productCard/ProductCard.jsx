@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { FilterContext, ProductContext, ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState, useMemo } from "react";
 ;
 ;
@@ -7,19 +7,11 @@ import SingleProductCard from "./SingleProductCard";
 import ProductSkeleton from "../loader/ProductSkeleton";
 
 function ProductCard() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
 
-  const {
-    product,
-    productLoading,
-  } = useContext(MyContext);
+  const { product, productLoading } = useContext(ProductContext);;
 
-  const {
-    searchkey,
-    filterType,
-    filterPrice,
-    sortPrice,
-  } = useContext(MyContext);
+  const { searchkey, filterType, filterPrice, sortPrice } = useContext(FilterContext);;
 
   const [expandedId, setExpandedId] = useState(null);
 

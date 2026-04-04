@@ -4,11 +4,12 @@
 // import React, { useContext, useEffect, useState } from "react";
 // import Layout from "../layout/Layout";
 // import Loader from "../loader/Loader";
-// import { MyContext } from "../../context api/myContext";
+// import { ProductAdminContext, ThemeContext } from '../../context api/AllContext';
 
 // function Order() {
 //   const [userOrders, setUserOrders] = useState([]);
-//   const { mode, loading } = useContext(MyContext);
+//   const { mode } = useContext(ThemeContext);
+  const { loading } = useContext(ProductAdminContext);;
 
 //   useEffect(() => {
 //     const userid = JSON.parse(localStorage.getItem('user')).uid;

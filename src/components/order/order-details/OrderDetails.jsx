@@ -1,4 +1,4 @@
-import { MyContext } from '../../../context api/myContext';
+import { ThemeContext, UserContext } from '../../../context api/AllContext';
 import React, { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 ;
@@ -18,10 +18,10 @@ function OrderDetails({ orderLoading }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const isDark = mode === "dark";
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { loggedInUser: user } = useContext(UserContext);
   const { orders } = useSelector((state) => state.orders);
   const [cancellingId, setCancellingId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(2);
@@ -234,4 +234,4 @@ function OrderDetails({ orderLoading }) {
   );
 }
 
-export default OrderDetails;
+export default React.memo(OrderDetails);

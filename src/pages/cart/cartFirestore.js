@@ -67,6 +67,7 @@
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
 import { fireDB } from "../../firebase/FirebaseConfig";
 import { v4 as uuidv4 } from "uuid";
+import { toast } from "react-toastify";
 
 // ================= USER CART =================
 
@@ -81,6 +82,7 @@ export const saveCartToFirestore = async (uid, cart) => {
     );
   } catch (error) {
     console.error("❌ saveCartToFirestore:", error);
+    toast.error("Failed to save your cart. Please try again.", { icon: "⚠️" });
     throw error;
   }
 };
@@ -93,6 +95,7 @@ export const getCartFromFirestore = async (uid) => {
     return snap.exists() ? snap.data().cart || [] : [];
   } catch (error) {
     console.error("❌ getCartFromFirestore:", error);
+    toast.error("Failed to load your cart.", { icon: "⚠️" });
     return [];
   }
 };
@@ -108,6 +111,7 @@ export const clearUserCartFromFirestore = async (uid) => {
     );
   } catch (error) {
     console.error("❌ clearUserCartFromFirestore:", error);
+    toast.error("Failed to clear cart. Please try again.", { icon: "⚠️" });
     throw error;
   }
 };
@@ -141,6 +145,7 @@ export const saveGuestCartToFirestore = async (cart) => {
     );
   } catch (error) {
     console.error("❌ saveGuestCart:", error);
+    toast.error("Failed to save cart. Please try again.", { icon: "⚠️" });
     throw error;
   }
 };
@@ -154,6 +159,7 @@ export const getGuestCartFromFirestore = async () => {
     return snap.exists() ? snap.data().cart || [] : [];
   } catch (error) {
     console.error("❌ getGuestCart:", error);
+    toast.error("Failed to load cart.", { icon: "⚠️" });
     return [];
   }
 };
@@ -167,6 +173,7 @@ export const clearGuestCartFromFirestore = async () => {
     localStorage.removeItem("guestId");
   } catch (error) {
     console.error("❌ clearGuestCart:", error);
+    toast.error("Failed to clear cart. Please try again.", { icon: "⚠️" });
     throw error;
   }
 }; 

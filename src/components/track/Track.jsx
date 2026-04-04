@@ -2,8 +2,8 @@ import React, { useContext } from 'react'
 
 
 function Track({ mode }) {
-    // const { mode,toggleMode } = useContext(MyContext);
-// const returnValue = useContext(MyContext);
+    // const { mode, toggleMode } = useContext(ThemeContext);;
+// const returnValue = useContext(ProductContext);
 // console.log(returnValue);
 
 

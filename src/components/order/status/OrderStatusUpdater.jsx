@@ -80,4 +80,9 @@ const OrderStatusUpdater = ({ orderId, currentStatus, isDark, onClose }) => {
   );
 };
 
-export default OrderStatusUpdater;
+export default React.memo(OrderStatusUpdater, (prevProps, nextProps) => {
+  if (prevProps.orderId !== nextProps.orderId) return false;
+  if (prevProps.currentStatus !== nextProps.currentStatus) return false;
+  if (prevProps.isDark !== nextProps.isDark) return false;
+  return true;
+});

@@ -147,4 +147,9 @@ const Tracking = ({ order, isDark }) => {
   );
 };
 
-export default React.memo(Tracking);
+export default React.memo(Tracking, (prevProps, nextProps) => {
+  if (prevProps.isDark !== nextProps.isDark) return false;
+  if (prevProps.order.id !== nextProps.order.id) return false;
+  if (prevProps.order.status !== nextProps.order.status) return false;
+  return true;
+});

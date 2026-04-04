@@ -8,7 +8,7 @@ import { saveCart } from "../../pages/cart/cartService";
 import { store } from "../../redux/store";
 
 function SingleProductCard({ item, expandedId, setExpandedId, mode }) {
-  // const { mode } = useContext(MyContext);
+  // const { mode } = useContext(ThemeContext);;
 
   // 👉 Fallback to title if id is missing to prevent all cards matching 'undefined === undefined'
   const uniqueId = item.id || item.title;

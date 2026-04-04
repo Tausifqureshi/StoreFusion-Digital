@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from "react";
 ;
 import Layout from "../../components/layout/Layout";
@@ -20,7 +20,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 function Contact() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -238,7 +238,7 @@ function Contact() {
   );
 }
 
-export default Contact;
+export default React.memo(Contact);
 
 
 
@@ -259,7 +259,7 @@ export default Contact;
 // import { motion, AnimatePresence } from "framer-motion";
 
 // function Contact() {
-//   const { mode } = useContext(MyContext);
+//   const { mode } = useContext(ThemeContext);;
 //   const isDark = mode === "dark";
 //   const [openFaq, setOpenFaq] = useState(null);
 //   const [showSuccess, setShowSuccess] = useState(false);
@@ -405,4 +405,4 @@ export default Contact;
 //   );
 // }
 
-// export default Contact;
+// export default React.memo(Contact);

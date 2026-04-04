@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { TestimonialContext } from './AllContext';
 import { fireDB } from '../firebase/FirebaseConfig';
-import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, setDoc, doc, deleteDoc, where } from 'firebase/firestore';
+import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, setDoc, doc, deleteDoc, where, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
+
+const initialFormState = {
+  name: '', text: '', img: '', role: '', productId: ''
+};
 
 function TestimonialState({ children }) {
   const [loading, setLoading] = useState(false);
   const [testimonial, setTestimonial] = useState([]);
-  const [testimonialForm, setTestimonialForm] = useState({
-    name: '', text: '', img: '', role: '',
-  });
+  const [testimonialForm, setTestimonialForm] = useState(initialFormState);
 
+  // 👉 User ki profile image uthao — na ho toh random avatar generate karo
   const getAvatar = useCallback((item) => {
     if (item?.img) return item.img;
     const id = item?.avatarId ?? 1;
@@ -18,25 +21,39 @@ function TestimonialState({ children }) {
     return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
   }, []);
 
+  // 👉 Real-time testimonials listener — product ke hisaab se ya sab ek saath
   const getTestimonialData = useCallback((productId = null) => {
     try {
       let q;
       if (productId) {
+        // 👉 Kisi khaas product ke reviews — uske ID se filter karo
         q = query(collection(fireDB, 'testimonials'), where('productId', '==', productId), orderBy('time', 'desc'));
       } else {
+        // 👉 Saare testimonials — naye pehle dikhao
         q = query(collection(fireDB, 'testimonials'), orderBy('time', 'desc'));
       }
 
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const arr = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setTestimonial(arr);
-      });
+      const unsubscribe = onSnapshot(
+        q,
+        (snapshot) => {
+          // 👉 Data aaya — id ke saath clean array banao
+          const arr = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setTestimonial(arr);
+        },
+        (error) => {
+          // 🔴 Listener mein error aaya — user ko dikhao
+          console.error("Testimonials listener error:", error);
+          toast.error("Failed to load testimonials.", { icon: "⚠️" });
+        }
+      );
       return unsubscribe;
     } catch (err) {
-      console.log(err);
+      console.error("getTestimonialData error:", err);
+      toast.error("Failed to connect to testimonials.", { icon: "⚠️" });
     }
   }, []);
 
+  // 👉 App shuru hote hi testimonials fetch karo — cleanup pe listener band ho jaayega
   useEffect(() => {
     let unsubscribe;
     const unsub = getTestimonialData();
@@ -46,8 +63,9 @@ function TestimonialState({ children }) {
     };
   }, [getTestimonialData]);
 
+  // 👉 Naya testimonial Firestore mein save karo
   const addTestimonial = useCallback(async (formData) => {
-    if (!formData.name || !formData.text) {
+    if (!formData.name || !formData.text || !formData.productId) {
       toast.error('Please fill all fields');
       return false;
     }
@@ -61,10 +79,10 @@ function TestimonialState({ children }) {
         gender: formData.gender || 'male',
       });
       toast.success('Testimonial added');
-      setTestimonialForm({ name: '', text: '', img: '', role: '' });
+      setTestimonialForm(initialFormState);
       return true;
     } catch (err) {
-      console.log(err);
+      console.error("addTestimonial error:", err);
       toast.error('Error adding testimonial');
       return false;
     } finally {
@@ -72,6 +90,7 @@ function TestimonialState({ children }) {
     }
   }, []);
 
+  // 👉 Existing testimonial update karo Firestore mein
   const updateTestimonial = useCallback(async () => {
     if (!testimonialForm.id) {
       toast.error('No ID found to update');
@@ -79,15 +98,19 @@ function TestimonialState({ children }) {
     }
     setLoading(true);
     try {
-      await setDoc(doc(fireDB, 'testimonials', testimonialForm.id), {
-        ...testimonialForm,
-        time: Timestamp.now(),
-      });
+      await setDoc(
+        doc(fireDB, 'testimonials', testimonialForm.id),
+        {
+          ...testimonialForm,
+          time: Timestamp.now(),
+        },
+        { merge: true }
+      );
       toast.success('Testimonial updated successfully!');
-      setTestimonialForm({ name: '', text: '', img: '', role: '', productId: '' });
+      setTestimonialForm(initialFormState);
       return true;
     } catch (err) {
-      console.log('Update Error:', err);
+      console.error("updateTestimonial error:", err);
       toast.error('Error updating testimonial');
       return false;
     } finally {
@@ -95,22 +118,25 @@ function TestimonialState({ children }) {
     }
   }, [testimonialForm]);
 
+  // 👉 Testimonial Firestore se permanently delete karo
   const deleteTestimonial = useCallback(async (id) => {
     setLoading(true);
     try {
       await deleteDoc(doc(fireDB, 'testimonials', id));
       toast.success('Testimonial deleted!', { autoClose: 50 });
     } catch (err) {
-      console.log(err);
+      console.error("deleteTestimonial error:", err);
       toast.error('Error deleting testimonial');
     } finally {
       setLoading(false);
     }
   }, []);
 
+  // 👉 Edit button: selected testimonial ka data form mein bhar do
+  // 👉 navigate() yahan se hata diya — routing ab component handle karega
   const editTestimonial = useCallback((item) => {
     setTestimonialForm(item);
-    return true; // We removed navigate(), handle routing in component
+    return true;
   }, []);
 
   const contextValue = useMemo(() => ({

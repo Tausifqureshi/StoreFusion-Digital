@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { FaChartLine } from 'react-icons/fa';
@@ -6,7 +6,7 @@ import { FaChartLine } from 'react-icons/fa';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const OrdersTrend = ({ isDark, labels, data }) => {
-  const chartData = {
+  const chartData = useMemo(() => ({
     labels: labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
@@ -23,9 +23,9 @@ const OrdersTrend = ({ isDark, labels, data }) => {
         pointHoverRadius: 8,
       },
     ],
-  };
+  }), [labels, data]);
 
-  const chartOptions = {
+  const chartOptions = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -58,7 +58,7 @@ const OrdersTrend = ({ isDark, labels, data }) => {
         ticks: { color: isDark ? '#64748b' : '#94a3b8', font: { size: 12, weight: 'bold' }, padding: 10, stepSize: 45 }
       }
     }
-  };
+  }), [isDark]);
 
   return (
     <div className={`p-6 sm:p-8 rounded-3xl border transition-all w-full ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
@@ -75,4 +75,10 @@ const OrdersTrend = ({ isDark, labels, data }) => {
   );
 };
 
-export default OrdersTrend;
+// 👉 React.memo: navbar scroll pe render NAHI hoga — sirf isDark ya data badlne pe hoga
+export default React.memo(OrdersTrend, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  if (prev.data !== next.data) return false;
+  if (prev.labels !== next.labels) return false;
+  return true;
+});

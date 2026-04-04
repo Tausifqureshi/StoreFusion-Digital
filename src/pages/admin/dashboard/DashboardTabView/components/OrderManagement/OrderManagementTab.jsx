@@ -97,7 +97,7 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
       />
 
       {/* 👉 ORDERS LIST VIEW */}
-      <div className={`rounded-3xl p-6 md:p-8 transition-all duration-300 mb-8 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+      <div className={`rounded-3xl p-6 md:p-8 transition-all duration-300 mb-8 overflow-visible ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
         <h2 className={`text-xl font-black tracking-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           Orders ({filteredAndSortedOrders.length})
         </h2>

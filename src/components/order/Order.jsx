@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext, UserContext } from '../../context api/AllContext';
 import React, { useContext, useState, useMemo, useEffect } from "react";
 import Layout from "../layout/Layout";
 import LoaderSpinner from "../loader/LoaderSpinner";
@@ -14,11 +14,11 @@ import { useNavigate } from "react-router-dom";
 import { deleteUserOrdersFromFirestore } from "./orderFirestore";
 
 function Order({ orderLoading }) {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const isDark = mode === "dark";
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const { loggedInUser: user } = useContext(UserContext);
   const { orders } = useSelector((state) => state.orders);
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const [activeTab, setActiveTab] = useState('All Orders');
@@ -105,7 +105,6 @@ function Order({ orderLoading }) {
                       isDark={isDark}
                       navigate={navigate}
                       setUpdatingOrderId={setUpdatingOrderId}
-                      updatingOrderId={updatingOrderId}
                     />
 
                     {/* Status Updater Dropdown */}
@@ -137,4 +136,4 @@ function Order({ orderLoading }) {
   );
 }
 
-export default Order;
+export default React.memo(Order);

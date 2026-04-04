@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import OrderStatusBadge from '../../../../../../components/order/OrderStatusBadge';
 import OrderStatusUpdater from '../../../../../../components/order/status/OrderStatusUpdater';
 
-const OrderItem = ({ isDark, o, i, activeDropdown, setActiveDropdown }) => {
+const OrderItem = ({ isDark, o, i, isActive, setActiveDropdown, uniqueKey }) => {
   const [showStatusUpdater, setShowStatusUpdater] = useState(false); // 👉 status updater panel toggle
 
   // 👉 Handle text-based invoice generation and download (Memoized for performance)
@@ -43,7 +43,7 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
   return (
     <>
       {/* Order Card */}
-      <div className={`group relative rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col xl:flex-row xl:items-center justify-between gap-6 border hover:-translate-y-1 ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl'}`}>
+      <div className={`group relative rounded-2xl p-4 sm:p-5 transition-all duration-300 flex flex-col xl:flex-row xl:items-center justify-between gap-6 border hover:-translate-y-1 ${isActive ? 'z-[50]' : 'z-0'} ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl'}`}>
 
         {/* Left: Avatar & Main Info */}
         <div className="flex items-center gap-4 min-w-[220px]">
@@ -104,16 +104,16 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
         </div>
 
         {/* Right: Actions */}
-        <div className="relative shrink-0 flex items-center justify-end z-10">
+        <div className="relative shrink-0 flex items-center justify-end">
           <button
-            onClick={() => setActiveDropdown(activeDropdown === o.id ? null : o.id)}
+            onClick={() => setActiveDropdown(prev => prev === uniqueKey ? null : uniqueKey)}
             className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${isDark ? 'hover:bg-gray-800 text-gray-400' : 'hover:bg-gray-200 text-gray-600'}`}
           >
             <FaEllipsisH size={14} />
           </button>
 
-          {activeDropdown === o.id && (
-            <div className={`absolute top-[110%] right-0 w-40 rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-top-2 ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-white border border-gray-100'}`}>
+          {isActive && (
+            <div className={`absolute top-[110%] right-0 w-44 z-[100] rounded-2xl shadow-2xl animate-in fade-in slide-in-from-top-2 ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-white border border-gray-100'}`}>
               {o.status !== "delivered" && (
                 <Link to={`/order-details/${o.id || o.paymentId || i}`} className={`w-full px-4 py-3 text-xs font-bold flex items-center gap-3 transition-all ${isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-700 hover:bg-gray-50'}`}>
                   <FaEye size={14} /> View Details
@@ -149,4 +149,11 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
   );
 };
 
-export default React.memo(OrderItem);
+export default React.memo(OrderItem, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  if (prev.isActive !== next.isActive) return false;
+  if (prev.uniqueKey !== next.uniqueKey) return false;
+  if (prev.o.id !== next.o.id) return false;
+  if (prev.o.status !== next.o.status) return false;
+  return true;
+});

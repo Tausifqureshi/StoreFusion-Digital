@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext } from "react";
 import Layout from "../../components/layout/Layout";
 ;
@@ -15,7 +15,7 @@ import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 
 
 function Home() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   return ( 
     <div>
       <Layout>

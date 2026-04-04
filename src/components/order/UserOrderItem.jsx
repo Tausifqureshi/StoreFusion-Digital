@@ -3,7 +3,8 @@ import OrderStatusBadge from './OrderStatusBadge';
 import { FiPackage } from 'react-icons/fi';
 import { FaArrowRight, FaEdit } from 'react-icons/fa';
 
-const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId, updatingOrderId }) => {
+const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId }) => {
+  console.log("UserOrderItem Rendered:", order.id);
   return (
     <div
       onClick={() => navigate(`/order-details/${order.id}`)}
@@ -56,7 +57,7 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId, updatingOr
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setUpdatingOrderId(updatingOrderId !== order.id ? order.id : null);
+                  setUpdatingOrderId((prev) => prev === order.id ? null : order.id);
                 }}
                 className="flex-1 md:flex-none px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-md active:scale-95 bg-blue-600 text-white hover:bg-blue-700"
               >
@@ -70,4 +71,11 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId, updatingOr
   );
 };
 
-export default React.memo(UserOrderItem);
+export default React.memo(UserOrderItem, (prevProps, nextProps) => {
+  if (prevProps.isDark !== nextProps.isDark) return false;
+  if (prevProps.order.id !== nextProps.order.id) return false;
+  if (prevProps.order.status !== nextProps.order.status) return false;
+  if (prevProps.order.date !== nextProps.order.date) return false;
+  if (prevProps.order.cartItems?.length !== nextProps.order.cartItems?.length) return false;
+  return true;
+});

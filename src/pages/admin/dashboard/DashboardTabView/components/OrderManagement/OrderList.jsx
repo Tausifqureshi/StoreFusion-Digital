@@ -6,16 +6,21 @@ const OrderList = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropd
   return (
     <div className="flex flex-col gap-4">
       {ordersOnCurrentPage.length > 0 ? (
-        ordersOnCurrentPage.map((o, i) => (
-          <OrderItem
-            key={o.id || i}
-            isDark={isDark}
-            o={o}
-            i={i}
-            activeDropdown={activeDropdown}
-            setActiveDropdown={setActiveDropdown}
-          />
-        ))
+        ordersOnCurrentPage.map((o, i) => {
+          // ✅ Unique key guaranteed — o.id, phir o.paymentId, phir index as last fallback
+          const uniqueKey = o.id || o.paymentId || `order-${i}`;
+          return (
+            <OrderItem
+              key={uniqueKey}
+              isDark={isDark}
+              o={o}
+              i={i}
+              uniqueKey={uniqueKey}
+              isActive={activeDropdown === uniqueKey}
+              setActiveDropdown={setActiveDropdown}
+            />
+          );
+        })
       ) : (
         <div className="py-20 text-center border-2 border-dashed rounded-3xl border-gray-200 dark:border-gray-800">
           <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center mb-4 ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>

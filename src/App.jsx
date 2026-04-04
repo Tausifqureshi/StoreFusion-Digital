@@ -197,7 +197,13 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import MyState from "./context api/MySatate";
+import { ThemeState } from "./context api/ThemeState";
+import { FilterState } from "./context api/FilterState";
+import ProductState from "./context api/ProductState";
+import OrderState from "./context api/OrderState";
+import UserState from "./context api/UserState";
+import TestimonialState from "./context api/TestimonialState";
+import Providers from "./context api/Providers";
 import { getUserOrdersFromFirestore } from "./components/order/orderFirestore";
 
 import { useDispatch } from "react-redux";
@@ -270,10 +276,10 @@ function App() {
 
   return (
     <>
-      {/* ✅ FULL SCREEN FIRST LOAD ONLY */}
+      {/* ✅ FULL SCREEN FIRST LOAD ONLY (Commented as requested) */}
       {/* {cartLoading && (
-        <div className="fixed top-0 left-0 w-full h-full overflow-y-auto bg-white dark:bg-[#131921] z-[9999]">
-          <Loader type="spinner" fullScreen />
+        <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white z-[9999]">
+          <Loader type="spinner" fullScreen size={60} />
         </div>
       )} */}
       {/* <h1> {version} </h1> */}
@@ -284,7 +290,7 @@ function App() {
           v7_relativeSplatPath: true,
         }}
       >
-        <MyState>
+        <Providers>
           <Suspense fallback={<Loader type="spinner" fullScreen />}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -342,7 +348,7 @@ function App() {
           </Suspense>
 
           <ToastContainer />
-        </MyState>
+        </Providers>
       </BrowserRouter>
     </>
   );

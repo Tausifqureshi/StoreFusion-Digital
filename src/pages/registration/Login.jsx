@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
@@ -21,7 +21,7 @@ import { getUserOrdersFromFirestore } from "../../components/order/orderFirestor
 import { setOrders } from "../../redux/orderSlice";
 
 function Login() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const isDark = mode === 'dark';
   const [authLoading, setAuthLoading] = useState(false);
   const [errors, setErrors] = useState({});

@@ -38,8 +38,7 @@ const ProductCategories = ({ isDark, products }) => {
       categoryCountMap[formattedCat] = (categoryCountMap[formattedCat] || 0) + 1;
     });
 
-    console.log(categoryCountMap);
-    // Output example: { Electronics: 5, Clothing: 3, Others: 2 }
+    // 👉 Output example: { Electronics: 5, Clothing: 3, Others: 2 }
 
     // 👉 3. Object → Array banao, phir sort karo: jis category me zyada products, wo upar
     const sortedCategories = Object.entries(categoryCountMap)
@@ -139,4 +138,9 @@ const ProductCategories = ({ isDark, products }) => {
   );
 };
 
-export default ProductCategories;
+// 👉 React.memo: navbar scroll pe render NAHI hoga — sirf isDark ya products badlne pe hoga
+export default React.memo(ProductCategories, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  if (prev.products !== next.products) return false;
+  return true;
+});

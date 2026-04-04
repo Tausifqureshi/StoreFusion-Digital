@@ -1,10 +1,10 @@
-import { MyContext } from '../../context api/myContext';
+import { ProductAdminContext, ProductContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
 // import React, { useContext } from "react";
 // ;
 
 // function AddTestimonial() {
 //   const { testimonialForm, setTestimonialForm, addTestimonial, loading } =
-//     useContext(MyContext);
+//     useContext(ProductContext);
 
 //   return (
 //     <div className="p-6 max-w-md">
@@ -71,8 +71,9 @@ const Star = ({ filled, onClick }) => (
 );
 
 function AddTestimonial({ productId = "" }) {
-  const { testimonialForm, setTestimonialForm, addTestimonial, loading, updateTestimonial } = useContext(MyContext);
-  const { mode } = useContext(MyContext);
+  const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial } = useContext(TestimonialContext);
+  const { loading } = useContext(ProductAdminContext);;
+  const { mode } = useContext(ThemeContext);;
   const [rating, setRating] = useState(0);
   const isDark = mode === "dark";
 
@@ -178,7 +179,7 @@ function AddTestimonial({ productId = "" }) {
   );
 }
 
-export default AddTestimonial;
+export default React.memo(AddTestimonial);
 
 // import React, { useContext, useState, useEffect } from "react";
 // ;
@@ -200,7 +201,7 @@ export default AddTestimonial;
 
 // function AddTestimonial({ productId = "" }) {
 //   const { testimonialForm, setTestimonialForm, addTestimonial, loading, updateTestimonial } =
-//     useContext(MyContext);
+//     useContext(ProductContext);
 
 //   const [rating, setRating] = useState(0);
 // useEffect(() => {

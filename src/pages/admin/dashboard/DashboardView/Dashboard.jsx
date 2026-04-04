@@ -1,4 +1,4 @@
-import { MyContext } from '../../../../context api/myContext';
+import { OrderContext, ProductContext, ThemeContext, UserContext } from '../../../../context api/AllContext';
 import React, { useContext, useMemo } from 'react';
 import { FaBox, FaShoppingCart, FaUsers, FaTags } from 'react-icons/fa';
 ;
@@ -21,10 +21,10 @@ import DashboardHeader from './components/DashboardHeader';
 import { useDashboardData } from './hooks/useDashboardData';
 
 function Dashboard() {
-  const { mode } = useContext(MyContext);
-  const { product: allProducts } = useContext(MyContext);
-  const { order: allOrders } = useContext(MyContext);
-  const { user: allUsers } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
+  const { product: allProducts } = useContext(ProductContext);;
+  const { order: allOrders } = useContext(OrderContext);;
+  const { user: allUsers } = useContext(UserContext);;
   const isDark = mode === 'dark';
   const navigate = useNavigate();
 
@@ -138,4 +138,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default React.memo(Dashboard);

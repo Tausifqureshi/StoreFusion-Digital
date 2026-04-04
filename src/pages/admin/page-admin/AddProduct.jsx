@@ -1,8 +1,10 @@
 import React, { useContext } from "react";
-import { MyContext } from "../../../context api/myContext";
+import { useNavigate } from "react-router-dom";
+import { ProductAdminContext } from '../../../context api/AllContext';
 
 function AddProduct() {
-  const { products, setProducts, addProduct } = useContext(MyContext);
+  const navigate = useNavigate();
+  const { products, setProducts, addProduct } = useContext(ProductAdminContext);
 
   function inputHandle(e) {
     setProducts({ ...products, [e.target.name]: e.target.value });
@@ -86,8 +88,11 @@ function AddProduct() {
 
           <div className="flex justify-center">
             <button
-              onClick={() => {
-                addProduct();
+              onClick={async () => {
+                const success = await addProduct();
+                if (success) {
+                  navigate('/dashboard');
+                }
               }}
               className="bg-blue-500 w-full text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition-colors"
             >

@@ -1,4 +1,4 @@
-import { MyContext } from '../../context api/myContext';
+import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from "react";
 ;
 import Layout from "../../components/layout/Layout";
@@ -9,7 +9,7 @@ import {
 import { Link } from "react-router-dom"; // Link import kiya
 
 function About() {
-  const { mode } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);;
   const isDark = mode === "dark";
   
   // Accordion State
@@ -161,6 +161,6 @@ function About() {
   );
 }
 
-export default About;
+export default React.memo(About);
 
 

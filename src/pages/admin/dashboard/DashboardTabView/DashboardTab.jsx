@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { MyContext } from "../../../../context api/myContext";
+import { OrderContext, ProductAdminContext, ProductContext, ThemeContext, UserContext } from '../../../../context api/AllContext';
 import { FiBox, FiClipboard, FiMessageSquare } from "react-icons/fi";
 import { FaUsers } from "react-icons/fa";
 import { useSpring, animated } from "react-spring";
@@ -13,17 +13,11 @@ import LoaderSpinner from "../../../../components/loader/LoaderSpinner";
 
 function DashboardTab() {
   // 🎯 Destructuring specific loading states for granular control
-  const {
-    mode,
-    product,
-    edithandle,
-    deleteProduct,
-    order,
-    user,
-    productLoading,
-    orderLoading,
-    userLoading
-  } = useContext(MyContext);
+  const { mode } = useContext(ThemeContext);
+  const { product, productLoading } = useContext(ProductContext);
+  const { edithandle, deleteProduct } = useContext(ProductAdminContext);
+  const { order, orderLoading } = useContext(OrderContext);
+  const { user, userLoading } = useContext(UserContext);;
 
   const isDark = mode === 'dark';
 
@@ -164,4 +158,4 @@ function DashboardTab() {
   );
 }
 
-export default DashboardTab;
+export default React.memo(DashboardTab);

@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const RevenueTrend = ({ isDark, data }) => {
-  const chartData = {
+  const chartData = useMemo(() => ({
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
       {
@@ -19,9 +19,9 @@ const RevenueTrend = ({ isDark, data }) => {
         pointHoverRadius: 4,
       },
     ],
-  };
+  }), [data]);
 
-  const chartOptions = {
+  const chartOptions = useMemo(() => ({
     responsive: true,
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
@@ -39,7 +39,7 @@ const RevenueTrend = ({ isDark, data }) => {
         ticks: { color: isDark ? '#64748b' : '#94a3b8', font: { size: 10 } }
       }
     }
-  };
+  }), [isDark]);
 
   return (
     <div className={`p-6 sm:p-8 rounded-3xl border transition-all h-full ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
@@ -56,4 +56,8 @@ const RevenueTrend = ({ isDark, data }) => {
   );
 };
 
-export default RevenueTrend;
+export default React.memo(RevenueTrend, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  if (prev.data !== next.data) return false;
+  return true;
+});
