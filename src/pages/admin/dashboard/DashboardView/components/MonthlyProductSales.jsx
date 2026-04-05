@@ -57,9 +57,10 @@ const MonthlyProductSales = ({ isDark, data }) => {
   );
 };
 
-// 👉 React.memo: navbar scroll pe render NAHI hoga — sirf isDark ya data badlne pe hoga
+// ✅ React.memo: Performance lock (Content check se scroll re-renders bilkul stop ho jayenge)
 export default React.memo(MonthlyProductSales, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.data !== next.data) return false;
-  return true;
+  return (
+    prev.isDark === next.isDark &&
+    prev.data?.join(',') === next.data?.join(',')
+  );
 });

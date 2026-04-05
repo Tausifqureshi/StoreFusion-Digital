@@ -5,16 +5,10 @@ import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, setDoc, doc,
 import { toast } from 'react-toastify';
 
 export function ProductState({ children }) {
-  // 👉 Navigation yahan se hata diya — UI routing ab components mein handle hogi
-
-  // 👉 Loaders: data load hone tak spinner dikhane ke liye
   const [productLoading, setProductLoading] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // 👉 Products ki list store karne ke liye
   const [product, setProduct] = useState([]);
 
-  // 👉 Admin ka product form ka data
   const [products, setProducts] = useState({
     title: "",
     price: "",
@@ -31,7 +25,6 @@ export function ProductState({ children }) {
     }),
   });
 
-  // 👉 Product form ko blank karo — add/update ke baad use karo
   const resetProductForm = useCallback(() => {
     setProducts({
       title: "",
@@ -50,38 +43,39 @@ export function ProductState({ children }) {
     });
   }, []);
 
-  // 👉 Real-time products listener — Firestore mein koi bhi badlaav aate hi UI update ho jaayega
   const getProductData = useCallback(() => {
-    setProductLoading(true);
+    // Zero Flash Pattern: only show loading on initial fetch
+    setProductLoading(prev => product.length === 0);
     try {
       const q = query(collection(fireDB, "products"), orderBy("time"));
       const unsubscribe = onSnapshot(
         q,
         (snapshot) => {
-          // 👉 Har product ka data + uski Firestore ID saath lo
-          const productsArray = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
+          const productsArray = snapshot.docs.map((docSnap) => ({
+            id: docSnap.id,
+            ...docSnap.data(),
           }));
-          setProduct(productsArray);
+          
+          setProduct(prev => {
+            const isSame = prev.length === productsArray.length && 
+                           prev.every((p, i) => p.id === productsArray[i].id);
+            return isSame ? prev : productsArray;
+          });
           setProductLoading(false);
         },
         (error) => {
-          // 🔴 Listener mein dikkat — loading band karo aur toast dikhao
           console.error("Products listener error:", error);
           toast.error("Failed to load products.", { icon: "⚠️" });
           setProductLoading(false);
         }
       );
-      // 👉 Sync return — async/await ki zaroorat nahi yahan
       return unsubscribe;
     } catch (err) {
       console.error(err);
       setProductLoading(false);
     }
-  }, []);
+  }, [product.length]);
 
-  // 👉 App shuru hote hi products fetch karo — cleanup pe listener band ho jaayega
   useEffect(() => {
     const unsubscribe = getProductData();
     return () => {
@@ -89,18 +83,10 @@ export function ProductState({ children }) {
     };
   }, [getProductData]);
 
-  // 👉 Naya product Firestore mein add karo
   const addProduct = useCallback(async () => {
-    if (
-      !products.title.trim() ||
-      !products.price.trim() ||
-      !products.imageUrl.trim() ||
-      !products.category.trim() ||
-      !products.description.trim()
-    ) {
+    if (!products.title.trim() || !products.price.trim() || !products.imageUrl.trim() || !products.category.trim() || !products.description.trim()) {
       return toast.error("Please fill all fields", { icon: "🚨" });
     }
-
     setLoading(true);
     try {
       await addDoc(collection(fireDB, "products"), {
@@ -110,8 +96,7 @@ export function ProductState({ children }) {
         stock: Number(products.stock || 0),
       });
       toast.success("Product added successfully!", { icon: "✅" });
-      // 🚀 getProductData() hataya — onSnapshot khud naya data le aayega, duplicate network call nahi
-      return true; // 👉 Component ko success signal bhejo taake woh navigate kar sake
+      return true;
     } catch (error) {
       console.error("Add product error:", error);
       toast.error("Error adding product. Please try again.", { icon: "⚠️" });
@@ -122,7 +107,6 @@ export function ProductState({ children }) {
     }
   }, [products, resetProductForm]);
 
-  // 👉 Existing product update karo Firestore mein
   const updateProduct = useCallback(async () => {
     setLoading(true);
     try {
@@ -144,7 +128,6 @@ export function ProductState({ children }) {
     }
   }, [products, resetProductForm]);
 
-  // 👉 Product Firestore se permanently delete karo
   const deleteProduct = useCallback(async (item) => {
     setLoading(true);
     try {
@@ -158,15 +141,12 @@ export function ProductState({ children }) {
     }
   }, []);
 
-  // 👉 Edit button: selected product ka data form mein bhar do
   const edithandle = useCallback((item) => setProducts(item), []);
 
-  // 👉 Public context: saare components products aur loading dekh sakte hain
   const productContextValue = useMemo(() => ({
     product, productLoading
   }), [product, productLoading]);
 
-  // 👉 Admin-only context: form aur CRUD functions sirf admin ke liye
   const productAdminContextValue = useMemo(() => ({
     products, setProducts,
     loading, setLoading,

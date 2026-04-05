@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
 export const useDashboardData = (allProducts, allOrders, allUsers) => {
   // 👉 Default range 'All Time' set kar diya, taake refresh pe saara data show ho
@@ -34,10 +34,34 @@ export const useDashboardData = (allProducts, allOrders, allUsers) => {
       return itemDate >= thresholdTime && itemDate <= anchorTime;
     });
   }, [selectedRange, calendarDate]);
+  // 👉 Hum refs use kar rahe hain taake parent render hone pe bhi references stable rahein
+  const lastOrder = useRef([]);
+  const lastProduct = useRef([]);
+  const lastUser = useRef([]);
 
-  const order = useMemo(() => filterByDate(allOrders || []), [allOrders, filterByDate]);
-  const product = useMemo(() => filterByDate(allProducts || []), [allProducts, filterByDate]);
-  const user = useMemo(() => filterByDate(allUsers || []), [allUsers, filterByDate]);
+  const order = useMemo(() => {
+    const filtered = filterByDate(allOrders || []);
+    // 👉 Deep check: agar data badla nahi hai toh purana reference hi return kardo
+    const isSame = lastOrder.current.length === filtered.length && 
+                   filtered.every((item, i) => item.id === lastOrder.current[i]?.id);
+    if (!isSame) lastOrder.current = filtered;
+    return lastOrder.current;
+  }, [allOrders, filterByDate]);
+
+  const product = useMemo(() => {
+    const filtered = filterByDate(allProducts || []);
+    const isSame = lastProduct.current.length === filtered.length && 
+                   filtered.every((item, i) => item.id === lastProduct.current[i]?.id);
+    if (!isSame) lastProduct.current = filtered;
+    return lastProduct.current;
+  }, [allProducts, filterByDate]);
+
+  const user = useMemo(() => {
+    const filtered = filterByDate(allUsers || []);
+    const isSame = lastUser.current.length === filtered.length;
+    if (!isSame) lastUser.current = filtered;
+    return lastUser.current;
+  }, [allUsers, filterByDate]);
 
   const [monthlyOrders, setMonthlyOrders] = useState(Array(12).fill(0)); // 🟡 Page load pe chart zero se start karo — data aane se pehle kuch show na ho
   const [monthlyRevenue, setMonthlyRevenue] = useState(Array(12).fill(0)); // 🟡 Page load pe revenue chart zero se start karo — data aane se pehle kuch show na ho
@@ -84,11 +108,15 @@ export const useDashboardData = (allProducts, allOrders, allUsers) => {
       revenueAcc[month] += amount; //revenueAcc[month] += amount ka matlab hai — us month ke box me amount add kar do
     });
 
-    // 👉 final calculated data state me save kar rahe hain
-    setMonthlyOrders(ordersCount);   // chart ke liye ordezrs data
-    setMonthlyRevenue(revenueAcc);   // chart ke liye revenue data
+    // 👉 Final data state mein tabhi save hoga jab koi change milega
+    setMonthlyOrders(prev => {
+      return prev.join(',') === ordersCount.join(',') ? prev : ordersCount;
+    });
+    setMonthlyRevenue(prev => {
+      return prev.join(',') === revenueAcc.join(',') ? prev : revenueAcc;
+    });
 
-    // 👉 ye code sirf tab chalega jab "order" change hoga
+    // 👉 Ye code sirf tab dobara chalega jab "order" array badlega
   }, [order]);
   // -------------------------------------------------------------------------
 

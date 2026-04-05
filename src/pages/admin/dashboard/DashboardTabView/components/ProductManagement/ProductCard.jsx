@@ -117,4 +117,14 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
   );
 };
 
-export default React.memo(ProductCard);
+// 👉 React.memo: Custom comparison logic to ensure product cards ONLY re-render when their specific data changes
+export default React.memo(ProductCard, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  if (prev.item?.id !== next.item?.id) return false;
+  if (prev.item?.stock !== next.item?.stock) return false;
+  if (prev.item?.sales !== next.item?.sales) return false;
+  if (prev.item?.title !== next.item?.title) return false;
+  if (prev.item?.price !== next.item?.price) return false;
+  if (prev.item?.imageUrl !== next.item?.imageUrl) return false;
+  return true;
+});

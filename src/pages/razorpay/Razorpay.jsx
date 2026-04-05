@@ -9,7 +9,9 @@ import { addOrder } from '../../redux/orderSlice';
 import { saveCartToFirestore, clearUserCartFromFirestore } from "../cart/cartFirestore";
 import { saveOrderToFirestore } from "../../components/order/orderFirestore"
 
-function Razorpay({ cartItems, totalAmount }) {
+// ✅ ABSOLUTE ISOLATION: Razorpay component remains 100% IDLE during cart updates.
+// It pulls the latest data via stable Ref snapshots only when the trigger is fired.
+const Razorpay = React.memo(({ cartItemsRef, totalAmountRef }) => {
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
@@ -46,7 +48,7 @@ function Razorpay({ cartItems, totalAmount }) {
 
     try {
       const orderInfo = {
-        cartItems,
+        cartItems: cartItemsRef.current,
         addressInfo,
         date: new Date().toLocaleString("en-US", {
           month: "short",
@@ -56,7 +58,7 @@ function Razorpay({ cartItems, totalAmount }) {
         email: user.email,
         userid: user.uid,
         paymentId: "COD",
-        totalAmount,
+        totalAmount: totalAmountRef.current,
       };
 
       const savedOrder = await saveOrderToFirestore(orderInfo);
@@ -116,7 +118,7 @@ function Razorpay({ cartItems, totalAmount }) {
       // key_secret: "13wTYUM144Kv98GujKu6kkB6",
       key: "rzp_test_SAmF1Zz8ccXm1f",
       key_secret: "0PKAeGJ6Dpv5yPv0HiopwTaJ",
-      amount: parseInt(totalAmount * 100),
+      amount: parseInt(totalAmountRef.current * 100),
       currency: "INR",
       order_receipt: 'order_rcptid_' + formData.fullName,
       name: "StoreFusion",
@@ -127,10 +129,10 @@ function Razorpay({ cartItems, totalAmount }) {
           window.dispatchEvent(new Event("paymentSuccess"));
           // console.log("Razorpay response:", response);
           toast.success('Payment Successful', { autoClose: 1000 });
-
+ 
           const paymentId = response.razorpay_payment_id;
           const orderInfo = {
-            cartItems,
+            cartItems: cartItemsRef.current,
             addressInfo,
             date: new Date().toLocaleString("en-US", {
               month: "short",
@@ -140,7 +142,7 @@ function Razorpay({ cartItems, totalAmount }) {
             email: user.email,
             userid: user.uid,
             paymentId,
-            totalAmount,
+            totalAmount: totalAmountRef.current,
           };
 
           // const orderRef = collection(fireDB, "orders");
@@ -189,6 +191,6 @@ function Razorpay({ cartItems, totalAmount }) {
       <Modal buyNow={buyNow} cashOnDelivery={cashOnDelivery} formData={formData} setFormData={setFormData} />
     </div>
   );
-}
+});
 
 export default Razorpay;

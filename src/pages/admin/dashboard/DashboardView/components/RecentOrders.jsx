@@ -1,11 +1,17 @@
 import React from 'react';
 import { FaShoppingCart, FaEye, FaBoxOpen } from 'react-icons/fa';
+import { useMemo } from 'react';
 
 const RecentOrders = ({ isDark, orders }) => {
-  const displayOrders = (orders && orders.length > 0) ? [...orders].sort((a,b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt)).slice(0, 4) : [];
+  const displayOrders = useMemo(() => {
+    if (!orders || orders.length === 0) return [];
+    return [...orders]
+      .sort((a, b) => new Date(b.date || b.createdAt) - new Date(a.date || a.createdAt))
+      .slice(0, 4);
+  }, [orders]);
 
   const getStatusColor = (status) => {
-    switch(status?.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'completed': return 'text-green-600 bg-green-100 dark:bg-green-500/10 dark:text-green-400 border-green-200 dark:border-green-800';
       case 'processing': return 'text-yellow-600 bg-yellow-100 dark:bg-yellow-500/10 dark:text-yellow-400 border-yellow-200 dark:border-yellow-800';
       case 'shipped': return 'text-blue-600 bg-blue-100 dark:bg-blue-500/10 dark:text-blue-400 border-blue-200 dark:border-blue-800';
@@ -26,10 +32,10 @@ const RecentOrders = ({ isDark, orders }) => {
           <FaEye size={12} /> View All
         </button>
       </div>
-      
+
       <div className="flex flex-col gap-4 flex-grow overflow-y-auto pr-1 custom-scrollbar">
         {displayOrders.length > 0 ? displayOrders.map((order, i) => (
-          <div key={i} className={`flex items-center justify-between p-4 rounded-2xl transition-all border ${isDark ? 'bg-[#131921]/50 border-gray-800 hover:bg-[#131921]' : 'bg-gray-50/50 border-gray-100 hover:border-gray-200 hover:bg-white hover:shadow-sm'}`}>
+          <div key={order.id || i} className={`flex items-center justify-between p-4 rounded-2xl transition-all border ${isDark ? 'bg-[#131921]/50 border-gray-800 hover:bg-[#131921]' : 'bg-gray-50/50 border-gray-100 hover:border-gray-200 hover:bg-white hover:shadow-sm'}`}>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
                 <FaShoppingCart size={18} />
@@ -40,11 +46,11 @@ const RecentOrders = ({ isDark, orders }) => {
                 </h3>
                 <p className={`text-xs font-bold mt-1 truncate ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                   {order.cartItems?.[0]?.title || "Store Item"} <br className="sm:hidden" />
-                  <span className={`text-[10px] sm:text-xs opacity-70 sm:ml-2`}>{order.paymentId || order.id || ("#ORD-" + Math.floor(Math.random() * 10000))}</span>
+                  <span className={`text-[10px] sm:text-xs opacity-70 sm:ml-2`}>{order.paymentId || order.id || ("#ORD-" + i)}</span>
                 </p>
               </div>
             </div>
-            
+
             <div className="flex flex-col items-end gap-1.5 shrink-0">
               <span className={`font-black text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
                 ₹{order.grandTotal || order.totalAmount || order.price || 0}
@@ -61,8 +67,8 @@ const RecentOrders = ({ isDark, orders }) => {
           </div>
         )) : (
           <div className="flex-grow flex flex-col items-center justify-center opacity-50 space-y-4">
-             <FaBoxOpen size={40} className={isDark ? "text-gray-700" : "text-gray-200"} />
-             <p className={`text-sm font-bold ${isDark ? "text-gray-500" : "text-gray-400"}`}>No recent orders found in database.</p>
+            <FaBoxOpen size={40} className={isDark ? "text-gray-700" : "text-gray-200"} />
+            <p className={`text-sm font-bold ${isDark ? "text-gray-500" : "text-gray-400"}`}>No recent orders found in database.</p>
           </div>
         )}
       </div>
@@ -70,4 +76,11 @@ const RecentOrders = ({ isDark, orders }) => {
   );
 };
 
-export default RecentOrders;
+// ✅ React.memo: Orders change hone par hi re-render hoga, scroll pe nahi
+export default React.memo(RecentOrders, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  if (prev.orders?.length !== next.orders?.length) return false;
+  if (prev.orders?.[0]?.id !== next.orders?.[0]?.id) return false;
+  return true;
+});
+;

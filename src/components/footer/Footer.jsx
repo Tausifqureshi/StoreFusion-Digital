@@ -1,5 +1,4 @@
-import { ThemeContext } from '../../context api/AllContext';
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 ;
 import { Link } from "react-router-dom";
 import {
@@ -16,9 +15,7 @@ import {
 } from "react-icons/fa";
 import { FiMapPin, FiPhone, FiMail, FiSend, FiChevronUp, FiChevronRight } from "react-icons/fi";
 
-function Footer() {
-  const { mode } = useContext(ThemeContext);;
-  const isDark = mode === "dark";
+function Footer({ isDark }) {
 
   const [email, setEmail] = useState("");
   const handleSubmit = (e) => {
@@ -229,4 +226,7 @@ function Footer() {
   );
 }
 
-export default Footer;
+// ✅ ABSOLUTE SHIELDING: Locked component prevents reconciliation leaks 
+export default React.memo(Footer, (prev, next) => {
+  return prev.isDark === next.isDark;
+});

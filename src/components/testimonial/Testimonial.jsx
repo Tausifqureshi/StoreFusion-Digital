@@ -2,35 +2,9 @@ import React, { useContext, useMemo } from 'react';
 import { ProductContext, TestimonialContext } from '../../context api/AllContext';
 import { FaEdit, FaTrash, FaQuoteLeft, FaStar } from 'react-icons/fa'; // Ye ensure kar lena
 
-// Props mein productId ya categoryName bhej sakte ho
-function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode }) {
-  const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(TestimonialContext);
-  const { product } = useContext(ProductContext);
-  const isDark = mode === 'dark';
-
-  // ⭐ Sara Filter Logic ab yahan move ho gaya
-  const finalReviews = useMemo(() => {
-    // Case 1: Agar Product ID aayi hai (ProductInfo Page)
-    if (productId) {
-      return testimonial.filter(item => item.productId === productId);
-    }
-
-    // Case 2: Agar Category Name aaya hai (CategoryProducts Page)
-    if (categoryName) {
-      // Step A: Pehle check karo "Fashion" category mein kaun-kaun se products hain
-      const categoryProductIds = product
-        .filter(p => p.category?.toLowerCase() === categoryName.toLowerCase()) // ✅ Sirf "Fashion" wale
-        .map(p => p.id); // ✅ Unki IDs ka array (e.g., ['p1', 'p5', 'p8'])
-
-      // Step B: Ab wahi reviews dikhao jo in IDs se match karte hon
-      return testimonial.filter(t => categoryProductIds.includes(t.productId));
-    }
-
-    // Case 3: Agar kuch nahi aaya toh saare dikhao (Home Page/Admin)
-    return testimonial;
-  }, [testimonial, productId, categoryName, product]);
-
-  if (finalReviews.length === 0) return null; // Agar koi review nahi hai toh kuch mat dikhao
+// ✅ INTERNAL VIEW: Locked to prevent reconciliation from parent re-renders
+const TestimonialView = React.memo(({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) => {
+  if (finalReviews.length === 0) return null;
   return (
     <section className={`body-font mb-10 transition-all ${isDark ? "bg-[#131921]" : "bg-white"}`}>
       <div className="container px-5 py-10 mx-auto">
@@ -38,13 +12,8 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
           {finalReviews.map((item, index) => (
             <div key={index} className="lg:w-1/3 md:w-1/2 p-4 w-full">
               <div className={`group relative h-full flex flex-col p-8 rounded-[2rem] border transition-all duration-500 hover:-translate-y-2 ${isDark ? "bg-gradient-to-b from-[#1e293b] to-[#131921] border-gray-700 shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-blue-500/50 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]" : "bg-gradient-to-br from-white to-blue-50/40 border-gray-200 shadow-[0_2px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.08)] hover:border-blue-200"}`}>
-
-                {/* Large Background Quote */}
                 <FaQuoteLeft className={`absolute top-6 right-6 opacity-20 transition-all duration-500 group-hover:scale-110 group-hover:text-blue-500 group-hover:opacity-40 ${isDark ? "text-gray-500" : "text-blue-300"}`} size={56} />
-
-                {/* Text Content */}
                 <div className="relative z-10 flex-1 mb-8">
-                  {/* Subtle Premium Star Rating */}
                   <div className="flex gap-1 mb-5 text-orange-400">
                     <FaStar size={14} /><FaStar size={14} /><FaStar size={14} /><FaStar size={14} /><FaStar size={14} />
                   </div>
@@ -52,8 +21,6 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
                     "{item.text}"
                   </p>
                 </div>
-
-                {/* User Profile Footer */}
                 <div className="relative z-10 flex items-center gap-4 mt-auto">
                   <div className="relative shrink-0">
                     <div className="w-[50px] h-[50px] rounded-full p-[2px] bg-gradient-to-tr from-blue-600 to-indigo-500 shadow-md">
@@ -73,20 +40,12 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
                     </p>
                   </div>
                 </div>
-
-                {/* ⭐ Buttons: Only for Admin or Specific Product Info Page */}
                 {(isAdmin || productId) && (
                   <div className="relative z-10 mt-8 flex gap-3 justify-start border-t border-gray-200 dark:border-gray-800 pt-5">
-                    <button
-                      onClick={() => editTestimonial(item)}
-                      className="flex-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-wider bg-transparent border border-blue-200 dark:border-blue-900/50 text-blue-600 dark:text-blue-400 px-4 py-2.5 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white dark:hover:text-white transition-all shadow-sm"
-                    >
+                    <button onClick={() => editTestimonial(item)} className="flex-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-wider bg-transparent border border-blue-200 dark:border-blue-900/50 text-blue-600 dark:text-blue-400 px-4 py-2.5 rounded-xl hover:bg-blue-600 hover:border-blue-600 hover:text-white dark:hover:text-white transition-all shadow-sm">
                       <FaEdit size={14} /> Edit
                     </button>
-                    <button
-                      onClick={() => deleteTestimonial(item.id)}
-                      className="flex-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-wider bg-transparent border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 px-4 py-2.5 rounded-xl hover:bg-red-600 hover:border-red-600 hover:text-white dark:hover:text-white transition-all shadow-sm"
-                    >
+                    <button onClick={() => deleteTestimonial(item.id)} className="flex-1 flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-wider bg-transparent border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 px-4 py-2.5 rounded-xl hover:bg-red-600 hover:border-red-600 hover:text-white dark:hover:text-white transition-all shadow-sm">
                       <FaTrash size={14} /> Delete
                     </button>
                   </div>
@@ -98,7 +57,46 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
       </div>
     </section>
   );
+}, (prev, next) => {
+  return (
+    prev.isDark === next.isDark &&
+    prev.isAdmin === next.isAdmin &&
+    prev.productId === next.productId &&
+    prev.finalReviews.length === next.finalReviews.length &&
+    prev.finalReviews === next.finalReviews
+  );
+});
 
+function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode }) {
+  const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(TestimonialContext);
+  const { product } = useContext(ProductContext);
+  const isDark = mode === 'dark';
+
+  const finalReviews = useMemo(() => {
+    if (productId) return testimonial.filter(item => item.productId === productId);
+    if (categoryName) {
+      const categoryProductIds = product.filter(p => p.category?.toLowerCase() === categoryName.toLowerCase()).map(p => p.id);
+      return testimonial.filter(t => categoryProductIds.includes(t.productId));
+    }
+    return testimonial;
+  }, [testimonial, productId, categoryName, product]);
+
+  return <TestimonialView 
+    finalReviews={finalReviews} 
+    isDark={isDark} 
+    isAdmin={isAdmin} 
+    productId={productId} 
+    getAvatar={getAvatar}
+    editTestimonial={editTestimonial}
+    deleteTestimonial={deleteTestimonial}
+  />;
 }
 
-export default React.memo(Testimonial);
+export default React.memo(Testimonial, (prev, next) => {
+  return (
+    prev.mode === next.mode &&
+    prev.productId === next.productId &&
+    prev.categoryName === next.categoryName &&
+    prev.isAdmin === next.isAdmin
+  );
+});

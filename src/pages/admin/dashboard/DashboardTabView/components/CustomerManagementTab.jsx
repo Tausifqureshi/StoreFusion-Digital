@@ -1,7 +1,15 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { FaSearch, FaUserAltSlash, FaEnvelope, FaPhone, FaEllipsisH, FaPlus } from 'react-icons/fa';
+import { UserContext, ThemeContext } from '../../../../../context api/AllContext';
+import LoaderSpinner from '../../../../../components/loader/LoaderSpinner';
 
-const CustomerManagementTab = ({ isDark, user = [] }) => {
+const CustomerManagementTab = () => {
+  // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
+  const { mode } = useContext(ThemeContext);
+  const { user, userLoading } = useContext(UserContext);
+  
+  const isDark = mode === 'dark';
+
   const [searchQuery, setSearchQuery] = useState("");
   const [filterRole, setFilterRole] = useState("All Roles");
   const [sortOrder, setSortOrder] = useState("Newest First");
@@ -10,30 +18,22 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
 
   // 👉 filter ki hui user list nikal rahe hain (search aur dropdowns ke hisab se)
   const filteredUsers = useMemo(() => {
+    if (!user) return [];
     return user
       .filter((u) => {
-        // 👉 agar user ka data poora khali hai (ghost user) to usko skip kar do
         if (!u.name && !u.email && !u.phone) return false;
-
-        // 👉 agar search box me kuch likha hai to match check kar rahe hain
         if (searchQuery) {
           const s = searchQuery.toLowerCase();
           const matchesSearch = u.name?.toLowerCase().includes(s) || u.email?.toLowerCase().includes(s) || u.phone?.includes(s);
-          // 👉 agar match nahi hua to user ko list se hata do
           if (!matchesSearch) return false;
         }
-
-        // 👉 role filter check kar rahe hain (Admin ya User)
         if (filterRole !== "All Roles") {
-          // 👉 agar role nahi hai to email check karke role assign kar rahe hain
           const roleName = u.role || (u.email?.includes('admin') ? 'Admin' : 'User');
           if (roleName.toLowerCase() !== filterRole.toLowerCase()) return false;
         }
-
         return true;
       })
       .sort((a, b) => {
-        // 👉 Newest ya Oldest ke base par list ko sort kar rahe hain
         const dateA = a.time?.seconds ? a.time.seconds * 1000 : new Date(a.createdAt || a.date || 0).getTime();
         const dateB = b.time?.seconds ? b.time.seconds * 1000 : new Date(b.createdAt || b.date || 0).getTime();
         if (sortOrder === "Newest First") return dateB - dateA;
@@ -52,13 +52,14 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
     setCurrentPage(1);
   }, [searchQuery, filterRole, sortOrder]);
 
+  if (userLoading) return <LoaderSpinner isDark={isDark} label="Loading customers..." />;
+
   const startItem = (currentPage - 1) * itemsPerPage + 1;
   const endItem = Math.min(currentPage * itemsPerPage, filteredUsers.length);
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 w-full max-w-[1200px] mx-auto">
-
-      {/* --- HEADER SECTION --- */}
+      {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 md:mb-8">
         <div>
           <h1 className={`text-3xl md:text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-gray-800'}`}>
@@ -68,16 +69,13 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
             Manage your users and their permissions
           </p>
         </div>
-
         <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-bold shadow-md transition-all active:scale-95">
           <FaPlus size={14} /> Add User
         </button>
       </div>
 
-      {/* --- SEARCH & FILTERS --- */}
+      {/* SEARCH & FILTERS */}
       <div className={`p-4 rounded-3xl mb-8 flex flex-col md:flex-row items-center justify-start gap-4 transition-all ${isDark ? 'bg-[#1e293b] border border-gray-800 shadow-lg' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
-
-        {/* 👉 Search Input Pill */}
         <div className="relative w-full md:max-w-md flex items-center shrink-0">
           <FaSearch className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} size={14} />
           <input
@@ -92,7 +90,6 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
           />
         </div>
 
-        {/* 👉 Role Dropdown */}
         <div className="relative w-full md:w-auto shrink-0">
           <select
             value={filterRole}
@@ -111,7 +108,6 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
           </div>
         </div>
 
-        {/* 👉 Sort Dropdown */}
         <div className="relative w-full md:w-auto shrink-0">
           <select
             value={sortOrder}
@@ -130,31 +126,20 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
         </div>
       </div>
 
-      {/* --- LIST VIEW --- */}
+      {/* LIST VIEW */}
       <div className={`w-full rounded-2xl p-6 transition-all duration-300 mb-8 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
-
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <h2 className={`text-lg font-bold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>
-            All Users ({filteredUsers.length})
-          </h2>
-        </div>
+        <h2 className={`text-lg font-bold tracking-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          All Users ({filteredUsers.length})
+        </h2>
 
         <div className="flex flex-col gap-3">
           {usersOnCurrentPage.length > 0 ? (
             usersOnCurrentPage.map((u, i) => {
               const itemBorder = isDark ? 'bg-[#1e293b] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500 hover:-translate-y-1' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1';
-
-              // 👉 role decide kar rahe hain aur uske hisab se purple ya blue color de rahe hain
               const roleName = u.role || (u.email?.includes('admin') ? 'Admin' : 'User');
               const roleBg = roleName.toLowerCase() === 'admin' ? '#8b5cf6' : '#3b82f6';
-
-              // 👉 avatar ke liye first letter nikal rahe hain, agar missing hai to pura blank rahega
               const initial = u.name ? u.name.charAt(0).toUpperCase() : (u.email ? u.email.charAt(0).toUpperCase() : "");
-
-              // 👉 backend se proper date nikal rahe hain
               const displayDate = u.date || (u.time ? new Date(u.time.seconds * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : "");
-
-              // 👉 status set kar rahe hain, agar backend me nahi hai to by default 'Active' rakhega
               const statusText = u.status || "Active";
 
               return (
@@ -202,31 +187,23 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
         </div>
       </div>
 
-      {/* --- PAGINATION --- */}
+      {/* PAGINATION */}
       {totalPages > 1 && (
         <div className={`flex flex-col md:flex-row items-center justify-between gap-4 mt-8 transition-all duration-300 mb-8`}>
           <span className={`text-sm font-medium text-center md:text-left ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
             Showing <span className="font-semibold">{startItem}</span> to <span className="font-semibold">{endItem}</span> of <span className="font-semibold">{filteredUsers.length}</span> users
           </span>
-          {/* 👉 Premium Modern Pagination Container matching Tabs */}
           <div className={`inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 sm:rounded-2xl rounded-xl transition-all border ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg shadow-black/20' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)]'}`}>
-            {/* Previous Button */}
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 border border-transparent ${currentPage === 1
-                ? isDark
-                  ? 'text-gray-600 cursor-not-allowed bg-transparent'
-                  : 'text-gray-300 cursor-not-allowed bg-transparent'
-                : isDark
-                  ? 'bg-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-800/60'
-                  : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/60'
+                ? isDark ? 'text-gray-600 cursor-not-allowed bg-transparent' : 'text-gray-300 cursor-not-allowed bg-transparent'
+                : isDark ? 'bg-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-800/60' : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/60'
                 }`}
             >
               Previous
             </button>
-
-            {/* Page Numbers */}
             {Array.from({ length: totalPages }, (_, i) => {
               const isSelected = currentPage === i + 1;
               return (
@@ -234,30 +211,20 @@ const CustomerManagementTab = ({ isDark, user = [] }) => {
                   key={i + 1}
                   onClick={() => setCurrentPage(i + 1)}
                   className={`min-w-[40px] px-3 py-2 rounded-xl text-sm font-bold transition-all duration-300 border ${isSelected
-                    ? isDark
-                      ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/40'
-                      : 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
-                    : isDark
-                      ? 'bg-transparent text-gray-400 border-transparent hover:text-gray-200 hover:bg-gray-800/60'
-                      : 'bg-transparent text-gray-500 border-transparent hover:text-gray-900 hover:bg-gray-100/60'
+                    ? isDark ? 'bg-blue-600 text-white border-blue-500 shadow-md shadow-blue-900/40' : 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-500/20'
+                    : isDark ? 'bg-transparent text-gray-400 border-transparent hover:text-gray-200 hover:bg-gray-800/60' : 'bg-transparent text-gray-500 border-transparent hover:text-gray-900 hover:bg-gray-100/60'
                     }`}
                 >
                   {i + 1}
                 </button>
               )
             })}
-
-            {/* Next Button */}
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
               className={`px-4 py-2 rounded-xl text-sm font-bold transition-all duration-300 border border-transparent ${currentPage === totalPages
-                ? isDark
-                  ? 'text-gray-600 cursor-not-allowed bg-transparent'
-                  : 'text-gray-300 cursor-not-allowed bg-transparent'
-                : isDark
-                  ? 'bg-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-800/60'
-                  : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/60'
+                ? isDark ? 'text-gray-600 cursor-not-allowed bg-transparent' : 'text-gray-300 cursor-not-allowed bg-transparent'
+                : isDark ? 'bg-transparent text-gray-400 hover:text-gray-200 hover:bg-gray-800/60' : 'bg-transparent text-gray-500 hover:text-gray-900 hover:bg-gray-100/60'
                 }`}
             >
               Next

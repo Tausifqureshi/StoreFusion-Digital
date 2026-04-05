@@ -56,8 +56,10 @@ const RevenueTrend = ({ isDark, data }) => {
   );
 };
 
+// ✅ React.memo: Performance lock taaki scroll pe chart render na ho
 export default React.memo(RevenueTrend, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.data !== next.data) return false;
-  return true;
+  return (
+    prev.isDark === next.isDark &&
+    (prev.data?.join(',') === next.data?.join(','))
+  );
 });

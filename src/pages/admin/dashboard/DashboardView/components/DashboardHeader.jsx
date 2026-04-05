@@ -135,8 +135,8 @@ const DashboardHeader = ({
   );
 };
 
-// 👉 React.memo: navbar scroll ya dusre unrelated render pe yeh component re-render NAHI karega
-// 👉 Sirf isDark, selectedRange, ya selectedDate badlne pe re-render hoga
+// ✅ React.memo: Navbar scroll ya kisi unrelated render se dashboard ko bachane ke liye
+// ✅ Sirf isDark, selectedRange ya selectedDate badalne par hi ye render hoga
 export default React.memo(DashboardHeader, (prev, next) => {
   if (prev.isDark !== next.isDark) return false;
   if (prev.selectedRange !== next.selectedRange) return false;

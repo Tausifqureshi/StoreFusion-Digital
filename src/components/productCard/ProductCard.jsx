@@ -59,7 +59,7 @@ function ProductCard() {
                 <SingleProductCard
                   key={item.id || item.title}
                   item={item}
-                  expandedId={expandedId}
+                  isExpanded={expandedId === (item.id || item.title)}
                   setExpandedId={setExpandedId}
                   mode={mode}
                 />

@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
+import React from "react";
 
 function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
   const { fullName, address, pincode, phoneNumber } = formData;
@@ -101,7 +103,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
         )}
       </button>
 
-      {isVisible && (
+      {isVisible && createPortal(
         <div className="fixed inset-0 z-[99999] flex items-start justify-center p-4 pt-24 sm:pt-28 pb-6">
           {/* Backdrop */}
           <div
@@ -267,11 +269,20 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
             </div>
           </div>
         </div>
-      )}
+      , document.body)}
     </>
   );
 }
 
-export default Modal;
+// ✅ ABSOLUTE SHIELDING: Modal props are heavily memoized to prevent reconciliation leaks
+export default React.memo(Modal, (prev, next) => {
+  return (
+    prev.formData.id === next.formData.id &&
+    prev.formData.fullName === next.formData.fullName &&
+    prev.formData.address === next.formData.address &&
+    prev.formData.pincode === next.formData.pincode &&
+    prev.formData.phoneNumber === next.formData.phoneNumber
+  );
+});
 
 

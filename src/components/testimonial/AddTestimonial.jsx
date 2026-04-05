@@ -1,65 +1,5 @@
 import { ProductAdminContext, ProductContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
-// import React, { useContext } from "react";
-// ;
-
-// function AddTestimonial() {
-//   const { testimonialForm, setTestimonialForm, addTestimonial, loading } =
-//     useContext(ProductContext);
-
-//   return (
-//     <div className="p-6 max-w-md">
-//       <input
-//         className="border p-2 w-full mb-3"
-//         placeholder="Name"
-//         value={testimonialForm.name}
-//         onChange={(e) =>
-//           setTestimonialForm({ ...testimonialForm, name: e.target.value })
-//         }
-//       />
-
-//       <input
-//         className="border p-2 w-full mb-3"
-//         placeholder="Image URL"
-//         value={testimonialForm.img}
-//         onChange={(e) =>
-//           setTestimonialForm({ ...testimonialForm, img: e.target.value })
-//         }
-//       />
-
-//       <textarea
-//         className="border p-2 w-full mb-3"
-//         placeholder="Review"
-//         value={testimonialForm.text}
-//         onChange={(e) =>
-//           setTestimonialForm({ ...testimonialForm, text: e.target.value })
-//         }
-//       />
-
-//       <input
-//         className="border p-2 w-full mb-3"
-//         placeholder="Role"
-//         value={testimonialForm.role}
-//         onChange={(e) =>
-//           setTestimonialForm({ ...testimonialForm, role: e.target.value })
-//         }
-//       />
-
-//       <button
-//         onClick={addTestimonial}
-//         className="bg-black text-white px-4 py-2 rounded w-full"
-//       >
-//         {loading ? "Adding..." : "Add Testimonial"}
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default AddTestimonial;
-
-
 import React, { useContext, useState, useEffect } from "react";
-;
-;
 import { FaStar } from "react-icons/fa";
 
 const Star = ({ filled, onClick }) => (
@@ -70,39 +10,10 @@ const Star = ({ filled, onClick }) => (
   />
 );
 
-function AddTestimonial({ productId = "" }) {
-  const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial } = useContext(TestimonialContext);
-  const { loading } = useContext(ProductAdminContext);;
-  const { mode } = useContext(ThemeContext);;
-  const [rating, setRating] = useState(0);
-  const isDark = mode === "dark";
-
-  useEffect(() => { //ab tu edit mode me jata hai (testimonial edit karne) Tab kya hona chahiye UI me?stars already filled dikhne chahiye (4 stars)
-    if (testimonialForm?.rating) setRating(testimonialForm.rating);
-  }, [testimonialForm]);
-
-  const handleSubmit = () => {
-    if (rating === 0) {
-      alert("Please select a rating");
-      return;
-    }
-    if (testimonialForm.id) {
-      updateTestimonial();
-    } else {
-      addTestimonial({
-        ...testimonialForm,
-        rating,
-        productId: productId || testimonialForm.productId || "",
-      });
-    }
-    setRating(0);
-    setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
-  };
-
+const AddTestimonialView = React.memo(({ isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading }) => {
   return (
     <div className={`w-full max-w-lg mx-auto p-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-200 shadow-sm"}`}>
-
-      {/* Sharp Header - Your Fonts */}
+      {/* Header */}
       <div className="mb-6 border-b pb-4 border-gray-100 dark:border-gray-800">
         <h2 className={`text-xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
           Review <span className="text-blue-600">This Product</span>
@@ -111,8 +22,7 @@ function AddTestimonial({ productId = "" }) {
       </div>
 
       <div className="space-y-5">
-
-        {/* Rating Section - Standard Amazon Style */}
+        {/* Rating */}
         <div>
           <h3 className="text-[10px] font-black uppercase tracking-widest mb-2 opacity-70">Overall Rating</h3>
           <div className="flex gap-1">
@@ -122,7 +32,7 @@ function AddTestimonial({ productId = "" }) {
           </div>
         </div>
 
-        {/* Inputs - Rectangular & Professional */}
+        {/* Inputs */}
         <div className="space-y-4">
           <div>
             <label className="text-[9px] font-black uppercase tracking-widest mb-1 block opacity-60">Full Name</label>
@@ -166,16 +76,67 @@ function AddTestimonial({ productId = "" }) {
           </div>
         </div>
 
-        {/* Professional Submit Button - Flat & Strong */}
         <button
           onClick={handleSubmit}
           className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-blue-500/10 transition-all active:scale-[0.98]"
         >
           {loading ? "SAVING..." : (testimonialForm.id ? "UPDATE REVIEW" : "SUBMIT REVIEW")}
         </button>
-
       </div>
     </div>
+  );
+}, (prev, next) => {
+  return (
+    prev.isDark === next.isDark &&
+    prev.rating === next.rating &&
+    prev.loading === next.loading &&
+    prev.testimonialForm.name === next.testimonialForm.name &&
+    prev.testimonialForm.text === next.testimonialForm.text &&
+    prev.testimonialForm.img === next.testimonialForm.img &&
+    prev.testimonialForm.role === next.testimonialForm.role &&
+    prev.testimonialForm.id === next.testimonialForm.id
+  );
+});
+
+function AddTestimonial({ productId = "" }) {
+  const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial } = useContext(TestimonialContext);
+  const { loading } = useContext(ProductAdminContext);
+  const { mode } = useContext(ThemeContext);
+  const [rating, setRating] = useState(0);
+  const isDark = mode === "dark";
+
+  useEffect(() => {
+    if (testimonialForm?.rating) setRating(testimonialForm.rating);
+  }, [testimonialForm]);
+
+  const handleSubmit = () => {
+    if (rating === 0) {
+      alert("Please select a rating");
+      return;
+    }
+    if (testimonialForm.id) {
+      updateTestimonial();
+    } else {
+      addTestimonial({
+        ...testimonialForm,
+        rating,
+        productId: productId || testimonialForm.productId || "",
+      });
+    }
+    setRating(0);
+    setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
+  };
+
+  return (
+    <AddTestimonialView
+      isDark={isDark}
+      rating={rating}
+      setRating={setRating}
+      testimonialForm={testimonialForm}
+      setTestimonialForm={setTestimonialForm}
+      handleSubmit={handleSubmit}
+      loading={loading}
+    />
   );
 }
 
@@ -289,15 +250,3 @@ export default React.memo(AddTestimonial);
 // }
 
 // export default AddTestimonial;
-
-
-
-
-
-
-
-
-
-
-
-

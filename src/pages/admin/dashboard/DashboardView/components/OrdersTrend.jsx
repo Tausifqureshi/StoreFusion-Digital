@@ -5,13 +5,17 @@ import { FaChartLine } from 'react-icons/fa';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
+// 👉 Static defaults moved outside to prevent reference changes during parent re-renders
+const DEFAULT_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DEFAULT_DATA = [120, 95, 145, 130, 105, 95, 85, 155, 168, 140, 160, 175];
+
 const OrdersTrend = ({ isDark, labels, data }) => {
   const chartData = useMemo(() => ({
-    labels: labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    labels: labels || DEFAULT_LABELS,
     datasets: [
       {
         label: 'Orders',
-        data: data && data.length > 0 ? data : [120, 95, 145, 130, 105, 95, 85, 155, 168, 140, 160, 175],
+        data: data && data.length > 0 ? data : DEFAULT_DATA,
         fill: false,
         borderColor: '#8b5cf6', // purple-500
         tension: 0.4, // smooth curve like the screenshot
@@ -75,10 +79,11 @@ const OrdersTrend = ({ isDark, labels, data }) => {
   );
 };
 
-// 👉 React.memo: navbar scroll pe render NAHI hoga — sirf isDark ya data badlne pe hoga
+// ✅ React.memo: Performance lock (Content check se scroll re-renders stop ho jayenge)
 export default React.memo(OrdersTrend, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.data !== next.data) return false;
-  if (prev.labels !== next.labels) return false;
-  return true;
+  return (
+    prev.isDark === next.isDark &&
+    prev.data?.join(',') === next.data?.join(',') &&
+    prev.labels?.join(',') === next.labels?.join(',')
+  );
 });

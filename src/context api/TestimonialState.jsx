@@ -4,6 +4,7 @@ import { fireDB } from '../firebase/FirebaseConfig';
 import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, setDoc, doc, deleteDoc, where, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 
+
 const initialFormState = {
   name: '', text: '', img: '', role: '', productId: ''
 };
@@ -12,6 +13,10 @@ function TestimonialState({ children }) {
   const [loading, setLoading] = useState(false);
   const [testimonial, setTestimonial] = useState([]);
   const [testimonialForm, setTestimonialForm] = useState(initialFormState);
+
+  const resetFormState = useCallback(() => {
+    setTestimonialForm(initialFormState);
+  }, []);
 
   // 👉 User ki profile image uthao — na ho toh random avatar generate karo
   const getAvatar = useCallback((item) => {
@@ -79,7 +84,7 @@ function TestimonialState({ children }) {
         gender: formData.gender || 'male',
       });
       toast.success('Testimonial added');
-      setTestimonialForm(initialFormState);
+      resetFormState();
       return true;
     } catch (err) {
       console.error("addTestimonial error:", err);
@@ -107,7 +112,7 @@ function TestimonialState({ children }) {
         { merge: true }
       );
       toast.success('Testimonial updated successfully!');
-      setTestimonialForm(initialFormState);
+      resetFormState();
       return true;
     } catch (err) {
       console.error("updateTestimonial error:", err);
@@ -142,8 +147,8 @@ function TestimonialState({ children }) {
   const contextValue = useMemo(() => ({
     testimonial, loading, setLoading, addTestimonial,
     testimonialForm, setTestimonialForm, editTestimonial,
-    deleteTestimonial, updateTestimonial, getAvatar
-  }), [testimonial, loading, addTestimonial, testimonialForm, editTestimonial, deleteTestimonial, updateTestimonial, getAvatar]);
+    deleteTestimonial, updateTestimonial, getAvatar, resetFormState
+  }), [testimonial, loading, addTestimonial, testimonialForm, editTestimonial, deleteTestimonial, updateTestimonial, getAvatar, resetFormState]);
 
   return (
     <TestimonialContext.Provider value={contextValue}>

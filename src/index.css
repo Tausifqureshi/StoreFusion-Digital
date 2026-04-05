@@ -1,11 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
 * {
-    font-family: 'Inter', sans-serif;
-    font-weight: 500; 
-    
-  }
-      
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ✅ Performance Locks */
+.fixed, .sticky {
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0); /* Force GPU acceleration */
+}
+
+.transition-all, .transition-transform {
+  will-change: auto;
+}
+
+/* 🚀 Scroll Performance */
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+/* Smooth Image Loading */
+img {
+  content-visibility: auto;
+}
+
+/* Custom Scrollbar for Premium Feel */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.5);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(156, 163, 175, 0.8);
+}

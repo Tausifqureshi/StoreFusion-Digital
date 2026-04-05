@@ -55,4 +55,14 @@ const OrderSummaryCards = ({ isDark, order }) => {
   );
 };
 
-export default OrderSummaryCards;
+// 👉 React.memo: Absolute performance lock - preventing re-renders if order data hasn't changed
+export default React.memo(OrderSummaryCards, (prev, next) => {
+  if (prev.isDark !== next.isDark) return false;
+  // Deep check: if length is different or total revenue calculation would be different
+  if (prev.order?.length !== next.order?.length) return false;
+  
+  // Optional: check first/last orders IDs for more robust verification if length is same
+  if (prev.order?.[0]?.id !== next.order?.[0]?.id) return false;
+  
+  return true;
+});

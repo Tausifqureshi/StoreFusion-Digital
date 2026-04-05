@@ -8,50 +8,49 @@ export function OrderState({ children }) {
   const [order, setOrder] = useState([]);
   const [orderLoading, setOrderLoading] = useState(false);
 
-  // 👉 loggedInUser seedha UserContext se lete hain — localStorage baar baar padhne ki zaroorat nahi
+  // 👉 loggedInUser seedha UserContext se lete hain
   const { loggedInUser } = useContext(UserContext);
 
-  // 👉 Real-time onSnapshot listener banao
-  // ➡️ Admin Panel: saare orders chahiye — admin ka kaam hi yeh hai ke sab dekhe
   const getOrderData = useCallback(() => {
-    setOrderLoading(true);
+    // 🧠 Zero Flash Pattern: only show loading if we don't have orders yet
+    setOrderLoading(prev => order.length === 0);
 
-    // 👉 Admin ke liye poora "orders" collection — koi userid filter nahi lagana
-    // 👉 Normal user ke liye yeh function kabhi bhi nahi chalta (neeche check lagaya hai)
     const q = collection(fireDB, "orders");
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        // 👉 Firestore se aaya data clean array mein convert karo, id bhi saath lo
-        const ordersArray = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
+        const ordersArray = snapshot.docs.map((docSnap) => ({
+          id: docSnap.id,
+          ...docSnap.data(),
         }));
-        setOrder(ordersArray);
+
+        // 🧠 Stabilize update
+        setOrder(prev => {
+          const isSame = prev.length === ordersArray.length && 
+                         prev.every((o, i) => o.id === ordersArray[i].id);
+          return isSame ? prev : ordersArray;
+        });
+        
         setOrderLoading(false);
       },
       (error) => {
-        // 🔴 Real-time listener mein error aaya — user ko toast dikhao
         console.error("Firestore orders listener error:", error);
         toast.error("Failed to fetch orders. Please refresh.", { icon: "⚠️" });
         setOrderLoading(false);
       }
     );
 
-    // 🧠 Cleanup ke liye unsubscribe wapas bhejo
     return unsubscribe;
-  }, []);
+  }, [order.length]);
 
-  // 👉 Sirf Admin ke liye listener shuru karo — component hatne pe khud band ho jaayega
   useEffect(() => {
-    // ➡️ Admin nahi hai toh listener ki zaroorat nahi — performance bachao
+    // Sirf Admin ke liye listener shuru karo
     if (!loggedInUser || loggedInUser.role !== 'admin') return;
 
     const unsubscribe = getOrderData();
 
     return () => {
-      // 🧠 Memory bachao: component hatne pe Firestore listener band karo
       if (typeof unsubscribe === 'function') unsubscribe();
     };
   }, [loggedInUser, getOrderData]);

@@ -138,9 +138,11 @@ const ProductCategories = ({ isDark, products }) => {
   );
 };
 
-// 👉 React.memo: navbar scroll pe render NAHI hoga — sirf isDark ya products badlne pe hoga
+// ✅ React.memo: Performance lock taaki products list stable rahe
 export default React.memo(ProductCategories, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.products !== next.products) return false;
-  return true;
+  return (
+    prev.isDark === next.isDark &&
+    prev.products?.length === next.products?.length &&
+    prev.products?.[0]?.id === next.products?.[0]?.id
+  );
 });

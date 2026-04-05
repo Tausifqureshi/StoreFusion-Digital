@@ -22,12 +22,14 @@ const StatCard = ({ title, value, icon, bgClass, shadowClass, trend, trendValue,
   );
 };
 
-// 👉 React.memo: sirf tab re-render karo jab value, isDark, ya trendValue badlen
-// 👉 Navbar scroll ya dusre unrelated state changes pe render NAHI hoga
+// 👉 React.memo: Absolute lock for scroll stability
 export default React.memo(StatCard, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.value !== next.value) return false;
-  if (prev.title !== next.title) return false;
-  if (prev.trendValue !== next.trendValue) return false;
-  return true;
+  return (
+    prev.isDark === next.isDark &&
+    prev.value === next.value &&
+    prev.title === next.title &&
+    prev.trendValue === next.trendValue &&
+    prev.bgClass === next.bgClass &&
+    prev.shadowClass === next.shadowClass
+  );
 });

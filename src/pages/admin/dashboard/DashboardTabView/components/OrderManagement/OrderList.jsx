@@ -33,4 +33,12 @@ const OrderList = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropd
   );
 };
 
-export default React.memo(OrderList);
+// 👉 React.memo: Absolute performance lock for order list
+export default React.memo(OrderList, (prev, next) => {
+  return (
+    prev.isDark === next.isDark &&
+    prev.activeDropdown === next.activeDropdown &&
+    prev.ordersOnCurrentPage?.length === next.ordersOnCurrentPage?.length &&
+    prev.ordersOnCurrentPage?.[0]?.id === next.ordersOnCurrentPage?.[0]?.id
+  );
+});

@@ -1,12 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext, useEffect } from 'react';
 import { FaSync, FaDownload } from 'react-icons/fa';
+import { OrderContext, ThemeContext } from '../../../../../../context api/AllContext';
+import LoaderSpinner from '../../../../../../components/loader/LoaderSpinner';
 
 import OrderSummaryCards from './OrderSummaryCards';
 import OrderFilters from './OrderFilters';
 import OrderList from './OrderList';
 import OrderPagination from './OrderPagination';
 
-const OrderManagementTab = ({ isDark, order = [] }) => {
+const OrderManagementTab = () => {
+  // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
+  const { mode } = useContext(ThemeContext);
+  const { order, orderLoading } = useContext(OrderContext);
+  
+  const isDark = mode === 'dark';
+
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
 
@@ -20,11 +28,12 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
 
   // 👉 Unique status nikal rahe hain dynamic dropdown ke liye
   const uniqueStatuses = useMemo(() => {
-    return ["All Status", ...new Set(order.map(o => o.status).filter(Boolean))];
+    return ["All Status", ...new Set((order || []).map(o => o.status).filter(Boolean))];
   }, [order]);
 
   // 👉 Filtering aur Sorting dono ek sath handle kar rahe hain
   const filteredAndSortedOrders = useMemo(() => {
+    if (!order) return [];
     return order
       .filter((o) => {
         const matchesSearch = o.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -54,9 +63,11 @@ const OrderManagementTab = ({ isDark, order = [] }) => {
   );
 
   // 👉 Filter ya sort change hone par page ko wapas 1 par reset kar do
-  React.useEffect(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, filterStatus, sortOrder]);
+
+  if (orderLoading) return <LoaderSpinner isDark={isDark} label="Loading orders..." />;
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
