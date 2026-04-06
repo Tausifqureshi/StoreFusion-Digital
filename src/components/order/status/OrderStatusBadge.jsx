@@ -9,7 +9,7 @@ const OrderStatusBadge = React.memo(({ status, isDark }) => {
   const s = status?.toLowerCase() || 'processing';
 
   // Configuration for styles and icons based on status
-  const statusConfig = {
+  const statusConfig = { 
     delivered: {
       color: isDark ? 'text-green-400' : 'text-green-700',
       bg: isDark ? 'bg-green-500/10 border-green-500/20' : 'bg-green-100 border-green-200',

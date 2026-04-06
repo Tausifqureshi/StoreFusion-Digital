@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import React from "react";
@@ -30,9 +30,9 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = useCallback((e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  }, []);
 
   useEffect(() => {
     const stopLoading = () => {
@@ -59,7 +59,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
     }
   }, [isVisible]);
 
-  const handleBuyNow = async () => {
+  const handleBuyNow = useCallback(async () => {
     if (!fullName || !address || !pincode || !phoneNumber) {
       toast.error("All fields are required", {
         autoClose: 1000,
@@ -87,7 +87,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
     } catch (err) {
       setPlacingOrder(false);
     }
-  };
+  }, [buyNow, cashOnDelivery, formData, fullName, address, pincode, phoneNumber, paymentMethod, placingOrder, setFormData]);
 
   return (
     <>
@@ -269,20 +269,21 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
             </div>
           </div>
         </div>
-      , document.body)}
+        , document.body)}
     </>
   );
 }
 
+export default React.memo(Modal);
 // ✅ ABSOLUTE SHIELDING: Modal props are heavily memoized to prevent reconciliation leaks
-export default React.memo(Modal, (prev, next) => {
-  return (
-    prev.formData.id === next.formData.id &&
-    prev.formData.fullName === next.formData.fullName &&
-    prev.formData.address === next.formData.address &&
-    prev.formData.pincode === next.formData.pincode &&
-    prev.formData.phoneNumber === next.formData.phoneNumber
-  );
-});
+// export default React.memo(Modal, (prev, next) => {
+//   return (
+//     prev.formData.id === next.formData.id &&
+//     prev.formData.fullName === next.formData.fullName &&
+//     prev.formData.address === next.formData.address &&
+//     prev.formData.pincode === next.formData.pincode &&
+//     prev.formData.phoneNumber === next.formData.phoneNumber
+//   );
+// });
 
 

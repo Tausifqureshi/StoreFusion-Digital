@@ -149,11 +149,13 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
   );
 };
 
-export default React.memo(OrderItem, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.isActive !== next.isActive) return false;
-  if (prev.uniqueKey !== next.uniqueKey) return false;
-  if (prev.o.id !== next.o.id) return false;
-  if (prev.o.status !== next.o.status) return false;
-  return true;
-});
+export default React.memo(OrderItem);
+
+// export default React.memo(OrderItem, (prev, next) => {
+//   if (prev.isDark !== next.isDark) return false;
+//   if (prev.isActive !== next.isActive) return false;
+//   if (prev.uniqueKey !== next.uniqueKey) return false;
+//   if (prev.o.id !== next.o.id) return false;
+//   if (prev.o.status !== next.o.status) return false;
+//   return true;
+// });

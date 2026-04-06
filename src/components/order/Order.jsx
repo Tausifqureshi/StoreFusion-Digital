@@ -13,17 +13,26 @@ import { useNavigate } from "react-router-dom";
 import { deleteUserOrdersFromFirestore } from "./orderFirestore";
 
 // ✅ ORDER VIEW: Saare orders list aur tabs yahan locked hain
-const OrderView = React.memo(({ 
-  isDark, orders, orderLoading, user, 
-  activeTab, setActiveTab, handleDeleteAllOrders, 
-  navigate, updatingOrderId, setUpdatingOrderId 
+const OrderView = React.memo(({
+  isDark, orders, orderLoading, user,
+  activeTab, setActiveTab, handleDeleteAllOrders,
+  navigate, updatingOrderId, setUpdatingOrderId
 }) => {
   const activeOrders = useMemo(() => {
-    let filtered = orders.filter(order => order.status?.toLowerCase() !== "delivered");
+    // 1. Pehle Delivered orders ko bahar nikaalo
+    const nonDelivered = orders.filter(order => order.status?.toLowerCase() !== "delivered");
+
     if (activeTab === 'Returns') {
-      return filtered.filter(order => order.status?.toLowerCase() === 'refunded' || order.status?.toLowerCase() === 'returned');
+      // 2. Returns tab: Sirf refunded/returned
+      return nonDelivered.filter(order =>
+        ['refunded', 'returned'].includes(order.status?.toLowerCase())
+      );
     }
-    return filtered.filter(order => order.status?.toLowerCase() !== 'refunded' && order.status?.toLowerCase() !== 'returned');
+
+    // 3. All Orders tab: Na delivered ho, na refunded, na returned
+    return nonDelivered.filter(order =>
+      !['refunded', 'returned'].includes(order.status?.toLowerCase())
+    );
   }, [orders, activeTab]);
 
   return (
@@ -97,21 +106,25 @@ const OrderView = React.memo(({
       </div>
     </div>
   );
-}, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.orderLoading === next.orderLoading &&
-    prev.activeTab === next.activeTab &&
-    prev.updatingOrderId === next.updatingOrderId &&
-    prev.orders.length === next.orders.length
-  );
 });
+
+/*
+// export default React.memo(OrderView, (prev, next) => {
+//   return (
+//     prev.isDark === next.isDark &&
+//     prev.orderLoading === next.orderLoading &&
+//     prev.activeTab === next.activeTab &&
+//     prev.updatingOrderId === next.updatingOrderId &&
+//     prev.orders.length === next.orders.length
+//   );
+// });
+*/
 
 function Order({ orderLoading }) {
   const { mode } = useContext(ThemeContext);
   const { loggedInUser: user } = useContext(UserContext);
   const { orders } = useSelector((state) => state.orders);
-  
+
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
   const [activeTab, setActiveTab] = useState('All Orders');
   const navigate = useNavigate();
@@ -133,7 +146,7 @@ function Order({ orderLoading }) {
 
   return (
     <Layout>
-      <OrderView 
+      <OrderView
         isDark={isDark}
         orders={orders}
         orderLoading={orderLoading}
@@ -151,3 +164,5 @@ function Order({ orderLoading }) {
 }
 
 export default React.memo(Order);
+
+// export default React.memo(Order);

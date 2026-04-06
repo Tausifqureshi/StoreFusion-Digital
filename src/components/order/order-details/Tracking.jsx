@@ -16,7 +16,7 @@ const Tracking = ({ order, isDark }) => {
     else if (status === "refunded") return -1;
     else if (status === "cancelled") return -1;
     else return 0;
-  };
+  }; 
 
   const activeStepIndex = getTimelineProgressIndex(currentOrderStatus);
 

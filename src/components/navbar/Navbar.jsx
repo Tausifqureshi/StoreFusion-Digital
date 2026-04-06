@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, { Fragment, useContext, useState, useEffect, useMemo, useRef, useCallback, useTransition } from "react";
 import throttle from "lodash/throttle";
 import { Drawer } from "@mui/material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -25,17 +25,17 @@ const TopAnnouncement = React.memo(({ isDark }) => (
 ));
 
 // ✅ NAV LINKS: Memoized to prevent re-renders when parent state (like scroll) changes
-const NavLinks = React.memo(({ isDark, navItems, user, totalOrders }) => (
+const NavLinks = React.memo(({ isDark, navItems, user, totalOrders, handleNavigate }) => (
   <div className={`hidden lg:flex items-center gap-8 font-bold text-[13px] uppercase tracking-wider ${isDark ? "text-gray-200" : "text-gray-600"}`}>
     {navItems.map((item) => (
-      <Link key={item.name} to={item.URL} className="hover:text-orange-500 transition-colors">{item.name}</Link>
+      <button key={item.name} onClick={() => handleNavigate(item.URL)} className="hover:text-orange-500 transition-colors uppercase">{item.name}</button>
     ))}
     {user && (
-      <Link to="/order" className="relative hover:text-orange-500 transition-colors">
+      <button onClick={() => handleNavigate('/order')} className="relative hover:text-orange-500 transition-colors uppercase">
         Orders {totalOrders > 0 && <span className="absolute -top-3 -right-4 bg-green-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{totalOrders}</span>}
-      </Link>
+      </button>
     )}
-    {user?.role === "admin" && <Link to="/dashboard" className="text-orange-500 border-l pl-4 border-gray-300">Admin</Link>}
+    {user?.role === "admin" && <button onClick={() => handleNavigate('/dashboard')} className="text-orange-500 border-l pl-4 border-gray-300 uppercase">Admin</button>}
   </div>
 ));
 
@@ -51,15 +51,15 @@ const CartCounter = React.memo(() => {
 });
 
 // ✅ ACTION ICONS: Specifically handles its own local hover/state logic
-const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout }) => (
+const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout, handleNavigate }) => (
   <div className="flex items-center gap-5">
     <button onClick={toggleMode} className="transition-transform hover:scale-110">
       {mode === "light" ? <BsMoonStars size={20} className="text-gray-600" /> : <FiSun size={20} className="text-yellow-400" />}
     </button>
-    <Link to="/cart" className="relative">
+    <button onClick={() => handleNavigate('/cart')} className="relative">
       <FiShoppingCart size={24} className={isDark ? "text-white" : "text-gray-700"} />
       <CartCounter />
-    </Link>
+    </button>
     {user ? (
       <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
         <div className="flex flex-col items-start leading-tight pr-1">
@@ -76,7 +76,7 @@ const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout }
         </button>
       </div>
     ) : (
-      <Link to="/login" className={`hidden sm:block px-5 py-1.5 rounded text-xs font-bold ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}`}>SIGN IN</Link>
+      <button onClick={() => handleNavigate('/login')} className={`hidden sm:block px-5 py-1.5 rounded text-xs font-bold ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}`}>SIGN IN</button>
     )}
   </div>
 ));
@@ -91,10 +91,11 @@ function Navbar({ isDark }) {
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
   const [mega, setMega] = useState(false);
-  const [query, setQuery] = useState(""); 
+  const [query, setQuery] = useState("");
 
   const navigate = useNavigate();
   const location = useLocation();
+  const [isPending, startTransition] = useTransition();
 
   const { loggedInUser: user } = useContext(UserContext);
 
@@ -102,13 +103,17 @@ function Navbar({ isDark }) {
     state.orders.orders.filter(order => order.status?.toLowerCase() !== "delivered").length
   );
 
-  // ✅ Stable Functions using useCallback
-  const handleMobileClick = useCallback((url) => {
-    setOpen(false); 
-    setTimeout(() => {
-      navigate(url);
-    }, 300);
+  const handleNavigate = useCallback((url) => {
+    // 👉 For top-level navigation, standard navigate is faster (shows Suspense immediately)
+    navigate(url);
   }, [navigate]);
+
+  const handleMobileClick = useCallback((url) => {
+    setOpen(false);
+    setTimeout(() => {
+      handleNavigate(url);
+    }, 300);
+  }, [handleNavigate]);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
@@ -116,36 +121,62 @@ function Navbar({ isDark }) {
     window.location.href = `/login?redirect=${location.pathname}`;
   }, [location.pathname]);
 
-  const handleScroll = useCallback(
-    throttle(() => {
+  // const handleScroll = useCallback(
+  //   throttle(() => {
+  //     const currentScrollY = window.scrollY;
+
+  //     if (window.innerWidth < 1024) {
+  //       setIsVisible(true);
+  //     } else {
+  //       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
+  //         setIsVisible(false);
+  //       } else {
+  //         setIsVisible(true);
+  //       }
+  //     }
+
+  //     if (currentScrollY > 50) {
+  //       setIsScrolled(true);
+  //     } else {
+  //       setIsScrolled(false);
+  //     }
+
+  //     lastScrollY.current = currentScrollY;
+  //   }, 200),
+  //   []
+  // );
+
+  // useEffect(() => {
+  //   window.addEventListener("scroll", handleScroll, { passive: true });
+  //   // return () => window.removeEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //     handleScroll.cancel();
+  //   };
+
+  // }, [handleScroll]);
+
+  useEffect(() => {
+    const throttledScroll = throttle(() => {
       const currentScrollY = window.scrollY;
 
       if (window.innerWidth < 1024) {
         setIsVisible(true);
       } else {
-        if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-          setIsVisible(false);
-        } else {
-          setIsVisible(true);
-        }
+        setIsVisible(!(currentScrollY > lastScrollY.current && currentScrollY > 50));
       }
 
-      if (currentScrollY > 50) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-
+      setIsScrolled(currentScrollY > 50);
       lastScrollY.current = currentScrollY;
-    }, 200),
-    []
-  );
+    }, 200);
 
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [handleScroll]);
+    window.addEventListener("scroll", throttledScroll, { passive: true });
 
+    return () => {
+      window.removeEventListener("scroll", throttledScroll);
+      throttledScroll.cancel(); // 💥 VERY IMPORTANT
+    };
+  }, []);
   const navItems = useMemo(() => [
     { name: "Home", URL: "/" },
     { name: "All Products", URL: "/allproducts" },
@@ -173,7 +204,7 @@ function Navbar({ isDark }) {
           <div className="hidden lg:flex items-center gap-8">
             <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer">
               <span className={`flex items-center gap-1 font-bold text-[13px] uppercase tracking-wider hover:text-orange-500 transition-all ${isDark ? "text-gray-200" : "text-gray-600"}`}>
-                 Categories <FiChevronRight className="rotate-90" />
+                Categories <FiChevronRight className="rotate-90" />
               </span>
               {mega && (
                 <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
@@ -182,7 +213,12 @@ function Navbar({ isDark }) {
                     {categories.map((cat) => (
                       <div
                         key={cat}
-                        onClick={() => { navigate(`/category/${cat}`); setMega(false); }}
+                        onClick={() => {
+                          startTransition(() => {
+                            navigate(`/category/${cat}`);
+                          });
+                          setMega(false);
+                        }}
                         className={`p-3 rounded-xl transition-all hover:text-orange-500 cursor-pointer text-[11px] font-bold uppercase truncate border border-transparent
                           ${isDark ? "hover:bg-gray-800" : "hover:bg-orange-50 hover:border-orange-100 text-gray-700"}`}
                       >
@@ -193,15 +229,16 @@ function Navbar({ isDark }) {
                 </div>
               )}
             </div>
-            <NavLinks isDark={isDark} navItems={navItems} user={user} totalOrders={totalOrders} />
+            <NavLinks isDark={isDark} navItems={navItems} user={user} totalOrders={totalOrders} handleNavigate={handleNavigate} />
           </div>
 
-          <ActionIcons 
-            isDark={isDark} 
-            mode={mode} 
-            toggleMode={toggleMode} 
-            user={user} 
-            handleLogout={handleLogout} 
+          <ActionIcons
+            isDark={isDark}
+            mode={mode}
+            toggleMode={toggleMode}
+            user={user}
+            handleLogout={handleLogout}
+            handleNavigate={handleNavigate}
           />
         </div>
       </nav>
@@ -227,9 +264,19 @@ function Navbar({ isDark }) {
           <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-[#131921]" : "bg-blue-600 text-white"}`}>
             <div className="bg-white/20 p-2 rounded-full"><FiUser size={24} /></div>
             <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.fullName?.split(" ")[0] : "Sign In"}</h2>
-            <button onClick={() => setOpen(false)}><RxCross2 size={24} /></button>
+            {/* <button onClick={() => setOpen(false) setShowSubMenu(false)}><RxCross2 size={24} /></button> */}
+            <button
+              onClick={() => {
+                setOpen(false);
+                setShowSubMenu(false);
+              }}
+            >
+              <RxCross2 size={24} />
+            </button>
           </div>
 
+
+          {/* Sub menu layer */}
           <div className="relative flex-1 overflow-hidden">
             <div className={`absolute inset-0 p-4 space-y-1 overflow-y-auto transition-transform duration-300 ${showSubMenu ? "-translate-x-full" : "translate-x-0"}`}>
               <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase">Top Categories</h3>
@@ -287,7 +334,12 @@ function Navbar({ isDark }) {
                     .map((cat) => (
                       <button
                         key={cat}
-                        onClick={() => { setOpen(false); setTimeout(() => navigate(`/category/${cat}`), 300); }}
+                        onClick={() => {
+                          setOpen(false);
+                          startTransition(() => {
+                            navigate(`/category/${cat}`);
+                          });
+                        }}
                         className={`flex flex-col items-center justify-center p-5 rounded-2xl border transition-all active:scale-95
                           ${isDark ? "bg-[#1e293b] border-gray-800 text-gray-200" : "bg-gray-50 border-gray-200 text-gray-700 shadow-sm"}`}
                       >
@@ -316,6 +368,8 @@ function Navbar({ isDark }) {
 }
 
 // ✅ ABSOLUTE SHIELDING: Strict comparison prevents unnecessary re-renders
-export default React.memo(Navbar, (prev, next) => {
-  return prev.isDark === next.isDark;
-});
+// export default React.memo(Navbar, (prev, next) => {
+//   return prev.isDark === next.isDark;
+// });
+
+export default React.memo(Navbar);

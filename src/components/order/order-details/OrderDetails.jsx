@@ -14,7 +14,7 @@ import { cancelOrderFromFirestore } from "../orderFirestore";
 import { cancelOrder } from "../../../redux/orderSlice";
 import Tracking from "./Tracking";
 
-function OrderDetails({ orderLoading }) {
+function OrderDetails({ orderLoading }) { 
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();

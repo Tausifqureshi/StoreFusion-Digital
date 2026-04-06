@@ -15,7 +15,7 @@ import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
 import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import { clearCartStorage } from "./cartService";
 import { saveCartDebounce } from "./debounce";
-import { FiTrash2, FiMinus, FiPlus, FiChevronDown, FiShield, FiTruck } from "react-icons/fi";
+import { FiTrash2, FiMinus, FiPlus, FiChevronDown, FiShield, FiTruck, FiRefreshCw } from "react-icons/fi";
 import CartItemCard from "./CartItemCard";
 
 // ✅ CART VIEW: Saare items list aur sidebar yahan isolation mein locked hain
@@ -90,10 +90,15 @@ const CartView = React.memo(({
                   </button>
                 </div>
 
-                <div className="mt-8 flex justify-between items-center">
+                <div className="mt-8 flex justify-between items-center px-1">
                   <div className="flex flex-col items-center gap-2">
                     <div className={`p-2 rounded-full ${isDark ? 'bg-green-500/10 text-green-400' : 'bg-green-50 text-green-600'}`}><FiTruck size={20} /></div>
                     <span className="text-[8px] font-black uppercase tracking-wider text-gray-500">Fast Ship</span>
+                  </div>
+                  <div className="h-8 w-px bg-gray-200 dark:bg-gray-800"></div>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className={`p-2 rounded-full ${isDark ? 'bg-orange-500/10 text-orange-400' : 'bg-orange-50 text-orange-600'}`}><FiRefreshCw size={20} /></div>
+                    <span className="text-[8px] font-black uppercase tracking-wider text-gray-500">Returns</span>
                   </div>
                   <div className="h-8 w-px bg-gray-200 dark:bg-gray-800"></div>
                   <div className="flex flex-col items-center gap-2">
@@ -108,6 +113,21 @@ const CartView = React.memo(({
           <div className="flex flex-col items-center justify-center py-20 text-center">
             <h2 className="text-2xl font-black uppercase tracking-tighter mb-2 opacity-20">Your Bag is Empty</h2>
             <Link to="/allproducts" className="mt-4 px-8 py-3 bg-blue-600 text-white text-[10px] font-black uppercase tracking-widest rounded-xl shadow-lg">Continue Shopping</Link>
+
+            <div className="mt-16 flex items-center justify-center gap-10 opacity-30 grayscale hover:opacity-60 transition-opacity">
+              <div className="flex flex-col items-center gap-2">
+                <FiTruck size={24} />
+                <span className="text-[8px] font-black uppercase tracking-[0.2em]">Fast Ship</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <FiRefreshCw size={24} />
+                <span className="text-[8px] font-black uppercase tracking-[0.2em]">Returns</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <FiShield size={24} />
+                <span className="text-[8px] font-black uppercase tracking-[0.2em]">Warranty</span>
+              </div>
+            </div>
           </div>
         )}
       </div>

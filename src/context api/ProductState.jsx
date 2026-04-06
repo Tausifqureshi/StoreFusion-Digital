@@ -55,10 +55,10 @@ export function ProductState({ children }) {
             id: docSnap.id,
             ...docSnap.data(),
           }));
-          
+
           setProduct(prev => {
-            const isSame = prev.length === productsArray.length && 
-                           prev.every((p, i) => p.id === productsArray[i].id);
+            const isSame = prev.length === productsArray.length &&
+              prev.every((p, i) => p.id === productsArray[i].id);
             return isSame ? prev : productsArray;
           });
           setProductLoading(false);

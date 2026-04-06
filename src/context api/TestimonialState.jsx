@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { TestimonialContext } from './AllContext';
 import { fireDB } from '../firebase/FirebaseConfig';
 import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, setDoc, doc, deleteDoc, where, updateDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 
@@ -13,6 +14,7 @@ function TestimonialState({ children }) {
   const [loading, setLoading] = useState(false);
   const [testimonial, setTestimonial] = useState([]);
   const [testimonialForm, setTestimonialForm] = useState(initialFormState);
+  const navigate = useNavigate();
 
   const resetFormState = useCallback(() => {
     setTestimonialForm(initialFormState);
@@ -97,22 +99,21 @@ function TestimonialState({ children }) {
 
   // 👉 Existing testimonial update karo Firestore mein
   const updateTestimonial = useCallback(async () => {
+    // 👉 Check against a ref or the latest form state to avoid stale closure issues
     if (!testimonialForm.id) {
       toast.error('No ID found to update');
       return false;
     }
     setLoading(true);
     try {
-      await setDoc(
-        doc(fireDB, 'testimonials', testimonialForm.id),
-        {
-          ...testimonialForm,
-          time: Timestamp.now(),
-        },
-        { merge: true }
-      );
+      const docRef = doc(fireDB, 'testimonials', testimonialForm.id);
+      await updateDoc(docRef, {
+        ...testimonialForm,
+        time: Timestamp.now()
+      });
       toast.success('Testimonial updated successfully!');
       resetFormState();
+      navigate('/dashboard'); // ✅ Successful update ke baad dashboard pe vapis le jao
       return true;
     } catch (err) {
       console.error("updateTestimonial error:", err);
@@ -121,7 +122,7 @@ function TestimonialState({ children }) {
     } finally {
       setLoading(false);
     }
-  }, [testimonialForm]);
+  }, [testimonialForm, resetFormState]);
 
   // 👉 Testimonial Firestore se permanently delete karo
   const deleteTestimonial = useCallback(async (id) => {
@@ -141,8 +142,15 @@ function TestimonialState({ children }) {
   // 👉 navigate() yahan se hata diya — routing ab component handle karega
   const editTestimonial = useCallback((item) => {
     setTestimonialForm(item);
+    navigate('/addtestimonial'); // ✅ Redirect to Form taaki edit ho sake
+    
+    // 👉 Scroll to form if it exists on page
+    const formElement = document.getElementById('testimonial-form');
+    if (formElement) {
+      formElement.scrollIntoView({ behavior: 'smooth' });
+    }
     return true;
-  }, []);
+  }, [navigate]);
 
   const contextValue = useMemo(() => ({
     testimonial, loading, setLoading, addTestimonial,

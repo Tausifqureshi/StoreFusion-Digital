@@ -45,7 +45,7 @@ function Home() {
   return (
     <Layout>
       <HomeView mode={mode} />
-      
+
       {/* 👉 Button ko bahar rakha hai noise stop karne ke liye */}
       <ScrollToTopButoon mode={mode} />
     </Layout>

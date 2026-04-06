@@ -13,7 +13,7 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId }) => {
       {/* Top Row: Order ID & Badge */}
       <div className="flex justify-between items-center mb-3">
         <p className={`text-[10px] md:text-xs font-black uppercase tracking-widest ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-          Order Id {order.id}
+          Order Id {order.id} 
         </p>
         <OrderStatusBadge status={order.status || "placed"} isDark={isDark} />
       </div>
@@ -71,11 +71,13 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId }) => {
   );
 };
 
-export default React.memo(UserOrderItem, (prevProps, nextProps) => {
-  if (prevProps.isDark !== nextProps.isDark) return false;
-  if (prevProps.order.id !== nextProps.order.id) return false;
-  if (prevProps.order.status !== nextProps.order.status) return false;
-  if (prevProps.order.date !== nextProps.order.date) return false;
-  if (prevProps.order.cartItems?.length !== nextProps.order.cartItems?.length) return false;
-  return true;
-});
+export default React.memo(UserOrderItem);
+
+// export default React.memo(UserOrderItem, (prevProps, nextProps) => {
+//   if (prevProps.isDark !== nextProps.isDark) return false;
+//   if (prevProps.order.id !== nextProps.order.id) return false;
+//   if (prevProps.order.status !== nextProps.order.status) return false;
+//   if (prevProps.order.date !== nextProps.order.date) return false;
+//   if (prevProps.order.cartItems?.length !== nextProps.order.cartItems?.length) return false;
+//   return true;
+// });

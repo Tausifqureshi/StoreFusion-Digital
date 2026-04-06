@@ -7,10 +7,10 @@ import ProductSkeleton from "../../components/loader/ProductSkeleton";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 // ✅ ALL PRODUCTS VIEW: Saare products, filters aur pagination yahan locked hain
-const AllProductsView = React.memo(({ 
-  mode, product, productLoading, 
+const AllProductsView = React.memo(({
+  mode, product, productLoading,
   searchkey, filterType, filterPrice, sortPrice,
-  currentPage, setCurrentPage, expandedId, setExpandedId, productsRef 
+  currentPage, setCurrentPage, expandedId, setExpandedId, productsRef
 }) => {
   const productsPerPage = 8;
 
@@ -57,12 +57,12 @@ const AllProductsView = React.memo(({
 
             <div className="flex flex-wrap -m-4">
               {currentProducts.map((item, index) => (
-                <SingleProductCard 
-                  key={item.id || index} 
-                  item={item} 
-                  isExpanded={expandedId === (item.id || item.title)} 
-                  setExpandedId={setExpandedId} 
-                  mode={mode} 
+                <SingleProductCard
+                  key={item.id || index}
+                  item={item}
+                  isExpanded={expandedId === (item.id || item.title)}
+                  setExpandedId={setExpandedId}
+                  mode={mode}
                 />
               ))}
             </div>
@@ -127,7 +127,7 @@ function Allproducts() {
   const { mode } = useContext(ThemeContext);
   const { product, productLoading } = useContext(ProductContext);
   const { searchkey, filterType, filterPrice, sortPrice } = useContext(FilterContext);
-  
+
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedId, setExpandedId] = useState(null);
   const productsRef = useRef(null);
@@ -147,8 +147,8 @@ function Allproducts() {
     <Layout>
       {/* 👉 Filters separate taaki scroll button inhein na chede */}
       <Filter mode={mode} />
-      
-      <AllProductsView 
+
+      <AllProductsView
         mode={mode}
         product={product}
         productLoading={productLoading}

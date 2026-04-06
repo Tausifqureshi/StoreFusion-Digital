@@ -149,7 +149,7 @@ function ProductInfo() {
   const { product } = useContext(ProductContext);
   const { loading } = useContext(ProductAdminContext);
   const { mode } = useContext(ThemeContext);
-  
+
   const [mainImage, setMainImage] = useState("");
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
@@ -218,11 +218,13 @@ function ProductInfo() {
     if (!currentProduct) return [];
     return [
       { id: 1, title: "Specifications", text: currentProduct.description || "No description available", icon: <FaChevronDown size={14} /> },
-      { id: 2, title: "Available Coupons", text: (
-        <div className="p-3 border border-dashed border-orange-300 rounded-xl bg-orange-50 text-[9px] font-bold text-orange-800 uppercase">
-          CODE: FUSION20 | Flat 20% Off on your first order
-        </div>
-      ), icon: <FaTag size={14} className="text-orange-500" /> },
+      {
+        id: 2, title: "Available Coupons", text: (
+          <div className="p-3 border border-dashed border-orange-300 rounded-xl bg-orange-50 text-[9px] font-bold text-orange-800 uppercase">
+            CODE: FUSION20 | Flat 20% Off on your first order
+          </div>
+        ), icon: <FaTag size={14} className="text-orange-500" />
+      },
     ];
   }, [currentProduct]);
 
@@ -237,13 +239,13 @@ function ProductInfo() {
       <div className={`min-h-screen py-6 lg:py-10 pt-24 lg:pt-32 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
         <div className="container mx-auto px-4 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start justify-center">
-            
-            <GallerySection 
-              mainImage={mainImage} 
-              setMainImage={setMainImage} 
-              gallery={gallery} 
-              discount={discount} 
-              isDark={isDark} 
+
+            <GallerySection
+              mainImage={mainImage}
+              setMainImage={setMainImage}
+              gallery={gallery}
+              discount={discount}
+              isDark={isDark}
             />
 
             <div className="w-full lg:w-[50%] flex flex-col space-y-6 text-center lg:text-left">
@@ -272,9 +274,9 @@ function ProductInfo() {
                 </div>
               </div>
 
-              <ProductAccordion 
-                accordionData={accordionData} 
-                isDark={isDark} 
+              <ProductAccordion
+                accordionData={accordionData}
+                isDark={isDark}
               />
 
               <div className="grid grid-cols-3 gap-2 py-4 border-y border-gray-100 dark:border-gray-800">
@@ -314,13 +316,13 @@ function ProductInfo() {
             </div>
           </div>
 
-          <SimilarProductsSection 
-            similarProducts={similarProducts} 
-            expandedId={expandedId} 
-            setExpandedId={setExpandedId} 
-            mode={mode} 
-            handleViewAll={handleViewAll} 
-            isDark={isDark} 
+          <SimilarProductsSection
+            similarProducts={similarProducts}
+            expandedId={expandedId}
+            setExpandedId={setExpandedId}
+            mode={mode}
+            handleViewAll={handleViewAll}
+            isDark={isDark}
           />
 
           <div className="mt-20 lg:mt-12 pt-12 lg:pt-10 border-t border-gray-100 dark:border-gray-800 space-y-16 lg:space-y-24">

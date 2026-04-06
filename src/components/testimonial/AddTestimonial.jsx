@@ -12,7 +12,7 @@ const Star = ({ filled, onClick }) => (
 
 const AddTestimonialView = React.memo(({ isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading }) => {
   return (
-    <div className={`w-full max-w-lg mx-auto p-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-200 shadow-sm"}`}>
+    <div id="testimonial-form" className={`w-full max-w-lg mx-auto p-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-200 shadow-sm"}`}>
       {/* Header */}
       <div className="mb-6 border-b pb-4 border-gray-100 dark:border-gray-800">
         <h2 className={`text-xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
@@ -98,6 +98,8 @@ const AddTestimonialView = React.memo(({ isDark, rating, setRating, testimonialF
   );
 });
 
+import Layout from "../../components/layout/Layout";
+
 function AddTestimonial({ productId = "" }) {
   const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial } = useContext(TestimonialContext);
   const { loading } = useContext(ProductAdminContext);
@@ -108,6 +110,14 @@ function AddTestimonial({ productId = "" }) {
   useEffect(() => {
     if (testimonialForm?.rating) setRating(testimonialForm.rating);
   }, [testimonialForm]);
+
+  // ✅ NEW: Reset form if we are on a Product page (Adding new) vs Admin Edit
+  useEffect(() => {
+    if (productId && !testimonialForm.id) {
+      setRating(0);
+      setTestimonialForm({ name: "", text: "", img: "", role: "", productId: productId });
+    }
+  }, [productId, setTestimonialForm]);
 
   const handleSubmit = () => {
     if (rating === 0) {
@@ -128,15 +138,17 @@ function AddTestimonial({ productId = "" }) {
   };
 
   return (
-    <AddTestimonialView
-      isDark={isDark}
-      rating={rating}
-      setRating={setRating}
-      testimonialForm={testimonialForm}
-      setTestimonialForm={setTestimonialForm}
-      handleSubmit={handleSubmit}
-      loading={loading}
-    />
+    <Layout>
+      <AddTestimonialView
+        isDark={isDark}
+        rating={rating}
+        setRating={setRating}
+        testimonialForm={testimonialForm}
+        setTestimonialForm={setTestimonialForm}
+        handleSubmit={handleSubmit}
+        loading={loading}
+      />
+    </Layout>
   );
 }
 

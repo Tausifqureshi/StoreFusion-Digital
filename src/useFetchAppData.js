@@ -25,6 +25,7 @@ export const useFetchAppData = (setCartLoading, setOrderLoading) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (!user?.uid) {
       dispatch(clearOrders());
+      setOrderLoading(false); // 👈 Yahan handle karein
       return;
     }
     setOrderLoading(true);
@@ -41,5 +42,5 @@ export const useFetchAppData = (setCartLoading, setOrderLoading) => {
       clearTimeout(safetyTimer);
       unsubscribe && unsubscribe();
     };
-  }, [dispatch]);
+  }, [dispatch, setOrderLoading]);
 };

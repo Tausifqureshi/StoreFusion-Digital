@@ -12,7 +12,7 @@ import ProductPagination from './ProductPagination';
 
 const ProductManagementTab = () => {
   const navigate = useNavigate();
-  
+
   // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
   const { mode } = useContext(ThemeContext);
   const { product, productLoading } = useContext(ProductContext);
@@ -37,23 +37,42 @@ const ProductManagementTab = () => {
   }, [product]);
 
   // 👉 Sales calculation
+  // const productSalesCountMap = useMemo(() => {
+  //   if (!order) return {};
+  //   return order.reduce((acc, orderItem) => {
+  //     if (!Array.isArray(orderItem.cartItems)) return acc;
+  //     orderItem.cartItems.forEach(cartItem => {
+  //       if (!cartItem.id) return;
+  //       const quantity = Number(cartItem.quantity) || 1;
+  //       acc[cartItem.id] = (acc[cartItem.id] || 0) + quantity;
+  //     });
+  //     return acc;
+  //   }, {});
+  // }, [order]);
+
   const productSalesCountMap = useMemo(() => {
-    if (!order) return {};
-    return order.reduce((acc, orderItem) => {
-      if (!Array.isArray(orderItem.cartItems)) return acc;
+    const productSalesCountMap = {}
+    if (!order) return
+    // Main orders par loop chalao
+    order.forEach(orderItem => {
+      // Safety check: Agar cartItems array nahi hai toh skip karo
+      if (!Array.isArray(orderItem.cartItems)) return
+      // 3. Har order ke andar ke cartItems par loop chalao
       orderItem.cartItems.forEach(cartItem => {
-        if (!cartItem.id) return;
-        const quantity = Number(cartItem.quantity) || 1;
-        acc[cartItem.id] = (acc[cartItem.id] || 0) + quantity;
-      });
-      return acc;
-    }, {});
-  }, [order]);
+        if (!cartItem.id) return
+        // Quantity ko number mein convert karo (default 1)
+        const quantity = Number(cartItem.quantity) || 1
+        // Product ID ko key banao aur quantity ko add karo
+        productSalesCountMap[cartItem.id] = (productSalesCountMap[cartItem.id] || 0) + quantity
+      })
+    })
+    return productSalesCountMap
+  }, [order])
 
   // 👉 filtering aur sorting combined
   const filteredAndSortedProducts = useMemo(() => {
     if (!product) return [];
-    
+
     const productsWithSalesData = product.map(p => ({
       ...p,
       sales: productSalesCountMap[p.id] || 0
