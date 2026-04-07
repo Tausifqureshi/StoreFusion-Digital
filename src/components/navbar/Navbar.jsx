@@ -81,80 +81,11 @@ const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout, 
   </div>
 ));
 
-function Navbar({ isDark }) {
-  const { mode, toggleMode } = useContext(ThemeContext);
-  const { product } = useContext(ProductContext);
-
-  const [open, setOpen] = useState(false);
-  const [showSubMenu, setShowSubMenu] = useState(false);
+// ✅ NAV SCROLL SHIELD: Isolates scroll listeners to prevent parent re-renders
+const NavScrollShield = React.memo(({ children }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
-  const [mega, setMega] = useState(false);
-  const [query, setQuery] = useState("");
-
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [isPending, startTransition] = useTransition();
-
-  const { loggedInUser: user } = useContext(UserContext);
-
-  const totalOrders = useSelector((state) =>
-    state.orders.orders.filter(order => order.status?.toLowerCase() !== "delivered").length
-  );
-
-  const handleNavigate = useCallback((url) => {
-    // 👉 For top-level navigation, standard navigate is faster (shows Suspense immediately)
-    navigate(url);
-  }, [navigate]);
-
-  const handleMobileClick = useCallback((url) => {
-    setOpen(false);
-    setTimeout(() => {
-      handleNavigate(url);
-    }, 300);
-  }, [handleNavigate]);
-
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem("user");
-    // Directly clear from storage, reload or use stable event
-    window.location.href = `/login?redirect=${location.pathname}`;
-  }, [location.pathname]);
-
-  // const handleScroll = useCallback(
-  //   throttle(() => {
-  //     const currentScrollY = window.scrollY;
-
-  //     if (window.innerWidth < 1024) {
-  //       setIsVisible(true);
-  //     } else {
-  //       if (currentScrollY > lastScrollY.current && currentScrollY > 50) {
-  //         setIsVisible(false);
-  //       } else {
-  //         setIsVisible(true);
-  //       }
-  //     }
-
-  //     if (currentScrollY > 50) {
-  //       setIsScrolled(true);
-  //     } else {
-  //       setIsScrolled(false);
-  //     }
-
-  //     lastScrollY.current = currentScrollY;
-  //   }, 200),
-  //   []
-  // );
-
-  // useEffect(() => {
-  //   window.addEventListener("scroll", handleScroll, { passive: true });
-  //   // return () => window.removeEventListener("scroll", handleScroll);
-  //   return () => {
-  //     window.removeEventListener("scroll", handleScroll);
-  //     handleScroll.cancel();
-  //   };
-
-  // }, [handleScroll]);
 
   useEffect(() => {
     const throttledScroll = throttle(() => {
@@ -174,9 +105,48 @@ function Navbar({ isDark }) {
 
     return () => {
       window.removeEventListener("scroll", throttledScroll);
-      throttledScroll.cancel(); // 💥 VERY IMPORTANT
+      throttledScroll.cancel();
     };
   }, []);
+
+  return children(isVisible, isScrolled);
+});
+NavScrollShield.displayName = 'NavScrollShield';
+
+function Navbar({ isDark }) {
+  const { mode, toggleMode } = useContext(ThemeContext);
+  const { product } = useContext(ProductContext);
+
+  const [open, setOpen] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState(false);
+  const [mega, setMega] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [isPending, startTransition] = useTransition();
+
+  const { loggedInUser: user } = useContext(UserContext);
+
+  const totalOrders = useSelector((state) =>
+    state.orders.orders.filter(order => order.status?.toLowerCase() !== "delivered").length
+  );
+
+  const handleNavigate = useCallback((url) => {
+    navigate(url);
+  }, [navigate]);
+
+  const handleMobileClick = useCallback((url) => {
+    setOpen(false);
+    setTimeout(() => {
+      handleNavigate(url);
+    }, 300);
+  }, [handleNavigate]);
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem("user");
+    window.location.href = `/login?redirect=${location.pathname}`;
+  }, [location.pathname]);
   const navItems = useMemo(() => [
     { name: "Home", URL: "/" },
     { name: "All Products", URL: "/allproducts" },
@@ -187,11 +157,13 @@ function Navbar({ isDark }) {
   const categories = useMemo(() => [...new Set(product.map((p) => p.category))], [product]);
 
   return (
-    <div className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
-      <TopAnnouncement isDark={isDark} />
+    <NavScrollShield>
+      {(isVisible, isScrolled) => (
+        <div className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
+          <TopAnnouncement isDark={isDark} />
 
-      <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
-        <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+          <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
+            <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button onClick={() => { setOpen(true); setShowSubMenu(false); }} className={`lg:hidden p-1 ${isDark ? "text-white" : "text-gray-800"}`}>
               <FiMenu size={26} />
@@ -363,13 +335,12 @@ function Navbar({ isDark }) {
           </div>
         </div>
       </Drawer>
-    </div>
+        </div>
+      )}
+    </NavScrollShield>
   );
 }
 
-// ✅ ABSOLUTE SHIELDING: Strict comparison prevents unnecessary re-renders
-// export default React.memo(Navbar, (prev, next) => {
-//   return prev.isDark === next.isDark;
-// });
-
-export default React.memo(Navbar);
+const MemoizedNavbar = React.memo(Navbar);
+MemoizedNavbar.displayName = 'Navbar';
+export default MemoizedNavbar;

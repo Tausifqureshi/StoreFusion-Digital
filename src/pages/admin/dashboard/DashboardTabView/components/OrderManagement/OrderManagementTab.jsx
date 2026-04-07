@@ -5,7 +5,7 @@ import LoaderSpinner from '../../../../../../components/loader/LoaderSpinner';
 
 import OrderSummaryCards from './OrderSummaryCards';
 import OrderFilters from './OrderFilters';
-import OrderList from './OrderList';
+import OrderTable from './OrderTable';
 import OrderPagination from './OrderPagination';
 
 const OrderManagementTab = () => {
@@ -113,7 +113,7 @@ const OrderManagementTab = () => {
           Orders ({filteredAndSortedOrders.length})
         </h2>
 
-        <OrderList
+        <OrderTable
           isDark={isDark}
           ordersOnCurrentPage={ordersOnCurrentPage}
           activeDropdown={activeDropdown}

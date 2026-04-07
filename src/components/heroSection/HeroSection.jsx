@@ -97,10 +97,8 @@ const ProgressBar = memo(({ active, total }) => {
   );
 });
 
-const HeroSection = memo(({ mode }) => {
+const SwiperContainer = memo(({ isDark }) => {
   const [active, setActive] = useState(0);
-  const isDark = mode === "dark";
-
   const modules = useMemo(() => [Autoplay, Pagination, EffectFade], []);
 
   const handleSlideChange = useCallback((s) => {
@@ -108,9 +106,8 @@ const HeroSection = memo(({ mode }) => {
   }, []);
 
   return (
-    <div className="px-3 md:px-6 pt-20 md:pt-28 pb-10">
+    <>
       <ProgressBar active={active} total={SLIDES_DATA.length} />
-
       <Swiper
         modules={modules}
         effect="fade"
@@ -126,8 +123,21 @@ const HeroSection = memo(({ mode }) => {
           </SwiperSlide>
         ))}
       </Swiper>
+    </>
+  );
+});
+
+SwiperContainer.displayName = 'SwiperContainer';
+
+const HeroSection = memo(({ mode }) => {
+  const isDark = mode === "dark";
+
+  return (
+    <div className="px-3 md:px-6 pt-20 md:pt-28 pb-10">
+      <SwiperContainer isDark={isDark} />
     </div>
   );
 });
 
+HeroSection.displayName = 'HeroSection';
 export default HeroSection;

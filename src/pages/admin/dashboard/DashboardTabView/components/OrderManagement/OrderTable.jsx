@@ -2,12 +2,12 @@ import React from 'react';
 import OrderItem from './OrderItem';
 import { FaShoppingCart } from 'react-icons/fa';
 
-const OrderList = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropdown }) => {
+const OrderTable = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropdown }) => {
   return (
     <div className="flex flex-col gap-4">
       {ordersOnCurrentPage.length > 0 ? (
         ordersOnCurrentPage.map((o, i) => {
-          // ✅ Unique key guaranteed — o.id, phir o.paymentId, phir index as last fallback
+          // ✅ Unique key guaranteed
           const uniqueKey = o.id || o.paymentId || `order-${i}`;
           return (
             <OrderItem
@@ -33,12 +33,8 @@ const OrderList = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropd
   );
 };
 
-// 👉 React.memo: Absolute performance lock for order list
-export default React.memo(OrderList, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.activeDropdown === next.activeDropdown &&
-    prev.ordersOnCurrentPage?.length === next.ordersOnCurrentPage?.length &&
-    prev.ordersOnCurrentPage?.[0]?.id === next.ordersOnCurrentPage?.[0]?.id
-  );
-});
+// 👉 React.memo: Absolute performance lock for order list Without Risky hacks
+const MemoizedOrderTable = React.memo(OrderTable);
+MemoizedOrderTable.displayName = 'OrderTable';
+
+export default MemoizedOrderTable;
