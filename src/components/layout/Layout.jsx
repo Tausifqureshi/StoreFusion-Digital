@@ -2,6 +2,7 @@ import React, { useMemo, useContext } from "react";
 import Navbar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
 import { ThemeContext } from "../../context api/AllContext";
+import ScrollToTopButoon from "../Scroll top/ScrollToTopButoon";
 
 function Layout({ children }) {
   const { mode } = useContext(ThemeContext);
@@ -18,6 +19,7 @@ function Layout({ children }) {
       <main className="content relative z-40 min-h-[60vh]">
         {children}
       </main>
+      <ScrollToTopButoon mode={mode} />
       {memoFooter}
     </div>
   );

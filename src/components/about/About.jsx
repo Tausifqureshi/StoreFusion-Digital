@@ -1,7 +1,6 @@
 import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from "react";
 ;
-import Layout from "../../components/layout/Layout";
 import {
   FaRocket, FaShieldAlt, FaUsers, FaChartLine,
   FaCheckCircle, FaChevronDown, FaStore, FaTruck, FaGlobe
@@ -40,7 +39,7 @@ function About() {
   ];
 
   return (
-    <Layout>
+    <>
       <section className={`min-h-screen transition-colors duration-300 pt-20 ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
 
         {/* 🚀 Modern Hero Section */}
@@ -157,10 +156,11 @@ function About() {
         </div>
 
       </section>
-    </Layout>
+    </>
   );
 }
 
 export default React.memo(About);
+
 
 

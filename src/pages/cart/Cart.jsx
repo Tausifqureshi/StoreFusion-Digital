@@ -1,12 +1,12 @@
 
 import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useMemo, useRef, useEffect } from "react";
-import Layout from "../../components/layout/Layout";
 import { useSelector } from "react-redux";
-import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
+import { useAppLoading } from "../../context api/LoadingState";
 import CartView from "./components/CartView";
 
-function Cart({ cartLoading }) {
+function Cart() {
+  const { cartLoading } = useAppLoading();
   const { mode } = useContext(ThemeContext);
   const cartItems = useSelector((state) => state.cart) || [];
   const isDark = mode === "dark";
@@ -26,7 +26,7 @@ function Cart({ cartLoading }) {
   }, [totalAmountValue, cartItems]);
 
   return (
-    <Layout>
+    <>
       <CartView
         isDark={isDark}
         cartItems={cartItems}
@@ -34,8 +34,7 @@ function Cart({ cartLoading }) {
         totalAmountRef={totalAmountRef}
         cartItemsRef={cartItemsRef}
       />
-      <ScrollToTopButoon mode={mode} />
-    </Layout>
+    </>
   );
 }
 

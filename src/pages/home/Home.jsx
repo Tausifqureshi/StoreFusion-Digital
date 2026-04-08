@@ -1,16 +1,14 @@
 import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext } from "react";
-import Layout from "../../components/layout/Layout";
 import HeroSection from "../../components/heroSection/HeroSection";
 import Filter from "../../components/filter/Filter";
 import ProductCard from "../../components/productCard/ProductCard";
 import Track from "../../components/track/Track";
 import Testimonial from "../../components/testimonial/Testimonial";
 import { Link } from "react-router-dom";
-import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
+function Home() {
+  const { mode } = useContext(ThemeContext);
 
-// ✅ HOME VIEW: Saare components ko yahan isolation mein lock kiya hai
-const HomeView = React.memo(({ mode }) => {
   return (
     <>
       <HeroSection mode={mode} />
@@ -36,20 +34,7 @@ const HomeView = React.memo(({ mode }) => {
       <Testimonial mode={mode} />
     </>
   );
-}, (prev, next) => prev.mode === next.mode);
-
-function Home() {
-  // 👉 Context sirf parent mein consume hoga
-  const { mode } = useContext(ThemeContext);
-
-  return (
-    <Layout>
-      <HomeView mode={mode} />
-
-      {/* 👉 Button ko bahar rakha hai noise stop karne ke liye */}
-      <ScrollToTopButoon mode={mode} />
-    </Layout>
-  );
 }
 
-export default Home;
+export default React.memo(Home);
+

@@ -1,7 +1,6 @@
 import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from "react";
 ;
-import Layout from "../../components/layout/Layout";
 import {
   FaCheckCircle,
   FaMapMarkerAlt,
@@ -62,7 +61,7 @@ function Contact() {
   };
 
   return (
-    <Layout>
+    <>
       <section className={`min-h-screen transition-all duration-500 pt-28 pb-20 ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
         
         {/* 🚀 HERO SECTION (Bold & Italic Mix) */}
@@ -234,7 +233,7 @@ function Contact() {
         </div>
 
       </section>
-    </Layout>
+    </>
   );
 }
 
@@ -242,7 +241,6 @@ export default React.memo(Contact);
 
 
 
-// import Layout from "../../components/layout/Layout";
 // import {
 //   FaCheckCircle,
 //   FaMapMarkerAlt,
@@ -280,7 +278,7 @@ export default React.memo(Contact);
 //   const mapEmbedUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.11609823277!2d72.7410978611104!3d19.08219783958221!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709885000000!5m2!1sen!2sin";
 
 //   return (
-//     <Layout>
+//     <>
 //       <section className={`min-h-screen transition-colors duration-500 pt-28 pb-20 ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
         
 //         {/* 🚀 HERO SECTION */}
@@ -401,7 +399,7 @@ export default React.memo(Contact);
 //         </div>
 
 //       </section>
-//     </Layout>
+//     </>
 //   );
 // }
 

@@ -1,15 +1,15 @@
 
 import { ThemeContext, UserContext } from '../../context api/AllContext';
 import React, { useContext, useEffect } from "react";
-import Layout from "../layout/Layout";
-import { toast } from "react-toastify";
-import ScrollToTopButoon from "../Scroll top/ScrollToTopButoon";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useAppLoading } from "../../context api/LoadingState";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 import { deleteUserOrdersFromFirestore } from "./orderFirestore";
 import OrderView from "./components/OrderView";
 
-function Order({ orderLoading }) {
+function Order() {
+  const { orderLoading } = useAppLoading();
   const { mode } = useContext(ThemeContext);
   const { loggedInUser: user } = useContext(UserContext);
   const { orders } = useSelector((state) => state.orders);
@@ -32,7 +32,7 @@ function Order({ orderLoading }) {
   }, []);
 
   return (
-    <Layout>
+    <>
       <OrderView
         isDark={isDark}
         orders={orders}
@@ -41,8 +41,7 @@ function Order({ orderLoading }) {
         handleDeleteAllOrders={handleDeleteAllOrders}
         navigate={navigate}
       />
-      <ScrollToTopButoon mode={mode} />
-    </Layout>
+    </>
   );
 }
 

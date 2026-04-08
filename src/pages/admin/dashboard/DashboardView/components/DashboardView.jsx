@@ -59,4 +59,6 @@ const DashboardView = React.memo(({ isDark, navigate, children }) => {
 });
 
 DashboardView.displayName = 'DashboardView';
-export default DashboardView;
+export default React.memo(DashboardView, (prev, next) => {
+  return prev.isDark === next.isDark && prev.children === next.children;
+});

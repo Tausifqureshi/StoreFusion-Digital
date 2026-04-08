@@ -1,22 +1,21 @@
-import React, { useEffect, useState, useContext, useCallback } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import throttle from "lodash/throttle";
 
 import { FiArrowUp } from "react-icons/fi";
 
 function ScrollToTopButoon({ mode }) {
-  // const { mode } = useContext(ThemeContext);;
   const [isVisible, setIsVisible] = useState(false);
   const isDark = mode === "dark";
 
-  // Show the button when the user scrolls down 300px
-  const toggleVisibility = useCallback(
-    throttle(() => {
+  // Wrap throttle function in useMemo to keep its reference stable and use aggressive 300ms throttle
+  const toggleVisibility = useMemo(
+    () => throttle(() => {
       if (window.scrollY > 300) {
         setIsVisible(true);
       } else {
         setIsVisible(false);
       }
-    }, 200),
+    }, 300),
     []
   );
 
@@ -32,6 +31,7 @@ function ScrollToTopButoon({ mode }) {
     window.addEventListener('scroll', toggleVisibility, { passive: true });
     return () => {
       window.removeEventListener('scroll', toggleVisibility);
+      toggleVisibility.cancel(); // Cleans up the lodash throttle properly
     };
   }, [toggleVisibility]);
 
@@ -61,5 +61,4 @@ function ScrollToTopButoon({ mode }) {
     </div>
   );
 }
-
-export default React.memo(ScrollToTopButoon);
+export default React.memo(ScrollToTopButoon, (prevProps, nextProps) => prevProps.mode === nextProps.mode);

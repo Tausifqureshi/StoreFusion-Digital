@@ -1,8 +1,7 @@
 import { FilterContext, ProductAdminContext, ProductContext, ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
 import Filter from "../../components/filter/Filter";
-import Layout from "../../components/layout/Layout";
-import ScrollToTopButoon from "../../components/Scroll top/ScrollToTopButoon";
+// ScrollToTopButton removed as it is globally handled
 import ProductSkeleton from "../../components/loader/ProductSkeleton";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
 
@@ -144,7 +143,7 @@ function Allproducts() {
   }, []);
 
   return (
-    <Layout>
+    <>
       {/* 👉 Filters separate taaki scroll button inhein na chede */}
       <Filter mode={mode} />
 
@@ -162,10 +161,9 @@ function Allproducts() {
         setExpandedId={setExpandedId}
         productsRef={productsRef}
       />
-
-      <ScrollToTopButoon mode={mode} />
-    </Layout>
+    </>
   );
 }
 
 export default Allproducts;
+

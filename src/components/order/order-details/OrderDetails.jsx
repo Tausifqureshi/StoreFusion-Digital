@@ -1,8 +1,8 @@
 import { ThemeContext, UserContext } from '../../../context api/AllContext';
 import React, { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useAppLoading } from "../../../context api/LoadingState";
 ;
-import Layout from "../../layout/Layout";
 import { useSelector, useDispatch } from "react-redux";
 import OrderStatusBadge from "../OrderStatusBadge";
 import LoaderSpinner from "../../loader/LoaderSpinner";
@@ -14,7 +14,8 @@ import { cancelOrderFromFirestore } from "../orderFirestore";
 import { cancelOrder } from "../../../redux/orderSlice";
 import Tracking from "./Tracking";
 
-function OrderDetails({ orderLoading }) { 
+function OrderDetails() { 
+  const { orderLoading } = useAppLoading();
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -64,7 +65,7 @@ function OrderDetails({ orderLoading }) {
 
 
   return (
-    <Layout>
+    <>
       <div className={`min-h-screen pt-28 pb-12 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
         <div className="max-w-6xl mx-auto px-4">
 
@@ -230,7 +231,7 @@ function OrderDetails({ orderLoading }) {
           )}
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 

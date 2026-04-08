@@ -18,28 +18,32 @@ import { BsMoonStars } from "react-icons/bs";
 import { RxCross2 } from "react-icons/rx";
 
 // ✅ TOP ANNOUNCEMENT: Purely static (Locked)
-const TopAnnouncement = React.memo(({ isDark }) => (
-  <div className={`text-center py-1.5 text-xs font-bold ${isDark ? "bg-[#131921] text-gray-400" : "bg-[#232f3e] text-white"}`}>
-    🚚 Free delivery on ₹300+ | Fast Checkout ⚡
-  </div>
-));
+const TopAnnouncement = React.memo(function TopAnnouncement({ isDark }) {
+  return (
+    <div className={`text-center py-1.5 text-xs font-bold ${isDark ? "bg-[#131921] text-gray-400" : "bg-[#232f3e] text-white"}`}>
+      🚚 Free delivery on ₹300+ | Fast Checkout ⚡
+    </div>
+  );
+});
 
 // ✅ NAV LINKS: Memoized to prevent re-renders when parent state (like scroll) changes
-const NavLinks = React.memo(({ isDark, navItems, user, totalOrders, handleNavigate }) => (
-  <div className={`hidden lg:flex items-center gap-8 font-bold text-[13px] uppercase tracking-wider ${isDark ? "text-gray-200" : "text-gray-600"}`}>
-    {navItems.map((item) => (
-      <button key={item.name} onClick={() => handleNavigate(item.URL)} className="hover:text-orange-500 transition-colors uppercase">{item.name}</button>
-    ))}
-    {user && (
-      <button onClick={() => handleNavigate('/order')} className="relative hover:text-orange-500 transition-colors uppercase">
-        Orders {totalOrders > 0 && <span className="absolute -top-3 -right-4 bg-green-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{totalOrders}</span>}
-      </button>
-    )}
-    {user?.role === "admin" && <button onClick={() => handleNavigate('/dashboard')} className="text-orange-500 border-l pl-4 border-gray-300 uppercase">Admin</button>}
-  </div>
-));
+const NavLinks = React.memo(function NavLinks({ isDark, navItems, user, totalOrders, handleNavigate }) {
+  return (
+    <div className={`hidden lg:flex items-center gap-8 font-bold text-[13px] uppercase tracking-wider ${isDark ? "text-gray-200" : "text-gray-600"}`}>
+      {navItems.map((item) => (
+        <button key={item.name} onClick={() => handleNavigate(item.URL)} className="hover:text-orange-500 transition-colors uppercase">{item.name}</button>
+      ))}
+      {user && (
+        <button onClick={() => handleNavigate('/order')} className="relative hover:text-orange-500 transition-colors uppercase">
+          Orders {totalOrders > 0 && <span className="absolute -top-3 -right-4 bg-green-500 text-white text-[10px] w-5 h-5 rounded-full flex items-center justify-center font-bold">{totalOrders}</span>}
+        </button>
+      )}
+      {user?.role === "admin" && <button onClick={() => handleNavigate('/dashboard')} className="text-orange-500 border-l pl-4 border-gray-300 uppercase">Admin</button>}
+    </div>
+  );
+});
 
-const CartCounter = React.memo(() => {
+const CartCounter = React.memo(function CartCounter() {
   const totalQuantity = useSelector((state) =>
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
   );
@@ -51,38 +55,40 @@ const CartCounter = React.memo(() => {
 });
 
 // ✅ ACTION ICONS: Specifically handles its own local hover/state logic
-const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout, handleNavigate }) => (
-  <div className="flex items-center gap-5">
-    <button onClick={toggleMode} className="transition-transform hover:scale-110">
-      {mode === "light" ? <BsMoonStars size={20} className="text-gray-600" /> : <FiSun size={20} className="text-yellow-400" />}
-    </button>
-    <button onClick={() => handleNavigate('/cart')} className="relative">
-      <FiShoppingCart size={24} className={isDark ? "text-white" : "text-gray-700"} />
-      <CartCounter />
-    </button>
-    {user ? (
-      <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
-        <div className="flex flex-col items-start leading-tight pr-1">
-          <span className={`text-[10px] font-bold ${isDark ? "text-gray-400" : "text-gray-500"}`}>
-            Hello, {user.fullName?.split(" ")[0] || "User"}
-          </span>
-          <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>
-            Account
-          </span>
+const ActionIcons = React.memo(function ActionIcons({ isDark, mode, toggleMode, user, handleLogout, handleNavigate }) {
+  return (
+    <div className="flex items-center gap-5">
+      <button onClick={toggleMode} className="transition-transform hover:scale-110">
+        {mode === "light" ? <BsMoonStars size={20} className="text-gray-600" /> : <FiSun size={20} className="text-yellow-400" />}
+      </button>
+      <button onClick={() => handleNavigate('/cart')} className="relative">
+        <FiShoppingCart size={24} className={isDark ? "text-white" : "text-gray-700"} />
+        <CartCounter />
+      </button>
+      {user ? (
+        <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
+          <div className="flex flex-col items-start leading-tight pr-1">
+            <span className={`text-[10px] font-bold ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+              Hello, {user.fullName?.split(" ")[0] || "User"}
+            </span>
+            <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>
+              Account
+            </span>
+          </div>
+          <img src={user.profilePic || "https://i.pravatar.cc/100"} className="w-8 h-8 rounded-full border-2 border-orange-500 shadow-sm" alt="p" />
+          <button onClick={handleLogout} className="text-[9px] font-black text-white bg-red-500 px-3 py-1.5 rounded-lg hover:bg-red-600 transition-colors shadow-sm ml-1 tracking-widest">
+            LOGOUT
+          </button>
         </div>
-        <img src={user.profilePic || "https://i.pravatar.cc/100"} className="w-8 h-8 rounded-full border-2 border-orange-500 shadow-sm" alt="p" />
-        <button onClick={handleLogout} className="text-[9px] font-black text-white bg-red-500 px-3 py-1.5 rounded-lg hover:bg-red-600 transition-colors shadow-sm ml-1 tracking-widest">
-          LOGOUT
-        </button>
-      </div>
-    ) : (
-      <button onClick={() => handleNavigate('/login')} className={`hidden sm:block px-5 py-1.5 rounded text-xs font-bold ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}`}>SIGN IN</button>
-    )}
-  </div>
-));
+      ) : (
+        <button onClick={() => handleNavigate('/login')} className={`hidden sm:block px-5 py-1.5 rounded text-xs font-bold ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}`}>SIGN IN</button>
+      )}
+    </div>
+  );
+});
 
 // ✅ NAV SCROLL SHIELD: Isolates scroll listeners to prevent parent re-renders
-const NavScrollShield = React.memo(({ children }) => {
+const NavScrollShield = React.memo(function NavScrollShield({ children }) {
   const [isVisible, setIsVisible] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const lastScrollY = useRef(0);
@@ -99,7 +105,7 @@ const NavScrollShield = React.memo(({ children }) => {
 
       setIsScrolled(currentScrollY > 50);
       lastScrollY.current = currentScrollY;
-    }, 200);
+    }, 300);
 
     window.addEventListener("scroll", throttledScroll, { passive: true });
 

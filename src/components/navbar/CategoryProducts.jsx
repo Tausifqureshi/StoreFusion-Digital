@@ -1,7 +1,6 @@
 import { ProductContext, ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useMemo, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import Layout from "../../components/layout/Layout";
 ;
 ;
 import {
@@ -31,7 +30,7 @@ function CategoryProducts() {
   }, [product, name]);
 
   return (
-    <Layout>
+    <>
       <div
         className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"}`}
       >
@@ -90,8 +89,9 @@ function CategoryProducts() {
 
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 
 export default CategoryProducts;
+

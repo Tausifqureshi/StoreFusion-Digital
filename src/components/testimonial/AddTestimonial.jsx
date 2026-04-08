@@ -98,7 +98,6 @@ const AddTestimonialView = React.memo(({ isDark, rating, setRating, testimonialF
   );
 });
 
-import Layout from "../../components/layout/Layout";
 
 function AddTestimonial({ productId = "" }) {
   const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial } = useContext(TestimonialContext);
@@ -138,7 +137,7 @@ function AddTestimonial({ productId = "" }) {
   };
 
   return (
-    <Layout>
+    <>
       <AddTestimonialView
         isDark={isDark}
         rating={rating}
@@ -148,7 +147,7 @@ function AddTestimonial({ productId = "" }) {
         handleSubmit={handleSubmit}
         loading={loading}
       />
-    </Layout>
+    </>
   );
 }
 
@@ -262,3 +261,4 @@ export default React.memo(AddTestimonial);
 // }
 
 // export default AddTestimonial;
+

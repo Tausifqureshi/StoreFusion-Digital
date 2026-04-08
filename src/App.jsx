@@ -5,7 +5,7 @@ import {
   RouterProvider,
   Navigate,
   useLocation,
-  Outlet,
+  Outlet
 } from "react-router-dom";
 
 import { ToastContainer } from "react-toastify";
@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Providers from "./context api/Providers";
 import Loader from "./components/loader/Loader";
-import { useFetchAppData } from "./useFetchAppData";
+import Layout from "./components/layout/Layout";
 
 // 🔥 LAZY LOADING
 const Home = lazy(() => import("./pages/home/Home"));
@@ -48,80 +48,166 @@ export function ProtectedRoutesForAdmin({ children }) {
   return <Navigate to="/login" state={{ PreviousPathname: location.pathname }} replace />;
 }
 
-// ✅ ROOT LAYOUT WRAPPER: Injects Providers into the Data Router context perfectly
-function RootLayout({ cartLoading, orderLoading }) {
+// ✅ ROOT LAYOUT WRAPPER (Handles Data Fetching & Context APIs statically)
+function RootLayout() {
   return (
     <Providers>
       <Suspense fallback={<Loader type="spinner" fullScreen />}>
-        <Outlet context={{ cartLoading, orderLoading }} />
+        <Outlet />
       </Suspense>
       <ToastContainer />
     </Providers>
   );
 }
 
-function App() {
-  const [cartLoading, setCartLoading] = useState(true);
-  const [orderLoading, setOrderLoading] = useState(false);
-  useFetchAppData(setCartLoading, setOrderLoading);
+// ✅ MAIN UI LAYOUT (Persistent Navbar and Footer without re-mounting)
+function MainLayout() {
+  return (
+    <Layout>
+      <Outlet />
+    </Layout>
+  );
+}
 
-  // ✅ DATA ROUTER DEFINITION
-  const router = createBrowserRouter([
+// ✅ STATIC DATA ROUTER OUTSIDE APP (Zero unnecessary recreations)
+// const router = createBrowserRouter([
+
+//   {
+//     path: "/",
+//     element: <RootLayout />,
+//     children: [
+//       {
+//         element: <MainLayout />, // Routes WITH Navbar and Footer
+//         children: [
+//           { path: "/", element: <Home /> },
+//           { path: "/about", element: <About /> },
+//           { path: "/contact", element: <Contact /> },
+//           { path: "/order", element: <Order /> },
+//           { path: "/order-details/:id?", element: <OrderDetails /> },
+//           { path: "/cart", element: <Cart /> },
+//           { path: "/allproducts", element: <Allproducts /> },
+//           { path: "/productInfo/:id", element: <ProductInfo /> },
+//           { path: "/category/:name", element: <CategoryProducts /> },
+//           {
+//             path: "/dashboard",
+//             element: (
+//               <ProtectedRoutesForAdmin>
+//                 <Suspense fallback={<Loader type="admin" />}>
+//                   <Dashboard />
+//                 </Suspense>
+//               </ProtectedRoutesForAdmin>
+//             ),
+//           },
+//           {
+//             path: "/addProduct",
+//             element: (
+//               <ProtectedRoutesForAdmin>
+//                 <AddProduct />
+//               </ProtectedRoutesForAdmin>
+//             ),
+//           },
+//           {
+//             path: "/updateProduct",
+//             element: (
+//               <ProtectedRoutesForAdmin>
+//                 <UpdateProduct />
+//               </ProtectedRoutesForAdmin>
+//             ),
+//           },
+//           {
+//             path: "/addtestimonial",
+//             element: (
+//               <ProtectedRoutesForAdmin>
+//                 <AddTestimonial />
+//               </ProtectedRoutesForAdmin>
+//             ),
+//           },
+//           { path: "/*", element: <NoPage /> },
+//         ],
+//       },
+//       {
+//         // Auth Routes WITHOUT Navbar and Footer
+//         children: [
+//           { path: "/signup", element: <Signup /> },
+//           { path: "/login", element: <Login /> },
+//         ],
+//       },
+//     ],
+//   },
+// ]);
+// ✅ STATIC DATA ROUTER OUTSIDE APP (Fixed Syntax)
+const router = createBrowserRouter(
+  [
     {
       path: "/",
-      element: <RootLayout cartLoading={cartLoading} orderLoading={orderLoading} />,
+      element: <RootLayout />,
       children: [
-        { path: "/", element: <Home /> },
-        { path: "/about", element: <About /> },
-        { path: "/contact", element: <Contact /> },
-        { path: "/order", element: <Order orderLoading={orderLoading} /> },
-        { path: "/order-details/:id?", element: <OrderDetails orderLoading={orderLoading} /> },
-        { path: "/cart", element: <Cart cartLoading={cartLoading} /> },
-        { path: "/allproducts", element: <Allproducts /> },
-        { path: "/signup", element: <Signup /> },
-        { path: "/login", element: <Login /> },
-        { path: "/productInfo/:id", element: <ProductInfo /> },
-        { path: "/category/:name", element: <CategoryProducts /> },
         {
-          path: "/dashboard",
-          element: (
-            <ProtectedRoutesForAdmin>
-              <Suspense fallback={<Loader type="admin" />}>
-                <Dashboard />
-              </Suspense>
-            </ProtectedRoutesForAdmin>
-          ),
+          element: <MainLayout />, // Routes WITH Navbar and Footer
+          children: [
+            { path: "/", element: <Home /> },
+            { path: "/about", element: <About /> },
+            { path: "/contact", element: <Contact /> },
+            { path: "/order", element: <Order /> },
+            { path: "/order-details/:id?", element: <OrderDetails /> },
+            { path: "/cart", element: <Cart /> },
+            { path: "/allproducts", element: <Allproducts /> },
+            { path: "/productInfo/:id", element: <ProductInfo /> },
+            { path: "/category/:name", element: <CategoryProducts /> },
+            {
+              path: "/dashboard",
+              element: (
+                <ProtectedRoutesForAdmin>
+                  <Suspense fallback={<Loader type="admin" />}>
+                    <Dashboard />
+                  </Suspense>
+                </ProtectedRoutesForAdmin>
+              ),
+            },
+            {
+              path: "/addProduct",
+              element: (
+                <ProtectedRoutesForAdmin>
+                  <AddProduct />
+                </ProtectedRoutesForAdmin>
+              ),
+            },
+            {
+              path: "/updateProduct",
+              element: (
+                <ProtectedRoutesForAdmin>
+                  <UpdateProduct />
+                </ProtectedRoutesForAdmin>
+              ),
+            },
+            {
+              path: "/addtestimonial",
+              element: (
+                <ProtectedRoutesForAdmin>
+                  <AddTestimonial />
+                </ProtectedRoutesForAdmin>
+              ),
+            },
+            { path: "/*", element: <NoPage /> },
+          ],
         },
         {
-          path: "/addProduct",
-          element: (
-            <ProtectedRoutesForAdmin>
-              <AddProduct />
-            </ProtectedRoutesForAdmin>
-          ),
+          // Auth Routes WITHOUT Navbar and Footer
+          children: [
+            { path: "/signup", element: <Signup /> },
+            { path: "/login", element: <Login /> },
+          ],
         },
-        {
-          path: "/updateProduct",
-          element: (
-            <ProtectedRoutesForAdmin>
-              <UpdateProduct />
-            </ProtectedRoutesForAdmin>
-          ),
-        },
-        {
-          path: "/addtestimonial",
-          element: (
-            <ProtectedRoutesForAdmin>
-              <AddTestimonial />
-            </ProtectedRoutesForAdmin>
-          ),
-        },
-        { path: "/*", element: <NoPage /> },
       ],
     },
-  ]);
+  ],
 
-  return <RouterProvider router={router} />;
+);
+function App() {
+  return <RouterProvider router={router}
+
+  />;
 }
 
 export default App;
+

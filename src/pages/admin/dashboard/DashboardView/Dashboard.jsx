@@ -1,8 +1,6 @@
 import { ThemeContext } from '../../../../context api/AllContext';
 import React, { useContext, useMemo } from 'react';
-import Layout from '../../../../components/layout/Layout';
 import DashboardTab from '../DashboardTabView/DashboardTab';
-import ScrollToTopButton from '../../../../components/Scroll top/ScrollToTopButoon';
 import { useNavigate } from 'react-router-dom';
 import DashboardView from './components/DashboardView';
 
@@ -15,18 +13,18 @@ function Dashboard() {
   const memoTabs = useMemo(() => <DashboardTab />, []);
 
   return (
-    <Layout>
+    <>
       <DashboardView
         isDark={isDark}
         navigate={navigate}
       >
         {memoTabs}
       </DashboardView>
-      <ScrollToTopButton />
-    </Layout>
+    </>
   );
 }
 
-const MemoizedDashboard = React.memo(Dashboard);
+const MemoizedDashboard = React.memo(Dashboard, () => true); // Top-level route component shouldn't receive props that change its render.
 MemoizedDashboard.displayName = 'Dashboard';
 export default MemoizedDashboard;
+

@@ -1,5 +1,4 @@
 import React, { useContext, useState, useEffect, useMemo, useCallback } from "react";
-import Layout from "../../components/layout/Layout";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../redux/cartSlice";
@@ -235,7 +234,7 @@ function ProductInfo() {
   const gallery = [currentProduct.imageUrl, currentProduct.imageUrl2 || currentProduct.imageUrl, currentProduct.imageUrl3 || currentProduct.imageUrl];
 
   return (
-    <Layout>
+    <>
       <div className={`min-h-screen py-6 lg:py-10 pt-24 lg:pt-32 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
         <div className="container mx-auto px-4 lg:px-20">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start justify-center">
@@ -338,7 +337,7 @@ function ProductInfo() {
           </div>
         </div>
       </div>
-    </Layout>
+    </>
   );
 }
 
