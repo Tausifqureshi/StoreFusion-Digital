@@ -3,7 +3,7 @@ import { ProductContext, TestimonialContext } from '../../context api/AllContext
 import { FaEdit, FaTrash, FaQuoteLeft, FaStar } from 'react-icons/fa'; // Ye ensure kar lena
 
 // ✅ INTERNAL VIEW: Locked to prevent reconciliation from parent re-renders
-const TestimonialView = React.memo(({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) => {
+const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) {
   if (finalReviews.length === 0) return null;
   return (
     <section className={`body-font mb-10 transition-all ${isDark ? "bg-[#131921]" : "bg-white"}`}>
@@ -57,14 +57,6 @@ const TestimonialView = React.memo(({ finalReviews, isDark, isAdmin, productId, 
       </div>
     </section>
   );
-}, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.isAdmin === next.isAdmin &&
-    prev.productId === next.productId &&
-    prev.finalReviews.length === next.finalReviews.length &&
-    prev.finalReviews === next.finalReviews
-  );
 });
 
 function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode }) {
@@ -92,11 +84,4 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
   />;
 }
 
-export default React.memo(Testimonial, (prev, next) => {
-  return (
-    prev.mode === next.mode &&
-    prev.productId === next.productId &&
-    prev.categoryName === next.categoryName &&
-    prev.isAdmin === next.isAdmin
-  );
-});
+export default React.memo(Testimonial);

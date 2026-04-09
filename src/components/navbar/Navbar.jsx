@@ -26,6 +26,7 @@ const TopAnnouncement = React.memo(function TopAnnouncement({ isDark }) {
   );
 });
 
+
 // ✅ NAV LINKS: Memoized to prevent re-renders when parent state (like scroll) changes
 const NavLinks = React.memo(function NavLinks({ isDark, navItems, user, totalOrders, handleNavigate }) {
   return (
@@ -43,6 +44,7 @@ const NavLinks = React.memo(function NavLinks({ isDark, navItems, user, totalOrd
   );
 });
 
+
 const CartCounter = React.memo(function CartCounter() {
   const totalQuantity = useSelector((state) =>
     state.cart.reduce((acc, item) => acc + item.quantity, 0),
@@ -53,6 +55,7 @@ const CartCounter = React.memo(function CartCounter() {
     </span>
   ) : null;
 });
+
 
 // ✅ ACTION ICONS: Specifically handles its own local hover/state logic
 const ActionIcons = React.memo(function ActionIcons({ isDark, mode, toggleMode, user, handleLogout, handleNavigate }) {
@@ -87,6 +90,7 @@ const ActionIcons = React.memo(function ActionIcons({ isDark, mode, toggleMode, 
   );
 });
 
+
 // ✅ NAV SCROLL SHIELD: Isolates scroll listeners to prevent parent re-renders
 const NavScrollShield = React.memo(function NavScrollShield({ children }) {
   const [isVisible, setIsVisible] = useState(true);
@@ -117,7 +121,7 @@ const NavScrollShield = React.memo(function NavScrollShield({ children }) {
 
   return children(isVisible, isScrolled);
 });
-NavScrollShield.displayName = 'NavScrollShield';
+
 
 function Navbar({ isDark }) {
   const { mode, toggleMode } = useContext(ThemeContext);
@@ -153,6 +157,7 @@ function Navbar({ isDark }) {
     localStorage.removeItem("user");
     window.location.href = `/login?redirect=${location.pathname}`;
   }, [location.pathname]);
+
   const navItems = useMemo(() => [
     { name: "Home", URL: "/" },
     { name: "All Products", URL: "/allproducts" },
@@ -170,183 +175,181 @@ function Navbar({ isDark }) {
 
           <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
             <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button onClick={() => { setOpen(true); setShowSubMenu(false); }} className={`lg:hidden p-1 ${isDark ? "text-white" : "text-gray-800"}`}>
-              <FiMenu size={26} />
-            </button>
-            <Link to="/" className={`text-2xl font-black italic tracking-tighter ${isDark ? "text-white" : "text-blue-600"}`}>
-              STORE<span className="text-orange-500">FUSION</span>
-            </Link>
-          </div>
+              <div className="flex items-center gap-4">
+                <button onClick={() => { setOpen(true); setShowSubMenu(false); }} className={`lg:hidden p-1 ${isDark ? "text-white" : "text-gray-800"}`}>
+                  <FiMenu size={26} />
+                </button>
+                <Link to="/" className={`text-2xl font-black italic tracking-tighter ${isDark ? "text-white" : "text-blue-600"}`}>
+                  STORE<span className="text-orange-500">FUSION</span>
+                </Link>
+              </div>
 
-          <div className="hidden lg:flex items-center gap-8">
-            <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer">
-              <span className={`flex items-center gap-1 font-bold text-[13px] uppercase tracking-wider hover:text-orange-500 transition-all ${isDark ? "text-gray-200" : "text-gray-600"}`}>
-                Categories <FiChevronRight className="rotate-90" />
-              </span>
-              {mega && (
-                <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
-                  <h3 className="px-3 mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Explore Categories</h3>
-                  <div className="grid grid-cols-3 gap-2 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
-                    {categories.map((cat) => (
-                      <div
-                        key={cat}
-                        onClick={() => {
-                          startTransition(() => {
-                            navigate(`/category/${cat}`);
-                          });
-                          setMega(false);
-                        }}
-                        className={`p-3 rounded-xl transition-all hover:text-orange-500 cursor-pointer text-[11px] font-bold uppercase truncate border border-transparent
+              <div className="hidden lg:flex items-center gap-8">
+                <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer">
+                  <span className={`flex items-center gap-1 font-bold text-[13px] uppercase tracking-wider hover:text-orange-500 transition-all ${isDark ? "text-gray-200" : "text-gray-600"}`}>
+                    Categories <FiChevronRight className="rotate-90" />
+                  </span>
+                  {mega && (
+                    <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
+                      <h3 className="px-3 mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Explore Categories</h3>
+                      <div className="grid grid-cols-3 gap-2 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
+                        {categories.map((cat) => (
+                          <div
+                            key={cat}
+                            onClick={() => {
+                              startTransition(() => {
+                                navigate(`/category/${cat}`);
+                              });
+                              setMega(false);
+                            }}
+                            className={`p-3 rounded-xl transition-all hover:text-orange-500 cursor-pointer text-[11px] font-bold uppercase truncate border border-transparent
                           ${isDark ? "hover:bg-gray-800" : "hover:bg-orange-50 hover:border-orange-100 text-gray-700"}`}
-                      >
-                        {cat}
+                          >
+                            {cat}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    </div>
+                  )}
+                </div>
+                <NavLinks isDark={isDark} navItems={navItems} user={user} totalOrders={totalOrders} handleNavigate={handleNavigate} />
+              </div>
+
+              <ActionIcons
+                isDark={isDark}
+                mode={mode}
+                toggleMode={toggleMode}
+                user={user}
+                handleLogout={handleLogout}
+                handleNavigate={handleNavigate}
+              />
+            </div>
+          </nav>
+
+          <Drawer
+            anchor="left"
+            open={open}
+            onClose={() => setOpen(false)}
+            className="lg:hidden z-50"
+            sx={{
+              '& .MuiDrawer-paper': {
+                width: '20rem',
+                backgroundColor: isDark ? "#232f3e" : "white",
+                color: isDark ? "white" : "inherit"
+              },
+              '& .MuiBackdrop-root': {
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                backdropFilter: 'blur(4px)',
+              }
+            }}
+          >
+            <div className={`relative w-full h-full flex flex-col overflow-hidden ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-900"}`}>
+              <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-[#131921]" : "bg-blue-600 text-white"}`}>
+                <div className="bg-white/20 p-2 rounded-full"><FiUser size={24} /></div>
+                <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.fullName?.split(" ")[0] : "Sign In"}</h2>
+                {/* <button onClick={() => setOpen(false) setShowSubMenu(false)}><RxCross2 size={24} /></button> */}
+                <button
+                  onClick={() => {
+                    setOpen(false);
+                    setShowSubMenu(false);
+                  }}
+                >
+                  <RxCross2 size={24} />
+                </button>
+              </div>
+
+
+              {/* Sub menu layer */}
+              <div className="relative flex-1 overflow-hidden">
+                <div className={`absolute inset-0 p-4 space-y-1 overflow-y-auto transition-transform duration-300 ${showSubMenu ? "-translate-x-full" : "translate-x-0"}`}>
+                  <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase">Top Categories</h3>
+                  <button onClick={() => setShowSubMenu(true)} className={`w-full flex items-center justify-between p-3 rounded-lg font-medium ${isDark ? "hover:bg-gray-800" : "hover:bg-gray-50"}`}>
+                    Shop by Category <FiChevronRight />
+                  </button>
+                  <div className="my-4 border-t border-gray-100 dark:border-gray-700" />
+                  <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">Programs & Features</h3>
+                  {navItems.map((item) => (
+                    <button key={item.name} onClick={() => handleMobileClick(item.URL)} className={`w-full text-left block p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
+                      {item.name}
+                    </button>
+                  ))}
+                  {user && (
+                    <button onClick={() => handleMobileClick("/order")} className={`w-full text-left flex items-center justify-between p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
+                      <span className="flex items-center gap-3"><FiPackage className="text-blue-500" /> My Orders</span>
+                      {totalOrders > 0 && <span className="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded-full">{totalOrders}</span>}
+                    </button>
+                  )}
+                  {user?.role === "admin" && (
+                    <button onClick={() => handleMobileClick("/dashboard")} className={`w-full text-left flex items-center gap-2 p-3 font-medium text-orange-500 rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-orange-50 active:bg-orange-100"}`}>
+                      <FiShield /> Admin Panel
+                    </button>
+                  )}
+                  <div className="mt-auto pt-10 pb-10">
+                    {user ? (
+                      <button onClick={handleLogout} className="w-full p-3 text-red-500 font-bold border-2 border-red-500 rounded-xl hover:bg-red-50 transition-all">Sign Out</button>
+                    ) : (
+                      <button onClick={() => handleMobileClick("/login")} className="block w-full p-3 bg-blue-600 text-white text-center rounded-xl font-bold shadow-lg">Sign In</button>
+                    )}
                   </div>
                 </div>
-              )}
-            </div>
-            <NavLinks isDark={isDark} navItems={navItems} user={user} totalOrders={totalOrders} handleNavigate={handleNavigate} />
-          </div>
-
-          <ActionIcons
-            isDark={isDark}
-            mode={mode}
-            toggleMode={toggleMode}
-            user={user}
-            handleLogout={handleLogout}
-            handleNavigate={handleNavigate}
-          />
-        </div>
-      </nav>
-
-      <Drawer
-        anchor="left"
-        open={open}
-        onClose={() => setOpen(false)}
-        className="lg:hidden z-50"
-        sx={{
-          '& .MuiDrawer-paper': {
-            width: '20rem',
-            backgroundColor: isDark ? "#232f3e" : "white",
-            color: isDark ? "white" : "inherit"
-          },
-          '& .MuiBackdrop-root': {
-            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-            backdropFilter: 'blur(4px)',
-          }
-        }}
-      >
-        <div className={`relative w-full h-full flex flex-col overflow-hidden ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-900"}`}>
-          <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-[#131921]" : "bg-blue-600 text-white"}`}>
-            <div className="bg-white/20 p-2 rounded-full"><FiUser size={24} /></div>
-            <h2 className="text-lg font-bold italic flex-1">Hello, {user ? user.fullName?.split(" ")[0] : "Sign In"}</h2>
-            {/* <button onClick={() => setOpen(false) setShowSubMenu(false)}><RxCross2 size={24} /></button> */}
-            <button
-              onClick={() => {
-                setOpen(false);
-                setShowSubMenu(false);
-              }}
-            >
-              <RxCross2 size={24} />
-            </button>
-          </div>
-
-
-          {/* Sub menu layer */}
-          <div className="relative flex-1 overflow-hidden">
-            <div className={`absolute inset-0 p-4 space-y-1 overflow-y-auto transition-transform duration-300 ${showSubMenu ? "-translate-x-full" : "translate-x-0"}`}>
-              <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase">Top Categories</h3>
-              <button onClick={() => setShowSubMenu(true)} className={`w-full flex items-center justify-between p-3 rounded-lg font-medium ${isDark ? "hover:bg-gray-800" : "hover:bg-gray-50"}`}>
-                Shop by Category <FiChevronRight />
-              </button>
-              <div className="my-4 border-t border-gray-100 dark:border-gray-700" />
-              <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">Programs & Features</h3>
-              {navItems.map((item) => (
-                <button key={item.name} onClick={() => handleMobileClick(item.URL)} className={`w-full text-left block p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
-                  {item.name}
-                </button>
-              ))}
-              {user && (
-                <button onClick={() => handleMobileClick("/order")} className={`w-full text-left flex items-center justify-between p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
-                  <span className="flex items-center gap-3"><FiPackage className="text-blue-500" /> My Orders</span>
-                  {totalOrders > 0 && <span className="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded-full">{totalOrders}</span>}
-                </button>
-              )}
-              {user?.role === "admin" && (
-                <button onClick={() => handleMobileClick("/dashboard")} className={`w-full text-left flex items-center gap-2 p-3 font-medium text-orange-500 rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-orange-50 active:bg-orange-100"}`}>
-                  <FiShield /> Admin Panel
-                </button>
-              )}
-              <div className="mt-auto pt-10 pb-10">
-                {user ? (
-                  <button onClick={handleLogout} className="w-full p-3 text-red-500 font-bold border-2 border-red-500 rounded-xl hover:bg-red-50 transition-all">Sign Out</button>
-                ) : (
-                  <button onClick={() => handleMobileClick("/login")} className="block w-full p-3 bg-blue-600 text-white text-center rounded-xl font-bold shadow-lg">Sign In</button>
-                )}
-              </div>
-            </div>
-            <div className={`absolute inset-0 z-50 flex flex-col transition-transform duration-300 bg-inherit ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
-              <div className={`p-4 border-b sticky top-0 z-20 ${isDark ? "bg-[#232f3e] border-gray-800" : "bg-blue-600 text-white"}`}>
-                <div className="flex items-center gap-3 mb-4">
-                  <button onClick={() => { setShowSubMenu(false); setQuery("") }} className="p-1"><FiArrowLeft size={22} /></button>
-                  <h2 className="text-sm font-black uppercase tracking-tighter italic">Shop by <span className="text-orange-400">Category</span></h2>
-                </div>
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="Search for categories"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    className={`w-full p-3 pl-10 rounded-xl text-xs font-bold outline-none transition-all
+                <div className={`absolute inset-0 z-50 flex flex-col transition-transform duration-300 bg-inherit ${showSubMenu ? "translate-x-0" : "translate-x-full"}`}>
+                  <div className={`p-4 border-b sticky top-0 z-20 ${isDark ? "bg-[#232f3e] border-gray-800" : "bg-blue-600 text-white"}`}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <button onClick={() => { setShowSubMenu(false); setQuery("") }} className="p-1"><FiArrowLeft size={22} /></button>
+                      <h2 className="text-sm font-black uppercase tracking-tighter italic">Shop by <span className="text-orange-400">Category</span></h2>
+                    </div>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="Search for categories"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        className={`w-full p-3 pl-10 rounded-xl text-xs font-bold outline-none transition-all
                       ${isDark ? "bg-[#131921] text-white focus:ring-1 ring-orange-500" : "bg-white text-gray-800 shadow-inner"}`}
-                  />
-                  <FiMenu className="absolute left-3 top-3.5 opacity-30" size={16} />
-                </div>
-              </div>
-              <div className="flex-1 overflow-y-auto p-4 pb-24 bg-inherit custom-scrollbar">
-                <div className="grid grid-cols-2 gap-3">
-                  {categories
-                    .filter(cat => cat.toLowerCase().includes(query.toLowerCase()))
-                    .map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => {
-                          setOpen(false);
-                          startTransition(() => {
-                            navigate(`/category/${cat}`);
-                          });
-                        }}
-                        className={`flex flex-col items-center justify-center p-5 rounded-2xl border transition-all active:scale-95
-                          ${isDark ? "bg-[#1e293b] border-gray-800 text-gray-200" : "bg-gray-50 border-gray-200 text-gray-700 shadow-sm"}`}
-                      >
-                        <div className={`w-10 h-10 flex items-center justify-center rounded-full mb-2 font-black text-lg
-                          ${isDark ? "bg-orange-500/20 text-orange-500" : "bg-blue-100 text-blue-600"}`}>
-                          {cat[0].toUpperCase()}
-                        </div>
-                        <span className="text-[10px] font-black uppercase tracking-widest text-center truncate w-full">
-                          {cat}
-                        </span>
-                      </button>
-                    ))}
-                </div>
-                {categories.filter(cat => cat.toLowerCase().includes(query.toLowerCase())).length === 0 && (
-                  <div className="text-center py-20 opacity-30 font-black uppercase text-xs tracking-[0.3em]">
-                    No Category Found
+                      />
+                      <FiMenu className="absolute left-3 top-3.5 opacity-30" size={16} />
+                    </div>
                   </div>
-                )}
+                  <div className="flex-1 overflow-y-auto p-4 pb-24 bg-inherit custom-scrollbar">
+                    <div className="grid grid-cols-2 gap-3">
+                      {categories
+                        .filter(cat => cat.toLowerCase().includes(query.toLowerCase()))
+                        .map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => {
+                              setOpen(false);
+                              startTransition(() => {
+                                navigate(`/category/${cat}`);
+                              });
+                            }}
+                            className={`flex flex-col items-center justify-center p-5 rounded-2xl border transition-all active:scale-95
+                          ${isDark ? "bg-[#1e293b] border-gray-800 text-gray-200" : "bg-gray-50 border-gray-200 text-gray-700 shadow-sm"}`}
+                          >
+                            <div className={`w-10 h-10 flex items-center justify-center rounded-full mb-2 font-black text-lg
+                          ${isDark ? "bg-orange-500/20 text-orange-500" : "bg-blue-100 text-blue-600"}`}>
+                              {cat[0].toUpperCase()}
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-center truncate w-full">
+                              {cat}
+                            </span>
+                          </button>
+                        ))}
+                    </div>
+                    {categories.filter(cat => cat.toLowerCase().includes(query.toLowerCase())).length === 0 && (
+                      <div className="text-center py-20 opacity-30 font-black uppercase text-xs tracking-[0.3em]">
+                        No Category Found
+                      </div>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      </Drawer>
+          </Drawer>
         </div>
       )}
     </NavScrollShield>
   );
 }
 
-const MemoizedNavbar = React.memo(Navbar);
-MemoizedNavbar.displayName = 'Navbar';
-export default MemoizedNavbar;
+export default React.memo(Navbar);

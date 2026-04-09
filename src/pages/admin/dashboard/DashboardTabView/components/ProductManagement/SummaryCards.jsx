@@ -64,10 +64,4 @@ const SummaryCards = ({ isDark, product, filteredAndSortedProducts }) => {
 };
 
 // 👉 React.memo: Ensure product summary cards only re-render when base data changes
-export default React.memo(SummaryCards, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.product?.length === next.product?.length &&
-    prev.filteredAndSortedProducts?.length === next.filteredAndSortedProducts?.length
-  );
-});
+export default React.memo(SummaryCards);

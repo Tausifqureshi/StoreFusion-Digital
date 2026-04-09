@@ -61,11 +61,4 @@ const OrderFilters = ({ isDark, searchQuery, setSearchQuery, filterStatus, setFi
 };
 
 // 👉 React.memo: Ensure filter bar doesn't re-render unless its own logic/state changes
-export default React.memo(OrderFilters, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.searchQuery === next.searchQuery &&
-    prev.filterStatus === next.filterStatus &&
-    prev.sortOrder === next.sortOrder
-  );
-});
+export default React.memo(OrderFilters);

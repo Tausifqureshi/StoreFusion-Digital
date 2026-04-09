@@ -24,7 +24,5 @@ function Dashboard() {
   );
 }
 
-const MemoizedDashboard = React.memo(Dashboard, () => true); // Top-level route component shouldn't receive props that change its render.
-MemoizedDashboard.displayName = 'Dashboard';
-export default MemoizedDashboard;
+export default React.memo(Dashboard);
 

@@ -6,11 +6,11 @@ import ProductSkeleton from "../../components/loader/ProductSkeleton";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 // ✅ ALL PRODUCTS VIEW: Saare products, filters aur pagination yahan locked hain
-const AllProductsView = React.memo(({
+const AllProductsView = React.memo(function AllProductsView({
   mode, product, productLoading,
   searchkey, filterType, filterPrice, sortPrice,
   currentPage, setCurrentPage, expandedId, setExpandedId, productsRef
-}) => {
+}) {
   const productsPerPage = 8;
 
   // 👉 Filtered products calculation (locked inside)
@@ -106,19 +106,6 @@ const AllProductsView = React.memo(({
         )}
       </div>
     </section>
-  );
-}, (prev, next) => {
-  // 🚀 Strict performance comparison
-  return (
-    prev.mode === next.mode &&
-    prev.product.length === next.product.length &&
-    prev.productLoading === next.productLoading &&
-    prev.searchkey === next.searchkey &&
-    prev.filterPrice === next.filterPrice &&
-    prev.sortPrice === next.sortPrice &&
-    prev.currentPage === next.currentPage &&
-    prev.expandedId === next.expandedId &&
-    prev.filterType.join(',') === next.filterType.join(',')
   );
 });
 

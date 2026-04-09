@@ -110,14 +110,4 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode }) {
 }
 
 // ✅ ABSOLUTE SHIELDING: Strict comparison ensures NO re-renders unless the specific item or theme changes
-export default React.memo(SingleProductCard, (prev, next) => {
-  return (
-    prev.mode === next.mode &&
-    prev.isExpanded === next.isExpanded &&
-    prev.item.id === next.item.id &&
-    prev.item.title === next.item.title &&
-    prev.item.price === next.item.price &&
-    prev.item.quantity === next.item.quantity &&
-    prev.item.stock === next.item.stock
-  );
-});
+export default React.memo(SingleProductCard);

@@ -4,7 +4,7 @@ import { useDashboardData } from '../hooks/useDashboardData';
 import ProductCategories from './ProductCategories';
 import RecentOrders from './RecentOrders';
 
-const TablesContainer = React.memo(({ isDark, selectedRange, selectedDate }) => {
+const TablesContainer = React.memo(function TablesContainer({ isDark, selectedRange, selectedDate }) {
   const { product: allProducts } = useContext(ProductContext);
   const { order: allOrders } = useContext(OrderContext);
   const { user: allUsers } = useContext(UserContext);
@@ -22,12 +22,6 @@ const TablesContainer = React.memo(({ isDark, selectedRange, selectedDate }) => 
         <RecentOrders isDark={isDark} orders={order} />
       </div>
     </div>
-  );
-}, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.selectedRange === next.selectedRange &&
-    prev.selectedDate?.getTime() === next.selectedDate?.getTime()
   );
 });
 

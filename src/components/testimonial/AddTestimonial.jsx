@@ -10,7 +10,7 @@ const Star = ({ filled, onClick }) => (
   />
 );
 
-const AddTestimonialView = React.memo(({ isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading }) => {
+const AddTestimonialView = React.memo(function AddTestimonialView({ isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading }) {
   return (
     <div id="testimonial-form" className={`w-full max-w-lg mx-auto p-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-200 shadow-sm"}`}>
       {/* Header */}
@@ -84,17 +84,6 @@ const AddTestimonialView = React.memo(({ isDark, rating, setRating, testimonialF
         </button>
       </div>
     </div>
-  );
-}, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.rating === next.rating &&
-    prev.loading === next.loading &&
-    prev.testimonialForm.name === next.testimonialForm.name &&
-    prev.testimonialForm.text === next.testimonialForm.text &&
-    prev.testimonialForm.img === next.testimonialForm.img &&
-    prev.testimonialForm.role === next.testimonialForm.role &&
-    prev.testimonialForm.id === next.testimonialForm.id
   );
 });
 

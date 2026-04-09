@@ -84,13 +84,4 @@ const ProductFilters = ({
 };
 
 // 👉 React.memo: Absolute performance lock for product filters
-export default React.memo(ProductFilters, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.searchQuery === next.searchQuery &&
-    prev.filterCategory === next.filterCategory &&
-    prev.filterStatus === next.filterStatus &&
-    prev.sortOrder === next.sortOrder &&
-    prev.availableProductCategories?.length === next.availableProductCategories?.length
-  );
-});
+export default React.memo(ProductFilters);

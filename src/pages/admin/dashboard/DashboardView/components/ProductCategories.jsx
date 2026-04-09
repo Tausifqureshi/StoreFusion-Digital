@@ -138,11 +138,4 @@ const ProductCategories = ({ isDark, products }) => {
   );
 };
 
-// ✅ React.memo: Performance lock taaki products list stable rahe
-export default React.memo(ProductCategories, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.products?.length === next.products?.length &&
-    prev.products?.[0]?.id === next.products?.[0]?.id
-  );
-});
+export default React.memo(ProductCategories);

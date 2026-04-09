@@ -5,9 +5,9 @@ import UserOrderItem from "../UserOrderItem";
 import OrderStatusUpdater from "../status/OrderStatusUpdater";
 
 // ✅ ORDER VIEW: State colocated to prevent Layout re-renders during tab or update state changes
-const OrderView = React.memo(({
+const OrderView = React.memo(function OrderView({
   isDark, orders, orderLoading, user, handleDeleteAllOrders, navigate
-}) => {
+}) {
   // 👉 Local colocated state
   const [activeTab, setActiveTab] = useState('All Orders');
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
@@ -99,5 +99,4 @@ const OrderView = React.memo(({
   );
 });
 
-OrderView.displayName = 'OrderView';
-export default OrderView;
+export default React.memo(OrderView);

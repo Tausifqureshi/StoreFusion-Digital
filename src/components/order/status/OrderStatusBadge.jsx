@@ -5,7 +5,7 @@ import { getStatusConfig } from '../../../design-system/statusConfig';
  * OrderStatusBadge Component
  * Premium, memoized badge for displaying order status with consistent branding and subtle animations.
  */
-const OrderStatusBadge = React.memo(({ status, isDark }) => {
+const OrderStatusBadge = React.memo(function OrderStatusBadge({ status, isDark }) {
   const config = getStatusConfig(status);
 
   // Setup animations for active statuses
@@ -30,7 +30,7 @@ const OrderStatusBadge = React.memo(({ status, isDark }) => {
   );
 });
 
-OrderStatusBadge.displayName = 'OrderStatusBadge';
+
 
 export default OrderStatusBadge;
 

@@ -5,7 +5,7 @@ import MonthlyProductSales from './MonthlyProductSales';
 import RevenueTrend from './RevenueTrend';
 import OrdersTrend from './OrdersTrend';
 
-const ChartsContainer = React.memo(({ isDark, selectedRange, selectedDate }) => {
+const ChartsContainer = React.memo(function ChartsContainer({ isDark, selectedRange, selectedDate }) {
   const { product: allProducts } = useContext(ProductContext);
   const { order: allOrders } = useContext(OrderContext);
   const { user: allUsers } = useContext(UserContext);
@@ -24,12 +24,6 @@ const ChartsContainer = React.memo(({ isDark, selectedRange, selectedDate }) => 
         <OrdersTrend isDark={isDark} data={monthlyOrders} />
       </div>
     </>
-  );
-}, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.selectedRange === next.selectedRange &&
-    prev.selectedDate?.getTime() === next.selectedDate?.getTime()
   );
 });
 

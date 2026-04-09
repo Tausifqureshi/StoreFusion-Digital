@@ -22,14 +22,4 @@ const StatCard = ({ title, value, icon, bgClass, shadowClass, trend, trendValue,
   );
 };
 
-// 👉 React.memo: Absolute lock for scroll stability
-export default React.memo(StatCard, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.value === next.value &&
-    prev.title === next.title &&
-    prev.trendValue === next.trendValue &&
-    prev.bgClass === next.bgClass &&
-    prev.shadowClass === next.shadowClass
-  );
-});
+export default React.memo(StatCard);

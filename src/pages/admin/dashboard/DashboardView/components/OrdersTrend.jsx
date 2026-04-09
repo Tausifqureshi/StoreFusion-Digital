@@ -79,11 +79,4 @@ const OrdersTrend = ({ isDark, labels, data }) => {
   );
 };
 
-// ✅ React.memo: Performance lock (Content check se scroll re-renders stop ho jayenge)
-export default React.memo(OrdersTrend, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.data?.join(',') === next.data?.join(',') &&
-    prev.labels?.join(',') === next.labels?.join(',')
-  );
-});
+export default React.memo(OrdersTrend);

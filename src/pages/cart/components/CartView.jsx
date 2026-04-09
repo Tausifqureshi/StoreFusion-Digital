@@ -16,9 +16,9 @@ import CartItemCard from "../CartItemCard";
 import Razorpay from "../../razorpay/Razorpay";
 
 // ✅ CART VIEW: Explicitly named and colocated state
-const CartView = React.memo(({
+const CartView = React.memo(function CartView({
   isDark, cartItems, cartLoading, totalAmountRef, cartItemsRef
-}) => {
+}) {
   const dispatch = useDispatch();
   const [clearingCart, setClearingCart] = useState(false);
   const [cartUpdating, setCartUpdating] = useState(null);
@@ -30,13 +30,13 @@ const CartView = React.memo(({
   const shippingCharge = 20;
   const totalWithShipping = totalAmount > 0 ? (totalAmount + shippingCharge).toFixed(2) : 0;
 
-  // 👉 Isolating state modifiers inside CartView to prevent Layout re-renders
+  // 👉 Relying on cartItemsRef to maintain absolute referential stability for child components
   const deleteCart = useCallback((itemId) => {
-    const updatedCart = cartItems.filter((i) => i.id !== itemId);
+    const updatedCart = cartItemsRef.current.filter((i) => i.id !== itemId);
     dispatch(deleteFromCart(itemId));
     saveCartDebounce(updatedCart);
     toast.info("Removed from bag", { position: "bottom-right", autoClose: 1000 });
-  }, [cartItems, dispatch]);
+  }, [dispatch, cartItemsRef]);
 
   const incrementCartQuantity = useCallback((itemId) => {
     setCartUpdating({ id: itemId, type: "increment" });
@@ -166,5 +166,4 @@ const CartView = React.memo(({
   );
 });
 
-CartView.displayName = 'CartView';
-export default CartView;
+export default React.memo(CartView);

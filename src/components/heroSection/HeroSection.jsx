@@ -127,7 +127,7 @@ const SwiperContainer = memo(({ isDark }) => {
   );
 });
 
-SwiperContainer.displayName = 'SwiperContainer';
+
 
 const HeroSection = memo(({ mode }) => {
   const isDark = mode === "dark";
@@ -139,5 +139,5 @@ const HeroSection = memo(({ mode }) => {
   );
 });
 
-HeroSection.displayName = 'HeroSection';
+
 export default HeroSection;

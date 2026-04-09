@@ -11,7 +11,7 @@ import { saveOrderToFirestore } from "../../components/order/orderFirestore"
 
 // ✅ ABSOLUTE ISOLATION: Razorpay component remains 100% IDLE during cart updates.
 // It pulls the latest data via stable Ref snapshots only when the trigger is fired.
-const Razorpay = React.memo(({ cartItemsRef, totalAmountRef }) => {
+const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) {
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',

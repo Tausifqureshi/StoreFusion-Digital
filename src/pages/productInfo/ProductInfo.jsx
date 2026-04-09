@@ -21,7 +21,7 @@ import AddTestimonial from "../../components/testimonial/AddTestimonial";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 // ✅ GALLERY SECTION: Memoized to prevent re-renders when other sections change
-const GallerySection = React.memo(({ mainImage, setMainImage, gallery, discount, isDark }) => {
+const GallerySection = React.memo(function GallerySection({ mainImage, setMainImage, gallery, discount, isDark }) {
   const [zoomPos, setZoomPos] = useState({ x: 0, y: 0, show: false });
 
   const handleMouseMove = useCallback((e) => {
@@ -77,17 +77,10 @@ const GallerySection = React.memo(({ mainImage, setMainImage, gallery, discount,
       </div>
     </div>
   );
-}, (prev, next) => {
-  return (
-    prev.mainImage === next.mainImage &&
-    prev.discount === next.discount &&
-    prev.isDark === next.isDark &&
-    prev.gallery.length === next.gallery.length
-  );
 });
 
 // ✅ PRODUCT ACCORDION: Self-contained state prevents whole-page re-renders on toggle
-const ProductAccordion = React.memo(({ accordionData, isDark }) => {
+const ProductAccordion = React.memo(function ProductAccordion({ accordionData, isDark }) {
   const [openIndex, setOpenIndex] = useState(0);
   const handleToggle = useCallback((index) => {
     setOpenIndex(prev => prev === index ? null : index);
@@ -114,35 +107,37 @@ const ProductAccordion = React.memo(({ accordionData, isDark }) => {
 });
 
 // ✅ SIMILAR PRODUCTS: Memoized to avoid re-renders on every scroll/image change
-const SimilarProductsSection = React.memo(({ similarProducts, expandedId, setExpandedId, mode, handleViewAll, isDark }) => (
-  <section className="mt-12 lg:mt-24 border-t border-gray-100 dark:border-gray-800 pt-8 px-2 md:px-0">
-    <div className="flex items-center justify-between mb-6 lg:mb-10">
-      <div className="flex flex-col">
-        <h2 className={`text-lg md:text-2xl lg:text-3xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
-          Similar <span className="text-blue-600">Products</span>
-        </h2>
-        <div className="w-10 md:w-16 h-1 bg-orange-500 mt-1"></div>
+const SimilarProductsSection = React.memo(function SimilarProductsSection({ similarProducts, expandedId, setExpandedId, mode, handleViewAll, isDark }) {
+  return (
+    <section className="mt-12 lg:mt-24 border-t border-gray-100 dark:border-gray-800 pt-8 px-2 md:px-0">
+      <div className="flex items-center justify-between mb-6 lg:mb-10">
+        <div className="flex flex-col">
+          <h2 className={`text-lg md:text-2xl lg:text-3xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
+            Similar <span className="text-blue-600">Products</span>
+          </h2>
+          <div className="w-10 md:w-16 h-1 bg-orange-500 mt-1"></div>
+        </div>
+        <button
+          onClick={handleViewAll}
+          className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-blue-600 border-b-2 border-blue-600 pb-0.5 hover:text-orange-500 hover:border-orange-500 transition-all"
+        >
+          View All
+        </button>
       </div>
-      <button
-        onClick={handleViewAll}
-        className="text-[9px] md:text-[11px] font-black uppercase tracking-widest text-blue-600 border-b-2 border-blue-600 pb-0.5 hover:text-orange-500 hover:border-orange-500 transition-all"
-      >
-        View All
-      </button>
-    </div>
-    <div className="flex flex-wrap -m-4">
-      {similarProducts.map((item, index) => (
-        <SingleProductCard
-          key={item.id || index}
-          item={item}
-          isExpanded={expandedId === (item.id || item.title)}
-          setExpandedId={setExpandedId}
-          mode={mode}
-        />
-      ))}
-    </div>
-  </section>
-));
+      <div className="flex flex-wrap -m-4">
+        {similarProducts.map((item, index) => (
+          <SingleProductCard
+            key={item.id || index}
+            item={item}
+            isExpanded={expandedId === (item.id || item.title)}
+            setExpandedId={setExpandedId}
+            mode={mode}
+          />
+        ))}
+      </div>
+    </section>
+  );
+});
 
 function ProductInfo() {
   const { product } = useContext(ProductContext);

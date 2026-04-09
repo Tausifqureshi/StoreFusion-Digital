@@ -76,11 +76,4 @@ const RecentOrders = ({ isDark, orders }) => {
   );
 };
 
-// ✅ React.memo: Orders change hone par hi re-render hoga, scroll pe nahi
-export default React.memo(RecentOrders, (prev, next) => {
-  if (prev.isDark !== next.isDark) return false;
-  if (prev.orders?.length !== next.orders?.length) return false;
-  if (prev.orders?.[0]?.id !== next.orders?.[0]?.id) return false;
-  return true;
-});
-;
+export default React.memo(RecentOrders);

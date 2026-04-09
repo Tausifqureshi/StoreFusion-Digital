@@ -110,6 +110,10 @@ const ProductManagementTab = () => {
     setCurrentPage(1);
   }, [searchQuery, filterCategory, filterStatus, sortOrder]);
 
+  // 👉 Stable handlers for ProductGrid memoization
+  const memoizedEditHandle = React.useCallback((item) => edithandle(item), [edithandle]);
+  const memoizedDeleteProduct = React.useCallback((item) => deleteProduct(item), [deleteProduct]);
+
   if (productLoading) return <LoaderSpinner isDark={isDark} label="Loading products..." />;
 
   return (
@@ -154,8 +158,8 @@ const ProductManagementTab = () => {
       <ProductGrid
         productsOnCurrentPage={productsOnCurrentPage}
         isDark={isDark}
-        edithandle={edithandle}
-        deleteProduct={deleteProduct}
+        edithandle={memoizedEditHandle}
+        deleteProduct={memoizedDeleteProduct}
       />
 
       <ProductPagination

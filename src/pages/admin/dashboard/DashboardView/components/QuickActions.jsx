@@ -31,5 +31,4 @@ const QuickActions = ({ isDark, navigate }) => {
   );
 };
 
-// ✅ STRICT MEMOIZATION: QuickActions should never re-render just because the user clicked a tab or updated stats. It only re-renders on Dark Mode toggle.
-export default React.memo(QuickActions, (prev, next) => prev.isDark === next.isDark && prev.navigate === next.navigate);
+export default React.memo(QuickActions);

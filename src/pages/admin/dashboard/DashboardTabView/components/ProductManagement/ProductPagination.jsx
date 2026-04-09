@@ -76,11 +76,4 @@ const ProductPagination = ({ isDark, currentPage, totalPages, setCurrentPage, it
 };
 
 // 👉 React.memo: Absolute performance lock for product pagination
-export default React.memo(ProductPagination, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.currentPage === next.currentPage &&
-    prev.totalPages === next.totalPages &&
-    prev.totalItems === next.totalItems
-  );
-});
+export default React.memo(ProductPagination);

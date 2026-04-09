@@ -57,10 +57,4 @@ const MonthlyProductSales = ({ isDark, data }) => {
   );
 };
 
-// ✅ React.memo: Performance lock (Content check se scroll re-renders bilkul stop ho jayenge)
-export default React.memo(MonthlyProductSales, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.data?.join(',') === next.data?.join(',')
-  );
-});
+export default React.memo(MonthlyProductSales);

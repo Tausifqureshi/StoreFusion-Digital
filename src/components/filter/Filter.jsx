@@ -6,8 +6,9 @@ import { FiRefreshCw, FiSliders, FiX } from "react-icons/fi";
 import { Drawer, IconButton } from "@mui/material";
 
 // ✅ DESKTOP VIEW: Memoized for main layout stability
-const DesktopFilter = React.memo(({ isDark, searchkey, filterType, filterPrice, uniqueCategories, toggleCategory, setFilterPrice, resetFilters, isRotating }) => (
-  <div className={`hidden lg:flex p-4 rounded-2xl border transition-all duration-300 ${isDark ? "bg-[#232f3e] border-gray-700 shadow-2xl" : "bg-white border-gray-100 shadow-xl shadow-blue-100/40"}`}>
+const DesktopFilter = React.memo(function DesktopFilter({ isDark, searchkey, filterType, filterPrice, uniqueCategories, toggleCategory, setFilterPrice, resetFilters, isRotating }) {
+  return (
+    <div className={`hidden lg:flex p-4 rounded-2xl border transition-all duration-300 ${isDark ? "bg-[#232f3e] border-gray-700 shadow-2xl" : "bg-white border-gray-100 shadow-xl shadow-blue-100/40"}`}>
     <div className="flex items-center justify-between w-full gap-4">
       <Search placeholder="Search products..." isMobile={false} />
       <div className="flex items-center gap-3">
@@ -43,11 +44,13 @@ const DesktopFilter = React.memo(({ isDark, searchkey, filterType, filterPrice, 
       </div>
     </div>
   </div>
-));
+  );
+});
 
 // ✅ MOBILE VIEW: Handles chips and triggers
-const MobileFilter = React.memo(({ isDark, filterType, sortPrice, toggleCategory, setSortPrice, setDrawerOpen }) => (
-  <div className="lg:hidden flex flex-col gap-3">
+const MobileFilter = React.memo(function MobileFilter({ isDark, filterType, sortPrice, toggleCategory, setSortPrice, setDrawerOpen }) {
+  return (
+    <div className="lg:hidden flex flex-col gap-3">
     <div className="relative">
       <Search placeholder="Search StoreFusion..." isMobile={true} />
     </div>
@@ -72,7 +75,8 @@ const MobileFilter = React.memo(({ isDark, filterType, sortPrice, toggleCategory
       )}
     </div>
   </div>
-));
+  );
+});
 
 function Filter({ mode }) {
   const { product } = useContext(ProductContext);

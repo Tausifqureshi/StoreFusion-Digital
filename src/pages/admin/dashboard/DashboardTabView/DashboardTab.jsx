@@ -176,7 +176,7 @@ const TABS_DATA = [
 ];
 
 // ✅ ISOLATED TAB MENU
-const TabMenu = React.memo(({ activeTab, handleTabChange, isDark }) => {
+const TabMenu = React.memo(function TabMenu({ activeTab, handleTabChange, isDark }) {
   return (
     <div className="mb-8 w-full flex justify-start">
       <div className={`inline-flex items-center gap-2 p-1.5 rounded-2xl border transition-all ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg' : 'bg-white border-gray-200'}`}>
@@ -200,6 +200,8 @@ const TabMenu = React.memo(({ activeTab, handleTabChange, isDark }) => {
     </div>
   );
 });
+
+
 
 function DashboardTab() {
   const { mode } = useContext(ThemeContext);
@@ -241,4 +243,3 @@ function DashboardTab() {
 }
 
 export default React.memo(DashboardTab);
-

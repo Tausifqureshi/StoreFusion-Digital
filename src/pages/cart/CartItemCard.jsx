@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FiTrash2, FiMinus, FiPlus, FiChevronDown } from 'react-icons/fi';
 
-const CartItemCard = ({ 
-  item, 
-  index, 
-  isDark, 
-  deleteCart, 
-  decrementCartQuantity, 
-  incrementCartQuantity, 
-  cartUpdatingType 
+const CartItemCard = ({
+  item,
+  index,
+  isDark,
+  deleteCart,
+  decrementCartQuantity,
+  incrementCartQuantity,
+  cartUpdatingType
 }) => {
   const [isDescOpen, setIsDescOpen] = useState(false);
   const [isDescExpanded, setIsDescExpanded] = useState(false);
@@ -75,11 +75,4 @@ const CartItemCard = ({
   );
 };
 
-export default React.memo(CartItemCard, (prevProps, nextProps) => {
-  if (prevProps.isDark !== nextProps.isDark) return false;
-  if (prevProps.cartUpdatingType !== nextProps.cartUpdatingType) return false;
-  if (prevProps.item.id !== nextProps.item.id) return false;
-  if (prevProps.item.quantity !== nextProps.item.quantity) return false;
-  if (prevProps.item.price !== nextProps.item.price) return false;
-  return true;
-});
+export default React.memo(CartItemCard);

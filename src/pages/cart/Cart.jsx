@@ -38,6 +38,4 @@ function Cart() {
   );
 }
 
-const MemoizedCart = React.memo(Cart);
-MemoizedCart.displayName = 'Cart';
-export default MemoizedCart;
+export default React.memo(Cart);

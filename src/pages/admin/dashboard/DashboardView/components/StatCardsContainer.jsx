@@ -4,7 +4,7 @@ import { useDashboardData } from '../hooks/useDashboardData';
 import StatCard from './StatCard';
 import { FaBox, FaShoppingCart, FaUsers, FaTags } from 'react-icons/fa';
 
-const StatCardsContainer = React.memo(({ isDark, selectedRange, selectedDate }) => {
+const StatCardsContainer = React.memo(function StatCardsContainer({ isDark, selectedRange, selectedDate }) {
   const { product: allProducts } = useContext(ProductContext);
   const { order: allOrders } = useContext(OrderContext);
   const { user: allUsers } = useContext(UserContext);
@@ -69,12 +69,6 @@ const StatCardsContainer = React.memo(({ isDark, selectedRange, selectedDate }) 
         <StatCard key={index} {...item} isDark={isDark} />
       ))}
     </div>
-  );
-}, (prev, next) => {
-  return (
-    prev.isDark === next.isDark &&
-    prev.selectedRange === next.selectedRange &&
-    prev.selectedDate?.getTime() === next.selectedDate?.getTime()
   );
 });
 

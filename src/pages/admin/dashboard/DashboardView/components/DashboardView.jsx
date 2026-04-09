@@ -6,7 +6,7 @@ import TablesContainer from './TablesContainer';
 import QuickActions from './QuickActions';
 
 // ✅ DASHBOARD VIEW: Explicit independent UI shell with its own localized filter states
-const DashboardView = React.memo(({ isDark, navigate, children }) => {
+const DashboardView = React.memo(function DashboardView({ isDark, navigate, children }) {
   // 👉 UI-wide filters colocated for the Dashboard Overview only
   const [selectedRange, setSelectedRange] = useState("All Time");
   const [calendarDate, setCalendarDate] = useState(new Date("2026-03-20"));
@@ -58,7 +58,4 @@ const DashboardView = React.memo(({ isDark, navigate, children }) => {
   );
 });
 
-DashboardView.displayName = 'DashboardView';
-export default React.memo(DashboardView, (prev, next) => {
-  return prev.isDark === next.isDark && prev.children === next.children;
-});
+export default React.memo(DashboardView);
