@@ -42,7 +42,7 @@ const GallerySection = React.memo(function GallerySection({ mainImage, setMainIm
             onClick={() => setMainImage(img)}
             className={`w-14 h-14 md:w-20 md:h-20 border-2 rounded-xl cursor-pointer overflow-hidden p-1.5 transition-all bg-white flex-shrink-0 ${mainImage === img ? "border-blue-600 shadow-md scale-105" : "border-gray-100 opacity-60 hover:opacity-100"}`}
           >
-            <img src={img} alt="thumb" className="w-full h-full object-contain" />
+            <img src={img} alt="thumb" loading="lazy" decoding="async" className="w-full h-full object-contain" />
           </div>
         ))}
       </div>
@@ -60,6 +60,8 @@ const GallerySection = React.memo(function GallerySection({ mainImage, setMainIm
         <img
           src={mainImage}
           alt="product"
+          loading="eager"
+          fetchpriority="high"
           className="w-full h-[220px] sm:h-[300px] md:h-[350px] lg:h-[380px] object-contain transition-transform duration-500"
         />
         {zoomPos.show && (

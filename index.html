@@ -5,25 +5,32 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title> Store Fusion </title>
+  <title>Store Fusion</title>
+  <meta name="description" content="StoreFusion - Premium E-Commerce Store. Shop the latest electronics, fashion and essentials." />
 
-  <!-- Google Fonts link for Poppins -->
-  <!-- <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"> -->
-  <!-- Google Font Optimization -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- ✅ DNS Prefetch + Preconnect for faster handshakes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
+  <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com" />
+  <link rel="dns-prefetch" href="https://firebasestorage.googleapis.com" />
+  <link rel="dns-prefetch" href="https://checkout.razorpay.com" />
+  <link rel="dns-prefetch" href="https://lzd.co" />
+  <link rel="dns-prefetch" href="https://images.unsplash.com" />
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <!-- ✅ Google Fonts — merged into ONE request, display=swap prevents render-block -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.jsx"></script>
-  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
+  <!-- ✅ async: does NOT block rendering of the page -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js" async></script>
 </body>
 
 </html>

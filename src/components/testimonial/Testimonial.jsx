@@ -26,6 +26,8 @@ const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDa
                     <div className="w-[50px] h-[50px] rounded-full p-[2px] bg-gradient-to-tr from-blue-600 to-indigo-500 shadow-md">
                       <img
                         alt="customer"
+                        loading="lazy"
+                        decoding="async"
                         className={`w-full h-full object-cover rounded-full border-2 ${isDark ? 'border-[#1e293b]' : 'border-white'}`}
                         src={getAvatar(item)}
                       />

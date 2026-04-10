@@ -12,6 +12,8 @@ function ImageWithLoader({ src, alt }) {
       <img
         src={src}
         alt={alt}
+        loading="lazy"
+        decoding="async"
         onLoad={() => setLoading(false)}
         className={`rounded-2xl w-full h-64 p-2 object-contain transition-opacity duration-500 ${
           loading ? "opacity-0" : "opacity-100"

@@ -78,7 +78,7 @@ const ActionIcons = React.memo(function ActionIcons({ isDark, mode, toggleMode, 
               Account
             </span>
           </div>
-          <img src={user.profilePic || "https://i.pravatar.cc/100"} className="w-8 h-8 rounded-full border-2 border-orange-500 shadow-sm" alt="p" />
+          <img src={user.profilePic || "https://i.pravatar.cc/100"} loading="lazy" decoding="async" className="w-8 h-8 rounded-full border-2 border-orange-500 shadow-sm" alt="p" />
           <button onClick={handleLogout} className="text-[9px] font-black text-white bg-red-500 px-3 py-1.5 rounded-lg hover:bg-red-600 transition-colors shadow-sm ml-1 tracking-widest">
             LOGOUT
           </button>

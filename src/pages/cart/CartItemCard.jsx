@@ -23,7 +23,7 @@ const CartItemCard = ({
       <div className="flex flex-row gap-4 md:gap-6">
         {/* Image */}
         <div className={`w-24 h-24 md:w-32 md:h-32 rounded-2xl p-2 flex shrink-0 items-center justify-center overflow-hidden border ${isDark ? "bg-white border-gray-700" : "bg-white border-gray-50 shadow-inner"}`}>
-          <img src={item.imageUrl} alt="product" className="max-h-full object-contain" />
+          <img src={item.imageUrl} alt="product" loading="lazy" decoding="async" className="max-h-full object-contain" />
         </div>
 
         {/* Info */}

@@ -37,7 +37,7 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId }) => {
         <div className="flex gap-3">
           {order.cartItems?.slice(0, 2).map((item, i) => (
             <div key={i} className={`w-14 h-14 md:w-16 md:h-16 rounded-2xl p-2 flex items-center justify-center border transition-all ${isDark ? "bg-[#131921] border-gray-700" : "bg-white border-gray-200 shadow-sm"}`}>
-              <img src={item.imageUrl} alt="product" className="max-h-full object-contain" />
+              <img src={item.imageUrl} alt="product" loading="lazy" decoding="async" className="max-h-full object-contain" />
             </div>
           ))}
           {order.cartItems?.length > 2 && (

@@ -11,31 +11,35 @@ import { Autoplay, Pagination, EffectFade } from "swiper/modules";
 // ✅ Static data outside (Performance unlock)
 const SLIDES_DATA = [
   {
-    img: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=2001&auto=format&fit=crop",
+    // ✅ First slide: smaller URL for faster LCP
+    img: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=75&w=1200&auto=format&fit=crop",
     title: "PREMIUM TECH",
     highlight: "DEALS",
     desc: "Upgrade your workstation with next-gen electronics. Professional gear for the modern setup.",
     price: "UP TO 60% OFF",
     btnText: "Explore Tech",
     link: "/allproducts",
+    priority: true, // ✅ LCP priority hint
   },
   {
-    img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=75&w=1200&auto=format&fit=crop",
     title: "EXCLUSIVE",
     highlight: "COLLECTION",
     desc: "Handpicked premium products across all categories. Only at StoreFusion.",
     price: "FREE SHIPPING ON FIRST ORDER",
     btnText: "Start Shopping",
     link: "/allproducts",
+    priority: false,
   },
   {
-    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=2070&auto=format&fit=crop",
+    img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=75&w=1200&auto=format&fit=crop",
     title: "TRENDING",
     highlight: "ESSENTIALS",
     desc: "Redefine your style with our latest lifestyle products. Minimalist design for everyday use.",
     price: "FLAT ₹500 CASHBACK",
     btnText: "View Essentials",
     link: "/allproducts",
+    priority: false,
   },
 ];
 
@@ -45,7 +49,11 @@ const SlideContent = memo(({ item, isDark }) => (
     <img
       src={item.img}
       alt={item.title}
-      loading="eager"
+      width={1200}
+      height={650}
+      loading={item.priority ? "eager" : "lazy"}
+      fetchpriority={item.priority ? "high" : "auto"}
+      decoding={item.priority ? "sync" : "async"}
       className="w-full h-full object-cover transition-transform duration-[6000ms] scale-105"
     />
     <div className={`absolute inset-0 ${isDark ? "bg-gradient-to-r from-black/80 via-black/40 to-transparent" : "bg-black/40"}`} />

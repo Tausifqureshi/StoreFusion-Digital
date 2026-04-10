@@ -33,7 +33,7 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
         </span>
 
         {item.imageUrl && (
-          <img src={item.imageUrl} alt={item.title} className="max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform hover:scale-110 duration-500" />
+          <img src={item.imageUrl} alt={item.title} loading="lazy" decoding="async" className="max-h-full object-contain mix-blend-multiply dark:mix-blend-normal transition-transform hover:scale-110 duration-500" />
         )}
       </div>
 
