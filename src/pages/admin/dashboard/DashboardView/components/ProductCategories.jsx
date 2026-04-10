@@ -15,7 +15,7 @@ const ProductCategories = ({ isDark, products }) => {
         backgroundColors: [isDark ? '#334155' : '#e2e8f0']
       };
     }
-
+     
     const totalProducts = products.length;
     const baseColors = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
