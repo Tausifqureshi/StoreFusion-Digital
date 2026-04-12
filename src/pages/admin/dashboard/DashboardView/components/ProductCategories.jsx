@@ -6,9 +6,9 @@ import { FaCube, FaChartPie } from 'react-icons/fa';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ProductCategories = ({ isDark, products }) => {
-  const chartData = useMemo(() => {
+  const chartData = useMemo(() => {   
     // 👉 1. Products nahi hain → khali/default chart dikhao
-    if (!products || products.length === 0) {
+    if (!products || products.length === 0) {    
       return {
         labels: ['No Data'],
         percentages: [100],
