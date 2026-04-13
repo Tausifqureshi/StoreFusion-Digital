@@ -45,7 +45,7 @@ const ProductCategories = ({ isDark, products }) => {
       .sort((a, b) => b[1] - a[1]); // b[1] - a[1] = descending order (bada pehle)
 
     // 👉 4. slice: pehli 5 categories nikalo → baaki sab "Others" me jayenge
-    const top5Categories = sortedCategories.slice(0, 5);   // index 0–4 tak (Top 5)
+    const top5Categories = sortedCategories.slice(0, 5);   // index 0–4 tak (Top 5)   
     const othersCategories = sortedCategories.slice(5);    // index 5 ke baad wale → Others
 
     // 👉 5. reduce: baaki sab categories ka count jod ke ek 'Others' ka total banao
