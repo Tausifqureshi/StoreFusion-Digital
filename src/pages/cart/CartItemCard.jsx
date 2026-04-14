@@ -75,4 +75,5 @@ const CartItemCard = ({
   );
 };
 
+CartItemCard.displayName = 'CartItemCard';
 export default React.memo(CartItemCard);

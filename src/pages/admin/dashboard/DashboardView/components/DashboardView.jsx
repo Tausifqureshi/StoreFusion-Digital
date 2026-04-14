@@ -4,6 +4,9 @@ import StatCardsContainer from './StatCardsContainer';
 import ChartsContainer from './ChartsContainer';
 import TablesContainer from './TablesContainer';
 import QuickActions from './QuickActions';
+import { ProductContext, OrderContext, UserContext } from '../../../../../context api/AllContext';
+import { useDashboardData } from '../hooks/useDashboardData';
+import { useContext } from 'react';
 
 // ✅ DASHBOARD VIEW: Explicit independent UI shell with its own localized filter states
 const DashboardView = React.memo(function DashboardView({ isDark, navigate, children }) {
@@ -13,6 +16,16 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
 
   const handleRangeChange = useCallback((r) => setSelectedRange(r), []);
   const handleDateChange = useCallback((d) => setCalendarDate(d), []);
+
+  const { product: allProducts } = useContext(ProductContext);
+  const { order: allOrders } = useContext(OrderContext);
+  const { user: allUsers } = useContext(UserContext);
+
+  const {
+    order, product, user,
+    monthlyOrders, monthlyRevenue,
+    totalRevenue, newDiscounts
+  } = useDashboardData(allProducts, allOrders, allUsers, selectedRange, calendarDate);
 
   return (
     <div className={`min-h-screen pt-28 pb-16 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"} font-sans`}>
@@ -28,20 +41,23 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
 
         <StatCardsContainer
           isDark={isDark}
-          selectedRange={selectedRange}
-          selectedDate={calendarDate}
+          product={product}
+          order={order}
+          user={user}
+          totalRevenue={totalRevenue}
+          newDiscounts={newDiscounts}
         />
 
         <ChartsContainer
           isDark={isDark}
-          selectedRange={selectedRange}
-          selectedDate={calendarDate}
+          monthlyOrders={monthlyOrders}
+          monthlyRevenue={monthlyRevenue}
         />
 
         <TablesContainer
           isDark={isDark}
-          selectedRange={selectedRange}
-          selectedDate={calendarDate}
+          product={product}
+          order={order}
         />
 
         <div className="w-full relative z-10">

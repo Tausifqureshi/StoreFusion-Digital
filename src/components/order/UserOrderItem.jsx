@@ -3,7 +3,7 @@ import OrderStatusBadge from './OrderStatusBadge';
 import { FiPackage } from 'react-icons/fi';
 import { FaArrowRight, FaEdit } from 'react-icons/fa';
 
-const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId }) => {
+function UserOrderItem({ order, isDark, navigate, setUpdatingOrderId }) {
   console.log("UserOrderItem Rendered:", order.id);
   return (
     <div
@@ -71,6 +71,7 @@ const UserOrderItem = ({ order, isDark, navigate, setUpdatingOrderId }) => {
   );
 };
 
+UserOrderItem.displayName = 'UserOrderItem';
 export default React.memo(UserOrderItem);
 
 // export default React.memo(UserOrderItem, (prevProps, nextProps) => {

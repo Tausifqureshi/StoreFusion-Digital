@@ -9,7 +9,7 @@ ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, T
 const DEFAULT_LABELS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const DEFAULT_DATA = [120, 95, 145, 130, 105, 95, 85, 155, 168, 140, 160, 175];
 
-const OrdersTrend = ({ isDark, labels, data }) => {
+function OrdersTrend({ isDark, labels, data }) {
   const chartData = useMemo(() => ({
     labels: labels || DEFAULT_LABELS,
     datasets: [
@@ -79,4 +79,5 @@ const OrdersTrend = ({ isDark, labels, data }) => {
   );
 };
 
+OrdersTrend.displayName = 'OrdersTrend';
 export default React.memo(OrdersTrend);

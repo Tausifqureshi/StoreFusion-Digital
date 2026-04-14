@@ -1,18 +1,8 @@
-import React, { useContext, useMemo } from 'react';
-import { ProductContext, OrderContext, UserContext } from '../../../../../context api/AllContext';
-import { useDashboardData } from '../hooks/useDashboardData';
+import React, { useMemo } from 'react';
 import StatCard from './StatCard';
 import { FaBox, FaShoppingCart, FaUsers, FaTags } from 'react-icons/fa';
 
-const StatCardsContainer = React.memo(function StatCardsContainer({ isDark, selectedRange, selectedDate }) {
-  const { product: allProducts } = useContext(ProductContext);
-  const { order: allOrders } = useContext(OrderContext);
-  const { user: allUsers } = useContext(UserContext);
-
-  const {
-    order, product, user,
-    totalRevenue, newDiscounts
-  } = useDashboardData(allProducts, allOrders, allUsers);
+const StatCardsContainer = React.memo(function StatCardsContainer({ isDark, product, order, user, totalRevenue, newDiscounts }) {
 
   // 👉 stats calculation is now isolated here
   const stats = useMemo(() => [

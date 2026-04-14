@@ -2,7 +2,7 @@ import React from 'react';
 import { FaShoppingCart, FaEye, FaBoxOpen } from 'react-icons/fa';
 import { useMemo } from 'react';
 
-const RecentOrders = ({ isDark, orders }) => {
+function RecentOrders({ isDark, orders }) {
   const displayOrders = useMemo(() => {
     if (!orders || orders.length === 0) return [];
     return [...orders]
@@ -76,4 +76,5 @@ const RecentOrders = ({ isDark, orders }) => {
   );
 };
 
+RecentOrders.displayName = 'RecentOrders';
 export default React.memo(RecentOrders);

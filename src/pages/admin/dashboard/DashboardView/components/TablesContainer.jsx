@@ -1,17 +1,8 @@
-import React, { useContext } from 'react';
-import { ProductContext, OrderContext, UserContext } from '../../../../../context api/AllContext';
-import { useDashboardData } from '../hooks/useDashboardData';
+import React from 'react';
 import ProductCategories from './ProductCategories';
 import RecentOrders from './RecentOrders';
 
-const TablesContainer = React.memo(function TablesContainer({ isDark, selectedRange, selectedDate }) {
-  const { product: allProducts } = useContext(ProductContext);
-  const { order: allOrders } = useContext(OrderContext);
-  const { user: allUsers } = useContext(UserContext);
-
-  const {
-    order, product
-  } = useDashboardData(allProducts, allOrders, allUsers);
+const TablesContainer = React.memo(function TablesContainer({ isDark, product, order }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 relative z-10">

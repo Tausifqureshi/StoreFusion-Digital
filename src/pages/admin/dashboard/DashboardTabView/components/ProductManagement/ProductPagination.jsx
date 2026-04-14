@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProductPagination = ({ isDark, currentPage, totalPages, setCurrentPage, itemsPerPage, totalItems }) => {
+function ProductPagination({ isDark, currentPage, totalPages, setCurrentPage, itemsPerPage, totalItems }) {
   if (totalPages <= 1) return null; // total page 1 hai to pagination show nhi hogi
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
@@ -76,4 +76,5 @@ const ProductPagination = ({ isDark, currentPage, totalPages, setCurrentPage, it
 };
 
 // 👉 React.memo: Absolute performance lock for product pagination
+ProductPagination.displayName = 'ProductPagination';
 export default React.memo(ProductPagination);

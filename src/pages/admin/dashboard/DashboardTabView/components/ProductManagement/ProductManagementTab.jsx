@@ -10,7 +10,7 @@ import ProductFilters from './ProductFilters';
 import ProductGrid from './ProductGrid';
 import ProductPagination from './ProductPagination';
 
-const ProductManagementTab = () => {
+function ProductManagementTab() {
   const navigate = useNavigate();
 
   // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
@@ -174,4 +174,5 @@ const ProductManagementTab = () => {
   );
 };
 
+ProductManagementTab.displayName = 'ProductManagementTab';
 export default React.memo(ProductManagementTab);

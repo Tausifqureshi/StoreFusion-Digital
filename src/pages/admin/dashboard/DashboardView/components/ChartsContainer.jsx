@@ -1,18 +1,9 @@
-import React, { useContext, useMemo } from 'react';
-import { ProductContext, OrderContext, UserContext } from '../../../../../context api/AllContext';
-import { useDashboardData } from '../hooks/useDashboardData';
+import React, { useMemo } from 'react';
 import MonthlyProductSales from './MonthlyProductSales';
 import RevenueTrend from './RevenueTrend';
 import OrdersTrend from './OrdersTrend';
 
-const ChartsContainer = React.memo(function ChartsContainer({ isDark, selectedRange, selectedDate }) {
-  const { product: allProducts } = useContext(ProductContext);
-  const { order: allOrders } = useContext(OrderContext);
-  const { user: allUsers } = useContext(UserContext);
-
-  const {
-    monthlyOrders, monthlyRevenue
-  } = useDashboardData(allProducts, allOrders, allUsers);
+const ChartsContainer = React.memo(function ChartsContainer({ isDark, monthlyOrders, monthlyRevenue }) {
 
   return (
     <>

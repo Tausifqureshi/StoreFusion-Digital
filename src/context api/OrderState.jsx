@@ -25,13 +25,18 @@ export function OrderState({ children }) {
           ...docSnap.data(),
         }));
 
-        // 🧠 Stabilize update
+        // Performance Optimization
         setOrder(prev => {
-          const isSame = prev.length === ordersArray.length && 
-                         prev.every((o, i) => o.id === ordersArray[i].id);
+          // 1. Check karo kya purane aur naye array ki length same hai?
+          const isSame = prev.length === ordersArray.length &&
+            // 2. Check karo kya har item ki ID wahi hai jo pehle thi?
+            prev.every((o, i) => o.id === ordersArray[i].id);
+
+          // 3. Agar sab kuch same hai, toh 'prev' (purana reference) hi wapas kar do.
+          // Agar 'prev' return hota hai, toh React render trigger NAHI karta.
           return isSame ? prev : ordersArray;
         });
-        
+
         setOrderLoading(false);
       },
       (error) => {

@@ -4,7 +4,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const RevenueTrend = ({ isDark, data }) => {
+function RevenueTrend({ isDark, data }) {
   const chartData = useMemo(() => ({
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
@@ -56,4 +56,5 @@ const RevenueTrend = ({ isDark, data }) => {
   );
 };
 
+RevenueTrend.displayName = 'RevenueTrend';
 export default React.memo(RevenueTrend);

@@ -4,7 +4,7 @@ import { updateOrderStatus } from '../orderFirestore';
 
  
 
-const OrderStatusUpdater = ({ orderId, currentStatus, isDark, onClose }) => {
+function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
   const [loading, setLoading] = useState(null);
 
   const handleStatusUpdate = async (newStatus) => {
@@ -69,6 +69,7 @@ const OrderStatusUpdater = ({ orderId, currentStatus, isDark, onClose }) => {
   );
 };
 
+OrderStatusUpdater.displayName = 'OrderStatusUpdater';
 export default React.memo(OrderStatusUpdater);
 
 // export default React.memo(OrderStatusUpdater, (prevProps, nextProps) => {

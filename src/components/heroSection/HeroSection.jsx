@@ -44,56 +44,58 @@ const SLIDES_DATA = [
 ];
 
 // ✅ SEPARATE SLIDE CONTENT: To prevent entire Swiper re-render on progress update
-const SlideContent = memo(({ item, isDark }) => (
-  <div className="relative w-full h-[450px] sm:h-[550px] md:h-[650px] overflow-hidden">
-    <img
-      src={item.img}
-      alt={item.title}
-      width={1200}
-      height={650}
-      loading={item.priority ? "eager" : "lazy"}
-      fetchpriority={item.priority ? "high" : "auto"}
-      decoding={item.priority ? "sync" : "async"}
-      className="w-full h-full object-cover transition-transform duration-[6000ms] scale-105"
-    />
-    <div className={`absolute inset-0 ${isDark ? "bg-gradient-to-r from-black/80 via-black/40 to-transparent" : "bg-black/40"}`} />
-    
-    <div className="absolute inset-0 flex items-center px-8 md:px-20">
-      <div className="text-white max-w-2xl">
-        <div className="flex items-center gap-3 mb-4">
-          <span className="h-4 w-[2px] bg-orange-500"></span>
-          <p className="text-orange-500 text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">Featured Deals 2026</p>
-        </div>
-        
-        <h2 className="text-4xl md:text-7xl font-black italic tracking-tighter leading-none uppercase mb-4">
-          {item.title} <br />
-          <span className="text-orange-500">{item.highlight}</span>
-        </h2>
-        
-        <p className="text-sm md:text-lg text-gray-300 mb-2 max-w-md font-medium">{item.desc}</p>
-        <p className="text-xl md:text-3xl font-black italic text-yellow-400 mb-8 uppercase tracking-tighter bg-black/30 inline-block px-2">
-          {item.price}
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4">
-          <Link to={item.link}>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl transition-all active:scale-95">
-              {item.btnText}
-            </button>
-          </Link>
-          <Link to="/allproducts">
-            <button className="border border-white/30 backdrop-blur-md px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all">
-              Shop All
-            </button>
-          </Link>
+const SlideContent = memo(function SlideContent({ item, isDark }) {
+  return (
+    <div className="relative w-full h-[450px] sm:h-[550px] md:h-[650px] overflow-hidden">
+      <img
+        src={item.img}
+        alt={item.title}
+        width={1200}
+        height={650}
+        loading={item.priority ? "eager" : "lazy"}
+        fetchpriority={item.priority ? "high" : "auto"}
+        decoding={item.priority ? "sync" : "async"}
+        className="w-full h-full object-cover transition-transform duration-[6000ms] scale-105"
+      />
+      <div className={`absolute inset-0 ${isDark ? "bg-gradient-to-r from-black/80 via-black/40 to-transparent" : "bg-black/40"}`} />
+
+      <div className="absolute inset-0 flex items-center px-8 md:px-20">
+        <div className="text-white max-w-2xl">
+          <div className="flex items-center gap-3 mb-4">
+            <span className="h-4 w-[2px] bg-orange-500"></span>
+            <p className="text-orange-500 text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">Featured Deals 2026</p>
+          </div>
+
+          <h2 className="text-4xl md:text-7xl font-black italic tracking-tighter leading-none uppercase mb-4">
+            {item.title} <br />
+            <span className="text-orange-500">{item.highlight}</span>
+          </h2>
+
+          <p className="text-sm md:text-lg text-gray-300 mb-2 max-w-md font-medium">{item.desc}</p>
+          <p className="text-xl md:text-3xl font-black italic text-yellow-400 mb-8 uppercase tracking-tighter bg-black/30 inline-block px-2">
+            {item.price}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+            <Link to={item.link}>
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl transition-all active:scale-95">
+                {item.btnText}
+              </button>
+            </Link>
+            <Link to="/allproducts">
+              <button className="border border-white/30 backdrop-blur-md px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all">
+                Shop All
+              </button>
+            </Link>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-));
+  );
+});
 
 // ✅ PROGRESS BAR: Atomic component
-const ProgressBar = memo(({ active, total }) => {
+const ProgressBar = memo(function ProgressBar({ active, total }) {
   const width = `${((active + 1) / total) * 100}%`;
   return (
     <div className="h-[4px] w-full bg-gray-800 rounded-full overflow-hidden mb-3">
@@ -105,7 +107,7 @@ const ProgressBar = memo(({ active, total }) => {
   );
 });
 
-const SwiperContainer = memo(({ isDark }) => {
+const SwiperContainer = memo(function SwiperContainer({ isDark }) {
   const [active, setActive] = useState(0);
   const modules = useMemo(() => [Autoplay, Pagination, EffectFade], []);
 
@@ -137,7 +139,7 @@ const SwiperContainer = memo(({ isDark }) => {
 
 
 
-const HeroSection = memo(({ mode }) => {
+const HeroSection = memo(function HeroSection({ mode }) {
   const isDark = mode === "dark";
 
   return (

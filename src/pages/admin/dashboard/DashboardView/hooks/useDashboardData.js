@@ -1,9 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 
-export const useDashboardData = (allProducts, allOrders, allUsers) => {
-  // 👉 Default range 'All Time' set kar diya, taake refresh pe saara data show ho
-  const [selectedRange, setSelectedRange] = useState("All Time");
-  const [calendarDate, setCalendarDate] = useState(new Date("2026-03-20"));
+export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange, calendarDate) => {
+
 
   // 👉 Ye function array ko date aur selected range ke hisaab se filter karega
   const filterByDate = useCallback((items) => {
@@ -124,8 +122,6 @@ export const useDashboardData = (allProducts, allOrders, allUsers) => {
   const newDiscounts = useMemo(() => product?.filter(p => p.discount)?.length || 0, [product]);
 
   return {
-    selectedRange, setSelectedRange,
-    calendarDate, setCalendarDate,
     order, product, user,
     monthlyOrders, monthlyRevenue,
     totalRevenue, newDiscounts

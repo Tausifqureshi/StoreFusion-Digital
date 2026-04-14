@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { FiCheck } from 'react-icons/fi';
 import { MdHeadsetMic } from 'react-icons/md';
 
-const Tracking = ({ order, isDark }) => {
+function Tracking({ order, isDark }) {
 
   const currentOrderStatus = (order?.status || "placed").toLowerCase();
 
@@ -147,6 +147,7 @@ const Tracking = ({ order, isDark }) => {
   );
 };
 
+Tracking.displayName = 'Tracking';
 export default React.memo(Tracking, (prevProps, nextProps) => {
   if (prevProps.isDark !== nextProps.isDark) return false;
   if (prevProps.order.id !== nextProps.order.id) return false;

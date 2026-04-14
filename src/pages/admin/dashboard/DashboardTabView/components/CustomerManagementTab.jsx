@@ -3,7 +3,7 @@ import { FaSearch, FaUserAltSlash, FaEnvelope, FaPhone, FaEllipsisH, FaPlus } fr
 import { UserContext, ThemeContext } from '../../../../../context api/AllContext';
 import LoaderSpinner from '../../../../../components/loader/LoaderSpinner';
 
-const CustomerManagementTab = () => {
+function CustomerManagementTab() {
   // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
   const { mode } = useContext(ThemeContext);
   const { user, userLoading } = useContext(UserContext);
@@ -236,4 +236,5 @@ const CustomerManagementTab = () => {
   );
 };
 
+CustomerManagementTab.displayName = 'CustomerManagementTab';
 export default React.memo(CustomerManagementTab);

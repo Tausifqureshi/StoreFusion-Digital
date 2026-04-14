@@ -2,7 +2,7 @@ import React from 'react';
 import { FaBox } from 'react-icons/fa';
 import ProductCard from './ProductCard';
 
-const ProductGrid = ({ productsOnCurrentPage, isDark, edithandle, deleteProduct }) => {
+function ProductGrid({ productsOnCurrentPage, isDark, edithandle, deleteProduct }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {productsOnCurrentPage.length > 0 ? (
@@ -29,4 +29,5 @@ const ProductGrid = ({ productsOnCurrentPage, isDark, edithandle, deleteProduct 
   );
 };
 
+ProductGrid.displayName = 'ProductGrid';
 export default React.memo(ProductGrid);

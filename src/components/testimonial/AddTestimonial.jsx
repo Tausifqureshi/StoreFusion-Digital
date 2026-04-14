@@ -2,13 +2,15 @@ import { ProductAdminContext, ProductContext, TestimonialContext, ThemeContext }
 import React, { useContext, useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 
-const Star = ({ filled, onClick }) => (
-  <FaStar
-    onClick={onClick}
-    className={`w-6 h-6 cursor-pointer transition-colors ${filled ? "text-orange-500" : "text-gray-200 dark:text-gray-700"
-      }`}
-  />
-);
+function Star({ filled, onClick }) {
+  return (
+    <FaStar
+      onClick={onClick}
+      className={`w-6 h-6 cursor-pointer transition-colors ${filled ? "text-orange-500" : "text-gray-200 dark:text-gray-700"
+        }`}
+    />
+  );
+}
 
 const AddTestimonialView = React.memo(function AddTestimonialView({ isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading }) {
   return (
@@ -140,6 +142,7 @@ function AddTestimonial({ productId = "" }) {
   );
 }
 
+AddTestimonial.displayName = 'AddTestimonial';
 export default React.memo(AddTestimonial);
 
 // import React, { useContext, useState, useEffect } from "react";

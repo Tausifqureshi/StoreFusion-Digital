@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import OrderStatusBadge from '../../../../../../components/order/OrderStatusBadge';
 import OrderStatusUpdater from '../../../../../../components/order/status/OrderStatusUpdater';
 
-const OrderItem = ({ isDark, o, i, isActive, setActiveDropdown, uniqueKey }) => {
+function OrderItem({ isDark, o, i, isActive, setActiveDropdown, uniqueKey }) {
   const [showStatusUpdater, setShowStatusUpdater] = useState(false); // 👉 status updater panel toggle
 
   // 👉 Handle text-based invoice generation and download (Memoized for performance)
@@ -149,6 +149,7 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
   );
 };
 
+OrderItem.displayName = 'OrderItem';
 export default React.memo(OrderItem);
 
 // export default React.memo(OrderItem, (prev, next) => {

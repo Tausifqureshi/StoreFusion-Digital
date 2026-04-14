@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaShoppingCart, FaDollarSign, FaCheckCircle, FaBoxOpen } from 'react-icons/fa';
 
-const OrderSummaryCards = ({ isDark, order }) => {
+function OrderSummaryCards({ isDark, order }) {
   const totalOrders = order.length;
   const totalRevenue = order.reduce((acc, o) => acc + Number(o.grandTotal || o.totalAmount || o.price || 0), 0);
   
@@ -56,4 +56,5 @@ const OrderSummaryCards = ({ isDark, order }) => {
 };
 
 // 👉 React.memo: Absolute performance lock - preventing re-renders if order data hasn't changed
+OrderSummaryCards.displayName = 'OrderSummaryCards';
 export default React.memo(OrderSummaryCards);

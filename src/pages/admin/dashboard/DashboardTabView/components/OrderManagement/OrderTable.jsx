@@ -2,7 +2,7 @@ import React from 'react';
 import OrderItem from './OrderItem';
 import { FaShoppingCart } from 'react-icons/fa';
 
-const OrderTable = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropdown }) => {
+function OrderTable({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDropdown }) {
   return (
     <div className="flex flex-col gap-4">
       {ordersOnCurrentPage.length > 0 ? (
@@ -34,4 +34,5 @@ const OrderTable = ({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDrop
 };
 
 // 👉 React.memo: Absolute performance lock for order list Without Risky hacks
+OrderTable.displayName = 'OrderTable';
 export default React.memo(OrderTable);

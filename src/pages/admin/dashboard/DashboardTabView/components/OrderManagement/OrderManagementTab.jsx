@@ -8,7 +8,7 @@ import OrderFilters from './OrderFilters';
 import OrderTable from './OrderTable';
 import OrderPagination from './OrderPagination';
 
-const OrderManagementTab = () => {
+function OrderManagementTab() {
   // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
   const { mode } = useContext(ThemeContext);
   const { order, orderLoading } = useContext(OrderContext);
@@ -135,4 +135,5 @@ const OrderManagementTab = () => {
   );
 };
 
+OrderManagementTab.displayName = 'OrderManagementTab';
 export default React.memo(OrderManagementTab);

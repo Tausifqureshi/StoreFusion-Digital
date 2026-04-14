@@ -84,4 +84,5 @@ const ProductFilters = ({
 };
 
 // 👉 React.memo: Absolute performance lock for product filters
+ProductFilters.displayName = 'ProductFilters';
 export default React.memo(ProductFilters);

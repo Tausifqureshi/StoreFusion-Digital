@@ -1,6 +1,6 @@
 import React from 'react';
 
-const OrderPagination = ({ isDark, currentPage, totalPages, setCurrentPage, itemsPerPage, totalItems }) => {
+function OrderPagination({ isDark, currentPage, totalPages, setCurrentPage, itemsPerPage, totalItems }) {
   if (totalPages <= 1) return null;
 
   const startItem = (currentPage - 1) * itemsPerPage + 1;
@@ -64,4 +64,5 @@ const OrderPagination = ({ isDark, currentPage, totalPages, setCurrentPage, item
 };
 
 // 👉 React.memo: Ensure pagination only re-renders when necessary (page navigation or content size change)
+OrderPagination.displayName = 'OrderPagination';
 export default React.memo(OrderPagination);

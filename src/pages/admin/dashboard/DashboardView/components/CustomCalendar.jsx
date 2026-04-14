@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const CustomCalendar = ({ selectedDate, onChange, isDark }) => {
+export function CustomCalendar({ selectedDate, onChange, isDark }) {
   const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
   const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   

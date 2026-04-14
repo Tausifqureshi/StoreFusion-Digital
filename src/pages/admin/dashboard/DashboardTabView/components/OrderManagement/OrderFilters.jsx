@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaSearch } from 'react-icons/fa';
 
-const OrderFilters = ({ isDark, searchQuery, setSearchQuery, filterStatus, setFilterStatus, sortOrder, setSortOrder, uniqueStatuses }) => {
+function OrderFilters({ isDark, searchQuery, setSearchQuery, filterStatus, setFilterStatus, sortOrder, setSortOrder, uniqueStatuses }) {
   return (
     <div className={`p-4 rounded-2xl mb-8 transition-all flex flex-col md:flex-row items-center justify-start gap-4 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
       
@@ -61,4 +61,5 @@ const OrderFilters = ({ isDark, searchQuery, setSearchQuery, filterStatus, setFi
 };
 
 // 👉 React.memo: Ensure filter bar doesn't re-render unless its own logic/state changes
+OrderFilters.displayName = 'OrderFilters';
 export default React.memo(OrderFilters);

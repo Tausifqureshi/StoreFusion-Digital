@@ -135,4 +135,5 @@ const DashboardHeader = ({
   );
 };
 
+DashboardHeader.displayName = 'DashboardHeader';
 export default React.memo(DashboardHeader);

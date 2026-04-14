@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useState, useMemo } from "react";
+import React, { useContext, useState, useMemo } from "react";
+import { LoadingContext } from "./AllContext";
 import { useFetchAppData } from "../useFetchAppData";
 
-const LoadingContext = createContext();
+// ✅ LoadingContext is now centralized in AllContext.jsx (with displayName set there)
 
-export const LoadingProvider = ({ children }) => {
+export function LoadingProvider({ children }) {
   const [cartLoading, setCartLoading] = useState(true);
   const [orderLoading, setOrderLoading] = useState(false);
 
@@ -17,12 +18,14 @@ export const LoadingProvider = ({ children }) => {
       {children}
     </LoadingContext.Provider>
   );
-};
+}
+
+LoadingProvider.displayName = 'LoadingProvider';
 
 export const useAppLoading = () => {
   const context = useContext(LoadingContext);
   if (!context) {
-    return { cartLoading: false, orderLoading: false }; // Secure fallback
+    return { cartLoading: false, orderLoading: false };
   }
   return context;
 };

@@ -5,7 +5,7 @@ import { FaChartArea } from 'react-icons/fa';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
-const MonthlyProductSales = ({ isDark, data }) => {
+function MonthlyProductSales({ isDark, data }) {
   const chartData = useMemo(() => ({
     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
     datasets: [
@@ -57,4 +57,5 @@ const MonthlyProductSales = ({ isDark, data }) => {
   );
 };
 
+MonthlyProductSales.displayName = 'MonthlyProductSales';
 export default React.memo(MonthlyProductSales);

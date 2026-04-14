@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaStar, FaEllipsisH, FaEye, FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
-const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
+function ProductCard({ item, isDark, edithandle, deleteProduct }) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const stock = Number(item.stock) || 0;
@@ -117,4 +117,5 @@ const ProductCard = ({ item, isDark, edithandle, deleteProduct }) => {
   );
 };
 
+ProductCard.displayName = 'ProductCard';
 export default React.memo(ProductCard);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaBox, FaChartLine, FaShoppingCart, FaDollarSign } from 'react-icons/fa';
 
-const SummaryCards = ({ isDark, product, filteredAndSortedProducts }) => {
+function SummaryCards({ isDark, product, filteredAndSortedProducts }) {
   // 👉 total products array ki length se nikal rahe hain
   const totalProducts = product.length;
 
@@ -64,4 +64,5 @@ const SummaryCards = ({ isDark, product, filteredAndSortedProducts }) => {
 };
 
 // 👉 React.memo: Ensure product summary cards only re-render when base data changes
+SummaryCards.displayName = 'SummaryCards';
 export default React.memo(SummaryCards);

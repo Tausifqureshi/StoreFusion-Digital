@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StatCard = ({ title, value, icon, bgClass, shadowClass, trend, trendValue, isDark }) => {
+function StatCard({ title, value, icon, bgClass, shadowClass, trend, trendValue, isDark }) {
 
   return (
     <div className={`p-6 rounded-3xl transition-all duration-300 hover:-translate-y-1 cursor-pointer ${bgClass} ${isDark ? 'border border-[#1e293b] shadow-md' : `border border-transparent shadow shadow-gray-200/50 hover:shadow-xl ${shadowClass}`}`}>
@@ -22,4 +22,5 @@ const StatCard = ({ title, value, icon, bgClass, shadowClass, trend, trendValue,
   );
 };
 
+StatCard.displayName = 'StatCard';
 export default React.memo(StatCard);
