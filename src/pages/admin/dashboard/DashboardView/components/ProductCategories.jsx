@@ -47,7 +47,7 @@ function ProductCategories({ isDark, products }) {
     // 👉 4. slice: pehli 5 categories nikalo → baaki sab "Others" me jayenge
     const top5Categories = sortedCategories.slice(0, 5);   // index 0–4 tak (Top 5)   
     const othersCategories = sortedCategories.slice(5);    // index 5 ke baad wale → Others
-
+                         
     // 👉 5. reduce: baaki sab categories ka count jod ke ek 'Others' ka total banao
     const othersCount = othersCategories.reduce((sum, item) => sum + item[1], 0); // 0 = starting value
 
@@ -57,7 +57,7 @@ function ProductCategories({ isDark, products }) {
     const finalColors = top5Categories.map((_, index) => baseColors[index % baseColors.length]); // har category ko ek color do
 
     // 👉 7. Agar 'Others' me kuch bache hain → array ke end me push kar do
-    if (othersCount > 0) {
+    if (othersCount > 0) {                   
       finalLabels.push('Others');
       finalPercentages.push(Math.round((othersCount / totalProducts) * 100));
       finalColors.push('#6b7280'); // Others = grey color (fix)
