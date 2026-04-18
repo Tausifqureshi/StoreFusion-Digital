@@ -1,5 +1,5 @@
 import React from 'react';
-import OrderStatusBadge from './OrderStatusBadge';
+import OrderStatusBadge from '../status/OrderStatusBadge';
 import { FiPackage } from 'react-icons/fi';
 import { FaArrowRight, FaEdit } from 'react-icons/fa';
 

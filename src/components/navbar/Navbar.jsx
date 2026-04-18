@@ -30,7 +30,7 @@ const TopAnnouncement = React.memo(function TopAnnouncement({ isDark }) {
 // ✅ NAV LINKS: Memoized to prevent re-renders when parent state (like scroll) changes
 const NavLinks = React.memo(function NavLinks({ isDark, navItems, user, totalOrders, handleNavigate }) {
   return (
-    <div className={`hidden lg:flex items-center gap-8 font-bold text-[13px] uppercase tracking-wider ${isDark ? "text-gray-200" : "text-gray-600"}`}>
+    <div className={`hidden lg:flex items-center lg:gap-4 xl:gap-8 font-bold lg:text-[11px] xl:text-[13px] uppercase tracking-wider shrink-0 ${isDark ? "text-gray-200" : "text-gray-600"}`}>
       {navItems.map((item) => (
         <button key={item.name} onClick={() => handleNavigate(item.URL)} className="hover:text-orange-500 transition-colors uppercase">{item.name}</button>
       ))}
@@ -60,7 +60,7 @@ const CartCounter = React.memo(function CartCounter() {
 // ✅ ACTION ICONS: Specifically handles its own local hover/state logic
 const ActionIcons = React.memo(function ActionIcons({ isDark, mode, toggleMode, user, handleLogout, handleNavigate }) {
   return (
-    <div className="flex items-center gap-5">
+    <div className="flex items-center gap-4 lg:gap-3 xl:gap-5 shrink-0">
       <button onClick={toggleMode} className="transition-transform hover:scale-110">
         {mode === "light" ? <BsMoonStars size={20} className="text-gray-600" /> : <FiSun size={20} className="text-yellow-400" />}
       </button>
@@ -69,12 +69,12 @@ const ActionIcons = React.memo(function ActionIcons({ isDark, mode, toggleMode, 
         <CartCounter />
       </button>
       {user ? (
-        <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
-          <div className="flex flex-col items-start leading-tight pr-1">
-            <span className={`text-[10px] font-bold ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+        <div className="hidden sm:flex items-center gap-3 lg:gap-2 xl:gap-3 border-l pl-3 lg:pl-2 xl:pl-4 border-gray-300 dark:border-gray-700">
+          <div className="hidden lg:flex flex-col items-start leading-tight pr-1">
+            <span className={`lg:text-[9px] xl:text-[10px] font-bold ${isDark ? "text-gray-400" : "text-gray-500"}`}>
               Hello, {user.fullName?.split(" ")[0] || "User"}
             </span>
-            <span className={`text-[11px] font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>
+            <span className={`lg:text-[10px] xl:text-[11px] font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>
               Account
             </span>
           </div>
@@ -175,7 +175,7 @@ function Navbar({ isDark }) {
 
           <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
             <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-4 shrink-0">
                 <button onClick={() => { setOpen(true); setShowSubMenu(false); }} className={`lg:hidden p-1 ${isDark ? "text-white" : "text-gray-800"}`}>
                   <FiMenu size={26} />
                 </button>
@@ -184,9 +184,9 @@ function Navbar({ isDark }) {
                 </Link>
               </div>
 
-              <div className="hidden lg:flex items-center gap-8">
-                <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer">
-                  <span className={`flex items-center gap-1 font-bold text-[13px] uppercase tracking-wider hover:text-orange-500 transition-all ${isDark ? "text-gray-200" : "text-gray-600"}`}>
+              <div className="hidden lg:flex items-center lg:gap-4 xl:gap-8 shrink-0">
+                <div onMouseEnter={() => setMega(true)} onMouseLeave={() => setMega(false)} className="relative py-5 cursor-pointer shrink-0">
+                  <span className={`flex items-center gap-1 font-bold lg:text-[11px] xl:text-[13px] uppercase tracking-wider hover:text-orange-500 transition-all ${isDark ? "text-gray-200" : "text-gray-600"}`}>
                     Categories <FiChevronRight className="rotate-90" />
                   </span>
                   {mega && (

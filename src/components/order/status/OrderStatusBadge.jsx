@@ -1,5 +1,5 @@
 import React from 'react';
-import { getStatusConfig } from '../../../design-system/statusConfig';
+import { getStatusConfig } from './statusConfig';
 
 /**
  * OrderStatusBadge Component

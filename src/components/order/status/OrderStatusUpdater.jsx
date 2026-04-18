@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { FiTruck, FiCheckCircle, FiClock, FiXCircle, FiRefreshCw, FiBox } from 'react-icons/fi';
+import { FiRefreshCw } from 'react-icons/fi';
 import { updateOrderStatus } from '../orderFirestore';
+import { statusOptions } from './statusConfig';
 
  
 
@@ -20,17 +21,7 @@ function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
     }
   };
 
-  const statusOptions = [
-    { label: 'placed', icon: FiBox, color: 'bg-orange-500 hover:bg-orange-600' },
-    { label: 'pending', icon: FiClock, color: 'bg-yellow-500 hover:bg-yellow-600' },
-    { label: 'processing', icon: FiRefreshCw, color: 'bg-blue-500 hover:bg-blue-600' },
-    { label: 'shipped', icon: FiTruck, color: 'bg-purple-500 hover:bg-purple-600' },
-    { label: 'hub', icon: FiBox, color: 'bg-indigo-500 hover:bg-indigo-600' },
-    { label: 'delivered', icon: FiCheckCircle, color: 'bg-green-500 hover:bg-green-600' },
-    { label: 'returned', icon: FiRefreshCw, color: 'bg-gray-500 hover:bg-gray-600' },
-    { label: 'refunded', icon: FiRefreshCw, color: 'bg-blue-400 hover:bg-blue-500' },
-    { label: 'cancelled', icon: FiXCircle, color: 'bg-red-500 hover:bg-red-600' },
-  ];
+
 
   return (
     <div className={`rounded-2xl p-4 border shadow-xl w-64 ${isDark ? 'bg-[#1e293b] border-gray-700' : 'bg-white border-gray-200'}`}>

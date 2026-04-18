@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { FaEllipsisH, FaEye, FaEdit, FaTrash, FaDownload } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import OrderStatusBadge from '../../../../../../components/order/OrderStatusBadge';
+import OrderStatusBadge from '../../../../../../components/order/status/OrderStatusBadge';
 import OrderStatusUpdater from '../../../../../../components/order/status/OrderStatusUpdater';
 
 function OrderItem({ isDark, o, i, isActive, setActiveDropdown, uniqueKey }) {

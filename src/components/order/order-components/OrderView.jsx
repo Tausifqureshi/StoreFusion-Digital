@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { FaTrash, FaArrowLeft, FaBoxOpen } from "react-icons/fa";
-import LoaderSpinner from "../../loader/LoaderSpinner";
-import UserOrderItem from "../UserOrderItem";
+import LoaderSpinner from "../../../components/loader/LoaderSpinner";
+import UserOrderItem from "./UserOrderItem";
 import OrderStatusUpdater from "../status/OrderStatusUpdater";
 
 // ✅ ORDER VIEW: State colocated to prevent Layout re-renders during tab or update state changes
@@ -13,18 +13,22 @@ const OrderView = React.memo(function OrderView({
   const [updatingOrderId, setUpdatingOrderId] = useState(null);
 
   const activeOrders = useMemo(() => {
+    // Ye pehle saare "delivered" orders hata deta hai
     const nonDelivered = orders.filter(order => order.status?.toLowerCase() !== "delivered");
 
     if (activeTab === 'Returns') {
+      // Agar "Returns" tab select hai, toh sirf refunded/returned orders deta hai
       return nonDelivered.filter(order =>
         ['refunded', 'returned'].includes(order.status?.toLowerCase())
       );
     }
 
+    // "All Orders" tab me sab kuch dikhata hai siwaye (delivered, refunded aur returned) ke
     return nonDelivered.filter(order =>
       !['refunded', 'returned'].includes(order.status?.toLowerCase())
     );
   }, [orders, activeTab]);
+
 
   return (
     <div className={`min-h-screen pt-24 pb-12 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-[#f8fafc] text-gray-900"}`}>

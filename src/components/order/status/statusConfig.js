@@ -7,6 +7,19 @@ import {
   FiBox,
 } from 'react-icons/fi';
 
+// ✅ ORDER STATUS OPTIONS (For UI Dropdowns/Updaters)
+export const statusOptions = [
+  { label: 'placed', icon: FiBox, color: 'bg-orange-500 hover:bg-orange-600' },
+  { label: 'pending', icon: FiClock, color: 'bg-yellow-500 hover:bg-yellow-600' },
+  { label: 'processing', icon: FiRefreshCw, color: 'bg-blue-500 hover:bg-blue-600' },
+  { label: 'shipped', icon: FiTruck, color: 'bg-purple-500 hover:bg-purple-600' },
+  { label: 'hub', icon: FiBox, color: 'bg-indigo-500 hover:bg-indigo-600' },
+  { label: 'delivered', icon: FiCheckCircle, color: 'bg-green-500 hover:bg-green-600' },
+  { label: 'returned', icon: FiRefreshCw, color: 'bg-gray-500 hover:bg-gray-600' },
+  { label: 'refunded', icon: FiRefreshCw, color: 'bg-blue-400 hover:bg-blue-500' },
+  { label: 'cancelled', icon: FiXCircle, color: 'bg-red-500 hover:bg-red-600' },
+];
+
 // ✅ CENTRALIZED STATUS CONFIG: Eliminates string-matching hacks in components
 const statusConfig = {
   placed: {

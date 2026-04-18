@@ -1,12 +1,12 @@
 
-import { ThemeContext, UserContext } from '../../context api/AllContext';
+import { ThemeContext, UserContext } from '../../../context api/AllContext';
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppLoading } from "../../context api/LoadingState";
+import { useAppLoading } from "../../../context api/LoadingState";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { deleteUserOrdersFromFirestore } from "./orderFirestore";
-import OrderView from "./components/OrderView";
+import { deleteUserOrdersFromFirestore } from "../orderFirestore";
+import OrderView from "./OrderView";
 
 function Order() {
   const { orderLoading } = useAppLoading();

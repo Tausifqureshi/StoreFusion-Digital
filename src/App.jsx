@@ -17,7 +17,7 @@ import Layout from "./components/layout/Layout";
 
 // 🔥 LAZY LOADING
 const Home = lazy(() => import("./pages/home/Home"));
-const Order = lazy(() => import("./components/order/Order"));
+const Order = lazy(() => import("./components/order/order-components/Order"));
 const OrderDetails = lazy(() => import("./components/order/order-details/OrderDetails"));
 const Cart = lazy(() => import("./pages/cart/Cart"));
 const Dashboard = lazy(() => import("./pages/admin/dashboard/DashboardView/Dashboard"));
