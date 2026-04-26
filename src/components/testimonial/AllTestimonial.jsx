@@ -24,7 +24,7 @@ function AllTestimonial() {
             <div key={index} className="lg:w-1/3 lg:mb-0 mb-6 p-4">
               <div className={`h-full text-center p-6 ${mode === 'dark' ? 'bg-gray-700' : 'bg-gray-100'} rounded-lg shadow-lg`}>
                 <div className="flex justify-center">
-                  <img
+                  <img loading="lazy"
                     alt="customer"
                     className="w-24 h-24 mb-4 object-cover object-center rounded-full border-2 border-gray-200"
                     // src={testimonial.img ||"https://i.pravatar.cc/300"}
@@ -48,7 +48,7 @@ function AllTestimonial() {
   );
 }
 
-export default AllTestimonial;
+export default React.memo(AllTestimonial);
 
 
 

@@ -2,22 +2,18 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { ThemeContext } from './AllContext';
 
 export function ThemeState({ children }) {
-  const [mode, setMode] = useState("light");
+  const [mode, setMode] = useState(() => {
+    return localStorage.getItem('themeMode') || "light";
+  });
 
-  // const toggleMode = useCallback(() => {
-  //   if (mode === "light") {
-  //     setMode("dark");
-  //     document.body.style.backgroundColor = "rgb(17, 24, 39)";
-  //   } else {
-  //     setMode("light");
-  //     document.body.style.backgroundColor = "white";
-  //   }
-  // }, []);
+  React.useEffect(() => {
+    document.body.style.backgroundColor = mode === "dark" ? "rgb(17, 24, 39)" : "white";
+  }, [mode]);
+
   const toggleMode = useCallback(() => {
     setMode(prev => {
       const newMode = prev === "light" ? "dark" : "light";
-      document.body.style.backgroundColor =
-        newMode === "dark" ? "rgb(17, 24, 39)" : "white";
+      localStorage.setItem('themeMode', newMode);
       return newMode;
     });
   }, []);

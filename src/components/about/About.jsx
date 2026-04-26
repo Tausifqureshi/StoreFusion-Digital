@@ -121,6 +121,7 @@ function About() {
                 <img
                   src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop"
                   alt="Store"
+                  loading="lazy"
                   className="rounded-[40px] shadow-2xl grayscale hover:grayscale-0 transition-all duration-700"
                 />
                 {/* Floating Badge */}

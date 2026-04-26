@@ -165,7 +165,14 @@ function Navbar({ isDark }) {
     { name: "Contact", URL: "/contact" },
   ], []);
 
-  const categories = useMemo(() => [...new Set(product.map((p) => p.category))], [product]);
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(
+      product
+        .map(p => p.category?.trim().toUpperCase())
+        .filter(Boolean)
+    );
+    return [...uniqueCategories];
+  }, [product]);
 
   return (
     <NavScrollShield>

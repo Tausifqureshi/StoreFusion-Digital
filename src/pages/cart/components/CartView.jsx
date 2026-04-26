@@ -41,14 +41,18 @@ const CartView = React.memo(function CartView({
   const incrementCartQuantity = useCallback((itemId) => {
     setCartUpdating({ id: itemId, type: "increment" });
     dispatch(incrementQuantity(itemId));
+    const updatedCart = cartItemsRef.current.map(i => i.id === itemId ? { ...i, quantity: (i.quantity || 1) + 1 } : i);
+    saveCartDebounce(updatedCart);
     setTimeout(() => setCartUpdating(null), 200);
-  }, [dispatch]);
+  }, [dispatch, cartItemsRef]);
 
   const decrementCartQuantity = useCallback((itemId) => {
     setCartUpdating({ id: itemId, type: "decrement" });
     dispatch(decrementQuantity(itemId));
+    const updatedCart = cartItemsRef.current.map(i => i.id === itemId ? { ...i, quantity: Math.max(1, (i.quantity || 1) - 1) } : i);
+    saveCartDebounce(updatedCart);
     setTimeout(() => setCartUpdating(null), 200);
-  }, [dispatch]);
+  }, [dispatch, cartItemsRef]);
 
   const clearCartItems = async () => {
     setClearingCart(true);

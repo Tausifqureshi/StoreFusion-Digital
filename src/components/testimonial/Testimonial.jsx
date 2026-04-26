@@ -1,6 +1,7 @@
 import React, { useContext, useMemo } from 'react';
 import { ProductContext, TestimonialContext } from '../../context api/AllContext';
 import { FaEdit, FaTrash, FaQuoteLeft, FaStar } from 'react-icons/fa'; // Ye ensure kar lena
+import { useNavigate } from 'react-router-dom';
 
 // ✅ INTERNAL VIEW: Locked to prevent reconciliation from parent re-renders
 const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) {
@@ -64,6 +65,7 @@ const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDa
 function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode }) {
   const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(TestimonialContext);
   const { product } = useContext(ProductContext);
+  const navigate = useNavigate();
   const isDark = mode === 'dark';
 
   const finalReviews = useMemo(() => {
@@ -81,7 +83,7 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
     isAdmin={isAdmin} 
     productId={productId} 
     getAvatar={getAvatar}
-    editTestimonial={editTestimonial}
+    editTestimonial={(item) => editTestimonial(item, navigate)}
     deleteTestimonial={deleteTestimonial}
   />;
 }

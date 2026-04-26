@@ -7,18 +7,18 @@ import ImageWithLoader from "../loader/ImageWithLoader";
 import { saveCart } from "../../pages/cart/cartService";
 import { store } from "../../redux/store";
 
-function SingleProductCard({ item, isExpanded, setExpandedId, mode }) {
+function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "lg:w-1/4" }) {
   const uniqueId = item.id || item.title;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   // 👉 Select specific cart item (Optimized Redux Selector)
-  const isProductInCart = useSelector((state) => 
+  const isProductInCart = useSelector((state) =>
     state.cart.find((cartItem) => cartItem.id === item.id)
   );
 
   const { title, price, imageUrl, discount = 0, category, description, id, stock = 0 } = item;
-  
+
   // ✅ Derived data memoized
   const finalPrice = useMemo(() => Math.round(price - (price * discount) / 100), [price, discount]);
 
@@ -58,13 +58,17 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode }) {
   }, [setExpandedId, uniqueId]);
 
   return (
-    <div className="p-4 w-full custom-md:w-1/2 md:w-1/2 lg:w-1/4 drop-shadow-lg self-start transition-all duration-300">
+    <div className={`p-4 w-full custom-md:w-1/2 md:w-1/2 ${colSize} drop-shadow-lg self-start transition-all duration-300`}>
       <div className={`border-2 hover:shadow-2xl transition-shadow duration-300 ease-in-out ${mode === "dark" ? "bg-gray-800 hover:shadow-gray-900 border-gray-700" : "border-gray-200 hover:shadow-gray-100 bg-white"} border-opacity-60 rounded-2xl overflow-hidden flex flex-col h-full`}>
-        <div onClick={() => navigate(`/productinfo/${id}`)} className="flex justify-center cursor-pointer bg-white relative shrink-0">
+        <div 
+          onClick={() => navigate(`/productinfo/${id}`)} 
+          className="flex justify-center cursor-pointer relative shrink-0 overflow-hidden pt-4 bg-transparent rounded-t-2xl"
+        >
           {discount > 0 && <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded z-10">{discount}% OFF</span>}
-          <ImageWithLoader src={imageUrl} alt="product" />
+          <div className="w-full">
+             <ImageWithLoader src={imageUrl} alt="product" />
+          </div>
         </div>
-
         <div className="p-5 border-t-2 flex flex-col flex-1">
           <h2 className={`tracking-widest text-xs title-font font-medium text-gray-400 mb-1 ${mode === "dark" ? "text-white" : ""}`}>{category}</h2>
           <h1 className={`title-font text-lg font-medium mb-3 truncate ${mode === "dark" ? "text-white" : "text-gray-900"}`}>{title}</h1>

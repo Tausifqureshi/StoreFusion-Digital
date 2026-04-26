@@ -14,6 +14,7 @@ export function ProductState({ children }) {
     price: "",
     imageUrl: "",
     category: "",
+    subcategory: "",
     description: "",
     discount: "",
     stock: "",
@@ -31,6 +32,7 @@ export function ProductState({ children }) {
       price: "",
       imageUrl: "",
       category: "",
+      subcategory: "",
       description: "",
       discount: "",
       stock: "",
@@ -55,12 +57,13 @@ export function ProductState({ children }) {
             id: docSnap.id,
             ...docSnap.data(),
           }));
-
-          setProduct(prev => {
-            const isSame = prev.length === productsArray.length &&
-              prev.every((p, i) => p.id === productsArray[i].id);
-            return isSame ? prev : productsArray;
-          });
+          // setProduct(prev => {
+          //   // Advanced Deep Check: Sirf tabhi update karega jab actual data change hua ho!
+          //   const isSame = JSON.stringify(prev) === JSON.stringify(productsArray);
+          //   return isSame ? prev : productsArray;
+          // });
+          
+          setProduct(productsArray);
           setProductLoading(false);
         },
         (error) => {

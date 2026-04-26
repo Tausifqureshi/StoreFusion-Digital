@@ -1,5 +1,6 @@
 import { ProductAdminContext, ProductContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 function Star({ filled, onClick }) {
@@ -95,6 +96,7 @@ function AddTestimonial({ productId = "" }) {
   const { loading } = useContext(ProductAdminContext);
   const { mode } = useContext(ThemeContext);
   const [rating, setRating] = useState(0);
+  const navigate = useNavigate();
   const isDark = mode === "dark";
 
   useEffect(() => {
@@ -115,7 +117,7 @@ function AddTestimonial({ productId = "" }) {
       return;
     }
     if (testimonialForm.id) {
-      updateTestimonial();
+      updateTestimonial(navigate);
     } else {
       addTestimonial({
         ...testimonialForm,

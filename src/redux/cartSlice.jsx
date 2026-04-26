@@ -106,7 +106,7 @@ const cartSlice = createSlice({
           item.quantity += action.payload.quantity;
         }
       } else {
-        if (Number(action.payload.stock || 0) > 0) {
+        if (Number(action.payload.stock || 0) > 0) { //kya stock 0 se jyada hai tu push kr
           state.push(action.payload);
         }
       }

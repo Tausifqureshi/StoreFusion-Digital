@@ -5,22 +5,20 @@ import { FilterContext, ThemeContext } from '../../context api/AllContext';
 function Search({ placeholder = "Search StoreFusion...", isMobile = false }) {
   const { mode } = useContext(ThemeContext);
   const { searchkey, setSearchkey } = useContext(FilterContext);
-
   const isDark = mode === "dark";
 
-  // 👉 Local state and debounce for Search to fix global re-render lag
-  const [localSearch, setLocalSearch] = useState(searchkey);
+  // Live typing text (local state)
+  const [typingText, setTypingText] = useState(searchkey);
 
+  // Debounce: 400ms wait karke hi global search update karo (No lag)
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setSearchkey(localSearch);
-    }, 400);
-    return () => clearTimeout(timer);
-  }, [localSearch, setSearchkey]);
+    const delayTimer = setTimeout(() => setSearchkey(typingText), 400);
+    return () => clearTimeout(delayTimer);
+  }, [typingText, setSearchkey]);
 
-  // 👉 Keep localSearch in sync if searchkey is cleared externally
+  // Sync: Agar global search clear ho jaye toh box bhi clear kar do
   useEffect(() => {
-    if (searchkey === "") setLocalSearch("");
+    if (searchkey === "") setTypingText("");
   }, [searchkey]);
 
   // Two different class names for mobile and desktop versions based on original implementation
@@ -38,8 +36,8 @@ function Search({ placeholder = "Search StoreFusion...", isMobile = false }) {
     <div className="relative flex-1">
       <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
       <input
-        value={localSearch}
-        onChange={(e) => setLocalSearch(e.target.value)}
+        value={typingText}
+        onChange={(e) => setTypingText(e.target.value)}
         type="text"
         placeholder={placeholder}
         className={isMobile ? mobileClasses : desktopClasses}

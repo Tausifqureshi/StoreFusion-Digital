@@ -8,7 +8,7 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
   const stock = Number(item.stock) || 0;
   const price = Number(String(item.price || "0").replace(/[^0-9.-]+/g, ""));
   const sales = Number(item.sales) || 0;
-  const rating = Number(item.rating) || 4.5; 
+  const rating = Number(item.rating) || 4.5;
 
   // Status computation for badge
   let status = "Active";
@@ -18,7 +18,7 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
     status = "Out of Stock";
     statusColors = isDark ? "bg-red-500/10 text-red-400 border border-red-500/20" : "bg-red-100 text-red-700";
   } else if (stock < 10) {
-    status = "Draft"; 
+    status = "Draft";
     statusColors = isDark ? "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20" : "bg-yellow-100 text-yellow-700";
   }
 
