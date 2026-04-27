@@ -72,7 +72,7 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
       // paymentSuccess event ko dispatch kar rahe hain
       window.dispatchEvent(new Event("paymentSuccess"));
     } catch (error) {
-      console.log("Error saving COD order:", error);
+      console.error("Error saving COD order:", error);
       toast.error('Failed to place COD order', { autoClose: 1000 });
     }
   };
@@ -114,10 +114,8 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
     };
 
     const options = {
-      // key: "rzp_test_s2VG2G2HwcOQd6",
-      // key_secret: "13wTYUM144Kv98GujKu6kkB6",
-      key: "rzp_test_SAmF1Zz8ccXm1f",
-      key_secret: "0PKAeGJ6Dpv5yPv0HiopwTaJ",
+      key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+      key_secret: import.meta.env.VITE_RAZORPAY_KEY_SECRET, // ⚠️ Test only — production me backend me hoga
       amount: parseInt(totalAmountRef.current * 100),
       currency: "INR",
       order_receipt: 'order_rcptid_' + formData.fullName,
@@ -166,7 +164,7 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
           await clearUserCartFromFirestore(user.uid);
 
         } catch (error) {
-          console.log("Error saving order:", error);
+          console.error("Error saving order:", error);
           toast.error('Failed to save order', { autoClose: 1000 });
         }
       },

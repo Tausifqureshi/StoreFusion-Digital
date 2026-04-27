@@ -1,6 +1,6 @@
 import { ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
@@ -33,8 +33,6 @@ function Login() {
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/';
 
-  const location = useLocation();
-  // const redirectPath = location.state?.PreviousPathname || '/';
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

@@ -19,6 +19,7 @@ const DashboardHeader = ({
 
   useEffect(() => {
     function handleClickOutside(event) {
+      // Yahan check ho raha hai ke user ne in boxes ke BAHAR toh click nahi kiya?
       if (rangeRef.current && !rangeRef.current.contains(event.target)) setIsRangeOpen(false);
       if (dateRef.current && !dateRef.current.contains(event.target)) setIsDateOpen(false);
     }

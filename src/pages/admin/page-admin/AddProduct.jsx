@@ -123,6 +123,18 @@ function AddProduct() {
 
           <input
             type="number"
+            step="0.1"
+            min="0"
+            max="5"
+            name="rating"
+            className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Product Rating (0 - 5)"
+            onChange={inputHandle}
+            value={products.rating || ""}
+          />
+
+          <input
+            type="number"
             name="stock"
             className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Available Stock Quantity"

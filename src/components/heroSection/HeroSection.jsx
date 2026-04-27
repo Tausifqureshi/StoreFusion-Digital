@@ -77,13 +77,13 @@ const SlideContent = memo(function SlideContent({ item, isDark }) {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Link to={item.link}>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl transition-all active:scale-95">
+            <Link to={item.link} className="w-auto">
+              <button className="w-44 sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-4 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest shadow-xl transition-all active:scale-95 text-center truncate whitespace-nowrap">
                 {item.btnText}
               </button>
             </Link>
-            <Link to="/allproducts">
-              <button className="border border-white/30 backdrop-blur-md px-10 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all">
+            <Link to="/allproducts" className="w-auto">
+              <button className="w-44 sm:w-auto border border-white/30 backdrop-blur-md px-4 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all text-center truncate whitespace-nowrap">
                 Shop All
               </button>
             </Link>

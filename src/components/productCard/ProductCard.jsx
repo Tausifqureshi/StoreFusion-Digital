@@ -126,7 +126,7 @@ function ProductCard() {
                       <p className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Premium {category} Collection</p>
                     </div>
                     <button
-                      onClick={() => navigate(`/category/${category}`)}
+                      onClick={() => navigate(`/category/${category.toLowerCase()}`)}
                       className="flex flex-shrink-0 items-center justify-center bg-blue-600 hover:bg-blue-700 text-white w-8 h-8 md:w-10 md:h-10 rounded-full transition-all active:scale-95 shadow-md shadow-blue-500/30"
                       title="View All"
                     >
@@ -148,7 +148,7 @@ function ProductCard() {
                     {/* View All Card at the end of the row */}
                     <div className="snap-start shrink-0 p-2">
                       <div
-                        onClick={() => navigate(`/category/${category}`)}
+                        onClick={() => navigate(`/category/${category.toLowerCase()}`)}
                         className={`w-[160px] h-[320px] flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-105 rounded-2xl border-2 border-dashed group ${mode === 'dark' ? 'border-gray-700 hover:border-blue-500 bg-gray-800/50' : 'border-gray-300 hover:border-blue-500 bg-gray-50'}`}
                       >
                         <div className="w-12 h-12 rounded-full bg-blue-600 text-white flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">

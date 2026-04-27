@@ -258,18 +258,26 @@ const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts
 // 🔐 USER PROTECTED (Memoized to prevent unnecessary checks)
 export const ProtectedRoutes = memo(({ children }) => {
   const location = useLocation();
-  const user = localStorage.getItem("user");
-  if (user) return children;
-  return <Navigate to="/login" state={{ PreviousPathname: location.pathname }} replace />;
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    // ✅ uid + email dono validate karo — sirf string hone se bypass na ho
+    if (user?.uid && user?.email) return children;
+  } catch {
+    // corrupted JSON — treat as logged out
+  }
+  return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
 });
 
 // 🔐 ADMIN PROTECTED
 export const ProtectedRoutesForAdmin = memo(({ children }) => {
   const location = useLocation();
-  const userString = localStorage.getItem("user");
-  const user = userString ? JSON.parse(userString) : null;
-  if (user && user.role === "admin") return children;
-  return <Navigate to="/login" state={{ PreviousPathname: location.pathname }} replace />;
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user?.uid && user?.email && user?.role === "admin") return children;
+  } catch {
+    // corrupted JSON
+  }
+  return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
 });
 
 // ✅ ROOT LAYOUT (Now purely for structure, Providers moved out)

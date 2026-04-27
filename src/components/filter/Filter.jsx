@@ -7,9 +7,9 @@ import { Drawer, IconButton, Slider } from "@mui/material";
 
 // ✅ DESKTOP VIEW: Sidebar layout (Vertical)
 const DesktopFilter = React.memo(function DesktopFilter({
-  isDark, filterType, filterPrice, sortPrice, filterColor,
+  isDark, filterType, localPrice, sortPrice, filterColor,
   uniqueCategories, uniqueColors, maxProductPrice,
-  toggleCategory, toggleColor, setFilterPrice, setSortPrice, resetFilters, isRotating,
+  toggleCategory, toggleColor, setLocalPrice, setFilterPrice, setSortPrice, resetFilters, isRotating,
   showCategoryFilter
 }) {
   return (
@@ -48,16 +48,17 @@ const DesktopFilter = React.memo(function DesktopFilter({
         <div className="px-2">
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-8">Price Range</p>
           <Slider
-            value={filterPrice}
-            onChange={(e, newValue) => setFilterPrice(newValue)}
+            value={localPrice}
+            onChange={(e, newValue) => setLocalPrice(newValue)}
+            onChangeCommitted={(e, newValue) => setFilterPrice(newValue)}
             valueLabelDisplay="auto"
             min={0}
             max={maxProductPrice}
             sx={{ color: '#f97316' }}
           />
           <div className="flex justify-between text-xs font-semibold text-gray-500 mt-2">
-            <span>₹{filterPrice[0]}</span>
-            <span>₹{filterPrice[1]}</span>
+            <span>₹{localPrice[0]}</span>
+            <span>₹{localPrice[1]}</span>
           </div>
         </div>
 
@@ -147,6 +148,7 @@ function Filter({ mode, showCategoryFilter = false }) {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
+  const [localPrice, setLocalPrice] = useState(filterPrice);
   const location = useLocation();
 
   const isDark = mode === "dark";
@@ -169,6 +171,10 @@ function Filter({ mode, showCategoryFilter = false }) {
       setFilterPrice([0, maxProductPrice]);
     }
   }, [maxProductPrice]);
+
+  useEffect(() => {
+    setLocalPrice(filterPrice);
+  }, [filterPrice]);
 
   // ✅ STABLE CALLBACKS
   const resetFilters = useCallback(() => {
@@ -203,7 +209,7 @@ function Filter({ mode, showCategoryFilter = false }) {
       <DesktopFilter
         isDark={isDark}
         filterType={filterType}
-        filterPrice={filterPrice}
+        localPrice={localPrice}
         sortPrice={sortPrice}
         filterColor={filterColor}
         uniqueCategories={uniqueCategories}
@@ -211,6 +217,7 @@ function Filter({ mode, showCategoryFilter = false }) {
         maxProductPrice={maxProductPrice}
         toggleCategory={toggleCategory}
         toggleColor={toggleColor}
+        setLocalPrice={setLocalPrice}
         setFilterPrice={setFilterPrice}
         setSortPrice={setSortPrice}
         resetFilters={resetFilters}
@@ -268,10 +275,10 @@ function Filter({ mode, showCategoryFilter = false }) {
           {/* Mobile Slider */}
           <div className="px-2">
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-8">Price Range</p>
-            <Slider value={filterPrice} onChange={(e, newValue) => setFilterPrice(newValue)} valueLabelDisplay="auto" min={0} max={maxProductPrice} sx={{ color: '#f97316' }} />
+            <Slider value={localPrice} onChange={(e, newValue) => setLocalPrice(newValue)} onChangeCommitted={(e, newValue) => setFilterPrice(newValue)} valueLabelDisplay="auto" min={0} max={maxProductPrice} sx={{ color: '#f97316' }} />
             <div className="flex justify-between text-xs font-semibold text-gray-500 mt-2">
-              <span>₹{filterPrice[0]}</span>
-              <span>₹{filterPrice[1]}</span>
+              <span>₹{localPrice[0]}</span>
+              <span>₹{localPrice[1]}</span>
             </div>
           </div>
 

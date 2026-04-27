@@ -4,7 +4,6 @@ import { FiPackage } from 'react-icons/fi';
 import { FaArrowRight, FaEdit } from 'react-icons/fa';
 
 function UserOrderItem({ order, isDark, navigate, setUpdatingOrderId }) {
-  console.log("UserOrderItem Rendered:", order.id);
   return (
     <div  
       onClick={() => navigate(`/order-details/${order.id}`)}

@@ -37,6 +37,7 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
   const lastProduct = useRef([]);
   const lastUser = useRef([]);
 
+  // 👉 Ye useMemo function 'allOrders' ko date ke hisaab se nikal kar memory mein save rakhega taake dashboard baar-baar load na ho
   const order = useMemo(() => {
     const filtered = filterByDate(allOrders || []);
     // 👉 Deep check: agar data badla nahi hai toh purana reference hi return kardo
@@ -46,40 +47,41 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
     return lastOrder.current;
   }, [allOrders, filterByDate]);
 
+  // 👉 Ye useMemo function 'allProducts' ko date ke hisaab se nikal kar memory mein save rakhega taake dashboard baar-baar load na ho
   const product = useMemo(() => {
     const filtered = filterByDate(allProducts || []);
+    // 👉 Check kar rahe hain ki naya filtered array aur purana array bilkul same hai ya nahi
+    // Agar same hai toh purana reference hi bhejenge, taake dashboard faltu mein dobara load (re-render) na ho
     const isSame = lastProduct.current.length === filtered.length && 
                    filtered.every((item, i) => item.id === lastProduct.current[i]?.id);
     if (!isSame) lastProduct.current = filtered;
     return lastProduct.current;
   }, [allProducts, filterByDate]);
 
+  // 👉 Ye useMemo function 'allUsers' ko date ke hisaab se nikal kar memory mein save rakhega taake dashboard baar-baar load na ho
   const user = useMemo(() => {
     const filtered = filterByDate(allUsers || []);
+    // 👉 Yahan check kar rahe hain ke total users ki ginti same hai ya nahi
+    // Agar same hai toh purana data hi return hoga, naya nahi banega
     const isSame = lastUser.current.length === filtered.length;
     if (!isSame) lastUser.current = filtered;
     return lastUser.current;
   }, [allUsers, filterByDate]);
 
-  const [monthlyOrders, setMonthlyOrders] = useState(Array(12).fill(0)); // 🟡 Page load pe chart zero se start karo — data aane se pehle kuch show na ho
-  const [monthlyRevenue, setMonthlyRevenue] = useState(Array(12).fill(0)); // 🟡 Page load pe revenue chart zero se start karo — data aane se pehle kuch show na ho
-
-  // -------------------------------------------------------------------------
-  // USER EXACT USE-EFFECT LOGIC PRESERVED BELOW
-  // -------------------------------------------------------------------------
-  useEffect(() => {
-
-    // 👉 agar order empty hai ya undefined hai to chart ke arrays ko khali (zero) kardo
-    if (!order || order.length === 0) {
-      setMonthlyOrders(Array(12).fill(0));  // 🔴 Order empty hai → chart wapas zero pe reset karo, purana data mat dikhao
-      setMonthlyRevenue(Array(12).fill(0)); // 🔴 Order empty hai → revenue chart bhi zero pe reset karo, purana data mat dikhao
-      return;
-    }
+  // 🟡 Page load pe chart zero se start karo — data aane se pehle kuch show na ho
+  const { monthlyOrders, monthlyRevenue } = useMemo(() => {
 
     // 👉 12 months ke liye array bana rahe hain (Jan–Dec)
     // har index ek month ko represent karega (0 = Jan, 11 = Dec)
     const ordersCount = Array(12).fill(0);   // 🟢 Data aa gaya — 12 months ke liye fresh khali array, orders count yahan store hoga
     const revenueAcc = Array(12).fill(0);    // 🟢 Data aa gaya — 12 months ke liye fresh khali array, revenue amount yahan store hoga
+
+    // 👉 agar order empty hai ya undefined hai to chart ke arrays ko khali (zero) kardo
+    if (!order || order.length === 0) {
+      // 🔴 Order empty hai → chart wapas zero pe reset karo, purana data mat dikhao
+      // 🔴 Order empty hai → revenue chart bhi zero pe reset karo, purana data mat dikhao
+      return { monthlyOrders: ordersCount, monthlyRevenue: revenueAcc };
+    }
 
     // 👉 har order pe loop chala rahe hain
     order.forEach((item) => {
@@ -103,18 +105,14 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
       );
 
       // 👉 us month me revenue add kar rahe hain
-      revenueAcc[month] += amount; //revenueAcc[month] += amount ka matlab hai — us month ke box me amount add kar do
+      // revenueAcc[month] += amount ka matlab hai — us month ke box me amount add kar do
+      revenueAcc[month] += amount;
     });
 
     // 👉 Final data state mein tabhi save hoga jab koi change milega
-    setMonthlyOrders(prev => {
-      return prev.join(',') === ordersCount.join(',') ? prev : ordersCount;
-    });
-    setMonthlyRevenue(prev => {
-      return prev.join(',') === revenueAcc.join(',') ? prev : revenueAcc;
-    });
+    return { monthlyOrders: ordersCount, monthlyRevenue: revenueAcc };
 
-    // 👉 Ye code sirf tab dobara chalega jab "order" array badlega
+  // 👉 Ye code sirf tab dobara chalega jab "order" array badlega
   }, [order]);
   // -------------------------------------------------------------------------
 

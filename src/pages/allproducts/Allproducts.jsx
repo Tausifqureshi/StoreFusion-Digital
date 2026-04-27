@@ -149,10 +149,11 @@ const Allproducts = React.memo(function Allproducts() {
 
   useEffect(() => {
     if (productsRef.current) {
+      //  Yahan DOM ko order diya ja raha hai ke is box ke bilkul start mein scroll karke chale jao
       productsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    setExpandedId(null);
-  }, [currentPage]);
+    setExpandedId(null); // jaise hi user page change kar re ga to open wala mode close ho jae ga
+  }, [currentPage]); // Jaise hi user page change karega (currentPage badlega), ye trigger hoga
 
   useEffect(() => {
     window.scrollTo(0, 0);

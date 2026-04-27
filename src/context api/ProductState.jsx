@@ -18,6 +18,7 @@ export function ProductState({ children }) {
     description: "",
     discount: "",
     stock: "",
+    rating: "",
     time: Timestamp.now(),
     date: new Date().toLocaleString("en-US", {
       month: "short",
@@ -36,6 +37,7 @@ export function ProductState({ children }) {
       description: "",
       discount: "",
       stock: "",
+      rating: "",
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",
@@ -97,6 +99,7 @@ export function ProductState({ children }) {
         price: Number(products.price),
         discount: Number(products.discount || 0),
         stock: Number(products.stock || 0),
+        rating: Number(products.rating || 4.5),
       });
       toast.success("Product added successfully!", { icon: "✅" });
       return true;
@@ -118,6 +121,7 @@ export function ProductState({ children }) {
         price: Number(products.price),
         discount: Number(products.discount || 0),
         stock: Number(products.stock || 0),
+        rating: Number(products.rating || 4.5),
       });
       toast.success("Product Updated successfully");
       return true;

@@ -8,7 +8,6 @@ export const saveCartDebounce = (cart) => {
   timer = setTimeout(async () => {
     try {
       await saveCart(cart);
-      console.log("🔥 cart synced");
     } catch (err) {
       console.error("debounce error", err);
     }

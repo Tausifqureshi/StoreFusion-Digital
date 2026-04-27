@@ -20,7 +20,10 @@ function Footer({ isDark }) {
   const [email, setEmail] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(email);
+    // ✅ toast se user ko feedback do, console me email leak mat karo
+    if (email.trim()) {
+      toast?.success?.("Subscribed successfully!", { autoClose: 1500 });
+    }
     setEmail("");
   }
 

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ImageWithLoader from "../loader/ImageWithLoader";
 import { saveCart } from "../../pages/cart/cartService";
 import { store } from "../../redux/store";
+import { FaStar } from "react-icons/fa";
 
 function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "lg:w-1/4" }) {
   const uniqueId = item.id || item.title;
@@ -71,16 +72,25 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
         </div>
         <div className="p-5 border-t-2 flex flex-col flex-1">
           <h2 className={`tracking-widest text-xs title-font font-medium text-gray-400 mb-1 ${mode === "dark" ? "text-white" : ""}`}>{category}</h2>
-          <h1 className={`title-font text-lg font-medium mb-3 truncate ${mode === "dark" ? "text-white" : "text-gray-900"}`}>{title}</h1>
+          <h1 className={`title-font text-lg font-medium mb-1 truncate ${mode === "dark" ? "text-white" : "text-gray-900"}`}>{title}</h1>
 
-          <div className="flex items-center gap-2 mb-1">
-            <span className={`font-medium ${mode === "dark" ? "text-white" : "text-gray-900"}`}>₹ {finalPrice}</span>
-            {discount > 0 && (
-              <>
-                <span className="line-through text-gray-400 text-sm">₹ {price}</span>
-                <span className="text-red-500 text-sm font-semibold">{discount}% OFF</span>
-              </>
-            )}
+          <div className="flex items-center justify-between mb-3">
+            {/* Price Side */}
+            <div className="flex items-center gap-2">
+              <span className={`font-medium ${mode === "dark" ? "text-white" : "text-gray-900"}`}>₹ {finalPrice}</span>
+              {discount > 0 && (
+                <>
+                  <span className="line-through text-gray-400 text-sm">₹ {price}</span>
+                  <span className="text-red-500 text-sm font-semibold">{discount}% OFF</span>
+                </>
+              )}
+            </div>
+
+            {/* Rating Side */}
+            <div className="flex items-center gap-1 bg-yellow-50 dark:bg-yellow-900/20 px-2 py-0.5 rounded-full">
+              <FaStar className="text-yellow-500 text-[10px]" />
+              <span className={`text-[11px] font-black ${mode === "dark" ? "text-yellow-500" : "text-yellow-600"}`}>{item.rating || "4.5"}</span>
+            </div>
           </div>
 
           <div className="mb-3 text-[10px] font-black uppercase tracking-widest text-orange-500">
@@ -114,4 +124,15 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
 }
 
 // ✅ ABSOLUTE SHIELDING: Strict comparison ensures NO re-renders unless the specific item or theme changes
-export default React.memo(SingleProductCard);
+export default React.memo(SingleProductCard, (prevProps, nextProps) => {
+  return (
+    prevProps.item.id === nextProps.item.id &&
+    prevProps.item.price === nextProps.item.price &&
+    prevProps.item.stock === nextProps.item.stock &&
+    prevProps.item.discount === nextProps.item.discount &&
+    prevProps.item.rating === nextProps.item.rating &&
+    prevProps.isExpanded === nextProps.isExpanded &&
+    prevProps.mode === nextProps.mode &&
+    prevProps.colSize === nextProps.colSize
+  );
+});

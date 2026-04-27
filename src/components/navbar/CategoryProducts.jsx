@@ -1,6 +1,6 @@
 import { ProductContext, ThemeContext, FilterContext } from '../../context api/AllContext';
 import React, { useContext, useMemo, useEffect, useState, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 ;
 ;
 import {
@@ -16,12 +16,16 @@ function CategoryProducts() {
   const { name } = useParams();
   const { product, productLoading } = useContext(ProductContext);
   const { mode } = useContext(ThemeContext);
-  const { filterPrice, sortPrice, filterColor } = useContext(FilterContext);
+  const { filterPrice, sortPrice, filterColor, searchkey } = useContext(FilterContext);
   const navigate = useNavigate();
   const isDark = mode === "dark";
   const [expandedId, setExpandedId] = useState(null);
   const [isFiltering, setIsFiltering] = useState(false);
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
+
+  const [searchParams] = useSearchParams();
+  const subQuery = searchParams.get("sub");
+  const displayTitle = subQuery ? subQuery : name;
 
   // Extract unique subcategories for the current main category
   const uniqueSubCategories = useMemo(() => {
@@ -51,18 +55,28 @@ function CategoryProducts() {
     setIsFiltering(true);
     const timer = setTimeout(() => setIsFiltering(false), 500);
     return () => clearTimeout(timer);
-  }, [filterPrice, sortPrice, filterColor, name, selectedSubcategories]);
+  }, [filterPrice, sortPrice, filterColor, searchkey, name, selectedSubcategories]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [name]);
 
-  // category wise product ko filter kar rahe hain lekin yaha dynamic ara hai name ka use kar re is me.
   const filteredProducts = useMemo(() => {
     return product
+      // category wise product ko filter kar rahe hain lekin yaha dynamic ara hai name ka use kar re is me.
       .filter((item) => item.category?.toLowerCase() === name.toLowerCase())
+
       .filter((item) => {
-        // Filter by Subcategory
+        // Filter By Search
+        if (!searchkey) return true;
+        return item.title?.toLowerCase().includes(searchkey.toLowerCase());
+      })
+      .filter((item) => {
+        // Amazon jaisa filter: Agar URL mein ?sub=laptop hai, toh sirf laptop dikhao! Tarika 1: URL ke through
+        if (subQuery) {
+          return item.subcategory?.toLowerCase() === subQuery.toLowerCase();
+        }
+        // Filter by Subcategory checkboxes yaha tab show higa jab user bina url ke aye ga warna show nhi hoga yaha prodict ko hide show karne ke liye hai yaha check box. 
         if (selectedSubcategories.length === 0) return true;
         return item.subcategory && selectedSubcategories.includes(item.subcategory.trim().toUpperCase());
       })
@@ -80,7 +94,7 @@ function CategoryProducts() {
         if (sortPrice === "high-to-low") return b.price - a.price;
         return 0;
       });
-  }, [product, name, filterPrice, filterColor, sortPrice, selectedSubcategories]);
+  }, [product, name, filterPrice, filterColor, sortPrice, selectedSubcategories, searchkey]);
 
   return (
     <>
@@ -98,7 +112,7 @@ function CategoryProducts() {
                 <FaArrowLeft /> Back to Shopping
               </button>
               <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic">
-                {name} <span className="text-blue-600">Collection</span>
+                {displayTitle} <span className="text-blue-600">Collection</span>
               </h1>
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">
                 Showing {filteredProducts.length} Premium Results
@@ -112,8 +126,8 @@ function CategoryProducts() {
             {/* Sidebar Filter (Without Category Checkboxes) */}
             <div className="lg:col-span-3 lg:sticky lg:top-24 w-full flex flex-col gap-6">
 
-              {/* ⭐ Dynamic Subcategory Checkboxes ⭐ */}
-              {uniqueSubCategories.length > 0 && (
+              {/*jab bhi user url ke thorw aye ge jaise  searchParams ka use kar Subcategory  dehke ga us ko Checkboxes nhi dheke ge */}
+              {!subQuery && uniqueSubCategories.length > 0 && (
                 <div className={`p-5 rounded-[2rem] border ${isDark ? 'bg-[#1e293b] border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
                   <h3 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-orange-500">
                     Filter by Type
@@ -186,7 +200,7 @@ function CategoryProducts() {
             </div>
 
             <div className="max-w-5xl mx-auto px-2">
-              <Testimonial categoryName={name} />
+              <Testimonial categoryName={name} mode={mode} />
             </div>
           </section>
 

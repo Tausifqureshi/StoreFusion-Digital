@@ -207,8 +207,18 @@ function ProductInfo() {
   }, [dispatch, currentProduct]);
 
   const handleViewAll = useCallback(() => {
-    navigate(`/allproducts`);
-  }, [navigate]);
+    if (currentProduct?.category) {
+      const cat = currentProduct.category.toLowerCase();
+      // Amazon Style: Agar subcategory hai, toh URL ke aage '?sub=laptop' lagao
+      if (currentProduct.subcategory) {
+        navigate(`/category/${cat}?sub=${currentProduct.subcategory.toLowerCase()}`);
+      } else {
+        navigate(`/category/${cat}`);
+      }
+    } else {
+      navigate(`/allproducts`);
+    }
+  }, [navigate, currentProduct]);
 
   const accordionData = useMemo(() => {
     if (!currentProduct) return [];
