@@ -9,6 +9,18 @@ const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDa
   return (
     <section className={`body-font mb-10 transition-all ${isDark ? "bg-[#131921]" : "bg-white"}`}>
       <div className="container px-5 py-10 mx-auto">
+        {/* Section Heading */}
+        <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
+          <div>
+            <h2 className={`text-3xl md:text-4xl font-black italic tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              What Our <span className="text-orange-500">Users Say</span>
+            </h2>
+            <p className={`text-xs md:text-sm font-bold uppercase tracking-[0.3em] mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+              Customer Testimonials
+            </p>
+          </div>
+        </div>
+
         <div className="flex flex-wrap -m-4">
           {finalReviews.map((item, index) => (
             <div key={index} className="lg:w-1/3 md:w-1/2 p-4 w-full">

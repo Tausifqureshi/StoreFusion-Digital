@@ -2,12 +2,12 @@ import React, { useContext } from 'react'
 
 
 function Track({ mode }) {
-    // const { mode, toggleMode } = useContext(ThemeContext);;
-// const returnValue = useContext(ProductContext);
-// console.log(returnValue);
+  // const { mode, toggleMode } = useContext(ThemeContext);;
+  // const returnValue = useContext(ProductContext);
+  // console.log(returnValue);
 
 
-return (
+  return (
     <div>
       <section className="text-gray-600 body-font">
         <div className="container px-5 md:py-10 mx-auto">
@@ -40,7 +40,7 @@ return (
                   <svg className={`${feature.iconColor} w-12 h-12 mb-3 inline-block`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" d={feature.iconPath} />
                   </svg>
-                  
+
                   <h2 className={`title-font font-medium text-lg ${mode === 'dark' ? 'text-white' : 'text-gray-900'}`}>{feature.title}</h2>
                   <p className={`leading-relaxed ${mode === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>{feature.description}</p>
                 </div>
