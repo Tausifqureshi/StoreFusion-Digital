@@ -7,11 +7,12 @@ import { useNavigate } from 'react-router-dom';
 const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) {
   if (finalReviews.length === 0) return null;
   return (
-    <section className={`body-font mb-10 transition-all ${isDark ? "bg-[#131921]" : "bg-white"}`}>
-      <div className="container px-5 py-10 mx-auto">
-        {/* Section Heading */}
-        <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
-          <div>
+    <section className="body-font mb-10 transition-all">
+      <div className="container px-5 py-8 md:py-12 mx-auto">
+        <div className={`rounded-3xl p-4 md:p-6 md:px-8 shadow-sm border ${isDark ? 'bg-[#131921] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
+          {/* Section Heading */}
+          <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
+            <div>
             <h2 className={`text-3xl md:text-4xl font-black italic tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
               What Our <span className="text-orange-500">Users Say</span>
             </h2>
@@ -68,6 +69,7 @@ const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDa
               </div>
             </div>
           ))}
+          </div>
         </div>
       </div>
     </section>

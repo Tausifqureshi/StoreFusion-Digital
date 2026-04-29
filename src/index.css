@@ -13,7 +13,6 @@
 .fixed, .sticky {
   will-change: transform;
   backface-visibility: hidden;
-  transform: translateZ(0); /* Force GPU acceleration */
 }
 
 .transition-all, .transition-transform {

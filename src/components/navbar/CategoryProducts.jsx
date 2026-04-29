@@ -16,11 +16,11 @@ function CategoryProducts() {
   const { name } = useParams();
   const { product, productLoading } = useContext(ProductContext);
   const { mode } = useContext(ThemeContext);
-  const { filterPrice, sortPrice, filterColor, searchkey } = useContext(FilterContext);
+  const { filterPrice, sortPrice, filterColor, filterSize, searchkey } = useContext(FilterContext);
   const navigate = useNavigate();
   const isDark = mode === "dark";
   const [expandedId, setExpandedId] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
   const [selectedSubcategories, setSelectedSubcategories] = useState([]);
 
   const [searchParams] = useSearchParams();
@@ -52,10 +52,10 @@ function CategoryProducts() {
 
   // Trigger loading spinner when filters or category changes
   useEffect(() => {
-    setIsFiltering(true);
-    const timer = setTimeout(() => setIsFiltering(false), 500);
+    setIsFilterLoading(true);
+    const timer = setTimeout(() => setIsFilterLoading(false), 500);
     return () => clearTimeout(timer);
-  }, [filterPrice, sortPrice, filterColor, searchkey, name, selectedSubcategories]);
+  }, [filterPrice, sortPrice, filterColor, filterSize, searchkey, name, selectedSubcategories]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -76,7 +76,7 @@ function CategoryProducts() {
         if (subQuery) {
           return item.subcategory?.toLowerCase() === subQuery.toLowerCase();
         }
-        // Filter by Subcategory checkboxes yaha tab show higa jab user bina url ke aye ga warna show nhi hoga yaha prodict ko hide show karne ke liye hai yaha check box. 
+        // Filter by Subcategory checkboxes yaha tab show hoga jab user bina url ke aye ga warna show nhi hoga yaha product ko hide show karne ke liye hai yaha check box. 
         if (selectedSubcategories.length === 0) return true;
         return item.subcategory && selectedSubcategories.includes(item.subcategory.trim().toUpperCase());
       })
@@ -89,12 +89,16 @@ function CategoryProducts() {
         if (!filterColor || filterColor.length === 0) return true;
         return filterColor.includes(item.color || "N/A");
       })
+      .filter((item) => {
+        if (!filterSize || filterSize.length === 0) return true;
+        return filterSize.includes((item.size || "N/A").trim().toUpperCase());
+      })
       .sort((a, b) => {
         if (sortPrice === "low-to-high") return a.price - b.price;
         if (sortPrice === "high-to-low") return b.price - a.price;
         return 0;
       });
-  }, [product, name, filterPrice, filterColor, sortPrice, selectedSubcategories, searchkey]);
+  }, [product, name, filterPrice, filterColor, filterSize, sortPrice, selectedSubcategories, searchkey]);
 
   return (
     <>
@@ -126,7 +130,7 @@ function CategoryProducts() {
             {/* Sidebar Filter (Without Category Checkboxes) */}
             <div className="lg:col-span-3 lg:sticky lg:top-24 w-full flex flex-col gap-6">
 
-              {/*jab bhi user url ke thorw aye ge jaise  searchParams ka use kar Subcategory  dehke ga us ko Checkboxes nhi dheke ge */}
+              {/*jab bhi user url ke thorw aye ge jaise  searchParams ka use kar Subcategory dehke gi.subCategory se reltive Checkboxes show nhi hoge productInfo page pe veiw all. agar user category se ata hai tab shoga subCategory se reltive checkbox*/}
               {!subQuery && uniqueSubCategories.length > 0 && (
                 <div className={`p-5 rounded-[2rem] border ${isDark ? 'bg-[#1e293b] border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
                   <h3 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-orange-500">
@@ -169,12 +173,12 @@ function CategoryProducts() {
                 </div>
               ) : (
                 <div className="relative min-h-[400px]">
-                  {isFiltering && (
+                  {isFilterLoading && (
                     <div className={`absolute inset-0 z-10 flex justify-center items-start ${mode === 'dark' ? 'bg-[#111827]/60' : 'bg-white/60'} backdrop-blur-[2px] transition-all duration-300`}>
                       <LoaderSpinner isDark={mode === 'dark'} label="" />
                     </div>
                   )}
-                  <div className={`flex flex-wrap -m-4 transition-opacity duration-300 ${isFiltering ? 'opacity-50' : 'opacity-100'}`}>
+                  <div className={`flex flex-wrap -m-4 transition-opacity duration-300 ${isFilterLoading ? 'opacity-50' : 'opacity-100'}`}>
                     {filteredProducts.map((item, index) => (
                       <SingleProductCard
                         key={index}

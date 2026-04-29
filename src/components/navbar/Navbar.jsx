@@ -109,7 +109,12 @@ const NavScrollShield = React.memo(function NavScrollShield({ children }) {
         setIsVisible(!(currentScrollY > lastScrollY.current && currentScrollY > 50)); // 🖥️ Desktop: Neeche scroll karo toh hide, upar karo toh show
       }
 
-      setIsScrolled(currentScrollY > 50); // 50px ke baad navbar ka background/shadow change hoga
+      // 50px ke baad navbar ka background/shadow change hoga (bg-change logic)
+      if (currentScrollY > 50) {
+        setIsScrolled(true); 
+      } else {
+        setIsScrolled(false);
+      }
       lastScrollY.current = currentScrollY; // Pichla scroll position save karo comparison ke liye
     }, 300); // 300ms throttle — har scroll event pe nahi, sirf 300ms baad fire hoga
 
@@ -179,7 +184,7 @@ function Navbar({ isDark }) {
   return (
     <NavScrollShield>
       {(isVisible, isScrolled) => (
-        <div className={`fixed top-0 w-full z-50 bg-purple-500 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
+        <div className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
           <TopAnnouncement isDark={isDark} />
 
           <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>

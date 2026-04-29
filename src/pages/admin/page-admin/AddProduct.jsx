@@ -13,11 +13,19 @@ function AddProduct() {
 
   // Memoized color toggle handler to keep JSX clean
   const handleColorToggle = useCallback((color) => {
-    // setProducts({ ...products, color: products.color === color ? "" : color });
     if (products.color === color) {
       setProducts({ ...products, color: "" });
     } else {
       setProducts({ ...products, color: color });
+    }
+  }, [products, setProducts]);
+
+  // Memoized size toggle handler
+  const handleSizeToggle = useCallback((size) => {
+    if (products.size === size) {
+      setProducts({ ...products, size: "" });
+    } else {
+      setProducts({ ...products, size: size });
     }
   }, [products, setProducts]);
 
@@ -106,6 +114,23 @@ function AddProduct() {
                   />
                   <span className={`text-xs font-bold ${products.color === color ? 'text-orange-700' : 'text-gray-600'}`}>
                     {color}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="border border-gray-300 rounded-lg p-3">
+            <p className="text-sm text-gray-500 mb-2">Select Product Size (Optional)</p>
+            <div className="grid grid-cols-5 gap-2">
+              {['S', 'M', 'L', 'XL', 'XXL', '6', '7', '8', '9', '10', '11'].map((size) => (
+                <div
+                  key={size}
+                  onClick={() => handleSizeToggle(size)}
+                  className={`cursor-pointer select-none flex items-center justify-center p-2 rounded-lg border transition-all ${products.size === size ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 hover:bg-gray-50 text-gray-600'}`}
+                >
+                  <span className="text-xs font-black uppercase">
+                    {size}
                   </span>
                 </div>
               ))}

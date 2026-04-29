@@ -14,6 +14,9 @@ export function FilterState({ children }) {
   const [filterColor, setFilterColor] = useState(() => {
     try { return JSON.parse(localStorage.getItem("filterColor")) || []; } catch { return []; }
   });
+  const [filterSize, setFilterSize] = useState(() => {
+    try { return JSON.parse(localStorage.getItem("filterSize")) || []; } catch { return []; }
+  });
 
   // // Persist to localStorage whenever state changes
   // useEffect(() => {
@@ -23,12 +26,37 @@ export function FilterState({ children }) {
   //   localStorage.setItem("sortPrice", sortPrice);
   //   localStorage.setItem("filterColor", JSON.stringify(filterColor));
   // }, [searchkey, filterType, filterPrice, sortPrice, filterColor]);
-  // ✅ Split Effects: Isse CPU par load kam padega
-  useEffect(() => { localStorage.setItem("searchkey", searchkey); }, [searchkey]);
-  useEffect(() => { localStorage.setItem("filterType", JSON.stringify(filterType)); }, [filterType]);
-  useEffect(() => { localStorage.setItem("filterPrice", JSON.stringify(filterPrice)); }, [filterPrice]);
-  useEffect(() => { localStorage.setItem("sortPrice", sortPrice); }, [sortPrice]);
-  useEffect(() => { localStorage.setItem("filterColor", JSON.stringify(filterColor)); }, [filterColor]);
+  // ✅ Clean LocalStorage: Removes the key entirely if the filter is empty to keep storage clean
+  useEffect(() => {
+    if (searchkey) localStorage.setItem("searchkey", searchkey);
+    else localStorage.removeItem("searchkey");
+  }, [searchkey]);
+
+  useEffect(() => {
+    if (filterType.length > 0) localStorage.setItem("filterType", JSON.stringify(filterType));
+    else localStorage.removeItem("filterType");
+  }, [filterType]);
+
+  useEffect(() => {
+    // Only save if it deviates from the default price range [0, 100000]
+    if (filterPrice[0] !== 0 || filterPrice[1] !== 100000) localStorage.setItem("filterPrice", JSON.stringify(filterPrice));
+    else localStorage.removeItem("filterPrice");
+  }, [filterPrice]);
+
+  useEffect(() => {
+    if (sortPrice) localStorage.setItem("sortPrice", sortPrice);
+    else localStorage.removeItem("sortPrice");
+  }, [sortPrice]);
+
+  useEffect(() => {
+    if (filterColor.length > 0) localStorage.setItem("filterColor", JSON.stringify(filterColor));
+    else localStorage.removeItem("filterColor");
+  }, [filterColor]);
+
+  useEffect(() => {
+    if (filterSize.length > 0) localStorage.setItem("filterSize", JSON.stringify(filterSize));
+    else localStorage.removeItem("filterSize");
+  }, [filterSize]);
 
   const contextValue = useMemo(() => ({
     searchkey, setSearchkey,
@@ -36,7 +64,8 @@ export function FilterState({ children }) {
     filterPrice, setFilterPrice,
     sortPrice, setSortPrice,
     filterColor, setFilterColor,
-  }), [searchkey, filterType, filterPrice, sortPrice, filterColor]);
+    filterSize, setFilterSize,
+  }), [searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize]);
 
   return (
     <FilterContext.Provider value={contextValue}>

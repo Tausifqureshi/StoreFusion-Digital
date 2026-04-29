@@ -9,18 +9,18 @@ import SingleProductCard from "../../components/productCard/SingleProductCard";
 // ✅ ALL PRODUCTS VIEW: Saare products, filters aur pagination yahan locked hain
 const AllProductsView = React.memo(function AllProductsView({
   mode, product, productLoading,
-  searchkey, filterType, filterPrice, sortPrice, filterColor,
+  searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize,
   currentPage, setCurrentPage, expandedId, setExpandedId, productsRef
 }) {
   const productsPerPage = 8;
-  const [isFiltering, setIsFiltering] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
 
   // Trigger loading spinner when filters or page changes
   useEffect(() => {
-    setIsFiltering(true);
-    const timer = setTimeout(() => setIsFiltering(false), 500);
+    setIsFilterLoading(true);
+    const timer = setTimeout(() => setIsFilterLoading(false), 500);
     return () => clearTimeout(timer);
-  }, [searchkey, filterType, filterPrice, sortPrice, filterColor, currentPage]);
+  }, [searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize, currentPage]);
 
   // 👉 Filtered products calculation (locked inside)
   const filteredProducts = useMemo(() => {
@@ -43,12 +43,17 @@ const AllProductsView = React.memo(function AllProductsView({
         const itemColor = (item.color || "N/A").trim().toLowerCase();
         return filterColor.some(c => c.trim().toLowerCase() === itemColor);
       })
+      .filter((item) => { //Filter By Size
+        if (!filterSize || filterSize.length === 0) return true;
+        const itemSize = (item.size || "N/A").trim().toUpperCase();
+        return filterSize.some(s => s.trim().toUpperCase() === itemSize);
+      })
       .sort((a, b) => { //Sort By Price
         if (sortPrice === "low-to-high") return a.price - b.price;
         if (sortPrice === "high-to-low") return b.price - a.price;
         return 0;
       });
-  }, [product, searchkey, filterType, filterPrice, sortPrice, filterColor]);
+  }, [product, searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -70,12 +75,12 @@ const AllProductsView = React.memo(function AllProductsView({
             </div>
 
             <div className="relative min-h-[400px]">
-              {isFiltering && (
+              {isFilterLoading && (
                 <div className={`absolute inset-0 z-10 flex justify-center items-start ${mode === 'dark' ? 'bg-[#111827]/60' : 'bg-white/60'} backdrop-blur-[2px] transition-all duration-300`}>
                   <LoaderSpinner isDark={mode === 'dark'} label="" />
                 </div>
               )}
-              <div className={`flex flex-wrap -m-4 transition-opacity duration-300 ${isFiltering ? 'opacity-50' : 'opacity-100'}`}>
+              <div className={`flex flex-wrap -m-4 transition-opacity duration-300 ${isFilterLoading ? 'opacity-50' : 'opacity-100'}`}>
                 {currentProducts.map((item, index) => (
                   <SingleProductCard
                     key={index}
@@ -141,7 +146,7 @@ const AllProductsView = React.memo(function AllProductsView({
 const Allproducts = React.memo(function Allproducts() {
   const { mode } = useContext(ThemeContext);
   const { product, productLoading } = useContext(ProductContext);
-  const { searchkey, filterType, filterPrice, sortPrice, filterColor } = useContext(FilterContext);
+  const { searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize } = useContext(FilterContext);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedId, setExpandedId] = useState(null);
@@ -177,6 +182,7 @@ const Allproducts = React.memo(function Allproducts() {
           filterType={filterType}
           sortPrice={sortPrice}
           filterColor={filterColor}
+          filterSize={filterSize}
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
           expandedId={expandedId}

@@ -19,6 +19,8 @@ export function ProductState({ children }) {
     discount: "",
     stock: "",
     rating: "",
+    color: "", // Added color placeholder if missing, though it's dynamic
+    size: "",  // Added size for apparel and shoes
     time: Timestamp.now(),
     date: new Date().toLocaleString("en-US", {
       month: "short",
@@ -38,6 +40,8 @@ export function ProductState({ children }) {
       discount: "",
       stock: "",
       rating: "",
+      color: "",
+      size: "", // Reset size
       time: Timestamp.now(),
       date: new Date().toLocaleString("en-US", {
         month: "short",

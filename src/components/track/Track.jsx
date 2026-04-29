@@ -1,66 +1,143 @@
-import React, { useContext } from 'react'
-
+import React from 'react'
+import { motion } from 'framer-motion'
+import { FiShoppingBag, FiTruck, FiGift, FiShield, FiClock, FiCreditCard } from 'react-icons/fi';
 
 function Track({ mode }) {
-  // const { mode, toggleMode } = useContext(ThemeContext);;
-  // const returnValue = useContext(ProductContext);
-  // console.log(returnValue);
+  const isDark = mode === 'dark';
 
+  const tracks = [
+    {
+      title: "Premium Quality",
+      description: "Our products are 100% genuine and made with top tier materials.",
+      icon: <FiShoppingBag className="w-8 h-8" />,
+      color: "from-orange-500 to-amber-500",
+      bgLight: "bg-orange-50",
+      bgDark: "bg-orange-500/10",
+      iconColor: "text-orange-500",
+    },
+    {
+      title: "Free & Fast Shipping",
+      description: "We ship all over India for FREE. Get your orders delivered at lightning speed.",
+      icon: <FiTruck className="w-8 h-8" />,
+      color: "from-blue-500 to-cyan-500",
+      bgLight: "bg-blue-50",
+      bgDark: "bg-blue-500/10",
+      iconColor: "text-blue-500",
+    },
+    {
+      title: "Exciting Offers",
+      description: "We provide amazing offers, seasonal discounts & special membership perks.",
+      icon: <FiGift className="w-8 h-8" />,
+      color: "from-orange-500 to-amber-500",
+      bgLight: "bg-orange-50",
+      bgDark: "bg-orange-500/10",
+      iconColor: "text-orange-500",
+    },
+    {
+      title: "Secure Payments",
+      description: "100% secure payment gateways to ensure your data is always safe.",
+      icon: <FiShield className="w-8 h-8" />,
+      color: "from-blue-500 to-cyan-500",
+      bgLight: "bg-blue-50",
+      bgDark: "bg-blue-500/10",
+      iconColor: "text-blue-500",
+    },
+    {
+      title: "24/7 Support",
+      description: "Our support team is available round the clock to help you out.",
+      icon: <FiClock className="w-8 h-8" />,
+      color: "from-orange-500 to-amber-500",
+      bgLight: "bg-orange-50",
+      bgDark: "bg-orange-500/10",
+      iconColor: "text-orange-500",
+    },
+    {
+      title: "Easy Returns",
+      description: "Not satisfied? Return it within 7 days for a full refund. No questions asked.",
+      icon: <FiCreditCard className="w-8 h-8" />,
+      color: "from-blue-500 to-cyan-500",
+      bgLight: "bg-blue-50",
+      bgDark: "bg-blue-500/10",
+      iconColor: "text-blue-500",
+    }
+  ];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  };
 
   return (
-    <div>
-      <section className="text-gray-600 body-font">
-        <div className="container px-5 md:py-10 mx-auto">
-          <div className="flex flex-wrap -m-4 text-center">
-            {[
-              {
-                title: "Premium T-Shirts",
-                description: "Our T-Shirts are 100% made of cotton.",
-                iconPath: "M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z",
-                iconColor: "text-blue-600",
-              },
-
-              {
-                title: "Free Shipping",
-                description: "We ship all over India for FREE.",
-                iconPath: "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12",
-                iconColor: "text-blue-600",
-              },
-
-              {
-                title: "Exciting Offers",
-                description: "We provide amazing offers & discounts.",
-                iconPath: "M15 8.25H9m6 3H9m3 6l-3-3h1.5a3 3 0 100-6M21 12a9 9 0 11-18 0 9 9 0 0118 0z",
-                iconColor: "text-blue-600",
-              },
-
-            ].map((feature, index) => (
-              <div className="p-4 md:w-1/3 sm:w-1/2 w-full" key={index}>
-                <div className={`border-2 hover:shadow-xl hover:shadow-gray-200 border-gray-200 rounded-lg px-4 py-6 transition-all duration-300 ease-in-out ${mode === 'dark' ? 'bg-gray-800' : 'bg-white'}`}>
-                  <svg className={`${feature.iconColor} w-12 h-12 mb-3 inline-block`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" d={feature.iconPath} />
-                  </svg>
-
-                  <h2 className={`title-font font-medium text-lg ${mode === 'dark' ? 'text-white' : 'text-gray-900'}`}>{feature.title}</h2>
-                  <p className={`leading-relaxed ${mode === 'dark' ? 'text-gray-400' : 'text-gray-700'}`}>{feature.description}</p>
-                </div>
-              </div>
-            ))}
+    <section className="py-8 md:py-12 transition-all duration-300 overflow-hidden">
+      <div className="container mx-auto px-5">
+        <div className={`rounded-3xl p-4 md:p-6 md:px-8 shadow-sm border ${isDark ? 'bg-[#131921] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
+          {/* Section Heading */}
+          <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
+            <div>
+            <h2 className={`text-3xl md:text-4xl font-black italic tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              Why Choose <span className="text-orange-500">StoreFusion</span>
+            </h2>
+            <p className={`text-xs md:text-sm font-bold uppercase tracking-[0.3em] mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+              Top Tier E-Commerce Experience
+            </p>
           </div>
         </div>
-      </section>
-    </div>
+
+        {/* Features Grid */}
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {tracks.map((feature, index) => (
+            <motion.div 
+              variants={itemVariants}
+              key={index} 
+              className={`group relative overflow-hidden rounded-[2rem] p-6 transition-all duration-500 hover:-translate-y-2 border
+                ${isDark 
+                  ? 'bg-gradient-to-b from-[#1e293b] to-[#131921] border-gray-700 shadow-[0_8px_30px_rgba(0,0,0,0.4)] hover:border-orange-500/50 hover:shadow-[0_15px_40px_rgba(0,0,0,0.6)]' 
+                  : 'bg-gradient-to-br from-white to-orange-50/40 border-gray-200 shadow-[0_2px_20px_rgba(0,0,0,0.04)] hover:shadow-[0_15px_30px_rgba(0,0,0,0.08)] hover:border-orange-200'
+                }
+              `}
+            >
+              {/* Decorative Gradient Blob */}
+              <div className={`absolute -right-6 -top-6 w-32 h-32 rounded-full opacity-[0.08] dark:opacity-[0.15] bg-gradient-to-br ${feature.color} group-hover:scale-150 transition-transform duration-700 ease-out blur-2xl`}></div>
+              
+              <div className="relative z-10">
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-inner
+                  ${isDark ? feature.bgDark : feature.bgLight} ${feature.iconColor}
+                `}>
+                  {feature.icon}
+                </div>
+                <h3 className={`text-lg md:text-xl font-black italic tracking-wide mb-2 uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                  {feature.title}
+                </h3>
+                <p className={`leading-relaxed text-[14px] font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                  {feature.description}
+                </p>
+              </div>
+
+              {/* Bottom decorative line */}
+              <div className={`absolute bottom-0 left-0 h-1 w-0 bg-gradient-to-r ${feature.color} group-hover:w-full transition-all duration-500 ease-out`}></div>
+            </motion.div>
+          ))}
+          </motion.div>
+        </div>
+      </div>
+    </section>
   );
 }
 
 export default React.memo(Track);
-
-
-
-
-
-
-
-
-
-

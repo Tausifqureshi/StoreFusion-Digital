@@ -7,10 +7,10 @@ import { Drawer, IconButton, Slider } from "@mui/material";
 
 // ✅ DESKTOP VIEW: Sidebar layout (Vertical)
 const DesktopFilter = React.memo(function DesktopFilter({
-  isDark, filterType, localPrice, sortPrice, filterColor,
-  uniqueCategories, uniqueColors, maxProductPrice,
-  toggleCategory, toggleColor, setLocalPrice, setFilterPrice, setSortPrice, resetFilters, isRotating,
-  showCategoryFilter
+  isDark, filterType, localPrice, sortPrice, filterColor, filterSize,
+  uniqueCategories, uniqueColors, uniqueSizes, maxProductPrice,
+  toggleCategory, toggleColor, toggleSize, setLocalPrice, setFilterPrice, setSortPrice, resetFilters, isRotating,
+  showCategoryFilter, hasActiveFilters
 }) {
   return (
     <div className={`hidden lg:flex flex-col p-6 rounded-2xl border transition-all duration-300 ${isDark ? "bg-[#232f3e] border-gray-700 shadow-2xl" : "bg-white border-gray-100 shadow-xl shadow-blue-100/40"} sticky top-28`}>
@@ -18,9 +18,11 @@ const DesktopFilter = React.memo(function DesktopFilter({
         <h2 className={`text-xl font-black italic tracking-tighter uppercase ${isDark ? "text-white" : "text-blue-600"}`}>
           Filters
         </h2>
-        <button onClick={resetFilters} className={`p-2 rounded-lg transition-all shadow-sm ${isDark ? "bg-gray-800 text-red-400 hover:bg-red-900" : "bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"}`} title="Clear Filters">
-          <FiRefreshCw size={18} className={`transition-transform duration-500 ${isRotating ? "rotate-180" : "rotate-0"}`} />
-        </button>
+        {hasActiveFilters && (
+          <button onClick={resetFilters} className={`p-2 rounded-lg transition-all shadow-sm ${isDark ? "bg-gray-800 text-red-400 hover:bg-red-900" : "bg-red-50 text-red-600 hover:bg-red-600 hover:text-white"}`} title="Clear Filters">
+            <FiRefreshCw size={18} className={`transition-transform duration-500 ${isRotating ? "rotate-180" : "rotate-0"}`} />
+          </button>
+        )}
       </div>
 
       <div className="space-y-6">
@@ -76,6 +78,20 @@ const DesktopFilter = React.memo(function DesktopFilter({
           </div>
         )}
 
+        {/* Size Filter */}
+        {uniqueSizes.length > 0 && (
+          <div>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Sizes</p>
+            <div className="flex flex-wrap gap-2">
+              {uniqueSizes.map((size, i) => (
+                <div key={i} onClick={() => toggleSize(size)} className={`cursor-pointer select-none flex items-center justify-center px-3 py-1.5 rounded-lg border-2 shadow-sm transition-all ${filterSize.includes(size) ? "border-orange-500 bg-orange-50 text-orange-700 font-black scale-105" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600 font-bold"}`}>
+                  <span className="text-[10px] uppercase">{size}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Sort by */}
         <div>
           <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Sort by</p>
@@ -106,7 +122,7 @@ const DesktopFilter = React.memo(function DesktopFilter({
 });
 
 // ✅ MOBILE VIEW: Handles chips and triggers
-const MobileFilter = React.memo(function MobileFilter({ isDark, filterType, filterColor, sortPrice, toggleCategory, toggleColor, setSortPrice, setDrawerOpen, showCategoryFilter }) {
+const MobileFilter = React.memo(function MobileFilter({ isDark, filterType, filterColor, filterSize, sortPrice, toggleCategory, toggleColor, toggleSize, setSortPrice, setDrawerOpen, showCategoryFilter }) {
   return (
     <div className="lg:hidden flex flex-col gap-3">
       <div className="relative">
@@ -127,6 +143,11 @@ const MobileFilter = React.memo(function MobileFilter({ isDark, filterType, filt
             {col} <FiX onClick={() => toggleColor(col)} className="cursor-pointer" size={14} />
           </div>
         ))}
+        {filterSize.map((size) => (
+          <div key={size} className="flex items-center gap-2 px-3 py-2 rounded-full bg-gray-800 text-white border-2 border-gray-700 text-[10px] font-black uppercase tracking-tighter shadow-sm animate-in fade-in zoom-in duration-300">
+            {size} <FiX onClick={() => toggleSize(size)} className="cursor-pointer" size={14} />
+          </div>
+        ))}
         {sortPrice && (
           <div className="flex items-center gap-2 px-3 py-2 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-tighter shadow-sm animate-in fade-in zoom-in duration-300">
             {sortPrice.replace("-", " ")} <FiX onClick={() => setSortPrice("")} className="cursor-pointer" size={14} />
@@ -143,7 +164,8 @@ function Filter({ mode, showCategoryFilter = false }) {
     filterType, setFilterType,
     filterPrice, setFilterPrice,
     sortPrice, setSortPrice,
-    filterColor, setFilterColor
+    filterColor, setFilterColor,
+    filterSize, setFilterSize
   } = useContext(FilterContext);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -158,11 +180,18 @@ function Filter({ mode, showCategoryFilter = false }) {
     const uniqueSet = new Set((product || []).map(p => p.category?.trim().toUpperCase()).filter(Boolean));
     return [...uniqueSet];
   }, [product]);
-  
+
   const uniqueColors = useMemo(() => {
     const uniqueSet = new Set((product || []).map(p => p.color?.trim().toUpperCase()).filter(Boolean));
     return [...uniqueSet];
   }, [product]);
+
+  const uniqueSizes = useMemo(() => {
+    const uniqueSet = new Set((product || []).map(p => p.size?.trim().toUpperCase()).filter(Boolean));
+    // Provide a logical sort for known sizes if desired, otherwise standard sort
+    return [...uniqueSet].sort();
+  }, [product]);
+
   const maxProductPrice = useMemo(() => product.length > 0 ? Math.max(...product.map(p => Number(p.price) || 0)) : 100000, [product]);
 
   // Set default max price on first load if missing
@@ -183,8 +212,9 @@ function Filter({ mode, showCategoryFilter = false }) {
     setFilterPrice([0, maxProductPrice]);
     setSortPrice("");
     setFilterColor([]);
+    setFilterSize([]);
     setTimeout(() => setIsRotating(false), 500);
-  }, [setFilterType, setFilterPrice, setSortPrice, setFilterColor, maxProductPrice]);
+  }, [setFilterType, setFilterPrice, setSortPrice, setFilterColor, setFilterSize, maxProductPrice]);
 
   const toggleCategory = useCallback((cat) => {
     setFilterType(prev => prev.includes(cat) ? prev.filter(item => item !== cat) : [...prev, cat]);
@@ -194,11 +224,25 @@ function Filter({ mode, showCategoryFilter = false }) {
     setFilterColor(prev => prev.includes(col) ? prev.filter(item => item !== col) : [...prev, col]);
   }, [setFilterColor]);
 
+  const toggleSize = useCallback((size) => {
+    setFilterSize(prev => prev.includes(size) ? prev.filter(item => item !== size) : [...prev, size]);
+  }, [setFilterSize]);
+
   useEffect(() => {
     const resizeListener = () => { if (window.innerWidth >= 1024) setDrawerOpen(false); };
     window.addEventListener("resize", resizeListener);
     return () => window.removeEventListener("resize", resizeListener);
   }, []);
+
+  // ✅ PERFORMANCE: useMemo ka use kiya hai taaki faltu render na ho (useState se double render hota hai)
+  const hasActiveFilters = useMemo(() => {
+    return filterType.length > 0 || 
+           filterColor.length > 0 || 
+           filterSize.length > 0 ||
+           sortPrice !== "" || 
+           localPrice[0] !== 0 || 
+           localPrice[1] !== maxProductPrice;
+  }, [filterType, filterColor, filterSize, sortPrice, localPrice, maxProductPrice]);
 
   return (
     <div className="w-full">
@@ -212,26 +256,32 @@ function Filter({ mode, showCategoryFilter = false }) {
         localPrice={localPrice}
         sortPrice={sortPrice}
         filterColor={filterColor}
+        filterSize={filterSize}
         uniqueCategories={uniqueCategories}
         uniqueColors={uniqueColors}
+        uniqueSizes={uniqueSizes}
         maxProductPrice={maxProductPrice}
         toggleCategory={toggleCategory}
         toggleColor={toggleColor}
+        toggleSize={toggleSize}
         setLocalPrice={setLocalPrice}
         setFilterPrice={setFilterPrice}
         setSortPrice={setSortPrice}
         resetFilters={resetFilters}
         isRotating={isRotating}
         showCategoryFilter={showCategoryFilter}
+        hasActiveFilters={hasActiveFilters}
       />
 
       <MobileFilter
         isDark={isDark}
         filterType={filterType}
         filterColor={filterColor}
+        filterSize={filterSize}
         sortPrice={sortPrice}
         toggleCategory={toggleCategory}
         toggleColor={toggleColor}
+        toggleSize={toggleSize}
         setSortPrice={setSortPrice}
         setDrawerOpen={setDrawerOpen}
         showCategoryFilter={showCategoryFilter}
@@ -296,7 +346,21 @@ function Filter({ mode, showCategoryFilter = false }) {
             </div>
           )}
 
-        {/* Sort by Price */}
+          {/* Mobile Sizes */}
+          {uniqueSizes.length > 0 && (
+            <div>
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-3">Sizes</p>
+              <div className="flex flex-wrap gap-2">
+                {uniqueSizes.map((size, i) => (
+                  <div key={i} onClick={() => toggleSize(size)} className={`cursor-pointer select-none flex items-center justify-center px-4 py-2 rounded-lg border-2 shadow-sm transition-all ${filterSize.includes(size) ? "border-orange-500 bg-orange-50 text-orange-700 font-black scale-105" : "border-gray-200 hover:border-gray-300 hover:bg-gray-50 text-gray-600 font-bold"}`}>
+                    <span className="text-[10px] uppercase">{size}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Sort by Price */}
           <div>
             <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Sort by Price</p>
             <div className="flex gap-3">
@@ -307,8 +371,10 @@ function Filter({ mode, showCategoryFilter = false }) {
         </div>
 
         <div className="flex gap-4 pt-6 border-t border-gray-100 dark:border-gray-800 mt-4">
-          <button onClick={resetFilters} className={`flex-1 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${isDark ? "bg-gray-800 text-red-400" : "bg-gray-100 text-gray-500"}`}>Clear All</button>
-          <button onClick={() => setDrawerOpen(false)} className="flex-[2] py-4 bg-blue-600 text-white rounded-2xl text-[11px] font-black shadow-lg uppercase tracking-widest active:scale-95 transition-all">Apply Filters</button>
+          {hasActiveFilters && (
+            <button onClick={resetFilters} className={`flex-1 py-4 rounded-2xl text-[11px] font-black uppercase tracking-widest transition-all ${isDark ? "bg-gray-800 text-red-400" : "bg-gray-100 text-gray-500"}`}>Clear All</button>
+          )}
+          <button onClick={() => setDrawerOpen(false)} className={`${hasActiveFilters ? "flex-[2]" : "w-full"} py-4 bg-blue-600 text-white rounded-2xl text-[11px] font-black shadow-lg uppercase tracking-widest active:scale-95 transition-all`}>Apply Filters</button>
         </div>
       </Drawer>
     </div>
