@@ -4,16 +4,21 @@ import { FilterContext } from './AllContext';
 export function FilterState({ children }) {
   // Use lazy initialization for state to read from localStorage once
   const [searchkey, setSearchkey] = useState(() => localStorage.getItem("searchkey") || "");
+
   const [filterType, setFilterType] = useState(() => {
     try { return JSON.parse(localStorage.getItem("filterType")) || []; } catch { return []; }
   });
+  
   const [filterPrice, setFilterPrice] = useState(() => {
     try { return JSON.parse(localStorage.getItem("filterPrice")) || [0, 100000]; } catch { return [0, 100000]; }
   });
+
   const [sortPrice, setSortPrice] = useState(() => localStorage.getItem("sortPrice") || "");
+
   const [filterColor, setFilterColor] = useState(() => {
     try { return JSON.parse(localStorage.getItem("filterColor")) || []; } catch { return []; }
   });
+
   const [filterSize, setFilterSize] = useState(() => {
     try { return JSON.parse(localStorage.getItem("filterSize")) || []; } catch { return []; }
   });

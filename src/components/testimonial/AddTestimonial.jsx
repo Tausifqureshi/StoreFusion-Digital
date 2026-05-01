@@ -1,90 +1,165 @@
-import { ProductAdminContext, ProductContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
+import { ProductAdminContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
-function Star({ filled, onClick }) {
-  return (
-    <FaStar
-      onClick={onClick}
-      className={`w-6 h-6 cursor-pointer transition-colors ${filled ? "text-orange-500" : "text-gray-200 dark:text-gray-700"
-        }`}
-    />
-  );
-}
+const RATING_CONFIG = [
+  { label: "Terrible", color: "text-red-500", bg: "bg-red-50 border-red-200" },
+  { label: "Poor", color: "text-orange-500", bg: "bg-orange-50 border-orange-200" },
+  { label: "Okay", color: "text-yellow-500", bg: "bg-yellow-50 border-yellow-200" },
+  { label: "Good", color: "text-lime-600", bg: "bg-lime-50 border-lime-200" },
+  { label: "Excellent", color: "text-green-600", bg: "bg-green-50 border-green-200" },
+];
 
-const AddTestimonialView = React.memo(function AddTestimonialView({ isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading }) {
+// ✅ Main View Component
+const AddTestimonialView = React.memo(function AddTestimonialView({
+  isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading
+}) {
+  const [hovered, setHovered] = useState(0);
+  const active = hovered || rating;
+  const config = active > 0 ? RATING_CONFIG[active - 1] : null;
+
+  const inputCls = `w-full px-3.5 py-2.5 text-sm border rounded-lg outline-none transition-all duration-150
+    ${isDark
+      ? "bg-[#1e293b] border-gray-600 text-white placeholder-gray-500 focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0]/40"
+      : "bg-white border-gray-300 text-gray-800 placeholder-gray-400 focus:border-[#2874F0] focus:ring-1 focus:ring-[#2874F0]/20"
+    }`;
+
   return (
-    <div id="testimonial-form" className={`w-full max-w-lg mx-auto p-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-200 shadow-sm"}`}>
-      {/* Header */}
-      <div className="mb-6 border-b pb-4 border-gray-100 dark:border-gray-800">
-        <h2 className={`text-xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
-          Review <span className="text-blue-600">This Product</span>
-        </h2>
-        <p className="text-[9px] font-black text-orange-500 uppercase tracking-widest mt-1">Your feedback matters to us</p>
+    <div
+      id="testimonial-form"
+      className={`w-full max-w-2xl mx-auto overflow-hidden
+        ${isDark
+          ? "bg-[#1a1f2e] border border-gray-700 rounded-2xl"
+          : "bg-white border border-gray-200 rounded-2xl shadow-lg shadow-gray-100"
+        }`}
+    >
+      {/* ── Header Bar — website orange accent ── */}
+      <div className="bg-orange-500 px-6 py-4 flex items-center justify-between">
+        <div>
+          <h2 className="text-white font-bold text-base">Rate this product</h2>
+          <p className="text-orange-100 text-xs mt-0.5">Help others with your experience</p>
+        </div>
+        {/* Live star preview in header */}
+        <div className="flex gap-0.5">
+          {[1, 2, 3, 4, 5].map(s => (
+            <FaStar key={s} size={14} className={s <= (rating) ? "text-white" : "text-orange-300/50"} />
+          ))}
+        </div>
       </div>
 
-      <div className="space-y-5">
-        {/* Rating */}
+      {/* ── Star Rating Block ─────────────────────────────────────────── */}
+      <div className={`px-6 py-5 border-b ${isDark ? "border-gray-700" : "border-gray-100"}`}>
+        <p className={`text-xs font-semibold mb-3 uppercase tracking-wide ${isDark ? "text-gray-400" : "text-gray-500"}`}>
+          Tap to rate
+        </p>
+        <div className="flex items-center gap-2">
+          {[1, 2, 3, 4, 5].map(val => (
+            <button
+              key={val}
+              type="button"
+              onClick={() => setRating(val)}
+              onMouseEnter={() => setHovered(val)}
+              onMouseLeave={() => setHovered(0)}
+              className="transition-all duration-100 hover:scale-125 active:scale-95 focus:outline-none"
+              aria-label={`${val} star`}
+            >
+              <FaStar
+                size={38}
+                className={`transition-colors duration-150 drop-shadow-sm ${val <= active ? "text-[#FFD700]" : isDark ? "text-gray-600" : "text-gray-200"
+                  }`}
+              />
+            </button>
+          ))}
+
+          {/* Rating pill badge — Meesho style */}
+          {config && (
+            <span className={`ml-2 px-3 py-1 rounded-full text-xs font-bold border ${config.bg} ${config.color} transition-all duration-200`}>
+              {config.label}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* ── Form Fields ───────────────────────────────────────────────── */}
+      <div className="px-6 py-5 space-y-4">
+
+        {/* Name */}
         <div>
-          <h3 className="text-[10px] font-black uppercase tracking-widest mb-2 opacity-70">Overall Rating</h3>
-          <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star key={star} filled={star <= rating} onClick={() => setRating(star)} />
-            ))}
-          </div>
+          <label className={`block text-xs font-semibold mb-1.5 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            Your Name <span className="text-red-400">*</span>
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            className={inputCls}
+            value={testimonialForm.name}
+            onChange={(e) => setTestimonialForm({ ...testimonialForm, name: e.target.value })}
+          />
         </div>
 
-        {/* Inputs */}
-        <div className="space-y-4">
+        {/* Review */}
+        <div>
+          <label className={`block text-xs font-semibold mb-1.5 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            Review Description <span className="text-red-400">*</span>
+          </label>
+          <textarea
+            rows={4}
+            placeholder="Describe what you liked or disliked, and share your overall experience..."
+            className={`${inputCls} resize-none`}
+            value={testimonialForm.text}
+            onChange={(e) => setTestimonialForm({ ...testimonialForm, text: e.target.value })}
+          />
+          <p className={`text-xs mt-1 ${isDark ? "text-gray-600" : "text-gray-400"}`}>
+            {testimonialForm.text?.length || 0} characters
+          </p>
+        </div>
+
+        {/* Photo + Role — 2 col */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="text-[9px] font-black uppercase tracking-widest mb-1 block opacity-60">Full Name</label>
+            <label className={`block text-xs font-semibold mb-1.5 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+              Photo URL <span className={isDark ? "text-gray-600" : "text-gray-400"}>(optional)</span>
+            </label>
             <input
-              placeholder="YOUR NAME"
-              className={`w-full px-4 py-2.5 border text-[10px] font-bold uppercase outline-none transition-all ${isDark ? "bg-[#232f3e] border-gray-700 text-white focus:border-blue-600" : "bg-white border-gray-300 focus:border-blue-600 shadow-sm"}`}
-              value={testimonialForm.name}
-              onChange={(e) => setTestimonialForm({ ...testimonialForm, name: e.target.value })}
+              type="url"
+              placeholder="https://photo-link.jpg"
+              className={inputCls}
+              value={testimonialForm.img}
+              onChange={(e) => setTestimonialForm({ ...testimonialForm, img: e.target.value })}
             />
           </div>
-
           <div>
-            <label className="text-[9px] font-black uppercase tracking-widest mb-1 block opacity-60">Your Review</label>
-            <textarea
-              placeholder="WHAT'S YOUR EXPERIENCE?"
-              className={`w-full px-4 py-3 border text-[10px] font-bold uppercase outline-none transition-all min-h-[100px] ${isDark ? "bg-[#232f3e] border-gray-700 text-white focus:border-blue-600" : "bg-white border-gray-300 focus:border-blue-600 shadow-sm"}`}
-              value={testimonialForm.text}
-              onChange={(e) => setTestimonialForm({ ...testimonialForm, text: e.target.value })}
+            <label className={`block text-xs font-semibold mb-1.5 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+              Your Role
+            </label>
+            <input
+              type="text"
+              placeholder="e.g. Verified Buyer"
+              className={inputCls}
+              value={testimonialForm.role}
+              onChange={(e) => setTestimonialForm({ ...testimonialForm, role: e.target.value })}
             />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-[9px] font-black uppercase tracking-widest mb-1 block opacity-60">Photo URL (Optional)</label>
-              <input
-                placeholder="HTTP://IMAGE-LINK.JPG"
-                className={`w-full px-3 py-2 border text-[9px] font-bold uppercase outline-none ${isDark ? "bg-[#232f3e] border-gray-700 text-white" : "bg-white border-gray-300"}`}
-                value={testimonialForm.img}
-                onChange={(e) => setTestimonialForm({ ...testimonialForm, img: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="text-[9px] font-black uppercase tracking-widest mb-1 block opacity-60">Role</label>
-              <input
-                placeholder="E.G. VERIFIED BUYER"
-                className={`w-full px-3 py-2 border text-[9px] font-bold uppercase outline-none ${isDark ? "bg-[#232f3e] border-gray-700 text-white" : "bg-white border-gray-300"}`}
-                value={testimonialForm.role}
-                onChange={(e) => setTestimonialForm({ ...testimonialForm, role: e.target.value })}
-              />
-            </div>
           </div>
         </div>
+      </div>
 
+      {/* ── Footer / Submit ───────────────────────────────────────────── */}
+      <div className={`px-6 py-4 border-t flex flex-col sm:flex-row items-center gap-3 ${isDark ? "border-gray-700 bg-[#141821]" : "border-gray-100 bg-gray-50"}`}>
         <button
           onClick={handleSubmit}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-black uppercase tracking-[0.2em] text-[10px] shadow-lg shadow-blue-500/10 transition-all active:scale-[0.98]"
+          disabled={loading}
+          className={`w-full sm:w-auto px-10 py-2.5 rounded-lg text-sm font-bold transition-all duration-150 active:scale-95
+            ${loading
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-[#FB641B] hover:bg-[#e55b16] text-white shadow-md shadow-[#FB641B]/30"
+            }`}
         >
-          {loading ? "SAVING..." : (testimonialForm.id ? "UPDATE REVIEW" : "SUBMIT REVIEW")}
+          {loading ? "Submitting..." : testimonialForm.id ? "Update Review" : "Submit Review"}
         </button>
+        <p className={`text-xs text-center sm:text-left ${isDark ? "text-gray-600" : "text-gray-400"}`}>
+          Your review will be visible to all shoppers
+        </p>
       </div>
     </div>
   );
@@ -103,7 +178,6 @@ function AddTestimonial({ productId = "" }) {
     if (testimonialForm?.rating) setRating(testimonialForm.rating);
   }, [testimonialForm]);
 
-  // ✅ NEW: Reset form if we are on a Product page (Adding new) vs Admin Edit
   useEffect(() => {
     if (productId && !testimonialForm.id) {
       setRating(0);
@@ -130,129 +204,17 @@ function AddTestimonial({ productId = "" }) {
   };
 
   return (
-    <>
-      <AddTestimonialView
-        isDark={isDark}
-        rating={rating}
-        setRating={setRating}
-        testimonialForm={testimonialForm}
-        setTestimonialForm={setTestimonialForm}
-        handleSubmit={handleSubmit}
-        loading={loading}
-      />
-    </>
+    <AddTestimonialView
+      isDark={isDark}
+      rating={rating}
+      setRating={setRating}
+      testimonialForm={testimonialForm}
+      setTestimonialForm={setTestimonialForm}
+      handleSubmit={handleSubmit}
+      loading={loading}
+    />
   );
 }
 
 AddTestimonial.displayName = 'AddTestimonial';
 export default React.memo(AddTestimonial);
-
-// import React, { useContext, useState, useEffect } from "react";
-// ;
-
-// const Star = ({ filled, onClick }) => (
-//   <svg
-//     onClick={onClick}
-//     className={`w-7 h-7 cursor-pointer transition-colors ${
-//       filled ? "text-yellow-400" : "text-gray-300 hover:text-yellow-300"
-//     }`}
-//     fill={filled ? "currentColor" : "none"}
-//     stroke="currentColor"
-//     strokeWidth={2}
-//     viewBox="0 0 24 24"
-//   >
-//     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-//   </svg>
-// );
-
-// function AddTestimonial({ productId = "" }) {
-//   const { testimonialForm, setTestimonialForm, addTestimonial, loading, updateTestimonial } =
-//     useContext(ProductContext);
-
-//   const [rating, setRating] = useState(0);
-// useEffect(() => {
-//   if (testimonialForm?.rating) {
-//     setRating(testimonialForm.rating);
-//   }
-// }, [testimonialForm]);
-
-
-//   // const isEdit = testimonialForm?.id;
-
-//   const handleSubmit = () => {
-//     if (rating === 0) {
-//       alert("Please select a star rating");
-//       return;
-//     }
-
-//   if (testimonialForm.id) {
-//     updateTestimonial();
-//     return;
-//   } else {
-//     addTestimonial({
-//       ...testimonialForm,
-//       rating,
-//       // productId,
-//        productId: productId || testimonialForm.productId || "",
-//     });
-//   }
-
-//     setRating(0);
-//     setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
-//   };
-
-//   return (
-//     <div className="p-6 max-w-lg mx-auto bg-white rounded-xl shadow-lg mt-8 border border-gray-100">
-//       <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-//         Submit Your Review
-//       </h2>
-
-//       {/* Star Rating */}
-//       <div className="flex mb-4">
-//         {[1, 2, 3, 4, 5].map((star) => (
-//           <Star key={star} filled={star <= rating} onClick={() => setRating(star)} />
-//         ))}
-//       </div>
-
-//       <input
-//         placeholder="Your Name"
-//         className="border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-md p-3 w-full mb-4 transition-all"
-//         value={testimonialForm.name}
-//         onChange={(e) => setTestimonialForm({ ...testimonialForm, name: e.target.value })}
-//       />
-
-//       <textarea
-//         placeholder="Write your review..."
-//         className="border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-md p-3 w-full mb-4 transition-all resize-none h-24"
-//         value={testimonialForm.text}
-//         onChange={(e) => setTestimonialForm({ ...testimonialForm, text: e.target.value })}
-//       />
-
-//       <input
-//         placeholder="Image URL (optional)"
-//         className="border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-md p-3 w-full mb-4 transition-all"
-//         value={testimonialForm.img}
-//         onChange={(e) => setTestimonialForm({ ...testimonialForm, img: e.target.value })}
-//       />
-
-//       <input
-//         placeholder="Role / Position"
-//         className="border border-gray-300 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-md p-3 w-full mb-4 transition-all"
-//         value={testimonialForm.role}
-//         onChange={(e) => setTestimonialForm({ ...testimonialForm, role: e.target.value })}
-//       />
-
-//       <button
-//         onClick={handleSubmit}
-//         className="bg-indigo-600 text-white px-5 py-2 rounded-lg w-full font-medium hover:bg-indigo-700 transition-all shadow-md"
-//       >
-//         {/* {loading ? "Submitting..." : "Submit Review"}
-//          */}
-//          {loading ? "Saving..." : testimonialForm.id ? "Update Review" : "Submit Review"}
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default AddTestimonial;
-

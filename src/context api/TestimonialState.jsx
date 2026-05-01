@@ -110,7 +110,7 @@ function TestimonialState({ children }) {
       });
       toast.success('Testimonial updated successfully!');
       resetFormState();
-      if(navigate) navigate('/dashboard'); // ✅ Successful update ke baad dashboard pe vapis le jao
+      if (navigate) navigate('/dashboard'); // ✅ Successful update ke baad dashboard pe vapis le jao
       return true;
     } catch (err) {
       console.error("updateTestimonial error:", err);
@@ -138,8 +138,8 @@ function TestimonialState({ children }) {
   // 👉 Edit button: selected testimonial ka data form mein bhar do
   const editTestimonial = useCallback((item, navigate) => {
     setTestimonialForm(item);
-    if(navigate) navigate('/addtestimonial'); // ✅ Redirect to Form taaki edit ho sake
-    
+    if (navigate) navigate('/addtestimonial'); // ✅ Redirect to Form taaki edit ho sake
+
     // 👉 Scroll to form if it exists on page
     const formElement = document.getElementById('testimonial-form');
     if (formElement) {

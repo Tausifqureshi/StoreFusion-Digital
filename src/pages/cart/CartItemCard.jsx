@@ -22,7 +22,7 @@ const CartItemCard = ({
     <div className={`p-4 md:p-6 rounded-[24px] border transition-all ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-white border-gray-100 shadow-sm"}`}>
       <div className="flex flex-row gap-4 md:gap-6">
         {/* Image */}
-        <div 
+        <div
           className={`w-24 h-24 md:w-32 md:h-32 rounded-2xl p-2 flex shrink-0 items-center justify-center overflow-hidden border bg-transparent ${isDark ? "border-gray-700" : "bg-white border-gray-50 shadow-inner"}`}
         >
           <img src={item.imageUrl} alt="product" loading="lazy" decoding="async" className={`max-h-full object-contain`} />
