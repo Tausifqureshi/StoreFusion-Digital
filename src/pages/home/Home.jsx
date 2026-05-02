@@ -15,7 +15,13 @@ function Home() {
 
 
       <Track mode={mode} />
-      <Testimonial mode={mode} />
+      
+      {/* Containerized Testimonial Section for Home Page */}
+      <section className="py-8 md:py-12">
+        <div className="container mx-auto px-5">
+          <Testimonial mode={mode} homePage={true} />
+        </div>
+      </section>
     </>
   );
 }

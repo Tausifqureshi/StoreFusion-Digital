@@ -154,7 +154,7 @@ const Allproducts = React.memo(function Allproducts() {
 
   useEffect(() => {
     if (productsRef.current) {
-      //  Yahan DOM ko order diya ja raha hai ke is box ke bilkul start mein scroll karke chale jao
+      // Jab bhi user page change karega, ye line smoothly product section ke start (top) par le jayegi
       productsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
     setExpandedId(null); // jaise hi user page change kar re ga to open wala mode close ho jae ga

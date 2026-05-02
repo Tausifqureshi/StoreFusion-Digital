@@ -31,7 +31,7 @@
 // const Contact = lazy(() => import("./components/contact/Contact"));
 // const About = lazy(() => import("./components/about/About"));
 // const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
-// const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts"));
+
 
 // // 🔐 USER PROTECTED
 // export function ProtectedRoutes({ children }) {
@@ -254,6 +254,7 @@ const Contact = lazy(() => import("./components/contact/Contact"));
 const About = lazy(() => import("./components/about/About"));
 const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
 const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts"));
+const AllTestimonials = lazy(() => import("./pages/all testimonials/AllTestimonials"));
 
 // 🔐 USER PROTECTED (Memoized to prevent unnecessary checks)
 export const ProtectedRoutes = memo(({ children }) => {
@@ -319,6 +320,7 @@ const router = createBrowserRouter([
           { path: "/allproducts", element: <Allproducts /> },
           { path: "/productInfo/:id", element: <ProductInfo /> },
           { path: "/category/:name", element: <CategoryProducts /> },
+          { path: "/all-testimonials", element: <AllTestimonials /> },
           {
             path: "/dashboard",
             element: (

@@ -43,7 +43,7 @@ function ProductInfo() {
   return (
     <>
       <div className={`min-h-screen py-6 lg:py-10 pt-24 lg:pt-32 transition-all ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
-        <div className="container mx-auto px-4 lg:px-20">
+        <div className="container mx-auto px-4 lg:px-4">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start justify-center">
 
             <GallerySection
@@ -80,13 +80,8 @@ function ProductInfo() {
             isDark={isDark}
           />
 
-          <div className="mt-20 lg:mt-12 pt-12 lg:pt-10 border-t border-gray-100 dark:border-gray-800 space-y-16 lg:space-y-24">
-            <section className="w-full mx-auto">
-              <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-center mb-10 italic">
-                Community <span className="text-orange-500">Feedback</span>
-              </h2>
-              <Testimonial productId={params.id} mode={mode} />
-            </section>
+          <div className="mt-20 lg:mt-12 pt-6 lg:pt-8 border-t border-gray-100 dark:border-gray-800 space-y-8 lg:space-y-12">
+            <Testimonial productId={params.id} mode={mode} />
             <section className="w-full max-w-2xl mx-auto pb-10 px-2">
               <AddTestimonial productId={params.id} />
             </section>

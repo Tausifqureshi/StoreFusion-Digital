@@ -103,7 +103,7 @@ function CategoryProducts() {
   return (
     <>
       <div
-        className={`min-h-screen pt-28 pb-12 transition-all ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"}`}
+        className={`min-h-screen pt-28 pb-12 transition-all ${isDark ? "bg-[#0f172a] text-white" : "bg-gray-50/50 text-gray-900"}`}
       >
         <div className="max-w-7xl mx-auto px-4">
           {/* Header Section */}
@@ -196,17 +196,9 @@ function CategoryProducts() {
           </div>
 
           {/* ⭐ TESTIMONIAL SECTION */}
-          <section className="mt-24 pt-16 border-t border-gray-200 dark:border-gray-800">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl md:text-4xl font-black uppercase italic">
-                Category <span className="text-blue-600">Feedback</span>
-              </h2>
-            </div>
-
-            <div className="max-w-5xl mx-auto px-2">
-              <Testimonial categoryName={name} mode={mode} />
-            </div>
-          </section>
+          <div className="mt-20 max-w-7xl mx-auto">
+            <Testimonial categoryName={name} mode={mode} />
+          </div>
 
         </div>
       </div>
