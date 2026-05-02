@@ -72,7 +72,7 @@ const DashboardHeader = ({
           <button
             onClick={() => setIsRangeOpen(!isRangeOpen)}
             className={`flex items-center gap-3 px-5 py-3 rounded-2xl text-sm font-black ${isDark
-              ? "bg-[#1e293b] text-gray-300 border-2 border-gray-700 hover:bg-gray-800"
+              ? "bg-[#1a1f2e] text-gray-300 border-2 border-gray-700 hover:bg-gray-800"
               : "bg-white text-gray-700 border-2 border-gray-100 hover:bg-gray-50"
               }`}
           >
@@ -81,7 +81,7 @@ const DashboardHeader = ({
           </button>
 
           {isRangeOpen && (
-            <div className={`absolute top-full left-0 mt-2 w-48 rounded-2xl shadow-xl ${isDark ? "bg-[#1e293b]" : "bg-white"
+            <div className={`absolute top-full left-0 mt-2 w-48 rounded-2xl shadow-xl ${isDark ? "bg-[#1a1f2e]" : "bg-white"
               }`}>
               {ranges.map(r => (
                 <button
@@ -106,7 +106,7 @@ const DashboardHeader = ({
           <button
             onClick={() => setIsDateOpen(!isDateOpen)}
             className={`flex items-center gap-3 px-5 py-3 rounded-2xl text-sm font-black ${isDark
-              ? "bg-[#1e293b] text-gray-300 border-2 border-gray-700"
+              ? "bg-[#1a1f2e] text-gray-300 border-2 border-gray-700"
               : "bg-white text-gray-700 border-2 border-gray-100"
               }`}
           >

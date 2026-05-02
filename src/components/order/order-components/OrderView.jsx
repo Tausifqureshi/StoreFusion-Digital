@@ -31,7 +31,7 @@ const OrderView = React.memo(function OrderView({
 
 
   return (
-    <div className={`min-h-screen pt-24 pb-12 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
+    <div className={`min-h-screen pt-24 pb-12 transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-10 border-b border-gray-200 dark:border-gray-800 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -60,7 +60,7 @@ const OrderView = React.memo(function OrderView({
         {/* Tab Selection */}
         <div className="flex gap-4 mb-8">
           {['All Orders', 'Returns'].map((tab) => (
-            <button key={tab} onClick={() => setActiveTab(tab)} className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeTab === tab ? "bg-blue-600 text-white shadow-lg" : isDark ? "bg-[#1e293b] text-gray-400 border border-gray-800" : "bg-white text-gray-500 border border-gray-100 shadow-sm"}`}>
+            <button key={tab} onClick={() => setActiveTab(tab)} className={`px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${activeTab === tab ? "bg-blue-600 text-white shadow-lg" : isDark ? "bg-[#1a1f2e] text-gray-400 border border-gray-800" : "bg-white text-gray-500 border border-gray-100 shadow-sm"}`}>
               {tab}
             </button>
           ))}

@@ -107,8 +107,8 @@ function Signup() {
   };
 
   return (
-    <div className={`flex justify-center flex-col items-center min-h-screen py-10 ${isDark ? "bg-[#131921]" : "bg-gradient-to-b from-gray-50 to-gray-200"}`}>
-      <div className={`shadow-xl rounded-2xl max-w-md w-full p-8 relative border ${isDark ? "bg-[#1f2937] border-gray-800" : "bg-white border-gray-100"}`}>
+    <div className={`flex justify-center flex-col items-center min-h-screen py-10 ${isDark ? "bg-[#1a1f2e]" : "bg-gradient-to-b from-gray-50 to-gray-200"}`}>
+      <div className={`shadow-xl rounded-2xl max-w-md w-full p-8 relative border ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-white border-gray-100"}`}>
         <h1 className={`text-center text-2xl mb-8 font-black uppercase tracking-widest ${isDark ? "text-white" : "text-gray-800"}`}>Create Account</h1>
         <form onSubmit={signup} action=''>
           <div className='mb-4'>
@@ -117,7 +117,7 @@ function Signup() {
               value={formData.fullName}
               name='fullName'
               className={`border px-4 py-3 w-full rounded-xl focus:outline-none focus:ring-2 transition-all ${isDark
-                  ? "bg-[#131921] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+                  ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
                   : "bg-white border-gray-200 text-gray-800 placeholder-gray-400 focus:ring-blue-500"
                 } ${errors.fullName ? 'border-red-500 focus:ring-red-500' : ''}`}
               placeholder='Full Name'
@@ -131,7 +131,7 @@ function Signup() {
               value={formData.email}
               name='email'
               className={`border px-4 py-3 w-full rounded-xl focus:outline-none focus:ring-2 transition-all ${isDark
-                  ? "bg-[#131921] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+                  ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
                   : "bg-white border-gray-200 text-gray-800 placeholder-gray-400 focus:ring-blue-500"
                 } ${errors.email ? 'border-red-500 focus:ring-red-500' : ''}`}
               placeholder='Email Address'
@@ -145,7 +145,7 @@ function Signup() {
               value={formData.password}
               name='password'
               className={`border px-4 py-3 w-full pr-12 rounded-xl focus:outline-none focus:ring-2 transition-all ${isDark
-                  ? "bg-[#131921] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+                  ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
                   : "bg-white border-gray-200 text-gray-800 placeholder-gray-400 focus:ring-blue-500"
                 } ${errors.password ? 'border-red-500 focus:ring-red-500' : ''}`}
               placeholder='Password'

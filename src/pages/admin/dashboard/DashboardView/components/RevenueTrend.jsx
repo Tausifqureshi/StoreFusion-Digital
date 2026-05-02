@@ -42,7 +42,7 @@ function RevenueTrend({ isDark, data }) {
   }), [isDark]);
 
   return (
-    <div className={`p-6 sm:p-8 rounded-3xl border transition-all h-full ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+    <div className={`p-6 sm:p-8 rounded-3xl border transition-all h-full ${isDark ? 'bg-[#1a1f2e] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
       <div className="flex items-center gap-3 mb-6">
         <span className="text-green-500 text-xl font-black">$</span>
         <h2 className={`text-lg font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>

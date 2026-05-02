@@ -26,9 +26,9 @@ function ProductSkeleton() {
     <div className="flex flex-wrap -m-4">
       {[...Array(8)].map((_, i) => (
         <div key={i} className="p-4 w-full sm:w-1/2 lg:w-1/4">
-          <div className={`p-5 rounded-[30px] border-2 transition-all ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-100"} animate-pulse`}>
+          <div className={`p-5 rounded-[30px] border-2 transition-all ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-white border-gray-100"} animate-pulse`}>
             {/* Image Placeholder */}
-            <div className={`w-full aspect-[4/3] rounded-[20px] mb-5 flex items-center justify-center overflow-hidden relative ${isDark ? "bg-[#1e293b]" : "bg-gray-100"}`}>
+            <div className={`w-full aspect-[4/3] rounded-[20px] mb-5 flex items-center justify-center overflow-hidden relative ${isDark ? "bg-[#1a1f2e]" : "bg-gray-100"}`}>
                <div className={`absolute inset-0 bg-gradient-to-r ${isDark ? "from-transparent via-gray-700/20 to-transparent" : "from-transparent via-white/50 to-transparent"} -translate-x-full animate-[shimmer_1.5s_infinite]`}></div>
             </div>
 

@@ -80,7 +80,7 @@ function Track({ mode }) {
   return (
     <section className="py-8 md:py-12 transition-all duration-300 overflow-hidden">
       <div className="container mx-auto px-5">
-        <div className={`rounded-3xl p-4 md:p-6 md:px-8 shadow-sm border ${isDark ? 'bg-[#131921] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
+        <div className={`rounded-3xl p-4 md:p-6 md:px-8 shadow-sm border ${isDark ? 'bg-[#1a1f2e] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
           {/* Section Heading */}
           <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
             <div>

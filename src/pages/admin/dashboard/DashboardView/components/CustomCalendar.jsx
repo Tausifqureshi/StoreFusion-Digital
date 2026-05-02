@@ -25,7 +25,7 @@ export function CustomCalendar({ selectedDate, onChange, isDark }) {
   });
 
   return (
-    <div className={`p-4 w-64 ${isDark ? 'bg-[#1e293b] text-gray-300' : 'bg-white text-gray-800'}`}>
+    <div className={`p-4 w-64 ${isDark ? 'bg-[#1a1f2e] text-gray-300' : 'bg-white text-gray-800'}`}>
       
       <div className="flex justify-between items-center mb-4 px-2">
         <button onClick={prevMonth} aria-label="Previous Month" className="text-gray-400 hover:text-black dark:hover:text-white font-black cursor-pointer px-2 py-1">&lt;</button>

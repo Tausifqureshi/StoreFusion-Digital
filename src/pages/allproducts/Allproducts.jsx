@@ -76,7 +76,7 @@ const AllProductsView = React.memo(function AllProductsView({
 
             <div className="relative min-h-[400px]">
               {isFilterLoading && (
-                <div className={`absolute inset-0 z-10 flex justify-center items-start ${mode === 'dark' ? 'bg-[#111827]/60' : 'bg-white/60'} backdrop-blur-[2px] transition-all duration-300`}>
+                <div className={`absolute inset-0 z-10 flex justify-center items-start ${mode === 'dark' ? 'bg-[#1a1f2e]/60' : 'bg-white/60'} backdrop-blur-[2px] transition-all duration-300`}>
                   <LoaderSpinner isDark={mode === 'dark'} label="" />
                 </div>
               )}

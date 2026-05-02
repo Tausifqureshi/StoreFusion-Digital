@@ -20,7 +20,7 @@ import { RxCross2 } from "react-icons/rx";
 // ✅ TOP ANNOUNCEMENT: Purely static (Locked)
 const TopAnnouncement = React.memo(function TopAnnouncement({ isDark }) {
   return (
-    <div className={`text-center py-1.5 text-xs font-bold ${isDark ? "bg-[#131921] text-gray-400" : "bg-[#232f3e] text-white"}`}>
+    <div className={`text-center py-1.5 text-xs font-bold ${isDark ? "bg-[#1a1f2e] text-gray-400" : "bg-[#232f3e] text-white"}`}>
       🚚 Free delivery on ₹300+ | Fast Checkout ⚡
     </div>
   );
@@ -149,16 +149,27 @@ function Navbar({ isDark }) {
     state.orders.orders.filter(order => order.status?.toLowerCase() !== "delivered").length
   );
 
+  const [pendingNavigate, setPendingNavigate] = useState(null);
+
   const handleNavigate = useCallback((url) => {
     navigate(url);
   }, [navigate]);
 
+  // 🚀 Standard Pattern: Mobile drawer band hone ke baad navigate karo
+  useEffect(() => {
+    if (pendingNavigate) {
+      const timer = setTimeout(() => {
+        handleNavigate(pendingNavigate);
+        setPendingNavigate(null);
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [pendingNavigate, handleNavigate]);
+
   const handleMobileClick = useCallback((url) => {
     setOpen(false);
-    setTimeout(() => {
-      handleNavigate(url);
-    }, 300);
-  }, [handleNavigate]);
+    setPendingNavigate(url);
+  }, []);
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
@@ -187,7 +198,7 @@ function Navbar({ isDark }) {
         <div className={`fixed top-0 w-full z-50 transition-transform duration-300 ${isVisible ? "translate-y-0" : "-translate-y-full"}`}>
           <TopAnnouncement isDark={isDark} />
 
-          <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#232f3e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
+          <nav className={`transition-all duration-300 relative z-50 ${isDark ? "border-b border-gray-800 bg-[#1a1f2e] shadow-lg shadow-black/50" : "border-b border-gray-200 bg-white shadow-[0_4px_20px_-2px_rgba(0,0,0,0.1)]"} ${isScrolled ? "bg-opacity-95 backdrop-blur-xl" : ""}`}>
             <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
               <div className="flex items-center gap-4 shrink-0">
                 <button onClick={() => { setOpen(true); setShowSubMenu(false); }} className={`lg:hidden p-1 ${isDark ? "text-white" : "text-gray-800"}`}>
@@ -204,7 +215,7 @@ function Navbar({ isDark }) {
                     Categories <FiChevronRight className="rotate-90" />
                   </span>
                   {mega && (
-                    <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-800"}`}>
+                    <div className={`absolute top-full left-0 w-[550px] shadow-2xl rounded-b-2xl border-t-4 border-orange-500 p-4 transition-all duration-300 z-[100] ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-800"}`}>
                       <h3 className="px-3 mb-3 text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">Explore Categories</h3>
                       <div className="grid grid-cols-3 gap-2 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
                         {categories.map((cat) => (
@@ -249,7 +260,7 @@ function Navbar({ isDark }) {
             sx={{
               '& .MuiDrawer-paper': {
                 width: '20rem',
-                backgroundColor: isDark ? "#232f3e" : "white",
+                backgroundColor: isDark ? "#1a1f2e" : "white",
                 color: isDark ? "white" : "inherit"
               },
               '& .MuiBackdrop-root': {
@@ -258,8 +269,8 @@ function Navbar({ isDark }) {
               }
             }}
           >
-            <div className={`relative w-full h-full flex flex-col overflow-hidden ${isDark ? "bg-[#232f3e] text-white" : "bg-white text-gray-900"}`}>
-              <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-[#131921]" : "bg-blue-600 text-white"}`}>
+            <div className={`relative w-full h-full flex flex-col overflow-hidden ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
+              <div className={`p-6 flex items-center gap-4 shrink-0 ${isDark ? "bg-gray-800/40" : "bg-blue-600 text-white"}`}>
                 {user?.profilePic
                   ? <img src={user.profilePic} loading="lazy" decoding="async" alt="profile" className="w-11 h-11 rounded-full border-2 border-orange-400 shadow-md object-cover" />
                   : <div className="bg-white/20 p-2 rounded-full"><FiUser size={24} /></div>
@@ -287,18 +298,18 @@ function Navbar({ isDark }) {
                   <div className="my-4 border-t border-gray-100 dark:border-gray-700" />
                   <h3 className="px-3 py-2 text-xs font-bold text-gray-400 uppercase tracking-widest">Programs & Features</h3>
                   {navItems.map((item) => (
-                    <button key={item.name} onClick={() => handleMobileClick(item.URL)} className={`w-full text-left block p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
+                    <button key={item.name} onClick={() => handleMobileClick(item.URL)} className={`w-full text-left block p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#1a1f2e] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
                       {item.name}
                     </button>
                   ))}
                   {user && (
-                    <button onClick={() => handleMobileClick("/order")} className={`w-full text-left flex items-center justify-between p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
+                    <button onClick={() => handleMobileClick("/order")} className={`w-full text-left flex items-center justify-between p-3 font-medium rounded-lg transition-all ${isDark ? "hover:bg-[#1a1f2e] active:bg-gray-800" : "hover:bg-blue-50 active:bg-blue-100 text-gray-800"}`}>
                       <span className="flex items-center gap-3"><FiPackage className="text-blue-500" /> My Orders</span>
                       {totalOrders > 0 && <span className="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded-full">{totalOrders}</span>}
                     </button>
                   )}
                   {user?.role === "admin" && (
-                    <button onClick={() => handleMobileClick("/dashboard")} className={`w-full text-left flex items-center gap-2 p-3 font-medium text-orange-500 rounded-lg transition-all ${isDark ? "hover:bg-[#131921] active:bg-gray-800" : "hover:bg-orange-50 active:bg-orange-100"}`}>
+                    <button onClick={() => handleMobileClick("/dashboard")} className={`w-full text-left flex items-center gap-2 p-3 font-medium text-orange-500 rounded-lg transition-all ${isDark ? "hover:bg-[#1a1f2e] active:bg-gray-800" : "hover:bg-orange-50 active:bg-orange-100"}`}>
                       <FiShield /> Admin Panel
                     </button>
                   )}
@@ -325,7 +336,7 @@ function Navbar({ isDark }) {
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         className={`w-full p-3 pl-10 rounded-xl text-xs font-bold outline-none transition-all
-                      ${isDark ? "bg-[#131921] text-white focus:ring-1 ring-orange-500" : "bg-white text-gray-800 shadow-inner"}`}
+                      ${isDark ? "bg-[#1a1f2e] text-white focus:ring-1 ring-orange-500" : "bg-white text-gray-800 shadow-inner"}`}
                       />
                       <FiMenu className="absolute left-3 top-3.5 opacity-30" size={16} />
                     </div>
@@ -344,7 +355,7 @@ function Navbar({ isDark }) {
                               });
                             }}
                             className={`flex flex-col items-center justify-center p-5 rounded-2xl border transition-all active:scale-95
-                          ${isDark ? "bg-[#1e293b] border-gray-800 text-gray-200" : "bg-gray-50 border-gray-200 text-gray-700 shadow-sm"}`}
+                          ${isDark ? "bg-[#1a1f2e] border-gray-800 text-gray-200" : "bg-gray-50 border-gray-200 text-gray-700 shadow-sm"}`}
                           >
                             <div className={`w-10 h-10 flex items-center justify-center rounded-full mb-2 font-black text-lg
                           ${isDark ? "bg-orange-500/20 text-orange-500" : "bg-blue-100 text-blue-600"}`}>

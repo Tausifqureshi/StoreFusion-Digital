@@ -41,8 +41,8 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
   const order = useMemo(() => {
     const filtered = filterByDate(allOrders || []);
     // 👉 Deep check: agar data badla nahi hai toh purana reference hi return kardo
-    const isSame = lastOrder.current.length === filtered.length && 
-                   filtered.every((item, i) => item.id === lastOrder.current[i]?.id);
+    const isSame = lastOrder.current.length === filtered.length &&
+      filtered.every((item, i) => item.id === lastOrder.current[i]?.id); // 👉 Har ek order ko purane index se milao, Agar saare IDs same hain, toh Naya data return karne ki jagah Purana hi return kardo, taaki React ko lage kuch nahi badla.
     if (!isSame) lastOrder.current = filtered;
     return lastOrder.current;
   }, [allOrders, filterByDate]);
@@ -52,8 +52,8 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
     const filtered = filterByDate(allProducts || []);
     // 👉 Check kar rahe hain ki naya filtered array aur purana array bilkul same hai ya nahi
     // Agar same hai toh purana reference hi bhejenge, taake dashboard faltu mein dobara load (re-render) na ho
-    const isSame = lastProduct.current.length === filtered.length && 
-                   filtered.every((item, i) => item.id === lastProduct.current[i]?.id);
+    const isSame = lastProduct.current.length === filtered.length &&
+      filtered.every((item, i) => item.id === lastProduct.current[i]?.id); // 👉 Har ek product ko purane index se milao, Agar saare IDs same hain, toh Naya data return karne ki jagah Purana hi return kardo, taaki React ko lage kuch nahi badla.
     if (!isSame) lastProduct.current = filtered;
     return lastProduct.current;
   }, [allProducts, filterByDate]);
@@ -63,7 +63,8 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
     const filtered = filterByDate(allUsers || []);
     // 👉 Yahan check kar rahe hain ke total users ki ginti same hai ya nahi
     // Agar same hai toh purana data hi return hoga, naya nahi banega
-    const isSame = lastUser.current.length === filtered.length;
+    const isSame = lastUser.current.length === filtered.length &&
+      filtered.every((item, i) => item.id === lastUser.current[i]?.id); // 👉 Loop chala kar check karo ki users ki list badli hai ya nahi
     if (!isSame) lastUser.current = filtered;
     return lastUser.current;
   }, [allUsers, filterByDate]);
@@ -112,7 +113,7 @@ export const useDashboardData = (allProducts, allOrders, allUsers, selectedRange
     // 👉 Final data state mein tabhi save hoga jab koi change milega
     return { monthlyOrders: ordersCount, monthlyRevenue: revenueAcc };
 
-  // 👉 Ye code sirf tab dobara chalega jab "order" array badlega
+    // 👉 Ye code sirf tab dobara chalega jab "order" array badlega
   }, [order]);
   // -------------------------------------------------------------------------
 

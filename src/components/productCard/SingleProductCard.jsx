@@ -97,7 +97,7 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
   return (
     <div className={`p-4 w-full custom-md:w-1/2 md:w-1/2 ${colSize} drop-shadow-lg self-start transition-all duration-300`}>
       {/* Fixed UX: Removed pointer-events-none from card container so clicks on the image pass through */}
-      <div className={`border-2 transition-shadow duration-300 ease-in-out ${mode === "dark" ? "bg-gray-800 border-gray-700" : "border-gray-200 bg-white"} border-opacity-60 rounded-2xl overflow-hidden flex flex-col h-full ${isOutOfStock ? "opacity-70" : `hover:shadow-2xl ${mode === "dark" ? "hover:shadow-gray-900" : "hover:shadow-gray-100"}`}`}>
+      <div className={`border-2 transition-shadow duration-300 ease-in-out ${mode === "dark" ? "bg-[#1a1f2e] border-gray-700" : "border-gray-200 bg-white"} border-opacity-60 rounded-2xl overflow-hidden flex flex-col h-full ${isOutOfStock ? "opacity-70" : `hover:shadow-2xl ${mode === "dark" ? "hover:shadow-gray-900" : "hover:shadow-gray-100"}`}`}>
         
         <div
           onClick={() => navigate(`/productinfo/${id}`)}
@@ -141,7 +141,7 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
             <div className="text-[10px] font-black uppercase tracking-widest text-orange-500">
               {!isOutOfStock ? `Stock Available: ${availableStock}` : <span className="text-red-500">Out of Stock</span>}
             </div>
-            <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-md shadow-sm shrink-0 border ${mode === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-200"}`}>
+            <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-md shadow-sm shrink-0 border ${mode === "dark" ? "bg-[#1a1f2e] border-gray-700" : "bg-white border-gray-200"}`}>
               <FaStar className="text-[#FFA41C] text-[12px]" />
               <span className="text-[12px] font-black text-[#FFA41C] tracking-wider">{item.rating || "4.5"}</span>
             </div>

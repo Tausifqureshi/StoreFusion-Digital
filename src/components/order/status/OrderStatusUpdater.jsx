@@ -24,7 +24,7 @@ function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
 
 
   return (
-    <div className={`rounded-2xl p-4 border shadow-xl w-64 ${isDark ? 'bg-[#1e293b] border-gray-700' : 'bg-white border-gray-200'}`}>
+    <div className={`rounded-2xl p-4 border shadow-xl w-64 ${isDark ? 'bg-[#1a1f2e] border-gray-700' : 'bg-white border-gray-200'}`}>
       <p className={`text-xs font-bold mb-3 uppercase tracking-widest ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
         Update Order Status
       </p>

@@ -65,7 +65,7 @@ function OrdersTrend({ isDark, labels, data }) {
   }), [isDark]);
 
   return (
-    <div className={`p-6 sm:p-8 rounded-3xl border transition-all w-full ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+    <div className={`p-6 sm:p-8 rounded-3xl border transition-all w-full ${isDark ? 'bg-[#1a1f2e] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
       <div className="flex items-center gap-3 mb-8">
         <FaChartLine className="text-purple-500 text-xl" />
         <h2 className={`text-xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-gray-900'}`}>

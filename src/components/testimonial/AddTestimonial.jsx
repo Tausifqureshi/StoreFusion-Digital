@@ -167,7 +167,7 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
 
 
 function AddTestimonial({ productId = "" }) {
-  const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial } = useContext(TestimonialContext);
+  const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial, resetFormState } = useContext(TestimonialContext);
   const { loading } = useContext(ProductAdminContext);
   const { mode } = useContext(ThemeContext);
   const [rating, setRating] = useState(0);
@@ -175,12 +175,21 @@ function AddTestimonial({ productId = "" }) {
   const isDark = mode === "dark";
 
   useEffect(() => {
+    // Ye function tab chalta hai jab component screen se hat-ta hai (Unmount)
+    return () => {
+      resetFormState(); // Context ke form ko wapas khali kar do
+      setRating(0);      // Star rating ko zero kar do
+    };
+  }, [resetFormState]);
+
+
+  useEffect(() => {
     if (testimonialForm?.rating) setRating(testimonialForm.rating);
   }, [testimonialForm]);
 
   useEffect(() => {
-    if (productId && !testimonialForm.id) {
-      setRating(0);
+    if (productId) {
+      setRating(0);  // Kabhi-kabhi Admin ek product page se doosre product page par direct ja sakta hai. Wahan bhi form reset hona chahiye Naye productId ke liye form ko reset kar do
       setTestimonialForm({ name: "", text: "", img: "", role: "", productId: productId });
     }
   }, [productId, setTestimonialForm]);
@@ -203,16 +212,43 @@ function AddTestimonial({ productId = "" }) {
     setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
   };
 
+  // 👉 Agar productId hai (yaani ProductInfo page), toh sirf View dikhao bina extra background/back button ke
+  if (productId) {
+    return (
+      <AddTestimonialView
+        isDark={isDark}
+        rating={rating}
+        setRating={setRating}
+        testimonialForm={testimonialForm}
+        setTestimonialForm={setTestimonialForm}
+        handleSubmit={handleSubmit}
+        loading={loading}
+      />
+    );
+  }
+
+  // 👉 Agar productId nahi hai (yaani Standalone page), toh background aur Back button ke saath dikhao
   return (
-    <AddTestimonialView
-      isDark={isDark}
-      rating={rating}
-      setRating={setRating}
-      testimonialForm={testimonialForm}
-      setTestimonialForm={setTestimonialForm}
-      handleSubmit={handleSubmit}
-      loading={loading}
-    />
+    <div className={`min-h-screen py-12 px-4 transition-all duration-300 ${isDark ? "bg-[#111827]" : "bg-gray-50"}`}>
+      <div className="max-w-2xl mx-auto mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${isDark ? "bg-[#1a1f2e] text-blue-400 border border-gray-800" : "bg-white text-blue-600 border border-gray-100 shadow-sm"}`}
+        >
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M15 19l-7-7 7-7" /></svg>
+          Go Back
+        </button>
+      </div>
+      <AddTestimonialView
+        isDark={isDark}
+        rating={rating}
+        setRating={setRating}
+        testimonialForm={testimonialForm}
+        setTestimonialForm={setTestimonialForm}
+        handleSubmit={handleSubmit}
+        loading={loading}
+      />
+    </div>
   );
 }
 

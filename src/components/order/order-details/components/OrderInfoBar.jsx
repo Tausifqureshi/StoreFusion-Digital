@@ -4,7 +4,7 @@ import OrderStatusBadge from "../../status/OrderStatusBadge";
 
 function OrderInfoBar({ order, totalPrice, isDark }) {
   return (
-    <div className={`px-8 py-5 flex flex-wrap items-center justify-between gap-4 ${isDark ? "bg-[#131921]" : "bg-gray-50/80"}`}>
+    <div className={`px-8 py-5 flex flex-wrap items-center justify-between gap-4 ${isDark ? "bg-[#1a1f2e]" : "bg-gray-50/80"}`}>
       <div className="flex flex-wrap gap-8">
         <div className="flex items-center gap-2">
           <FiCalendar className="text-blue-600" />

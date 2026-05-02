@@ -4,7 +4,7 @@ import { MdPerson, MdPhone, MdLocationOn, MdInfoOutline } from "react-icons/md";
 function OrderCustomerInfo({ user, addressInfo, order, isDark, cancellingId, handleCancelOrder }) {
   return (
     <div className="space-y-6">
-      <div className={`rounded-[30px] p-6 md:p-8 border h-full flex flex-col justify-between ${isDark ? "bg-[#131921] border-gray-800" : "bg-gray-50 border-gray-200 shadow-sm"}`}>
+      <div className={`rounded-[30px] p-6 md:p-8 border h-full flex flex-col justify-between ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-gray-50 border-gray-200 shadow-sm"}`}>
         <div className="space-y-8">
           <div className="space-y-4">
             <h3 className={`text-[11px] font-black uppercase tracking-widest border-b pb-3 flex items-center gap-2 ${isDark ? "border-gray-800 text-blue-400" : "border-gray-200 text-blue-600"}`}>
@@ -19,7 +19,7 @@ function OrderCustomerInfo({ user, addressInfo, order, isDark, cancellingId, han
             <h3 className={`text-[11px] font-black uppercase tracking-widest border-b pb-3 flex items-center gap-2 ${isDark ? "border-gray-800 text-orange-400" : "border-gray-200 text-orange-500"}`}>
               <MdLocationOn size={18} /> Shipping Info
             </h3>
-            <div className={`p-6 rounded-[25px] border ${isDark ? "bg-[#1e293b] border-gray-700" : "bg-white border-gray-200 shadow-sm"}`}>
+            <div className={`p-6 rounded-[25px] border ${isDark ? "bg-[#1a1f2e] border-gray-700" : "bg-white border-gray-200 shadow-sm"}`}>
               <p className="text-[10px] font-black uppercase text-blue-500 mb-1.5">{addressInfo?.name || "Recipient"}</p>
               <p className="text-[11px] font-bold uppercase tracking-tight leading-relaxed">{addressInfo?.address}<br />{addressInfo?.pincode}</p>
             </div>

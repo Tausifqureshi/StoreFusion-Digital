@@ -29,10 +29,10 @@ function Footer({ isDark }) {
 
 
   return (
-    <footer className={`relative transition-all duration-300 ${isDark ? "bg-[#131921] text-gray-300" : "bg-gray-50 text-gray-700"} font-sans border-t ${isDark ? "border-gray-800" : "border-gray-200"}`}>
+    <footer className={`relative transition-all duration-300 ${isDark ? "bg-[#111827] text-gray-300" : "bg-gray-50 text-gray-700"} font-sans border-t ${isDark ? "border-gray-800" : "border-gray-200"}`}>
 
       {/* Newsletter Section - Premium Touch */}
-      <div className={`${isDark ? "bg-[#232f3e]" : "bg-blue-600"} transition-colors duration-300`}>
+      <div className={`${isDark ? "bg-[#1a1f2e]" : "bg-blue-600"} transition-colors duration-300`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="text-center md:text-left">
             <h2 className={`text-2xl font-black tracking-tight ${isDark ? "text-white" : "text-white"} mb-2`}>
@@ -50,7 +50,7 @@ function Footer({ isDark }) {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email address"
-                className={`w-full py-3 px-5 pr-14 rounded-full text-sm font-medium outline-none transition-all ${isDark ? "bg-[#131921] text-white border border-gray-700 focus:border-orange-500 focus:ring-1 focus:ring-orange-500" : "bg-white text-gray-800 border-none focus:ring-2 focus:ring-orange-400"}`}
+                className={`w-full py-3 px-5 pr-14 rounded-full text-sm font-medium outline-none transition-all ${isDark ? "bg-[#111827] text-white border border-gray-700 focus:border-orange-500 focus:ring-1 focus:ring-orange-500" : "bg-white text-gray-800 border-none focus:ring-2 focus:ring-orange-400"}`}
               />
               <button className="absolute right-1 top-1 bottom-1 bg-orange-500 hover:bg-orange-600 text-white rounded-full px-5 flex items-center justify-center transition-colors shadow-md">
                 <FiSend size={16} />
@@ -86,7 +86,7 @@ function Footer({ isDark }) {
                   href={social.link}
                   target="_blank"
                   rel="noreferrer"
-                  className={`w-9 h-9 flex items-center justify-center rounded-full border transition-all duration-300 transform hover:-translate-y-1 ${isDark ? "bg-[#1e293b] border-gray-700" : "bg-white border-gray-200 shadow-sm"} ${social.color}`}
+                  className={`w-9 h-9 flex items-center justify-center rounded-full border transition-all duration-300 transform hover:-translate-y-1 ${isDark ? "bg-[#111827] border-gray-700" : "bg-white border-gray-200 shadow-sm"} ${social.color}`}
                 >
                   {social.icon}
                 </a>
@@ -161,7 +161,7 @@ function Footer({ isDark }) {
             </h3>
             <div className="space-y-4">
               <div className="flex items-start gap-4 group cursor-pointer">
-                <div className={`mt-0.5 p-2 rounded-lg transition-all duration-300 ${isDark ? "bg-[#232f3e] text-orange-500 group-hover:bg-orange-500 group-hover:text-white" : "bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"}`}>
+                <div className={`mt-0.5 p-2 rounded-lg transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-orange-500 group-hover:bg-orange-500 group-hover:text-white" : "bg-blue-50 text-blue-600 group-hover:bg-blue-600 group-hover:text-white"}`}>
                   <FiMapPin size={16} />
                 </div>
                 <div>
@@ -171,7 +171,7 @@ function Footer({ isDark }) {
               </div>
 
               <div className="flex items-start gap-4 group cursor-pointer">
-                <div className={`mt-0.5 p-2 rounded-lg transition-all duration-300 ${isDark ? "bg-[#232f3e] text-orange-500 group-hover:bg-orange-500 group-hover:text-white" : "bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white"}`}>
+                <div className={`mt-0.5 p-2 rounded-lg transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-orange-500 group-hover:bg-orange-500 group-hover:text-white" : "bg-green-50 text-green-600 group-hover:bg-green-600 group-hover:text-white"}`}>
                   <FiPhone size={16} />
                 </div>
                 <div>
@@ -181,7 +181,7 @@ function Footer({ isDark }) {
               </div>
 
               <div className="flex items-start gap-4 group cursor-pointer">
-                <div className={`mt-0.5 p-2 rounded-lg transition-all duration-300 ${isDark ? "bg-[#232f3e] text-orange-500 group-hover:bg-orange-500 group-hover:text-white" : "bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white"}`}>
+                <div className={`mt-0.5 p-2 rounded-lg transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-orange-500 group-hover:bg-orange-500 group-hover:text-white" : "bg-purple-50 text-purple-600 group-hover:bg-purple-600 group-hover:text-white"}`}>
                   <FiMail size={16} />
                 </div>
                 <div>
@@ -196,7 +196,7 @@ function Footer({ isDark }) {
       </div>
 
       {/* Bottom Bar: Copyright & Payments */}
-      <div className={`border-t relative ${isDark ? "border-gray-800 bg-[#0d1117]" : "border-gray-200 bg-white"}`}>
+      <div className={`border-t relative ${isDark ? "border-gray-800 bg-[#111827]" : "border-gray-200 bg-white"}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-6">
 
           {/* Copyright */}

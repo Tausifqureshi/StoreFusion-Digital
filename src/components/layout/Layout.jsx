@@ -14,7 +14,7 @@ function Layout({ children }) {
   const memoFooter = useMemo(() => <Footer isDark={isDark} />, [isDark]);
 
   return (
-    <div className={`transition-all duration-300 ${isDark ? "bg-[#131921]" : "bg-white"}`}>
+    <div className={`transition-all duration-300 ${isDark ? "bg-[#111827]" : "bg-white"}`}>
       {memoNavbar}
       <main className="content relative z-40 min-h-[60vh]">
         {children}

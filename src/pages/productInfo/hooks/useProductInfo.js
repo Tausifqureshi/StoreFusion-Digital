@@ -26,11 +26,26 @@ export function useProductInfo() {
 
   const similarProducts = useMemo(() => {
     if (!currentProduct || !product) return [];
+    // return product
+    //   .filter((item) =>
+    //     // 1. Current product ko list se hata do
+    //     item.id !== currentProduct.id &&
+    //     // 2. Category match honi chahiye (Base check)
+    //     item.category?.toLowerCase() === currentProduct.category?.toLowerCase() &&
+    //     // 3. Subcategory match honi chahiye (Specific check)
+    //     (item.subcategory?.toLowerCase() || "") === (currentProduct.subcategory?.toLowerCase() || "")
+    //   )
+    //   .slice(0, 4);
     return product
-      // 1. Same category ke products dhundo
-      // 2. Current product ko list se hata do
-      .filter((item) => item.category === currentProduct.category && item.id !== currentProduct.id)
-      // Sirf 4 products dikhao
+      .filter((item) => {
+        const sameCategory =
+          item.category?.toLowerCase() === currentProduct.category?.toLowerCase();
+
+        const sameSubCategory =
+          item.subcategory?.toLowerCase() === currentProduct.subcategory?.toLowerCase();
+
+        return sameCategory && sameSubCategory && item.id !== currentProduct.id;
+      })
       .slice(0, 4);
   }, [product, currentProduct]);
 
@@ -99,10 +114,10 @@ export function useProductInfo() {
   // Gallery mein hamesha 3 thumbnails — agar imageUrl2/3 nahi hai toh main image fallback hogi
   const gallery = currentProduct
     ? [
-        currentProduct.imageUrl,
-        currentProduct.imageUrl2 || currentProduct.imageUrl,
-        currentProduct.imageUrl3 || currentProduct.imageUrl,
-      ]
+      currentProduct.imageUrl,
+      currentProduct.imageUrl2 || currentProduct.imageUrl,
+      currentProduct.imageUrl3 || currentProduct.imageUrl,
+    ]
     : [];
 
   return {

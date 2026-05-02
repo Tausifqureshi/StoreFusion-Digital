@@ -75,7 +75,7 @@ function Tracking({ order, isDark }) {
                 <div className={`absolute left-[10px] top-6 w-[2px] h-[calc(100%-24px)] ${isCompleted && index < activeStepIndex ? "bg-green-500" : (isDark ? "bg-gray-700" : "bg-gray-200")}`} />
               )}
               <div className="relative z-10 pt-1">
-                <div className={`w-[22px] h-[22px] rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isCompleted ? "bg-green-500 border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)] scale-110" : (isDark ? "bg-[#1e293b] border-gray-600" : "bg-white border-gray-300")}`}>
+                <div className={`w-[22px] h-[22px] rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isCompleted ? "bg-green-500 border-green-500 shadow-[0_0_10px_rgba(34,197,94,0.4)] scale-110" : (isDark ? "bg-[#1a1f2e] border-gray-600" : "bg-white border-gray-300")}`}>
                   {isCompleted && <FiCheck className="text-white" size={12} strokeWidth={4} />}
                 </div>
               </div>
@@ -88,7 +88,7 @@ function Tracking({ order, isDark }) {
         })}
 
         {/* REQUEST CALLBACK - MOBILE */}
-        <div className={`mt-8 p-6 rounded-[25px] flex flex-col items-start gap-4 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-gray-50 border-gray-200 shadow-sm"}`}>
+        <div className={`mt-8 p-6 rounded-[25px] flex flex-col items-start gap-4 border ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-gray-50 border-gray-200 shadow-sm"}`}>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 shrink-0 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-600">
               <MdHeadsetMic size={24} />
@@ -103,7 +103,7 @@ function Tracking({ order, isDark }) {
       </div>
 
       {/* DESKTOP UI */}
-      <div className={`hidden md:block py-8 px-6 md:px-10 rounded-[40px] border-2 transition-all ${isDark ? "bg-[#131921] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-blue-500/5"}`}>
+      <div className={`hidden md:block py-8 px-6 md:px-10 rounded-[40px] border-2 transition-all ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-blue-500/5"}`}>
         <div className="relative flex justify-between items-start w-full">
           <div className="absolute top-[11px] left-[10%] right-[10%] flex items-center">
             <div className={`w-full h-[2px] ${isDark ? "bg-gray-700" : "bg-gray-200"}`}>
@@ -115,7 +115,7 @@ function Tracking({ order, isDark }) {
             const isCompleted = index <= activeStepIndex && order?.status !== "cancelled";
             return (
               <div key={index} className="flex flex-col items-center gap-5 relative z-10 flex-1">
-                <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isCompleted ? "bg-green-500 border-green-500 scale-[1.15] shadow-[0_0_15px_rgba(34,197,94,0.5)]" : (isDark ? "bg-[#1e293b] border-gray-600" : "bg-white border-gray-300")}`}>
+                <div className={`w-6 h-6 shrink-0 rounded-full flex items-center justify-center border-2 transition-all duration-300 ${isCompleted ? "bg-green-500 border-green-500 scale-[1.15] shadow-[0_0_15px_rgba(34,197,94,0.5)]" : (isDark ? "bg-[#1a1f2e] border-gray-600" : "bg-white border-gray-300")}`}>
                   {isCompleted && <FiCheck className="text-white" size={14} strokeWidth={4} />}
                 </div>
                 <div className="text-center">
@@ -129,7 +129,7 @@ function Tracking({ order, isDark }) {
       </div>
           
       {/* REQUEST CALLBACK - DESKTOP (Already embedded in mobile above, but keeping desktop version separated if needed or unified below) */}
-      <div className={`hidden md:flex mt-8 p-6 md:p-8 rounded-[25px] flex-row items-center justify-between gap-6 border ${isDark ? "bg-[#131921] border-gray-800" : "bg-gray-50 border-gray-200 shadow-sm"}`}>
+      <div className={`hidden md:flex mt-8 p-6 md:p-8 rounded-[25px] flex-row items-center justify-between gap-6 border ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-gray-50 border-gray-200 shadow-sm"}`}>
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 shrink-0 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-600">
             <MdHeadsetMic size={24} />

@@ -1,10 +1,13 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback, useContext, useRef } from "react";
 import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import React from "react";
+import { ThemeContext } from "../../context api/AllContext";
 
 function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
   const { fullName, address, pincode, phoneNumber } = formData;
+  const { mode } = useContext(ThemeContext);
+  const isDark = mode === 'dark';
 
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -12,34 +15,87 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
   const [loading, setLoading] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState("razorpay");
 
+  // 🚀 Standard Pattern: Loading ke liye timer
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        setIsVisible(true);
+        setLoading(false);
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
+  // 🚀 Standard Pattern: Opacity transition ke liye timer
+  useEffect(() => {
+    if (isVisible && !isOpen) {
+      const timer = setTimeout(() => setIsOpen(true), 10);
+      return () => clearTimeout(timer);
+    }
+  }, [isVisible, isOpen]);
+
+  // 🚀 Standard Pattern: Modal close hone ke baad DOM se hatane ke liye timer
+  useEffect(() => {
+    if (!isOpen && isVisible) {
+      const timer = setTimeout(() => setIsVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, isVisible]);
+
   const handleBuyNowClick = () => {
     setLoading(true);
-    setTimeout(() => {
-      setIsVisible(true);
-      // Small delay to allow element to render before adding opacity class for animation
-      setTimeout(() => setIsOpen(true), 10);
-      setLoading(false);
-    }, 200);
   };
+  const closeTimerRef = useRef(null);
 
   const closeModal = () => {
-    if (!placingOrder) {
-      setIsOpen(false);
-      // Wait for animation to finish before removing from DOM
-      setTimeout(() => setIsVisible(false), 300);
+    if (placingOrder) {
+      toast.info("Processing... please wait");
+      return;
     }
+
+    setIsOpen(false);
+
+    // clear previous timer (important)
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+    }
+
+    closeTimerRef.current = setTimeout(() => {
+      setIsVisible(false);
+    }, 300);
   };
+
+  // const closeModal = () => {
+  //   // if (!placingOrder) {
+  //   //   setIsOpen(false);
+  //   // }
+  //   if (placingOrder) {
+  //     toast.info("Processing... please wait");
+  //     return;
+  //   }
+  //   setIsOpen(false);
+
+  // };
+  // const closeModal = () => {
+  //   if (placingOrder) {
+  //     toast.info("Processing... please wait");
+  //     return;
+  //   }
+  //   setIsOpen(false);
+
+  //   setTimeout(() => {
+  //     setIsVisible(false);
+  //   }, 100);
+  // };
 
   const handleInputChange = useCallback((e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  }, []);
+  }, [formData, setFormData]);
 
   useEffect(() => {
     const stopLoading = () => {
       setPlacingOrder(false);
-      // modal ko close kar rahe hain setIsOpen(false) and setIsVisible(false)
       setIsOpen(false);
-      setTimeout(() => setIsVisible(false), 300);
     };
 
     window.addEventListener("paymentClosed", stopLoading);
@@ -86,6 +142,8 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
       });
     } catch (err) {
       setPlacingOrder(false);
+    } finally {
+      setPlacingOrder(false); // 🔥 ALWAYS RESET
     }
   }, [buyNow, cashOnDelivery, formData, fullName, address, pincode, phoneNumber, paymentMethod, placingOrder, setFormData]);
 
@@ -104,7 +162,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
       </button>
 
       {isVisible && createPortal(
-        <div className="fixed inset-0 z-[99999] flex items-start justify-center p-4 pt-24 sm:pt-28 pb-6">
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
           {/* Backdrop */}
           <div
             className={`fixed inset-0 bg-gray-900/60 backdrop-blur-sm transition-opacity duration-300 ease-out ${isOpen ? "opacity-100" : "opacity-0"
@@ -114,20 +172,21 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
 
           {/* Modal Panel */}
           <div
-            className={`relative flex flex-col w-full max-w-lg bg-white rounded-2xl shadow-2xl max-h-[85vh] overflow-hidden transition-all duration-300 ease-out transform ${isOpen
+            onClick={(e) => e.stopPropagation()} // 🚀 Bubbling stop kar rahe hain taaki CartItemCard trigger na ho
+            className={`relative flex flex-col w-full max-w-lg rounded-2xl shadow-2xl max-h-[85vh] overflow-hidden transition-all duration-300 ease-out transform border-2 ${isDark ? "bg-[#1a1f2e] border-gray-700" : "bg-white border-gray-100"} ${isOpen
               ? "translate-y-0 opacity-100 sm:scale-100"
               : "translate-y-4 opacity-0 sm:translate-y-0 sm:scale-95"
               }`}
           >
             {/* Header */}
-            <div className="px-5 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50 flex-shrink-0">
-              <h3 className="text-lg font-bold text-gray-800 tracking-tight">
+            <div className={`px-5 py-3 border-b flex justify-between items-center flex-shrink-0 ${isDark ? "bg-gray-800/20 border-gray-800" : "bg-gray-50/50 border-gray-100"}`}>
+              <h3 className={`text-lg font-bold tracking-tight ${isDark ? "text-white" : "text-gray-800"}`}>
                 Complete Your Order
               </h3>
               <button
                 onClick={closeModal}
                 disabled={placingOrder}
-                className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-red-500 transition-colors"
+                className={`w-7 h-7 flex items-center justify-center rounded-full transition-colors ${isDark ? "bg-gray-800 text-gray-400 hover:text-red-400" : "bg-gray-100 text-gray-500 hover:bg-gray-200 hover:text-red-500"}`}
                 aria-label="Close modal"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -142,23 +201,23 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
               <div className="space-y-4">
                 {/* Payment Method */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
+                  <label className={`block text-[10px] font-black mb-2 uppercase tracking-widest ${isDark ? "text-gray-400" : "text-gray-500"}`}>
                     Select Payment Method
                   </label>
                   <div className="flex flex-col sm:flex-row gap-2.5">
                     <label
                       className={`flex-1 relative px-3 py-2.5 rounded-xl cursor-pointer border-2 transition-all duration-200 ${paymentMethod === "razorpay"
-                        ? "border-blue-600 bg-blue-50/50 shadow-sm"
-                        : "border-gray-100 hover:border-blue-200 bg-white"
+                        ? isDark ? "border-blue-600 bg-blue-600/10 shadow-sm" : "border-blue-600 bg-blue-50/50 shadow-sm"
+                        : isDark ? "border-gray-800 bg-[#1a1f2e] hover:border-gray-700" : "border-gray-100 hover:border-blue-200 bg-white"
                         }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "razorpay" ? "border-blue-600" : "border-gray-300"}`}>
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "razorpay" ? "border-blue-600" : isDark ? "border-gray-600" : "border-gray-300"}`}>
                           {paymentMethod === "razorpay" && <div className="w-2 h-2 bg-blue-600 rounded-full" />}
                         </div>
-                        <span className="text-[13px] font-bold text-gray-800">Online Pay</span>
+                        <span className={`text-[13px] font-bold ${isDark ? "text-white" : "text-gray-800"}`}>Online Pay</span>
                       </div>
-                      <p className="text-[10px] text-gray-500 mt-0.5 ml-6.5">Cards, UPI, NetBanking</p>
+                      <p className={`text-[10px] mt-0.5 ml-6.5 ${isDark ? "text-gray-500" : "text-gray-500"}`}>Cards, UPI, NetBanking</p>
                       <input
                         type="radio"
                         name="payment"
@@ -171,18 +230,18 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
 
                     <label
                       className={`flex-1 relative px-3 py-2.5 rounded-xl cursor-pointer border-2 transition-all duration-200 ${paymentMethod === "cod"
-                        ? "border-green-600 bg-green-50/50 shadow-sm"
-                        : "border-gray-100 hover:border-green-200 bg-white"
+                        ? isDark ? "border-green-600 bg-green-600/10 shadow-sm" : "border-green-600 bg-green-50/50 shadow-sm"
+                        : isDark ? "border-gray-800 bg-[#1a1f2e] hover:border-gray-700" : "border-gray-100 hover:border-green-200 bg-white"
                         }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "cod" ? "border-green-600" : "border-gray-300"}`}>
+                        <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-colors ${paymentMethod === "cod" ? "border-green-600" : isDark ? "border-gray-600" : "border-gray-300"}`}>
                           {paymentMethod === "cod" && <div className="w-2 h-2 bg-green-600 rounded-full" />}
                         </div>
-                        <span className="text-[13px] font-bold text-gray-800">Pay on Delivery</span>
+                        <span className={`text-[13px] font-bold ${isDark ? "text-white" : "text-gray-800"}`}>Pay on Delivery</span>
                       </div>
 
-                      <p className="text-[10px] text-gray-500 mt-0.5 ml-6.5">Cash or UPI at doorstep</p>
+                      <p className={`text-[10px] mt-0.5 ml-6.5 ${isDark ? "text-gray-500" : "text-gray-500"}`}>Cash or UPI at doorstep</p>
                       <input
                         type="radio"
                         name="payment"
@@ -197,7 +256,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
 
                 {/* Shipping Details */}
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">
+                  <label className={`block text-[10px] font-black mb-2 uppercase tracking-widest ${isDark ? "text-gray-400" : "text-gray-500"}`}>
                     Shipping Details
                   </label>
                   <div className="space-y-3">
@@ -209,7 +268,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
                         name="fullName"
                         value={fullName}
                         onChange={handleInputChange}
-                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
                         placeholder="Full Name"
                       />
                     </div>
@@ -220,7 +279,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
                         name="phoneNumber"
                         value={phoneNumber}
                         onChange={handleInputChange}
-                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
                         placeholder="Mobile Number"
                       />
                     </div>
@@ -231,7 +290,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
                         name="address"
                         value={address}
                         onChange={handleInputChange}
-                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
                         placeholder="Complete Address"
                       />
                     </div>
@@ -242,7 +301,7 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
                         name="pincode"
                         value={pincode}
                         onChange={handleInputChange}
-                        className="w-full px-3.5 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-all placeholder-gray-400"
+                        className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white placeholder-gray-500 focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
                         placeholder="Pincode"
                       />
                     </div>
@@ -254,15 +313,15 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
                 <button
                   onClick={handleBuyNow}
                   disabled={placingOrder}
-                  className="mt-1 w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold flex justify-center items-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
+                  className="mt-1 w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] flex justify-center items-center gap-2 transition-all active:scale-[0.98] shadow-lg shadow-blue-600/20"
                 >
                   {placingOrder ? (
                     <>
                       <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      <span className="text-sm">Processing...</span>
+                      <span>Processing...</span>
                     </>
                   ) : (
-                    <span className="text-sm">Place Order Now</span>
+                    <span>Place Order Now</span>
                   )}
                 </button>
               </div>

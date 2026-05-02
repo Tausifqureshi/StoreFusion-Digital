@@ -12,7 +12,7 @@ function OrderSummaryCards({ isDark, order }) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#eff6ff] text-[#1e40af]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#eff6ff] text-[#1e40af]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Total Orders</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-blue-900'}`}>{totalOrders}</p>
@@ -22,7 +22,7 @@ function OrderSummaryCards({ isDark, order }) {
         </div>
       </div>
 
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#ecfdf5] text-[#047857]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#ecfdf5] text-[#047857]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-green-400' : 'text-green-600'}`}>Total Revenue</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-green-900'}`}>${totalRevenue}</p>
@@ -32,7 +32,7 @@ function OrderSummaryCards({ isDark, order }) {
         </div>
       </div>
 
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#faf5ff] text-[#6d28d9]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#faf5ff] text-[#6d28d9]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>Delivered</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-purple-900'}`}>{deliveredCount}</p>
@@ -42,7 +42,7 @@ function OrderSummaryCards({ isDark, order }) {
         </div>
       </div>
 
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#fff7ed] text-[#c2410c]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#fff7ed] text-[#c2410c]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-orange-400' : 'text-orange-600'}`}>Processing</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-orange-900'}`}>{processingCount}</p>

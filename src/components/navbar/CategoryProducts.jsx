@@ -103,7 +103,7 @@ function CategoryProducts() {
   return (
     <>
       <div
-        className={`min-h-screen pt-28 pb-12 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"}`}
+        className={`min-h-screen pt-28 pb-12 transition-all ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"}`}
       >
         <div className="max-w-7xl mx-auto px-4">
           {/* Header Section */}
@@ -132,7 +132,7 @@ function CategoryProducts() {
 
               {/*jab bhi user url ke thorw aye ge jaise  searchParams ka use kar Subcategory dehke gi.subCategory se reltive Checkboxes show nhi hoge productInfo page pe veiw all. agar user category se ata hai tab shoga subCategory se reltive checkbox*/}
               {!subQuery && uniqueSubCategories.length > 0 && (
-                <div className={`p-5 rounded-[2rem] border ${isDark ? 'bg-[#1e293b] border-gray-700' : 'bg-white border-gray-100 shadow-sm'}`}>
+                <div className={`p-5 rounded-[2rem] border ${isDark ? 'bg-[#1a1f2e] border-gray-800' : 'bg-white border-gray-100 shadow-sm'}`}>
                   <h3 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-orange-500">
                     Filter by Type
                   </h3>
@@ -144,7 +144,7 @@ function CategoryProducts() {
                         className="flex items-center gap-3 cursor-pointer group"
                       >
                         {/* Custom Checkbox UI */}
-                        <div className={`w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all ${selectedSubcategories.includes(sub) ? 'bg-orange-500 border-orange-500' : isDark ? 'border-gray-600 group-hover:border-orange-500' : 'border-gray-300 group-hover:border-orange-500'}`}>
+                        <div className={`w-5 h-5 rounded-md flex items-center justify-center border-2 transition-all ${selectedSubcategories.includes(sub) ? 'bg-orange-500 border-orange-500' : isDark ? 'border-gray-700 group-hover:border-orange-500' : 'border-gray-300 group-hover:border-orange-500'}`}>
                           {selectedSubcategories.includes(sub) && (
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -174,7 +174,7 @@ function CategoryProducts() {
               ) : (
                 <div className="relative min-h-[400px]">
                   {isFilterLoading && (
-                    <div className={`absolute inset-0 z-10 flex justify-center items-start ${mode === 'dark' ? 'bg-[#111827]/60' : 'bg-white/60'} backdrop-blur-[2px] transition-all duration-300`}>
+                    <div className={`absolute inset-0 z-10 flex justify-center items-start ${mode === 'dark' ? 'bg-[#1a1f2e]/60' : 'bg-white/60'} backdrop-blur-[2px] transition-all duration-300`}>
                       <LoaderSpinner isDark={mode === 'dark'} label="" />
                     </div>
                   )}

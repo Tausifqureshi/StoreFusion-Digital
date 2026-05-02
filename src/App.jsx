@@ -329,19 +329,11 @@ const router = createBrowserRouter([
               </ProtectedRoutesForAdmin>
             ),
           },
-          {
-            path: "/addtestimonial",
-            element: (
-              <ProtectedRoutesForAdmin>
-                <AddTestimonial />
-              </ProtectedRoutesForAdmin>
-            ),
-          },
           { path: "/*", element: <NoPage /> },
         ],
       },
       {
-        // Auth Routes WITHOUT Navbar/Footer
+        // Auth/Admin Routes WITHOUT Navbar/Footer
         children: [
           { path: "/signup", element: <Signup /> },
           { path: "/login", element: <Login /> },
@@ -352,6 +344,14 @@ const router = createBrowserRouter([
           {
             path: "/updateProduct",
             element: <ProtectedRoutesForAdmin><UpdateProduct /></ProtectedRoutesForAdmin>,
+          },
+          {
+            path: "/addtestimonial",
+            element: (
+              <ProtectedRoutesForAdmin>
+                <AddTestimonial />
+              </ProtectedRoutesForAdmin>
+            ),
           },
         ],
       },

@@ -13,7 +13,7 @@ const DesktopFilter = React.memo(function DesktopFilter({
   showCategoryFilter, hasActiveFilters
 }) {
   return (
-    <div className={`hidden lg:flex flex-col p-6 rounded-2xl border transition-all duration-300 ${isDark ? "bg-[#232f3e] border-gray-700 shadow-2xl" : "bg-white border-gray-100 shadow-xl shadow-blue-100/40"} sticky top-28`}>
+    <div className={`hidden lg:flex flex-col p-6 rounded-2xl border-2 transition-all duration-300 ${isDark ? "bg-[#1a1f2e] border-gray-700 shadow-2xl" : "bg-white border-gray-100 shadow-xl shadow-blue-100/40"} sticky top-28`}>
       <div className="flex items-center justify-between mb-6">
         <h2 className={`text-xl font-black italic tracking-tighter uppercase ${isDark ? "text-white" : "text-blue-600"}`}>
           Filters
@@ -35,7 +35,7 @@ const DesktopFilter = React.memo(function DesktopFilter({
             <div className="flex flex-col max-h-40 overflow-y-auto hidden-scrollbar">
               {uniqueCategories.map((cat, i) => (
                 <label key={i} className="flex items-center gap-3 cursor-pointer py-1.5 group">
-                  <div className={`relative flex items-center justify-center w-5 h-5 rounded md:rounded-md border ${filterType.includes(cat) ? 'bg-orange-500 border-orange-500 shadow-md shadow-orange-500/20' : isDark ? 'border-gray-500 bg-[#131921]' : 'border-gray-300 bg-white'} transition-all`}>
+                  <div className={`relative flex items-center justify-center w-5 h-5 rounded md:rounded-md border ${filterType.includes(cat) ? 'bg-orange-500 border-orange-500 shadow-md shadow-orange-500/20' : isDark ? 'border-gray-700 bg-[#1a1f2e]' : 'border-gray-300 bg-white'} transition-all`}>
                     <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" checked={filterType.includes(cat)} onChange={() => toggleCategory(cat)} />
                     {filterType.includes(cat) && <FiCheck className="text-white w-3.5 h-3.5" strokeWidth={4} />}
                   </div>
@@ -129,7 +129,7 @@ const MobileFilter = React.memo(function MobileFilter({ isDark, filterType, filt
         <Search placeholder="Search StoreFusion..." isMobile={true} />
       </div>
       <div className="flex flex-wrap items-center gap-2 pb-1">
-        <button onClick={() => setDrawerOpen(true)} className={`flex items-center gap-2 px-4 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest transition-all ${isDark ? "bg-[#232f3e] border-gray-600 text-white" : "bg-white border-gray-300 text-gray-700 shadow-sm"}`}>
+        <button onClick={() => setDrawerOpen(true)} className={`flex items-center gap-2 px-4 py-2 rounded-full border-2 text-[10px] font-black uppercase tracking-widest transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white" : "bg-white border-gray-300 text-gray-700 shadow-sm"}`}>
           Filters <FiSliders className="text-orange-500" />
         </button>
         {/* Only show category chips if not hidden */}
@@ -205,6 +205,14 @@ function Filter({ mode, showCategoryFilter = false }) {
     setLocalPrice(filterPrice);
   }, [filterPrice]);
 
+  // 🚀 Standard Pattern: Reset animation ko stop karo aur cleanup karo
+  useEffect(() => {
+    if (isRotating) {
+      const timer = setTimeout(() => setIsRotating(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [isRotating]);
+
   // ✅ STABLE CALLBACKS
   const resetFilters = useCallback(() => {
     setIsRotating(true);
@@ -213,7 +221,6 @@ function Filter({ mode, showCategoryFilter = false }) {
     setSortPrice("");
     setFilterColor([]);
     setFilterSize([]);
-    setTimeout(() => setIsRotating(false), 500);
   }, [setFilterType, setFilterPrice, setSortPrice, setFilterColor, setFilterSize, maxProductPrice]);
 
   const toggleCategory = useCallback((cat) => {
@@ -293,7 +300,7 @@ function Filter({ mode, showCategoryFilter = false }) {
         onClose={() => setDrawerOpen(false)}
         slotProps={{
           paper: {
-            className: `rounded-t-[30px] p-6 !transition-all !duration-500 ${isDark ? "!bg-[#131921] !text-white" : "!bg-white !text-gray-900"}`,
+            className: `rounded-t-[30px] p-6 !transition-all !duration-500 ${isDark ? "!bg-[#1a1f2e] !text-white" : "!bg-white !text-gray-900"}`,
             style: { maxHeight: "85vh" },
           }
         }}
@@ -311,7 +318,7 @@ function Filter({ mode, showCategoryFilter = false }) {
               <div className="flex flex-col max-h-40 overflow-y-auto hidden-scrollbar">
                 {uniqueCategories.map((cat, i) => (
                   <label key={i} className="flex items-center gap-3 cursor-pointer py-2 group">
-                    <div className={`relative flex items-center justify-center w-5 h-5 rounded md:rounded-md border ${filterType.includes(cat) ? 'bg-orange-500 border-orange-500 shadow-md shadow-orange-500/20' : isDark ? 'border-gray-500 bg-[#131921]' : 'border-gray-300 bg-white'} transition-all`}>
+                    <div className={`relative flex items-center justify-center w-5 h-5 rounded md:rounded-md border ${filterType.includes(cat) ? 'bg-orange-500 border-orange-500 shadow-md shadow-orange-500/20' : isDark ? 'border-gray-700 bg-[#1a1f2e]' : 'border-gray-300 bg-white'} transition-all`}>
                       <input type="checkbox" className="absolute opacity-0 w-full h-full cursor-pointer" checked={filterType.includes(cat)} onChange={() => toggleCategory(cat)} />
                       {filterType.includes(cat) && <FiCheck className="text-white w-3.5 h-3.5" strokeWidth={4} />}
                     </div>

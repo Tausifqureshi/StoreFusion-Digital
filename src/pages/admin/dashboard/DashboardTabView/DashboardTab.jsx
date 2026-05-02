@@ -8,7 +8,7 @@
 // const TabMenu = React.memo(({ tabs, activeTab, handleTabChange, isDark }) => {
 //   return (
 //     <div className="mb-8 w-full flex justify-start">
-//       <div className={`inline-flex items-center gap-2 p-1.5 rounded-2xl border transition-all ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg' : 'bg-white border-gray-200'}`}>
+//       <div className={`inline-flex items-center gap-2 p-1.5 rounded-2xl border transition-all ${isDark ? 'bg-[#1a1f2e] border-gray-600 shadow-lg' : 'bg-white border-gray-200'}`}>
 //         {tabs.map((tab) => {
 //           const isSelected = activeTab === tab.id;
 //           return (
@@ -179,7 +179,7 @@ const TABS_DATA = [
 const TabMenu = React.memo(function TabMenu({ activeTab, handleTabChange, isDark }) {
   return (
     <div className="mb-8 w-full flex justify-start">
-      <div className={`inline-flex items-center gap-2 p-1.5 rounded-2xl border transition-all ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg' : 'bg-white border-gray-200'}`}>
+      <div className={`inline-flex items-center gap-2 p-1.5 rounded-2xl border transition-all ${isDark ? 'bg-[#1a1f2e] border-gray-600 shadow-lg' : 'bg-white border-gray-200'}`}>
         {TABS_DATA.map((tab) => {
           const isSelected = activeTab === tab.id;
           return (

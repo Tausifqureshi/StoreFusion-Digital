@@ -145,7 +145,7 @@ export const saveOrderToFirestore = async (orderInfo) => {
       // 👉 Agar orderInfo mein status miss hai, toh default "placed" set kar do (NULLISH)
       status: orderInfo.status ?? "placed",
       // 👉 Jab order save ho raha hai, us exact time ka server stamp laga do (Secure time)
-      createdAt: serverTimestamp(), 
+      createdAt: serverTimestamp(),
     });
 
     // 👉 Database se mila naya ID (docRef.id) waapas return bhej do, jisse UI me dikha sake
@@ -168,7 +168,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
     // 👉 getUserOrdersFromFirestore yaha 2 chize le raha hai: uid aur 'callback' function.
     // 👉 Callback ek messenger hai: Jab data nikal jayega, toh yeh callback data ko wapas 
     // frontend (components) mein bhejne ka kaam karega.
-    
+
     // 👉 Agar User ki ID hi gayab hai, toh functions directly empty bhej do
     if (!uid) return () => { };
 
@@ -205,7 +205,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
           if (!b.createdAt) return -1;
           return new Date(b.createdAt) - new Date(a.createdAt);
         });
-        
+
         // 🟢 Saara fresh aur clean order ka data wapas page / component ko bhej diya jata hai
         callback(orders);
       },
@@ -223,7 +223,7 @@ export const getUserOrdersFromFirestore = (uid, callback) => {
     console.error("Error in getUserOrdersFromFirestore: ", error);
     toast.error("Failed to connect to orders service.", { icon: "⚠️" });
     callback([]);
-    return () => {};
+    return () => { };
   }
 };
 
@@ -338,4 +338,4 @@ export const deleteUserOrdersFromFirestore = async (uid) => {
     toast.error("Failed to delete user orders.", { icon: "⚠️" });
     throw error;
   }
-};
+}; 

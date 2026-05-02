@@ -20,7 +20,7 @@ function RecentOrders({ isDark, orders }) {
   };
 
   return (
-    <div className={`p-6 sm:p-8 rounded-3xl border transition-all h-full flex flex-col ${isDark ? 'bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+    <div className={`p-6 sm:p-8 rounded-3xl border transition-all h-full flex flex-col ${isDark ? 'bg-[#1a1f2e] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]' : 'bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
       <div className="flex justify-between items-center mb-6">
         <div className="flex items-center gap-3">
           <FaShoppingCart className="text-orange-500 text-xl" />
@@ -28,14 +28,14 @@ function RecentOrders({ isDark, orders }) {
             Recent Orders
           </h2>
         </div>
-        <button className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all border shadow-sm ${isDark ? 'bg-[#131921] text-gray-300 border-gray-700 hover:bg-gray-800' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}>
+        <button className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black transition-all border shadow-sm ${isDark ? 'bg-[#1a1f2e] text-gray-300 border-gray-700 hover:bg-gray-800' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'}`}>
           <FaEye size={12} /> View All
         </button>
       </div>
 
       <div className="flex flex-col gap-4 flex-grow overflow-y-auto pr-1 custom-scrollbar">
         {displayOrders.length > 0 ? displayOrders.map((order, i) => (
-          <div key={order.id || i} className={`flex items-center justify-between p-4 rounded-2xl transition-all border ${isDark ? 'bg-[#131921]/50 border-gray-800 hover:bg-[#131921]' : 'bg-gray-50/50 border-gray-100 hover:border-gray-200 hover:bg-white hover:shadow-sm'}`}>
+          <div key={order.id || i} className={`flex items-center justify-between p-4 rounded-2xl transition-all border ${isDark ? 'bg-[#1a1f2e]/50 border-gray-800 hover:bg-[#1a1f2e]' : 'bg-gray-50/50 border-gray-100 hover:border-gray-200 hover:bg-white hover:shadow-sm'}`}>
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
                 <FaShoppingCart size={18} />

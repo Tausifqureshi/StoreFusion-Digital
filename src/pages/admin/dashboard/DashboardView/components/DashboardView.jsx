@@ -28,7 +28,7 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
   } = useDashboardData(allProducts, allOrders, allUsers, selectedRange, calendarDate);
 
   return (
-    <div className={`min-h-screen pt-28 pb-16 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"} font-sans`}>
+    <div className={`min-h-screen pt-28 pb-16 transition-all duration-300 ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"} font-sans`}>
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8 relative">
 
         <DashboardHeader
@@ -65,7 +65,7 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
         </div>
 
         {/* 👉 Management Tabs: ZERO-CONTEXT switcher handles nested tabs */}
-        <div className={`mt-10 rounded-3xl border transition-all overflow-hidden flex flex-col relative z-10 ${isDark ? "bg-[#1e293b] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]" : "bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]"}`}>
+        <div className={`mt-10 rounded-3xl border transition-all overflow-hidden flex flex-col relative z-10 ${isDark ? "bg-[#1a1f2e] border-gray-800 shadow-[0_8px_30px_rgba(0,0,0,0.3)]" : "bg-white border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]"}`}>
           {children}
         </div>
 

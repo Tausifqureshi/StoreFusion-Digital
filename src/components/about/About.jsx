@@ -40,10 +40,10 @@ function About() {
 
   return (
     <>
-      <section className={`min-h-screen transition-colors duration-300 pt-20 ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
+      <section className={`min-h-screen transition-colors duration-300 pt-20 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
 
         {/* 🚀 Modern Hero Section */}
-        <div className={`relative py-16 md:py-28 px-6 overflow-hidden ${isDark ? "bg-[#1e293b]" : "bg-gray-50/50"}`}>
+        <div className={`relative py-16 md:py-28 px-6 overflow-hidden ${isDark ? "bg-[#1a1f2e]" : "bg-gray-50/50"}`}>
           <div className="max-w-7xl mx-auto flex flex-col items-center text-center relative z-10">
             <span className="bg-blue-600 text-white px-5 py-1.5 rounded-full text-[9px] font-black uppercase tracking-[0.3em] mb-8 animate-pulse">
               Our Journey
@@ -92,7 +92,7 @@ function About() {
                 {accordionData.map((item, index) => (
                   <div
                     key={index}
-                    className={`border rounded-3xl overflow-hidden transition-all duration-300 ${isDark ? "border-gray-800 bg-[#1e293b]" : "border-gray-100 bg-gray-50/50 shadow-sm"}`}
+                    className={`border rounded-3xl overflow-hidden transition-all duration-300 ${isDark ? "border-gray-800 bg-[#1a1f2e]" : "border-gray-100 bg-gray-50/50 shadow-sm"}`}
                   >
                     <button
                       onClick={() => setOpenIndex(openIndex === index ? null : index)}
@@ -136,7 +136,7 @@ function About() {
         </div>
 
         {/* 🌍 Final CTA Section */}
-        <div className={`py-24 text-center px-6 ${isDark ? "bg-[#1e293b]" : "bg-gray-50/50"}`}>
+        <div className={`py-24 text-center px-6 ${isDark ? "bg-[#1a1f2e]" : "bg-gray-50/50"}`}>
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-8">
             READY TO <span className="text-blue-600">UPGRADE?</span>
           </h2>

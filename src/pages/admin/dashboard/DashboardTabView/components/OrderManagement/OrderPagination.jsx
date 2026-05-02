@@ -7,7 +7,7 @@ function OrderPagination({ isDark, currentPage, totalPages, setCurrentPage, item
   const endItem = Math.min(currentPage * itemsPerPage, totalItems);
 
   return (
-    <div className={`flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-3xl md:rounded-full transition-all duration-300 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+    <div className={`flex flex-col md:flex-row items-center justify-between gap-4 p-4 rounded-3xl md:rounded-full transition-all duration-300 ${isDark ? 'bg-[#1a1f2e] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
       
       {/* 👉 Left k me items ki range dikhane wala text */}
       <span className={`text-sm font-medium text-center md:text-left md:pl-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>

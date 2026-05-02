@@ -23,10 +23,10 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
   }
 
   return (
-    <div className={`relative rounded-[2rem] p-5 transition-all duration-300 hover:-translate-y-1 ${isDark ? 'bg-[#1e293b] border border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500' : 'bg-white border border-gray-100 shadow-sm hover:shadow-xl'}`}>
+    <div className={`relative rounded-[2rem] p-5 transition-all duration-300 hover:-translate-y-1 flex flex-col h-full border-2 ${isDark ? 'bg-[#1a1f2e] border-gray-700 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-600' : 'bg-white border-gray-100 shadow-sm hover:shadow-xl'}`}>
 
       {/* Image Area */}
-      <div className={`relative w-full h-44 rounded-2xl mb-5 flex items-center justify-center p-4 overflow-hidden ${isDark ? 'bg-[#131921]/50' : 'bg-gray-50'}`}>
+      <div className={`relative w-full h-44 rounded-t-2xl mb-4 flex items-center justify-center p-4 overflow-hidden border-b-2 ${isDark ? 'bg-[#1a1f2e]/50 border-gray-700/50' : 'bg-gray-50 border-gray-100'}`}>
         {/* Status Badge */}
         <span className={`absolute top-3 right-3 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full z-10 ${statusColors}`}>
           {status}
@@ -38,7 +38,7 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
       </div>
 
       {/* Content */}
-      <h2 className={`font-black text-xl leading-tight line-clamp-1 mb-2 ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.title}</h2>
+      <h2 className={`font-black text-xl leading-tight line-clamp-1 mb-2 px-1 ${isDark ? 'text-white' : 'text-gray-900'}`}>{item.title}</h2>
 
       <p className={`text-xs font-medium line-clamp-2 mb-4 h-8 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
         {item.description || "High-quality product with amazing features and excellent durability."}
@@ -67,7 +67,7 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
 
       {/* Footer / Actions */}
       <div className="flex items-center justify-between mt-auto">
-        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${isDark ? 'bg-[#131921] text-gray-300 border-gray-700' : 'bg-white text-gray-600 border-gray-200'}`}>
+        <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${isDark ? 'bg-[#1a1f2e] text-gray-300 border-gray-700' : 'bg-white text-gray-600 border-gray-200'}`}>
           {item.category || "General"}
         </span>
 
@@ -85,7 +85,7 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
               {/* Overlay to close menu */}
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
 
-              <div className={`absolute bottom-[120%] right-0 w-40 rounded-2xl shadow-xl overflow-hidden z-20 animate-in fade-in slide-in-from-bottom-2 ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-white border border-gray-100'}`}>
+              <div className={`absolute bottom-[120%] right-0 w-40 rounded-2xl shadow-xl overflow-hidden z-20 animate-in fade-in slide-in-from-bottom-2 ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-white border border-gray-100'}`}>
                 <div className="py-2">
                   <Link
                     to={`/productInfo/${item.id}`}

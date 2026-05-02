@@ -1,11 +1,14 @@
-import React, { useContext, useEffect, useCallback } from 'react'
+import React, { useContext, useEffect, useCallback, useRef, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { ProductAdminContext } from '../../../context api/AllContext';
+import { ProductAdminContext, ThemeContext } from '../../../context api/AllContext';
 import { FiX } from "react-icons/fi";
 
 function UpdateProduct() {
     const navigate = useNavigate();
     const { products, setProducts, updateProduct } = useContext(ProductAdminContext);
+    const { mode } = useContext(ThemeContext);
+    const isDark = mode === 'dark';
+    const [isSuccess, setIsSuccess] = useState(false);
 
     function inputHandle(e) {
         setProducts({ ...products, [e.target.name]: e.target.value });
@@ -29,91 +32,135 @@ function UpdateProduct() {
         }
     }, [products, setProducts]);
 
-    const handleUpdateProduct = async () => {
-        const success = await updateProduct();
-        if (success) {
-            setTimeout(() => navigate("/dashboard"), 800);
-        }
-    };
-
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
+    // 🚀 Security Check: Agar products.id nahi hai toh dashboard bhejo (URL manipulation prevention)
+    useEffect(() => {
+        if (!products.id) {
+            navigate('/dashboard');
+        }
+    }, [products.id, navigate]);
+
+    // 🚀 Standard Pattern: Success hone par timer start karo aur cleanup me clear karo
+    useEffect(() => {
+        if (isSuccess) {
+            const timer = setTimeout(() => navigate('/dashboard'), 800);
+            return () => clearTimeout(timer);
+        }
+    }, [isSuccess, navigate]);
+
+    const handleUpdateProduct = async () => {
+        const success = await updateProduct();
+        if (success) {
+            setIsSuccess(true);
+        }
+    };
+
 
     return (
-        <div className="fixed inset-0 z-[100] overflow-y-auto flex justify-center items-start min-h-screen bg-black/80 backdrop-blur-sm py-12 px-4">
-            <div className="relative bg-white shadow-lg px-8 py-6 rounded-lg max-w-md w-full">
+        <div className={`fixed inset-0 z-[100] overflow-y-auto flex justify-center items-start min-h-screen backdrop-blur-sm py-12 px-4 transition-colors duration-300 ${isDark ? "bg-black/60" : "bg-black/80"}`}>
+            <div className={`relative shadow-2xl px-8 py-6 rounded-3xl max-w-md w-full border transition-all duration-300 ${isDark ? "bg-[#1a1f2e] border-gray-800 text-white" : "bg-white border-gray-100 text-gray-900"}`}>
                 <button
-                    onClick={() => navigate('/dashboard')}
-                    className="absolute top-4 right-4 p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                    onClick={() => navigate(-1)}
+                    className={`absolute top-6 right-6 p-2 rounded-full transition-all ${isDark ? "text-gray-400 hover:text-red-400 hover:bg-gray-800" : "text-gray-400 hover:text-red-500 hover:bg-red-50"}`}
                 >
                     <FiX size={24} />
                 </button>
-                <h1 className="text-center text-blue-600 text-3xl font-black italic tracking-tighter mb-5 uppercase">
+                <h1 className="text-center text-blue-600 text-3xl font-black italic tracking-tighter mb-8 uppercase">
                     UPDATE<span className="text-orange-500">PRODUCT</span>
                 </h1>
 
-                <div className="space-y-3">
-                    <input
-                        type="text"
-                        name="title"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Product Title"
-                        onChange={inputHandle}
-                        value={products.title}
-                    />
+                <div className="space-y-4">
+                    <div className="space-y-1">
+                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Product Title</label>
+                        <input
+                            type="text"
+                            name="title"
+                            className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                            placeholder="Product Title"
+                            onChange={inputHandle}
+                            value={products.title}
+                        />
+                    </div>
 
-                    <input
-                        type="text"
-                        name="price"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Product Price"
-                        onChange={inputHandle}
-                        value={products.price}
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Price</label>
+                            <input
+                                type="text"
+                                name="price"
+                                className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                                placeholder="Product Price"
+                                onChange={inputHandle}
+                                value={products.price}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Discount %</label>
+                            <input
+                                type="number"
+                                name="discount"
+                                className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                                placeholder="Discount %"
+                                onChange={inputHandle}
+                                value={products.discount}
+                            />
+                        </div>
+                    </div>
 
-                    <input
-                        type="text"
-                        name="imageUrl"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Product Image URL"
-                        onChange={inputHandle}
-                        value={products.imageUrl}
-                    />
+                    <div className="space-y-1">
+                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Image URL</label>
+                        <input
+                            type="text"
+                            name="imageUrl"
+                            className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                            placeholder="Product Image URL"
+                            onChange={inputHandle}
+                            value={products.imageUrl}
+                        />
+                    </div>
 
-                    <input
-                        type="text"
-                        name="category"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Main Category (e.g. Electronics, Fashion)"
-                        onChange={inputHandle}
-                        value={products.category}
-                    />
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Category</label>
+                            <input
+                                type="text"
+                                name="category"
+                                className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                                placeholder="Main Category"
+                                onChange={inputHandle}
+                                value={products.category}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Sub-category</label>
+                            <input
+                                type="text"
+                                name="subcategory"
+                                className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                                placeholder="Sub-category"
+                                onChange={inputHandle}
+                                value={products.subcategory || ""}
+                            />
+                        </div>
+                    </div>
 
-                    <input
-                        type="text"
-                        name="subcategory"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Sub-category (e.g. Laptop, Watch, Shirt) (Optional)"
-                        onChange={inputHandle}
-                        value={products.subcategory || ""}
-                    />
-
-                    <div className="border border-gray-300 rounded-lg p-3">
-                        <p className="text-sm text-gray-500 mb-2">Select Product Color</p>
+                    <div className={`p-4 rounded-2xl border ${isDark ? "bg-gray-800/20 border-gray-700" : "bg-gray-50 border-gray-100"}`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Select Color</p>
                         <div className="grid grid-cols-4 gap-2">
                             {['Black', 'White', 'Red', 'Blue', 'Green', 'Yellow', 'Pink', 'Gray'].map((color) => (
                                 <div
                                     key={color}
                                     onClick={() => handleColorToggle(color)}
-                                    className={`cursor-pointer select-none flex items-center justify-center gap-1.5 p-1.5 rounded-full border transition-all ${products.color === color ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:bg-gray-50'}`}
+                                    className={`cursor-pointer select-none flex items-center justify-center gap-1.5 p-2 rounded-full border transition-all ${products.color === color ? 'border-orange-500 bg-orange-500/10 text-orange-500' : isDark ? 'border-gray-700 bg-gray-800/40 text-gray-400' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}
                                 >
                                     <div
-                                        className="w-4 h-4 rounded-full shadow-sm border border-gray-300"
+                                        className="w-3 h-3 rounded-full shadow-sm border border-black/10"
                                         style={{ backgroundColor: color.toLowerCase() }}
                                     />
-                                    <span className={`text-xs font-bold ${products.color === color ? 'text-orange-700' : 'text-gray-600'}`}>
+                                    <span className="text-[9px] font-black uppercase tracking-tighter">
                                         {color}
                                     </span>
                                 </div>
@@ -121,16 +168,16 @@ function UpdateProduct() {
                         </div>
                     </div>
 
-                    <div className="border border-gray-300 rounded-lg p-3">
-                        <p className="text-sm text-gray-500 mb-2">Select Product Size (Optional)</p>
+                    <div className={`p-4 rounded-2xl border ${isDark ? "bg-gray-800/20 border-gray-700" : "bg-gray-50 border-gray-100"}`}>
+                        <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Select Size</p>
                         <div className="grid grid-cols-5 gap-2">
-                            {['S', 'M', 'L', 'XL', 'XXL', '6', '7', '8', '9', '10', '11'].map((size) => (
+                            {['S', 'M', 'L', 'XL', 'XXL', '6', '7', '8', '9', '10'].map((size) => (
                                 <div
                                     key={size}
                                     onClick={() => handleSizeToggle(size)}
-                                    className={`cursor-pointer select-none flex items-center justify-center p-2 rounded-lg border transition-all ${products.size === size ? 'border-orange-500 bg-orange-50 text-orange-700' : 'border-gray-200 hover:bg-gray-50 text-gray-600'}`}
+                                    className={`cursor-pointer select-none flex items-center justify-center p-2 rounded-xl border transition-all ${products.size === size ? 'border-orange-500 bg-orange-500/10 text-orange-500 font-black' : isDark ? 'border-gray-700 bg-gray-800/40 text-gray-400' : 'border-gray-200 bg-white text-gray-600 hover:bg-gray-50'}`}
                                 >
-                                    <span className="text-xs font-black uppercase">
+                                    <span className="text-[10px] uppercase font-black tracking-widest">
                                         {size}
                                     </span>
                                 </div>
@@ -138,53 +185,52 @@ function UpdateProduct() {
                         </div>
                     </div>
 
-                    <input
-                        type="number"
-                        name="discount"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Discount %"
-                        onChange={inputHandle}
-                        value={products.discount}
-                    />
-
-                    <input
-                        type="number"
-                        step="0.1"
-                        min="0"
-                        max="5"
-                        name="rating"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Product Rating (0 - 5)"
-                        onChange={inputHandle}
-                        value={products.rating || ""}
-                    />
-
-                    <input
-                        type="number"
-                        name="stock"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Available Stock Quantity"
-                        onChange={inputHandle}
-                        value={products.stock}
-                    />
-
-                    <textarea
-                        name="description"
-                        rows="4"
-                        className="border border-gray-300 rounded-lg w-full px-4 py-2 text-gray-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        placeholder="Product Description"
-                        onChange={inputHandle}
-                        value={products.description}
-                    />
-
-                    <div className="flex justify-center">
-                        <button
-                            onClick={handleUpdateProduct}
-                            className="bg-blue-500 w-full text-white font-semibold py-2 rounded-lg hover:bg-blue-600 transition-colors"
-                        >
-                            Update Product
-                        </button>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Rating</label>
+                            <input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                max="5"
+                                name="rating"
+                                className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                                placeholder="Rating (0 - 5)"
+                                onChange={inputHandle}
+                                value={products.rating || ""}
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Stock</label>
+                            <input
+                                type="number"
+                                name="stock"
+                                className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                                placeholder="Available Stock"
+                                onChange={inputHandle}
+                                value={products.stock}
+                            />
+                        </div>
                     </div>
+
+                    <div className="space-y-1">
+                        <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Description</label>
+                        <textarea
+                            name="description"
+                            rows="3"
+                            className={`w-full px-4 py-3 rounded-xl outline-none border transition-all resize-none ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+                            placeholder="Product Description"
+                            onChange={inputHandle}
+                            value={products.description}
+                        />
+                    </div>
+
+                    <button
+                        onClick={handleUpdateProduct}
+                        className="w-full bg-blue-600 text-white font-black uppercase tracking-[0.2em] text-[10px] py-4 rounded-2xl hover:bg-blue-700 transition-all shadow-xl shadow-blue-600/20 active:scale-95 mt-4"
+                    >
+                        Update Product
+                    </button>
                 </div>
             </div>
         </div>

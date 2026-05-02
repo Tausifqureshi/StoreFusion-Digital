@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react";
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -30,6 +30,26 @@ const CartView = React.memo(function CartView({
   const shippingCharge = 20;
   const totalWithShipping = totalAmount > 0 ? (totalAmount + shippingCharge).toFixed(2) : 0;
 
+  // 🚀 Standard Pattern: Cart update animation reset
+  useEffect(() => {
+    if (cartUpdating) {
+      const timer = setTimeout(() => setCartUpdating(null), 200);
+      return () => clearTimeout(timer);
+    }
+  }, [cartUpdating]);
+
+  // 🚀 Standard Pattern: Cart clear delay
+  useEffect(() => {
+    if (clearingCart) {
+      const timer = setTimeout(() => {
+        dispatch(clearCart());
+        setClearingCart(false);
+        toast.success("Bag cleared");
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [clearingCart, dispatch]);
+
   // 👉 Relying on cartItemsRef to maintain absolute referential stability for child components
   const deleteCart = useCallback((itemId) => {
     const updatedCart = cartItemsRef.current.filter((i) => i.id !== itemId);
@@ -43,7 +63,6 @@ const CartView = React.memo(function CartView({
     dispatch(incrementQuantity(itemId));
     const updatedCart = cartItemsRef.current.map(i => i.id === itemId ? { ...i, quantity: (i.quantity || 1) + 1 } : i);
     saveCartDebounce(updatedCart);
-    setTimeout(() => setCartUpdating(null), 200);
   }, [dispatch, cartItemsRef]);
 
   const decrementCartQuantity = useCallback((itemId) => {
@@ -51,25 +70,19 @@ const CartView = React.memo(function CartView({
     dispatch(decrementQuantity(itemId));
     const updatedCart = cartItemsRef.current.map(i => i.id === itemId ? { ...i, quantity: Math.max(1, (i.quantity || 1) - 1) } : i);
     saveCartDebounce(updatedCart);
-    setTimeout(() => setCartUpdating(null), 200);
   }, [dispatch, cartItemsRef]);
 
   const clearCartItems = async () => {
     setClearingCart(true);
     try {
       await clearCartStorage();
-      setTimeout(() => {
-        dispatch(clearCart());
-        setClearingCart(false);
-        toast.success("Bag cleared");
-      }, 400);
     } catch (err) { setClearingCart(false); }
   };
 
   if (cartLoading) return <LoaderSpinner isDark={isDark} label="Loading bag..." />;
 
   return (
-    <div className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#131921] text-white" : "bg-gray-50 text-gray-900"}`}>
+    <div className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"}`}>
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8 border-b border-gray-200 dark:border-gray-800 pb-6">
@@ -101,7 +114,7 @@ const CartView = React.memo(function CartView({
 
             {/* Sidebar */}
             <div className="w-full lg:w-[380px] lg:sticky lg:top-32">
-              <div className={`p-6 rounded-[30px] border ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-gray-200/50"}`}>
+              <div className={`p-6 rounded-[30px] border-2 ${isDark ? "bg-[#1a1f2e] border-gray-700" : "bg-white border-gray-100 shadow-xl shadow-gray-200/50"}`}>
                 <h3 className="text-sm font-black uppercase tracking-[0.2em] mb-6 opacity-50">Pricing Details</h3>
                 <div className="space-y-4 mb-6">
                   <div className="flex justify-between text-[11px] font-black uppercase tracking-widest text-gray-500">
@@ -120,7 +133,7 @@ const CartView = React.memo(function CartView({
 
                 <div className="space-y-3">
                   <Razorpay cartItemsRef={cartItemsRef} totalAmountRef={totalAmountRef} />
-                  <button onClick={clearCartItems} disabled={clearingCart} className={`w-full py-3 text-[10px] font-black uppercase tracking-widest rounded-xl border transition-all duration-300 ${isDark ? "border-gray-700 text-gray-400 hover:bg-red-600 hover:text-white hover:border-red-600 shadow-none" : "border-gray-200 text-gray-500 hover:bg-red-600 hover:text-white hover:border-red-600 shadow-none"}`}>
+                  <button onClick={clearCartItems} disabled={clearingCart} className={`w-full py-3 text-[10px] font-black uppercase tracking-widest rounded-xl border-2 transition-all duration-300 ${isDark ? "border-gray-700 text-gray-400 hover:bg-red-600 hover:text-white hover:border-red-600 shadow-none" : "border-gray-200 text-gray-500 hover:bg-red-600 hover:text-white hover:border-red-600 shadow-none"}`}>
                     {clearingCart ? "Processing..." : "Empty Shopping Bag"}
                   </button>
                 </div>

@@ -4,7 +4,7 @@ import React from "react";
 export default function Loader({ fullScreen = false }) {
   // ALWAYS FORCE DARK MODE FOR PREMIUM LOADER
   return (
-    <div className={`flex flex-col items-center justify-center w-full ${fullScreen ? "fixed inset-0 z-[9999] bg-[#131921] backdrop-blur-md" : "min-h-screen py-40 bg-[#131921]"}`}>
+    <div className={`flex flex-col items-center justify-center w-full ${fullScreen ? "fixed inset-0 z-[9999] bg-[#1a1f2e] backdrop-blur-md" : "min-h-screen py-40 bg-[#1a1f2e]"}`}>
 
       {/* Sleek Indeterminate Progress Bar */}
       <div className="relative w-48 h-[3px] overflow-hidden rounded-full mb-6 bg-gray-800 shadow-inner">

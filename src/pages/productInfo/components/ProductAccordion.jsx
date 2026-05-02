@@ -15,7 +15,7 @@ const ProductAccordion = React.memo(function ProductAccordion({ accordionData, i
           <div
             key={item.id}
             className={`border rounded-2xl overflow-hidden transition-all duration-300
-              ${isDark ? "border-gray-800 bg-[#1e293b]" : "border-gray-50 bg-gray-50 shadow-sm"}`}
+              ${isDark ? "border-gray-800 bg-[#1a1f2e]" : "border-gray-50 bg-gray-50 shadow-sm"}`}
           >
             <button
               onClick={() => handleToggle(index)}

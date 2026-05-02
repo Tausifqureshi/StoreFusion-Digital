@@ -15,7 +15,7 @@ function ProductPagination({ isDark, currentPage, totalPages, setCurrentPage, it
       </span>
 
       {/* 👉 Premium Modern Pagination Container matching Tabs */}
-      <div className={`inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 sm:rounded-2xl rounded-xl transition-all border ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg shadow-black/20' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)]'}`}>
+      <div className={`inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 sm:rounded-2xl rounded-xl transition-all border ${isDark ? 'bg-[#1a1f2e] border-gray-600 shadow-lg shadow-black/20' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)]'}`}>
 
         {/* Previous Button */}
         <button

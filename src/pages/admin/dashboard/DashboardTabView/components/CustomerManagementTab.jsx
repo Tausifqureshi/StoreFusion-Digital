@@ -75,7 +75,7 @@ function CustomerManagementTab() {
       </div>
 
       {/* SEARCH & FILTERS */}
-      <div className={`p-4 rounded-3xl mb-8 flex flex-col md:flex-row items-center justify-start gap-4 transition-all ${isDark ? 'bg-[#1e293b] border border-gray-800 shadow-lg' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+      <div className={`p-4 rounded-3xl mb-8 flex flex-col md:flex-row items-center justify-start gap-4 transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-800 shadow-lg' : 'bg-white border border-gray-100 shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
         <div className="relative w-full md:max-w-md flex items-center shrink-0">
           <FaSearch className={`absolute left-4 top-1/2 -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} size={14} />
           <input
@@ -84,7 +84,7 @@ function CustomerManagementTab() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className={`w-full pl-11 pr-4 py-3 rounded-2xl text-sm font-semibold outline-none transition-all ${isDark
-              ? 'bg-[#131921] border border-gray-700 text-white placeholder-gray-500 focus:border-blue-500/50 focus:bg-[#1a222d]'
+              ? 'bg-[#1a1f2e] border border-gray-700 text-white placeholder-gray-500 focus:border-blue-500/50 focus:bg-[#1a222d]'
               : 'bg-gray-50/50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:border-blue-400/50 focus:bg-white'
               }`}
           />
@@ -95,7 +95,7 @@ function CustomerManagementTab() {
             value={filterRole}
             onChange={(e) => setFilterRole(e.target.value)}
             className={`w-full md:w-auto appearance-none pl-4 pr-10 py-3 rounded-xl text-sm font-bold outline-none cursor-pointer transition-all ${isDark
-              ? 'bg-[#131921] border-gray-700 text-gray-300 hover:border-gray-600 focus:border-blue-500/50'
+              ? 'bg-[#1a1f2e] border-gray-700 text-gray-300 hover:border-gray-600 focus:border-blue-500/50'
               : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300 focus:border-blue-400/50'
               }`}
           >
@@ -113,7 +113,7 @@ function CustomerManagementTab() {
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
             className={`w-full md:w-auto appearance-none pl-4 pr-10 py-3 rounded-xl text-sm font-bold outline-none cursor-pointer transition-all ${isDark
-              ? 'bg-[#131921] border-gray-700 text-gray-300 hover:border-gray-600 focus:border-blue-500/50'
+              ? 'bg-[#1a1f2e] border-gray-700 text-gray-300 hover:border-gray-600 focus:border-blue-500/50'
               : 'bg-white border border-gray-200 text-gray-700 hover:border-gray-300 focus:border-blue-400/50'
               }`}
           >
@@ -127,7 +127,7 @@ function CustomerManagementTab() {
       </div>
 
       {/* LIST VIEW */}
-      <div className={`w-full rounded-2xl p-6 transition-all duration-300 mb-8 ${isDark ? 'bg-[#1e293b] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
+      <div className={`w-full rounded-2xl p-6 transition-all duration-300 mb-8 ${isDark ? 'bg-[#1a1f2e] border border-gray-800' : 'bg-white shadow-[0_8px_30px_rgba(0,0,0,0.04)]'}`}>
         <h2 className={`text-lg font-bold tracking-tight mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}>
           All Users ({filteredUsers.length})
         </h2>
@@ -135,7 +135,7 @@ function CustomerManagementTab() {
         <div className="flex flex-col gap-3">
           {usersOnCurrentPage.length > 0 ? (
             usersOnCurrentPage.map((u, i) => {
-              const itemBorder = isDark ? 'bg-[#1e293b] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500 hover:-translate-y-1' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1';
+              const itemBorder = isDark ? 'bg-[#1a1f2e] border-gray-600 shadow-[0_4px_20px_rgba(0,0,0,0.3)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.5)] hover:border-gray-500 hover:-translate-y-1' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)] hover:shadow-xl hover:-translate-y-1';
               const roleName = u.role || (u.email?.includes('admin') ? 'Admin' : 'User');
               const roleBg = roleName.toLowerCase() === 'admin' ? '#8b5cf6' : '#3b82f6';
               const initial = u.name ? u.name.charAt(0).toUpperCase() : (u.email ? u.email.charAt(0).toUpperCase() : "");
@@ -193,7 +193,7 @@ function CustomerManagementTab() {
           <span className={`text-sm font-medium text-center md:text-left ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
             Showing <span className="font-semibold">{startItem}</span> to <span className="font-semibold">{endItem}</span> of <span className="font-semibold">{filteredUsers.length}</span> users
           </span>
-          <div className={`inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 sm:rounded-2xl rounded-xl transition-all border ${isDark ? 'bg-[#1e293b] border-gray-600 shadow-lg shadow-black/20' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)]'}`}>
+          <div className={`inline-flex flex-wrap items-center justify-center gap-1.5 p-1.5 sm:rounded-2xl rounded-xl transition-all border ${isDark ? 'bg-[#1a1f2e] border-gray-600 shadow-lg shadow-black/20' : 'bg-white border-gray-200 shadow-[0_2px_15px_rgba(0,0,0,0.04)]'}`}>
             <button
               disabled={currentPage === 1}
               onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}

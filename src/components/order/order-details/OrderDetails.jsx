@@ -60,7 +60,7 @@ function OrderDetails() {
 
   return (
     <>
-      <div className={`min-h-screen pt-28 pb-12 transition-all duration-300 ${isDark ? "bg-[#131921] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
+      <div className={`min-h-screen pt-28 pb-12 transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
         <div className="max-w-6xl mx-auto px-4">
           {orderLoading ? (
             <div className="flex justify-center items-center py-20">
@@ -76,7 +76,7 @@ function OrderDetails() {
                 <Tracking order={order} isDark={isDark} />
               </div>
 
-              <div className={`relative overflow-hidden rounded-[40px] border-2 transition-all duration-500 ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-blue-500/5"}`}>
+              <div className={`relative overflow-hidden rounded-[40px] border-2 transition-all duration-500 ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-blue-500/5"}`}>
                 
                 {/* Header Info Bar */}
                 <OrderInfoBar order={order} totalPrice={totalPrice} isDark={isDark} />

@@ -45,6 +45,14 @@ function Contact() {
 
   };
 
+  // 🚀 Standard Pattern: Success message ko 4 seconds baad hide karo aur cleanup karo
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => setShowSuccess(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if(formData.name === "" || formData.email === "" || formData.message === ""){
@@ -57,12 +65,11 @@ function Contact() {
       email: "",
       message: "",
     });
-    setTimeout(() => setShowSuccess(false), 4000);
   };
 
   return (
     <>
-      <section className={`min-h-screen transition-all duration-500 pt-28 pb-20 ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
+      <section className={`min-h-screen transition-all duration-500 pt-28 pb-20 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
         
         {/* 🚀 HERO SECTION (Bold & Italic Mix) */}
         <div className="max-w-6xl mx-auto px-6 text-center lg:text-left mb-16">
@@ -82,7 +89,7 @@ function Contact() {
           
           {/* 📍 LEFT: VIBRANT MAP (5 Columns) */}
           <div className="lg:col-span-5 space-y-6">
-            <div className={`relative rounded-[45px] overflow-hidden border-4 shadow-2xl h-[450px] transition-transform hover:scale-[1.01] ${isDark ? "border-gray-800 bg-[#1e293b]" : "border-gray-100 bg-white"}`}>
+            <div className={`relative rounded-[45px] overflow-hidden border-4 shadow-2xl h-[450px] transition-transform hover:scale-[1.01] ${isDark ? "border-gray-800 bg-[#1a1f2e]" : "border-gray-100 bg-white"}`}>
               <iframe
                 title="StoreFusion HQ"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d241317.116099042!2d72.7410999570965!3d19.08219783958221!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7c6306644edc1%3A0x5da4ed8f8d648c69!2sMumbai%2C%20Maharashtra!5e0!3m2!1sen!2sin!4v1709830000000!5m2!1sen!2sin"
@@ -101,12 +108,12 @@ function Contact() {
 
             {/* Quick Stats/Values */}
             <div className="grid grid-cols-2 gap-4">
-                <div className={`p-6 rounded-[30px] border ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-gray-50 border-gray-200"}`}>
+                <div className={`p-6 rounded-[30px] border ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-gray-50 border-gray-200"}`}>
                     <FaClock className="text-orange-500 text-xl mb-3" />
                     <h4 className="text-[9px] font-black uppercase tracking-widest opacity-60">Available</h4>
                     <p className="text-xs font-black">24/7 SUPPORT</p>
                 </div>
-                <div className={`p-6 rounded-[30px] border ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-gray-50 border-gray-200"}`}>
+                <div className={`p-6 rounded-[30px] border ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-gray-50 border-gray-200"}`}>
                     <FaShieldAlt className="text-green-500 text-xl mb-3" />
                     <h4 className="text-[9px] font-black uppercase tracking-widest opacity-60">Security</h4>
                     <p className="text-xs font-black">100% SECURE</p>
@@ -116,7 +123,7 @@ function Contact() {
 
           {/* ✉️ RIGHT: COMPACT FORM (7 Columns) */}
           <div className="lg:col-span-7">
-            <div className={`p-10 rounded-[50px] border-2 transition-all ${isDark ? "bg-[#1e293b]/30 border-gray-800 shadow-2xl" : "bg-white border-gray-50 shadow-2xl shadow-gray-100"}`}>
+            <div className={`p-10 rounded-[50px] border-2 transition-all ${isDark ? "bg-[#1a1f2e]/30 border-gray-800 shadow-2xl" : "bg-white border-gray-50 shadow-2xl shadow-gray-100"}`}>
               <div className="mb-10">
                 <h2 className="text-3xl font-black uppercase tracking-tighter italic">DROP A <span className="text-blue-600 underline decoration-blue-600/30 underline-offset-8">LINE.</span></h2>
               </div>
@@ -133,7 +140,7 @@ function Contact() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Identity</label>
-                    <input type="text" placeholder="FULL NAME" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
+                    <input type="text" placeholder="FULL NAME" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
                      value={formData.name}
                      onChange={handleFormChange}
                      />
@@ -142,7 +149,7 @@ function Contact() {
 
                   <div className="space-y-2">
                     <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Digital Mail</label>
-                    <input type="email" placeholder="EMAIL ADDRESS" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
+                    <input type="email" placeholder="EMAIL ADDRESS" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
                      value={formData.email}
                      onChange={handleFormChange}
                      />
@@ -152,7 +159,7 @@ function Contact() {
 
                 <div className="space-y-2">
                   <label className="text-[9px] font-black uppercase tracking-[0.2em] text-gray-500 ml-1">Inquiry Details</label>
-                  <textarea rows="5" placeholder="WHAT'S ON YOUR MIND?" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all resize-none ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
+                  <textarea rows="5" placeholder="WHAT'S ON YOUR MIND?" className={`w-full p-4 rounded-2xl text-[11px] font-black uppercase tracking-widest outline-none border transition-all resize-none ${isDark ? "bg-[#1a1f2e] border-gray-800 focus:border-blue-600 text-white" : "bg-gray-50 border-gray-200 focus:border-blue-600 focus:bg-white"}`} required
                    value={formData.message}
                    onChange={handleFormChange}
                    ></textarea>
@@ -188,7 +195,7 @@ function Contact() {
             {faqData.map((faq, index) => {
               const isOpen = openIndex === index;
               return (
-                <div key={index} className={`border rounded-[30px] overflow-hidden transition-all duration-300 ${isDark ? "border-gray-800 bg-[#1e293b]" : "border-gray-100 bg-gray-50 shadow-sm"}`}>
+                <div key={index} className={`border rounded-[30px] overflow-hidden transition-all duration-300 ${isDark ? "border-gray-800 bg-[#1a1f2e]" : "border-gray-100 bg-gray-50 shadow-sm"}`}>
                   <button onClick={() => setOpenIndex(isOpen ? null : index)} className="w-full p-6 flex justify-between items-center text-left outline-none">
                     <span className="text-[10px] md:text-[12px] font-black uppercase tracking-widest">{faq.title}</span>
                     <FaChevronDown className={`transition-transform duration-300 ${isOpen ? "rotate-180 text-blue-600" : ""}`} />
@@ -203,7 +210,7 @@ function Contact() {
         </div>
 
         {/* 🌍 FOOTER INFO SECTION (ProductInfo Signature Look) */}
-        <div className={`py-24 relative overflow-hidden ${isDark ? "bg-[#1e293b]" : "bg-gray-50"}`}>
+        <div className={`py-24 relative overflow-hidden ${isDark ? "bg-[#1a1f2e]" : "bg-gray-50"}`}>
             <div className="max-w-6xl mx-auto px-6 text-center">
                 <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter mb-16 italic leading-none">
                    LET'S <span className="text-orange-500">CONVERGE.</span>
@@ -215,7 +222,7 @@ function Contact() {
                       { icon: <FaHeadset className="text-green-500" />, title: "Support Hub", line1: "support@fusion.com", line2: "24/7 Priority Mail" }
                     ].map((card, i) => (
                       <div key={i} className="space-y-4 group cursor-default">
-                          <div className={`w-20 h-20 mx-auto flex items-center justify-center rounded-[30px] text-3xl transition-all duration-500 group-hover:bg-blue-600 group-hover:text-white ${isDark ? "bg-[#131921]" : "bg-white shadow-xl"}`}>
+                          <div className={`w-20 h-20 mx-auto flex items-center justify-center rounded-[30px] text-3xl transition-all duration-500 group-hover:bg-blue-600 group-hover:text-white ${isDark ? "bg-[#1a1f2e]" : "bg-white shadow-xl"}`}>
                             {card.icon}
                           </div>
                           <h4 className="font-black uppercase text-[12px] tracking-[0.3em]">{card.title}</h4>
@@ -279,7 +286,7 @@ export default React.memo(Contact);
 
 //   return (
 //     <>
-//       <section className={`min-h-screen transition-colors duration-500 pt-28 pb-20 ${isDark ? "bg-[#131921] text-white" : "bg-white text-gray-900"}`}>
+//       <section className={`min-h-screen transition-colors duration-500 pt-28 pb-20 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
         
 //         {/* 🚀 HERO SECTION */}
 //         <div className="max-w-6xl mx-auto px-6 text-center mb-20">
@@ -320,7 +327,7 @@ export default React.memo(Contact);
 //             {/* Social Connect Cards */}
 //             <div className="flex gap-4">
 //                {[<FaInstagram />, <FaTwitter />, <FaLinkedin />, <FaWhatsapp />].map((icon, i) => (
-//                  <div key={i} className={`flex-1 h-14 flex items-center justify-center rounded-2xl border text-xl cursor-pointer transition-all hover:bg-blue-600 hover:text-white ${isDark ? "bg-[#1e293b] border-gray-800" : "bg-gray-50 border-gray-100"}`}>
+//                  <div key={i} className={`flex-1 h-14 flex items-center justify-center rounded-2xl border text-xl cursor-pointer transition-all hover:bg-blue-600 hover:text-white ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-gray-50 border-gray-100"}`}>
 //                    {icon}
 //                  </div>
 //                ))}
@@ -329,7 +336,7 @@ export default React.memo(Contact);
 
 //           {/* ✉️ RIGHT: Compact Form */}
 //           <div className="lg:col-span-6">
-//             <div className={`p-10 rounded-[45px] border-2 transition-all ${isDark ? "bg-[#1e293b]/30 border-gray-800 shadow-2xl shadow-black/50" : "bg-white border-gray-100 shadow-xl shadow-gray-100"}`}>
+//             <div className={`p-10 rounded-[45px] border-2 transition-all ${isDark ? "bg-[#1a1f2e]/30 border-gray-800 shadow-2xl shadow-black/50" : "bg-white border-gray-100 shadow-xl shadow-gray-100"}`}>
 //               <AnimatePresence>
 //                 {showSuccess && (
 //                   <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-6 p-4 rounded-2xl bg-green-500 text-white text-[10px] font-black uppercase flex items-center gap-3">
@@ -339,9 +346,9 @@ export default React.memo(Contact);
 //               </AnimatePresence>
 
 //               <form onSubmit={handleSubmit} className="space-y-6">
-//                 <input type="text" placeholder="Full Name" className={`w-full p-4 rounded-2xl text-xs font-bold outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600" : "bg-gray-50 border-gray-200 focus:border-blue-600"}`} required />
-//                 <input type="email" placeholder="Email Address" className={`w-full p-4 rounded-2xl text-xs font-bold outline-none border transition-all ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600" : "bg-gray-50 border-gray-200 focus:border-blue-600"}`} required />
-//                 <textarea rows="4" placeholder="Your Message" className={`w-full p-4 rounded-2xl text-xs font-bold outline-none border transition-all resize-none ${isDark ? "bg-[#131921] border-gray-800 focus:border-blue-600" : "bg-gray-50 border-gray-200 focus:border-blue-600"}`} required></textarea>
+//                 <input type="text" placeholder="Full Name" className={`w-full p-4 rounded-2xl text-xs font-bold outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-800 focus:border-blue-600" : "bg-gray-50 border-gray-200 focus:border-blue-600"}`} required />
+//                 <input type="email" placeholder="Email Address" className={`w-full p-4 rounded-2xl text-xs font-bold outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-800 focus:border-blue-600" : "bg-gray-50 border-gray-200 focus:border-blue-600"}`} required />
+//                 <textarea rows="4" placeholder="Your Message" className={`w-full p-4 rounded-2xl text-xs font-bold outline-none border transition-all resize-none ${isDark ? "bg-[#1a1f2e] border-gray-800 focus:border-blue-600" : "bg-gray-50 border-gray-200 focus:border-blue-600"}`} required></textarea>
 //                 <button type="submit" className="w-full py-5 bg-blue-600 text-white font-black uppercase tracking-[0.3em] text-[10px] rounded-2xl hover:bg-orange-500 transition-all shadow-xl shadow-blue-600/20 active:scale-95">Send Message</button>
 //               </form>
 //             </div>
@@ -355,7 +362,7 @@ export default React.memo(Contact);
 //           </div>
 //           <div className="space-y-4">
 //             {faqs.map((faq, index) => (
-//               <div key={index} className={`border rounded-3xl transition-all ${isDark ? "border-gray-800 bg-[#1e293b]/30" : "border-gray-100 bg-gray-50/50"}`}>
+//               <div key={index} className={`border rounded-3xl transition-all ${isDark ? "border-gray-800 bg-[#1a1f2e]/30" : "border-gray-100 bg-gray-50/50"}`}>
 //                 <button onClick={() => setOpenFaq(openFaq === index ? null : index)} className="w-full p-6 flex justify-between items-center outline-none">
 //                   <span className="text-xs font-black uppercase tracking-widest">{faq.q}</span>
 //                   <FaChevronDown className={`transition-transform duration-300 ${openFaq === index ? "rotate-180" : ""}`} />
@@ -373,7 +380,7 @@ export default React.memo(Contact);
 //         </div>
 
 //         {/* 🌍 FINAL INFO SECTION */}
-//         <div className={`py-20 text-center relative overflow-hidden ${isDark ? "bg-[#1e293b]" : "bg-gray-50"}`}>
+//         <div className={`py-20 text-center relative overflow-hidden ${isDark ? "bg-[#1a1f2e]" : "bg-gray-50"}`}>
 //             <div className="relative z-10 max-w-4xl mx-auto px-6">
 //                 <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-6">WANT TO <span className="text-blue-600">VISIT?</span></h2>
 //                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">

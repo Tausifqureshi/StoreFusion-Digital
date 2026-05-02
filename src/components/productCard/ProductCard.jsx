@@ -116,7 +116,7 @@ function ProductCard() {
             {/* CATEGORY WISE HOME LAYOUT (FLIPKART/AMAZON STYLE) */}
             <div className="space-y-12 md:space-y-16">
               {groupedCategoryData.map(({ category, categoryProducts }, idx) => (
-                <div key={idx} className={`rounded-3xl p-4 md:p-6 shadow-sm border ${mode === 'dark' ? 'bg-[#131921] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
+                <div key={idx} className={`rounded-3xl p-4 md:p-6 shadow-sm border ${mode === 'dark' ? 'bg-[#1a1f2e] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
                   {/* Header */}
                   <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-200 dark:border-gray-800 px-2">
                     <div>

@@ -18,7 +18,7 @@ function SummaryCards({ isDark, product, filteredAndSortedProducts }) {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#f0f7ff] text-[#1e40af]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#f0f7ff] text-[#1e40af]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Total Products</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-blue-900'}`}>{totalProducts}</p>
@@ -28,7 +28,7 @@ function SummaryCards({ isDark, product, filteredAndSortedProducts }) {
         </div>
       </div>
 
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#f0fdf4] text-[#166534]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#f0fdf4] text-[#166534]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-green-400' : 'text-green-600'}`}>Active Products</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-green-900'}`}>{activeProducts}</p>
@@ -38,7 +38,7 @@ function SummaryCards({ isDark, product, filteredAndSortedProducts }) {
         </div>
       </div>
 
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#faf5ff] text-[#6b21a8]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#faf5ff] text-[#6b21a8]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-purple-400' : 'text-purple-600'}`}>Filtered Results</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-purple-900'}`}>{filteredAndSortedProducts.length}</p>
@@ -48,7 +48,7 @@ function SummaryCards({ isDark, product, filteredAndSortedProducts }) {
         </div>
       </div>
 
-      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1e293b] border border-gray-700' : 'bg-[#fff7ed] text-[#9a3412]'}`}>
+      <div className={`p-6 rounded-3xl flex items-center justify-between transition-all ${isDark ? 'bg-[#1a1f2e] border border-gray-700' : 'bg-[#fff7ed] text-[#9a3412]'}`}>
         <div>
           <h3 className={`text-sm font-bold mb-1 ${isDark ? 'text-orange-400' : 'text-orange-600'}`}>Est. Revenue</h3>
           <p className={`text-4xl font-black tracking-tight ${isDark ? 'text-white' : 'text-orange-900'}`}>

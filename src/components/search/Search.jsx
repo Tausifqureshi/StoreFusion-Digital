@@ -22,15 +22,13 @@ function Search({ placeholder = "Search StoreFusion...", isMobile = false }) {
   }, [searchkey]);
 
   // Two different class names for mobile and desktop versions based on original implementation
-  const desktopClasses = `w-full pl-12 pr-4 py-2.5 rounded-xl border outline-none text-sm font-medium transition-all ${
-    isDark
-      ? "bg-[#131921] border-gray-600 text-white focus:border-orange-500"
+  const desktopClasses = `w-full pl-12 pr-4 py-2.5 rounded-xl border-2 ${isDark
+      ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-orange-500"
       : "bg-gray-50 border-gray-200 focus:bg-white focus:border-blue-400"
-  }`;
+    }`;
 
-  const mobileClasses = `w-full pl-12 pr-4 py-3 rounded-xl border shadow-md outline-none text-sm font-medium ${
-    isDark ? "bg-[#232f3e] border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"
-  }`;
+  const mobileClasses = `w-full pl-12 pr-4 py-3 rounded-xl border-2 shadow-md outline-none text-sm font-medium ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white" : "bg-white border-gray-200 text-gray-800"
+    }`;
 
   return (
     <div className="relative flex-1">
