@@ -1,4 +1,4 @@
-import { FilterContext, ProductContext, ThemeContext } from '../../context api/AllContext';
+import { FilterContext, ProductContext, ThemeContext } from '../../context/AllContext';
 import React, { useContext, useState, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
 import SingleProductCard from "./SingleProductCard";
@@ -100,8 +100,8 @@ function ProductCard() {
             {/* Global Product Header */}
             <div className="flex items-end justify-between mb-8 md:mb-12 px-2 border-b border-gray-200 dark:border-gray-800 pb-4">
               <div>
-                <h1 className={`text-3xl md:text-5xl font-black uppercase tracking-tighter italic ${mode === "dark" ? "text-white" : "text-gray-900"}`}>
-                  Our <span className="text-orange-500">Store</span>
+                <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter ${mode === "dark" ? "text-white" : "text-gray-900"}`}>
+                  OUR <span className="text-orange-500">STORE</span>
                 </h1>
                 <div className="w-16 h-1 bg-blue-600 mt-2"></div>
               </div>
@@ -120,8 +120,8 @@ function ProductCard() {
                   {/* Header */}
                   <div className="flex items-center justify-between mb-6 pb-2 border-b border-gray-200 dark:border-gray-800 px-2">
                     <div>
-                      <h2 className={`text-2xl md:text-3xl font-black italic tracking-tighter uppercase ${mode === "dark" ? "text-white" : "text-gray-900"}`}>
-                        Top in <span className="text-orange-500">{category}</span>
+                      <h2 className={`text-2xl md:text-3xl font-black tracking-tighter uppercase ${mode === "dark" ? "text-white" : "text-gray-900"}`}>
+                        TOP IN <span className="text-orange-500">{category}</span>
                       </h2>
                       <p className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Premium {category} Collection</p>
                     </div>

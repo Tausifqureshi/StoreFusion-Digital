@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
-import { UserContext } from "../../context api/AllContext";
+import { UserContext } from "../../context/AllContext";
 import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import Testimonial from "../../components/testimonial/Testimonial";
-import AddTestimonial from "../../components/testimonial/AddTestimonial";
+import AddTestimonial from "../../components/testimonial/AddTestimonial/AddTestimonial";
 
 import GallerySection from "./components/GallerySection";
 import ProductAction from "./components/ProductAction";
@@ -42,7 +42,7 @@ function ProductInfo() {
 
   return (
     <>
-      <div className={`min-h-screen py-6 lg:py-10 pt-24 lg:pt-32 transition-all ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
+      <div className={`min-h-screen py-6 lg:py-10 pt-28 lg:pt-28 transition-all ${isDark ? "bg-[#1a1f2e] text-white" : "bg-white text-gray-900"}`}>
         <div className="container mx-auto px-4 lg:px-4">
           <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 items-start justify-center">
 

@@ -8,8 +8,8 @@ function OrderDetailHeader({ navigate, isDark }) {
         <button onClick={() => navigate("/order")} className="inline-flex items-center gap-2 text-[10px] font-black uppercase text-blue-600 hover:tracking-widest transition-all w-fit">
           <FaArrowLeft /> BACK TO ORDERS
         </button>
-        <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none">
-          ORDER <span className="text-blue-600">DETAILS</span>
+        <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          ORDER <span className="text-orange-500">DETAILS</span>
         </h1>
       </div>
     </div>

@@ -1,5 +1,5 @@
 // import React, { useContext, useState } from "react";
-// import { ThemeContext } from '../../../../context api/AllContext';
+// import { ThemeContext } from '../../../../context/AllContext';
 // import { FiBox, FiClipboard, FiMessageSquare } from "react-icons/fi";
 // import { FaUsers } from "react-icons/fa";
 // import Testimonial from "../../../../components/testimonial/Testimonial";
@@ -124,7 +124,7 @@
 
 
 import React, { useContext, useState, useCallback, useMemo } from "react";
-import { ThemeContext } from '../../../../context api/AllContext';
+import { ThemeContext } from '../../../../context/AllContext';
 import { FiBox, FiClipboard, FiMessageSquare } from "react-icons/fi";
 import { FaUsers } from "react-icons/fa";
 import Testimonial from "../../../../components/testimonial/Testimonial";

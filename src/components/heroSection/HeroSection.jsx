@@ -66,13 +66,13 @@ const SlideContent = memo(function SlideContent({ item, isDark }) {
             <p className="text-orange-500 text-[10px] md:text-xs font-black uppercase tracking-[0.4em]">Featured Deals 2026</p>
           </div>
 
-          <h2 className="text-4xl md:text-7xl font-black italic tracking-tighter leading-none uppercase mb-4">
+          <h2 className="text-3xl md:text-4xl font-black tracking-tighter leading-none uppercase mb-4">
             {item.title} <br />
             <span className="text-orange-500">{item.highlight}</span>
           </h2>
 
           <p className="text-sm md:text-lg text-gray-300 mb-2 max-w-md font-medium">{item.desc}</p>
-          <p className="text-xl md:text-3xl font-black italic text-yellow-400 mb-8 uppercase tracking-tighter bg-black/30 inline-block px-2">
+          <p className="text-xl md:text-3xl font-black text-yellow-400 mb-8 uppercase tracking-tighter bg-black/30 inline-block px-2">
             {item.price}
           </p>
 

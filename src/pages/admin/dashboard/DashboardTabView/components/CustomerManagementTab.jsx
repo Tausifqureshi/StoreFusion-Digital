@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { FaSearch, FaUserAltSlash, FaEnvelope, FaPhone, FaEllipsisH, FaPlus } from 'react-icons/fa';
-import { UserContext, ThemeContext } from '../../../../../context api/AllContext';
+import { UserContext, ThemeContext } from '../../../../../context/AllContext';
 import LoaderSpinner from '../../../../../components/loader/LoaderSpinner';
 
 function CustomerManagementTab() {

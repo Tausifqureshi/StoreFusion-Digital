@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useCallback, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ProductAdminContext, ThemeContext } from '../../../context api/AllContext';
+import { ProductAdminContext, ThemeContext } from '../../../context/AllContext';
 import { FiX } from "react-icons/fi";
 
 function AddProduct() {

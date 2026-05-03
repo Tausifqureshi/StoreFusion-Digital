@@ -11,7 +11,7 @@
 // import { ToastContainer } from "react-toastify";
 // import "react-toastify/dist/ReactToastify.css";
 
-// import Providers from "./context api/Providers";
+// import Providers from "./context/Providers";
 // import Loader from "./components/loader/Loader";
 // import Layout from "./components/layout/Layout";
 
@@ -48,7 +48,7 @@
 //   return <Navigate to="/login" state={{ PreviousPathname: location.pathname }} replace />;
 // }
 
-// // ✅ ROOT LAYOUT WRAPPER (Handles Data Fetching & Context APIs statically)
+// // ✅ ROOT LAYOUT WRAPPER (Handles Data Fetching & contexts statically)
 // function RootLayout() {
 //   return (
 //     <Providers>
@@ -233,7 +233,7 @@ import {
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import Providers from "./context api/Providers";
+import Providers from "./context/Providers";
 import Loader from "./components/loader/Loader";
 import Layout from "./components/layout/Layout";
 
@@ -252,9 +252,9 @@ const UpdateProduct = lazy(() => import("./pages/admin/page-admin/UpdateProduct"
 const Allproducts = lazy(() => import("./pages/allproducts/Allproducts"));
 const Contact = lazy(() => import("./components/contact/Contact"));
 const About = lazy(() => import("./components/about/About"));
-const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
+const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial/AddTestimonial"));
 const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts"));
-const AllTestimonials = lazy(() => import("./pages/all testimonials/AllTestimonials"));
+const AllTestimonials = lazy(() => import("./components/testimonial/AllTestimonials/AllTestimonials"));
 
 // 🔐 USER PROTECTED (Memoized to prevent unnecessary checks)
 export const ProtectedRoutes = memo(({ children }) => {

@@ -1,8 +1,8 @@
 
-import { ThemeContext } from '../../context api/AllContext';
+import { ThemeContext } from '../../context/AllContext';
 import React, { useContext, useMemo, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useAppLoading } from "../../context api/LoadingState";
+import { useAppLoading } from "../../context/LoadingState";
 import CartView from "./components/CartView";
 
 function Cart() {

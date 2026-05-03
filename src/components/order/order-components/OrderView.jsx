@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useContext, useState, useEffect, useMemo } from "react";
 import { FaTrash, FaArrowLeft, FaBoxOpen } from "react-icons/fa";
 import LoaderSpinner from "../../../components/loader/LoaderSpinner";
 import UserOrderItem from "./UserOrderItem";
@@ -31,7 +31,7 @@ const OrderView = React.memo(function OrderView({
 
 
   return (
-    <div className={`min-h-screen pt-24 pb-12 transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
+    <div className={`min-h-screen pt-28 pb-12 transition-all duration-300 ${isDark ? "bg-[#1a1f2e] text-white" : "bg-[#f8fafc] text-gray-900"}`}>
       <div className="max-w-6xl mx-auto px-4">
         {/* Header */}
         <div className="mb-10 border-b border-gray-200 dark:border-gray-800 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -39,8 +39,8 @@ const OrderView = React.memo(function OrderView({
             <button onClick={() => navigate("/")} className="inline-flex items-center gap-2 text-[10px] font-black uppercase text-blue-600 hover:tracking-widest transition-all w-fit">
               <FaArrowLeft /> Back to Shop
             </button>
-            <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none">
-              My <span className="text-blue-600">Orders</span>
+            <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter leading-none ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              ORDER <span className="text-orange-500">HISTORY</span>
             </h1>
             <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Manage your purchases</p>
           </div>

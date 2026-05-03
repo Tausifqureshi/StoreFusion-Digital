@@ -1,4 +1,4 @@
-import { ThemeContext } from '../../context api/AllContext';
+import { ThemeContext } from '../../context/AllContext';
 import React, { useContext, useState } from 'react';
 import { Link, replace, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';

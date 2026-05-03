@@ -1,4 +1,4 @@
-import { ThemeContext } from '../../context api/AllContext';
+import { ThemeContext } from '../../context/AllContext';
 import React, { useContext, useState } from "react";
 ;
 import {
@@ -49,7 +49,7 @@ function About() {
               Our Journey
             </span>
             <h1 className="text-4xl md:text-7xl font-black tracking-tighter leading-none mb-8">
-              FUSING <span className="text-blue-600 italic">STYLE</span> WITH <br />
+              FUSING <span className="text-blue-600">STYLE</span> WITH <br />
               <span className="text-orange-500">TRUSTED</span> TECHNOLOGY
             </h1>
             <p className="text-sm md:text-lg max-w-3xl mx-auto opacity-70 font-medium leading-relaxed mb-4">
@@ -84,7 +84,7 @@ function About() {
 
             {/* Left: Accordion Section */}
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-10 italic">
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mb-10">
                 Why Choose <span className="text-blue-600">StoreFusion?</span>
               </h2>
 

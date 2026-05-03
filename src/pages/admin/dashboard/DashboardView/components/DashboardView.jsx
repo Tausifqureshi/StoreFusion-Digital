@@ -4,7 +4,7 @@ import StatCardsContainer from './StatCardsContainer';
 import ChartsContainer from './ChartsContainer';
 import TablesContainer from './TablesContainer';
 import QuickActions from './QuickActions';
-import { ProductContext, OrderContext, UserContext } from '../../../../../context api/AllContext';
+import { ProductContext, OrderContext, UserContext } from '../../../../../context/AllContext';
 import { useDashboardData } from '../hooks/useDashboardData';
 import { useContext } from 'react';
 

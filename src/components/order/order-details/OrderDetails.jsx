@@ -1,7 +1,7 @@
-import { ThemeContext, UserContext } from '../../../context api/AllContext';
+import { ThemeContext, UserContext } from '../../../context/AllContext';
 import React, { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAppLoading } from "../../../context api/LoadingState";
+import { useAppLoading } from "../../../context/LoadingState";
 import { useSelector, useDispatch } from "react-redux";
 import LoaderSpinner from "../../loader/LoaderSpinner";
 import { toast } from "react-toastify";
@@ -14,7 +14,7 @@ import OrderInfoBar from "./components/OrderInfoBar";
 import OrderItemsList from "./components/OrderItemsList";
 import OrderCustomerInfo from "./components/OrderCustomerInfo";
 
-function OrderDetails() { 
+function OrderDetails() {
   const { orderLoading } = useAppLoading();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -77,7 +77,7 @@ function OrderDetails() {
               </div>
 
               <div className={`relative overflow-hidden rounded-[40px] border-2 transition-all duration-500 ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-blue-500/5"}`}>
-                
+
                 {/* Header Info Bar */}
                 <OrderInfoBar order={order} totalPrice={totalPrice} isDark={isDark} />
 
@@ -87,13 +87,13 @@ function OrderDetails() {
                     <OrderItemsList order={order} isDark={isDark} navigate={navigate} />
 
                     {/* Customer Details & Shipping */}
-                    <OrderCustomerInfo 
-                      user={user} 
-                      addressInfo={addressInfo} 
-                      order={order} 
-                      isDark={isDark} 
-                      cancellingId={cancellingId} 
-                      handleCancelOrder={handleCancelOrder} 
+                    <OrderCustomerInfo
+                      user={user}
+                      addressInfo={addressInfo}
+                      order={order}
+                      isDark={isDark}
+                      cancellingId={cancellingId}
+                      handleCancelOrder={handleCancelOrder}
                     />
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-import { ProductContext, ThemeContext, FilterContext } from '../../context api/AllContext';
+import { ProductContext, ThemeContext, FilterContext } from '../../context/AllContext';
 import React, { useContext, useMemo, useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 ;
@@ -107,7 +107,7 @@ function CategoryProducts() {
       >
         <div className="max-w-7xl mx-auto px-4">
           {/* Header Section */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-gray-200 dark:border-gray-800 pb-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-gray-200 dark:border-gray-800 pb-6 mt-4">
             <div>
               <button
                 onClick={() => navigate("/")}
@@ -115,10 +115,10 @@ function CategoryProducts() {
               >
                 <FaArrowLeft /> Back to Shopping
               </button>
-              <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic">
-                {displayTitle} <span className="text-blue-600">Collection</span>
+              <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                {displayTitle} <span className="text-orange-500">COLLECTION</span>
               </h1>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-2">
+              <p className={`text-[10px] font-bold uppercase tracking-widest mt-2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
                 Showing {filteredProducts.length} Premium Results
               </p>
             </div>
@@ -128,7 +128,7 @@ function CategoryProducts() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
             {/* Sidebar Filter (Without Category Checkboxes) */}
-            <div className="lg:col-span-3 lg:sticky lg:top-24 w-full flex flex-col gap-6">
+            <div className="lg:col-span-3 lg:sticky lg:top-32 w-full flex flex-col gap-6 mt-4">
 
               {/*jab bhi user url ke thorw aye ge jaise  searchParams ka use kar Subcategory dehke gi.subCategory se reltive Checkboxes show nhi hoge productInfo page pe veiw all. agar user category se ata hai tab shoga subCategory se reltive checkbox*/}
               {!subQuery && uniqueSubCategories.length > 0 && (

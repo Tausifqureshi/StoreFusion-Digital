@@ -84,8 +84,8 @@ function Track({ mode }) {
           {/* Section Heading */}
           <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
             <div>
-            <h2 className={`text-3xl md:text-4xl font-black italic tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
-              Why Choose <span className="text-orange-500">StoreFusion</span>
+            <h2 className={`text-3xl md:text-4xl font-black tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              WHY CHOOSE <span className="text-orange-500">STOREFUSION</span>
             </h2>
             <p className={`text-xs md:text-sm font-bold uppercase tracking-[0.3em] mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
               Top Tier E-Commerce Experience
@@ -121,7 +121,7 @@ function Track({ mode }) {
                 `}>
                   {feature.icon}
                 </div>
-                <h3 className={`text-lg md:text-xl font-black italic tracking-wide mb-2 uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                <h3 className={`text-lg md:text-xl font-black tracking-wide mb-2 uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
                   {feature.title}
                 </h3>
                 <p className={`leading-relaxed text-[14px] font-medium ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>

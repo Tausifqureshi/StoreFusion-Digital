@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useContext, useEffect, useRef, useCallback } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { ProductContext, OrderContext, ProductAdminContext, ThemeContext } from '../../../../../../context api/AllContext';
+import { ProductContext, OrderContext, ProductAdminContext, ThemeContext } from '../../../../../../context/AllContext';
 import LoaderSpinner from '../../../../../../components/loader/LoaderSpinner';
 
 // Subcomponents ko yahan import kiya hai
@@ -14,10 +14,17 @@ function ProductManagementTab() {
   const navigate = useNavigate();
 
   // 🚀 Har tab apna data khud handle kar raha hai (Context se)
-  const { mode } = useContext(ThemeContext);
-  const { product, productLoading } = useContext(ProductContext);
-  const { order } = useContext(OrderContext);
-  const { edithandle, deleteProduct } = useContext(ProductAdminContext);
+  const themeContext = useContext(ThemeContext) || {};
+  const { mode = "light" } = themeContext;
+  
+  const productContext = useContext(ProductContext) || {};
+  const { product = [], productLoading = false } = productContext;
+  
+  const orderContext = useContext(OrderContext) || {};
+  const { order = [] } = orderContext;
+  
+  const productAdminContext = useContext(ProductAdminContext) || {};
+  const { edithandle = () => {}, deleteProduct = () => {} } = productAdminContext;
 
   const isDark = mode === 'dark';
 
@@ -102,7 +109,8 @@ function ProductManagementTab() {
           p.category?.toLowerCase().includes(searchQuery.toLowerCase());
 
         // Category Filter
-        const matchesCategory = filterCategory === "All Categories" || p.category === filterCategory;
+        const matchesCategory = filterCategory === "All Categories" || 
+          p.category?.trim().toLowerCase() === filterCategory?.trim().toLowerCase();
 
         // Stock Filter
         const isActive = Number(p.stock) > 0;

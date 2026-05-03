@@ -13,8 +13,8 @@ const SimilarProduct = React.memo(function SimilarProduct({
     <section className="mt-12 lg:mt-24 border-t border-gray-100 dark:border-gray-800 pt-8 px-2 md:px-0">
       <div className="flex items-center justify-between mb-6 lg:mb-10">
         <div className="flex flex-col">
-          <h2 className={`text-lg md:text-2xl lg:text-3xl font-black uppercase tracking-tighter italic ${isDark ? "text-white" : "text-gray-900"}`}>
-            Similar <span className="text-blue-600">Products</span>
+          <h2 className={`text-2xl md:text-3xl lg:text-4xl font-black italic uppercase tracking-tighter ${isDark ? "text-white" : "text-gray-900"}`}>
+            Similar <span className="text-orange-500">Products</span>
           </h2>
           <div className="w-10 md:w-16 h-1 bg-orange-500 mt-1"></div>
         </div>

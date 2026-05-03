@@ -1,4 +1,4 @@
-import { ThemeContext } from '../../context api/AllContext';
+import { ThemeContext } from '../../context/AllContext';
 import React, { useContext } from "react";
 import HeroSection from "../../components/heroSection/HeroSection";
 import ProductCard from "../../components/productCard/ProductCard";

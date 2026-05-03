@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../../redux/cartSlice";
 import { useParams, useNavigate } from "react-router-dom";
-import { ProductAdminContext, ProductContext, ThemeContext } from '../../../context api/AllContext';
+import { ProductAdminContext, ProductContext, ThemeContext } from '../../../context/AllContext';
 import { saveCart } from "../../cart/cartService";
 import { store } from "../../../redux/store";
 

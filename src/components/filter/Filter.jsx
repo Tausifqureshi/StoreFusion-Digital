@@ -1,4 +1,4 @@
-import { ProductContext, FilterContext } from '../../context api/AllContext';
+import { ProductContext, FilterContext } from '../../context/AllContext';
 import Search from '../search/Search';
 import React, { useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";

@@ -1,8 +1,8 @@
 import React, { useContext, useMemo } from 'react';
-import { ProductContext, TestimonialContext, ThemeContext } from '../../context api/AllContext';
+import { ProductContext, TestimonialContext, ThemeContext } from '../../context/AllContext';
 import { FaQuoteLeft, FaStar, FaEllipsisH, FaEye } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import SingleReviewCard from './SingleReviewCard';
+import SingleReviewCard from './SingleReviewCard/SingleReviewCard';
 
 
 // ✅ INTERNAL VIEW: Amazon Modern List Style
@@ -55,7 +55,7 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
   // ✅ Dynamic Heading Logic
   const getHeading = () => {
     if (homePage) return { main: "What Our", highlight: "Customers Say", sub: "Real experiences from real users", color: "text-orange-500" };
-    if (categoryName) return { main: "Category", highlight: "Feedback", sub: `Top reviews in ${categoryName}`, color: "text-blue-500" };
+    if (categoryName) return { main: "Category", highlight: "Feedback", sub: `Top reviews in ${categoryName}`, color: "text-orange-500" };
     if (productId) return { main: "Product", highlight: "Reviews", sub: "What buyers are saying about this item", color: "text-orange-500" };
     return { main: "Customer", highlight: "Testimonials", sub: "Real feedback from our community", color: "text-orange-500" };
   };
@@ -67,7 +67,7 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
       {/* ── Section Heading (Dynamic) ── Match Home Page Style */}
       <div className={`flex items-center justify-between mb-6 pb-2 border-b ${isDark ? 'border-gray-800' : 'border-gray-200'} px-2`}>
         <div>
-          <h2 className={`text-2xl md:text-3xl font-black italic tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <h2 className={`text-2xl md:text-3xl font-black tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
             {heading.main} <span className={heading.color}>{heading.highlight}</span>
           </h2>
           <p className={`text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>

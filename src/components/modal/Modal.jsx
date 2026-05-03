@@ -2,7 +2,7 @@ import { useEffect, useState, useMemo, useCallback, useContext, useRef } from "r
 import { createPortal } from "react-dom";
 import { toast } from "react-toastify";
 import React from "react";
-import { ThemeContext } from "../../context api/AllContext";
+import { ThemeContext } from "../../context/AllContext";
 
 function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
   const { fullName, address, pincode, phoneNumber } = formData;

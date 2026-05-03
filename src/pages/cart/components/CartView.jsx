@@ -82,12 +82,12 @@ const CartView = React.memo(function CartView({
   if (cartLoading) return <LoaderSpinner isDark={isDark} label="Loading bag..." />;
 
   return (
-    <div className={`min-h-screen pt-24 pb-12 transition-all ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"}`}>
+    <div className={`min-h-screen pt-36 pb-12 transition-all ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"}`}>
       <div className="max-w-7xl mx-auto px-4">
         {/* Header */}
         <div className="mb-8 border-b border-gray-200 dark:border-gray-800 pb-6">
-          <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tighter">
-            My <span className="text-blue-600">Shopping Bag</span>
+          <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            MY <span className="text-orange-500">SHOPPING BAG</span>
           </h1>
           <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">
             {cartItems.length} Premium Items Selected

@@ -1,4 +1,4 @@
-import { ThemeContext } from '../../../../context api/AllContext';
+import { ThemeContext } from '../../../../context/AllContext';
 import React, { useContext, useMemo } from 'react';
 import DashboardTab from '../DashboardTabView/DashboardTab';
 import { useNavigate } from 'react-router-dom';

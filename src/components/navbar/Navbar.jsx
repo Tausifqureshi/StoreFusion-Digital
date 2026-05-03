@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useState, useEffect, useMemo, useRef, useC
 import throttle from "lodash/throttle";
 import { Drawer } from "@mui/material";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ThemeContext, ProductContext, UserContext } from "../../context api/AllContext";
+import { ThemeContext, ProductContext, UserContext } from "../../context/AllContext";
 import { useSelector } from "react-redux";
 import {
   FiSun,

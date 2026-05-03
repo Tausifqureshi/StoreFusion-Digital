@@ -1,7 +1,7 @@
 import React, { useMemo, useContext } from "react";
 import Navbar from "../navbar/NavBar";
 import Footer from "../footer/Footer";
-import { ThemeContext } from "../../context api/AllContext";
+import { ThemeContext } from "../../context/AllContext";
 import ScrollToTopButoon from "../Scroll top/ScrollToTopButoon";
 
 function Layout({ children }) {

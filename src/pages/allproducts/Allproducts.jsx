@@ -1,4 +1,4 @@
-import { FilterContext, ProductAdminContext, ProductContext, ThemeContext } from '../../context api/AllContext';
+import { FilterContext, ProductAdminContext, ProductContext, ThemeContext } from '../../context/AllContext';
 import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
 import Filter from "../../components/filter/Filter";
 // ScrollToTopButton removed as it is globally handled
@@ -22,38 +22,52 @@ const AllProductsView = React.memo(function AllProductsView({
     return () => clearTimeout(timer);
   }, [searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize, currentPage]);
 
-  // 👉 Filtered products calculation (locked inside)
+  // 👉 Master Filter Logic (useMemo pattern with clean chain)
   const filteredProducts = useMemo(() => {
     return product
-      .filter((item) => //Filter By Search
-        item.title.toLowerCase().includes(searchkey.toLowerCase())
-      )
-      .filter((item) => { //Filter By Category
+      // 1. Search Filter
+      .filter((p) => searchkey.trim() === "" || p.title.toLowerCase().includes(searchkey.toLowerCase()))
+
+      // 2. Category Multi-select Filter
+      .filter((p) => {
         if (filterType.length === 0) return true;
-        const itemCat = item.category?.trim().toLowerCase();
+        const itemCat = p.category?.trim().toLowerCase();
         return filterType.some(t => t.trim().toLowerCase() === itemCat);
       })
-      .filter((item) => { //Range Slider Price
+
+      // 3. Price Range Filter
+      .filter((p) => {
         if (!filterPrice || filterPrice.length !== 2) return true;
         const [minPrice, maxPrice] = filterPrice;
-        return item.price >= minPrice && item.price <= maxPrice;
+        return p.price >= minPrice && p.price <= maxPrice;
       })
-      .filter((item) => { //Filter By Color
-        if (!filterColor || filterColor.length === 0) return true;
-        const itemColor = (item.color || "N/A").trim().toLowerCase();
+
+      // 4. Color Multi-select Filter
+      .filter((p) => {
+        if (filterColor.length === 0) return true;
+        const itemColor = (p.color || "N/A").trim().toLowerCase();
         return filterColor.some(c => c.trim().toLowerCase() === itemColor);
       })
-      .filter((item) => { //Filter By Size
-        if (!filterSize || filterSize.length === 0) return true;
-        const itemSize = (item.size || "N/A").trim().toUpperCase();
+
+      // 5. Size Multi-select Filter
+      .filter((p) => {
+        if (filterSize.length === 0) return true;
+        const itemSize = (p.size || "N/A").trim().toUpperCase();
         return filterSize.some(s => s.trim().toUpperCase() === itemSize);
       })
-      .sort((a, b) => { //Sort By Price
+
+      // 6. Sort Logic
+      .sort((a, b) => {
         if (sortPrice === "low-to-high") return a.price - b.price;
         if (sortPrice === "high-to-low") return b.price - a.price;
         return 0;
       });
   }, [product, searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize]);
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize]);
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -61,17 +75,17 @@ const AllProductsView = React.memo(function AllProductsView({
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   return (
-    <section className="text-gray-600 body-font w-full">
+    <section className="text-gray-600 body-font w-full pt-4 pb-12">
       <div className="w-full">
         {productLoading ? (
           <ProductSkeleton />
         ) : (
           <>
-            <div ref={productsRef} className="lg:w-1/2 w-full mb-6 lg:mb-10">
-              <h1 className={`sm:text-3xl text-2xl font-black uppercase tracking-tighter mb-2 ${mode === "dark" ? "text-white" : "text-blue-600"}`}>
-                Our Latest <span className="text-orange-500">Collection</span>
+            <div ref={productsRef} className="lg:w-1/2 w-full mb-8 mt-4">
+              <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter ${mode === "dark" ? "text-white" : "text-gray-900"}`}>
+                OUR LATEST <span className="text-orange-500">COLLECTION</span>
               </h1>
-              <div className="h-1 w-20 bg-blue-800 rounded transition-all duration-300 ease-in-out hover:bg-blue-600"></div>
+              <div className="h-1.5 w-24 bg-orange-500 rounded-full transition-all duration-300"></div>
             </div>
 
             <div className="relative min-h-[400px]">
@@ -83,7 +97,7 @@ const AllProductsView = React.memo(function AllProductsView({
               <div className={`flex flex-wrap -m-4 transition-opacity duration-300 ${isFilterLoading ? 'opacity-50' : 'opacity-100'}`}>
                 {currentProducts.map((item, index) => (
                   <SingleProductCard
-                    key={index}
+                    key={item.id || index}
                     item={item}
                     isExpanded={expandedId === (item.id || item.title)}
                     setExpandedId={setExpandedId}
@@ -167,7 +181,7 @@ const Allproducts = React.memo(function Allproducts() {
   return (
     <div className="container mx-auto px-4 mt-8 lg:mt-24 mb-16 transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       {/* Sidebar Filter */}
-      <div className="lg:col-span-3 lg:sticky lg:top-24 w-full">
+      <div className="lg:col-span-3 lg:sticky lg:top-32 w-full mt-4">
         <Filter mode={mode} showCategoryFilter={true} />
       </div>
 

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useMemo } from "react";
 import { LoadingContext } from "./AllContext";
-import { useFetchAppData } from "../useFetchAppData";
+import { useFetchAppData } from "../hooks/useFetchAppData";
 
 // ✅ LoadingContext is now centralized in AllContext.jsx (with displayName set there)
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FiSearch } from 'react-icons/fi';
-import { FilterContext, ThemeContext } from '../../context api/AllContext';
+import { FilterContext, ThemeContext } from '../../context/AllContext';
 
 function Search({ placeholder = "Search StoreFusion...", isMobile = false }) {
   const { mode } = useContext(ThemeContext);

@@ -1,8 +1,8 @@
 import React, { useContext, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Layout from '../../components/layout/Layout';
-import SingleReviewCard from '../../components/testimonial/SingleReviewCard';
-import { TestimonialContext, ThemeContext } from '../../context api/AllContext';
+import Layout from '../../layout/Layout';
+import SingleReviewCard from '../SingleReviewCard/SingleReviewCard';
+import { TestimonialContext, ThemeContext } from '../../../context/AllContext';
 
 function AllTestimonials() {
   const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(TestimonialContext);

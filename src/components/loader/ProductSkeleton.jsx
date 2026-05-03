@@ -16,7 +16,7 @@
 // export default ProductSkeleton;
 
 import React, { useContext } from "react";
-import { ThemeContext } from "../../context api/AllContext";
+import { ThemeContext } from "../../context/AllContext";
 
 function ProductSkeleton() {
   const { mode } = useContext(ThemeContext);
