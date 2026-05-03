@@ -82,16 +82,14 @@ function Track({ mode }) {
       <div className="container mx-auto px-5">
         <div className={`rounded-3xl p-4 md:p-6 md:px-8 shadow-sm border ${isDark ? 'bg-[#1a1f2e] border-gray-800' : 'bg-white border-gray-100 shadow-blue-900/5'}`}>
           {/* Section Heading */}
-          <div className="flex items-center justify-between mb-10 border-l-4 border-orange-500 pl-4">
-            <div>
-            <h2 className={`text-3xl md:text-4xl font-black tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <div className="mb-10 text-left">
+            <h2 className={`text-2xl md:text-3xl font-black tracking-tighter uppercase ${isDark ? 'text-white' : 'text-gray-900'}`}>
               WHY CHOOSE <span className="text-orange-500">STOREFUSION</span>
             </h2>
-            <p className={`text-xs md:text-sm font-bold uppercase tracking-[0.3em] mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
+            <p className={`text-[10px] md:text-xs font-bold uppercase tracking-widest mt-1 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
               Top Tier E-Commerce Experience
             </p>
           </div>
-        </div>
 
         {/* Features Grid */}
         <motion.div 

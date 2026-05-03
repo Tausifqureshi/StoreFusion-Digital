@@ -54,29 +54,27 @@ function ProductCard() {
     if (!product || product.length === 0) return [];
 
     // Ye Set record rakhega ki kaun-kaun si subcategories humne add kar li hain
-    const seenSubCategories = new Set(); 
+    const seenSubCategories = new Set();
 
     const resultObject = product.reduce((acc, p) => {
       const cat = p.category?.trim().toUpperCase(); // Ex: "ELECTRONICS"
       const sub = p.subcategory?.trim().toUpperCase(); // Ex: "MOBILES"
 
       if (cat && sub) { // Agar category aur subcategory dono exist karti hain tabhi aage badho
-        
+
         // Ek unique key banayi (Ex: "ELECTRONICS-MOBILES") taaki check kar sakein ki kya ye subcategory pehle aa chuki hai?
-        const subKey = `${cat}-${sub}`; 
-        
+        const subKey = `${cat}-${sub}`;
+
         // 1. Agar ye main category object me pehli baar aayi hai, toh array initialize karo
         if (!acc[cat]) acc[cat] = [];
 
-        // 2. YAHAN EK PRODUCT PER SUBCATEGORY WALA LOGIC HAI:
-        // Agar ye subcategory (subKey) pehli baar aayi hai (!seenSubCategories.has)
-        // aur humein total 6 se kam items chahiye...
+        // Agar ye subcategory pehli baar aayi hai aur total 6 products se kam hain, toh hi add karo.
         if (!seenSubCategories.has(subKey) && acc[cat].length < 6) {
-          
+
           acc[cat].push(p); // Is product ko array mein push kar do
-          
+
           // Agli baar is subcategory ka doosra product aaye toh skip ho jaye, isliye isko Set me dal diya
-          seenSubCategories.add(subKey); 
+          seenSubCategories.add(subKey);
         }
       }
       return acc;
@@ -98,12 +96,12 @@ function ProductCard() {
         ) : (
           <>
             {/* Global Product Header */}
-            <div className="flex items-end justify-between mb-8 md:mb-12 px-2 border-b border-gray-200 dark:border-gray-800 pb-4">
+            <div className="flex items-end justify-between mb-8 md:mb-12 px-2 pb-4">
               <div>
                 <h1 className={`text-3xl md:text-4xl font-black uppercase tracking-tighter ${mode === "dark" ? "text-white" : "text-gray-900"}`}>
                   OUR <span className="text-orange-500">STORE</span>
                 </h1>
-                <div className="w-16 h-1 bg-blue-600 mt-2"></div>
+                <div className="w-20 h-1.5 bg-orange-500 mt-2 rounded-full"></div>
               </div>
               <button
                 onClick={() => navigate('/allproducts')}

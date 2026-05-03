@@ -206,6 +206,17 @@ function AddProduct() {
           </div>
 
           <div className="space-y-1">
+            <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Sale End Date & Time (Flash Sale)</label>
+            <input
+              type="datetime-local"
+              name="saleEndTime"
+              className={`w-full px-4 py-3 rounded-xl outline-none border transition-all ${isDark ? "bg-[#1a1f2e] border-gray-700 text-white focus:border-blue-500" : "bg-gray-50 border-gray-200 text-gray-700 focus:border-blue-500 focus:bg-white"}`}
+              onChange={inputHandle}
+              value={products.saleEndTime || ""}
+            />
+          </div>
+
+          <div className="space-y-1">
             <label className={`text-[10px] font-black uppercase tracking-widest ml-1 ${isDark ? "text-gray-400" : "text-gray-500"}`}>Description</label>
             <textarea
               name="description"

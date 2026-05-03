@@ -19,6 +19,7 @@ export function ProductState({ children }) {
     discount: "",
     stock: "",
     rating: "",
+    saleEndTime: "",
     color: "", // Added color placeholder if missing, though it's dynamic
     size: "",  // Added size for apparel and shoes
     time: Timestamp.now(),
@@ -68,7 +69,7 @@ export function ProductState({ children }) {
           //   const isSame = JSON.stringify(prev) === JSON.stringify(productsArray);
           //   return isSame ? prev : productsArray;
           // });
-          
+
           setProduct(productsArray);
           setProductLoading(false);
         },
