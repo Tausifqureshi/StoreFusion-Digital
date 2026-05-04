@@ -23,7 +23,7 @@ function AllTestimonials() {
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // Jab bhi user page change karega, ye line smoothly review section ke start (top) par le jayegi
+    // Jab bhi user page change karega, ye line smoothly review section ke start (top) par le jayegi lekin ref ka use karne se page load hone k bd bhi start pr jaega
     reviewsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
