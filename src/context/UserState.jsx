@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { UserContext } from './AllContext';
-import { fireDB } from '../firebase/FirebaseConfig';
+import { fireDB } from '../firebase/firebaseConfig';
 import { collection, query, onSnapshot } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 

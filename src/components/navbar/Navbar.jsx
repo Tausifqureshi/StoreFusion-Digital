@@ -132,7 +132,7 @@ const NavScrollShield = React.memo(function NavScrollShield({ children }) {
 
 function Navbar({ isDark }) {
   const { mode, toggleMode } = useContext(ThemeContext);
-  const { product } = useContext(ProductContext);
+  const { product } = useContext(ProductContext) || { product: [] };
 
   const [open, setOpen] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);

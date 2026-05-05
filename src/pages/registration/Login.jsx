@@ -6,7 +6,7 @@ import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 ;
-import { auth, fireDB } from '../../firebase/FirebaseConfig';
+import { auth, fireDB } from '../../firebase/firebaseConfig';
 import { getDocs, query, collection, where } from 'firebase/firestore';
 import { setCart } from "../../redux/cartSlice";
 import { useDispatch } from "react-redux";

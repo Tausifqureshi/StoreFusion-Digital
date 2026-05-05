@@ -1,5 +1,5 @@
 // import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
-// import { fireDB } from "../../firebase/FirebaseConfig";
+// import { fireDB } from "../../firebase/firebaseConfig";
 // import { v4 as uuidv4 } from "uuid"; 
 
 // // ================= USER CART =================
@@ -65,7 +65,7 @@
 
 
 import { doc, getDoc, setDoc, deleteDoc } from "firebase/firestore";
-import { fireDB } from "../../firebase/FirebaseConfig";
+import { fireDB } from "../../firebase/firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
 import { toast } from "react-toastify";
 

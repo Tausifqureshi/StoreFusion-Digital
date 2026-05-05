@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Modal from "../../components/modal/Modal";
 import { addDoc, collection } from "firebase/firestore";
-import { fireDB } from "../../firebase/FirebaseConfig";
+import { fireDB } from "../../firebase/firebaseConfig";
 import { toast } from "react-toastify";
 import { useDispatch } from 'react-redux'; // Redux dispatch import
 import { clearCart } from '../../redux/cartSlice'; // Import clearCart action

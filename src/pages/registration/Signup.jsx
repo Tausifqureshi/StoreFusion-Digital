@@ -5,7 +5,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi';
 ;
 import { toast } from 'react-toastify';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { fireDB, auth } from '../../firebase/FirebaseConfig';
+import { fireDB, auth } from '../../firebase/firebaseConfig';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import Loader from '../../components/loader/Loader';
 

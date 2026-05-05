@@ -28,3 +28,4 @@ export function ThemeState({ children }) {
     </ThemeContext.Provider>
   );
 }
+export default ThemeState;

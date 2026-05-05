@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { TestimonialContext } from './AllContext';
-import { fireDB } from '../firebase/FirebaseConfig';
+import { fireDB } from '../firebase/firebaseConfig';
 import { Timestamp, addDoc, collection, onSnapshot, orderBy, query, setDoc, doc, deleteDoc, where, updateDoc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 

@@ -1,5 +1,5 @@
 // import { collection, addDoc, getDocs, doc, setDoc, deleteDoc, query, where, onSnapshot } from "firebase/firestore";
-// import { fireDB } from "../../firebase/FirebaseConfig";
+// import { fireDB } from "../../firebase/firebaseConfig";
 
 // // ================= ORDERS =================//
 
@@ -126,7 +126,7 @@ import {
   collection, addDoc, getDocs, doc, setDoc, deleteDoc,
   query, where, onSnapshot, orderBy, serverTimestamp
 } from "firebase/firestore";
-import { fireDB } from "../../firebase/FirebaseConfig";
+import { fireDB } from "../../firebase/firebaseConfig";
 import { toast } from "react-toastify";
 
 // ================= ORDERS =================//

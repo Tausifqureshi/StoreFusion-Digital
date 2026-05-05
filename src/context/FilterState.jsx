@@ -78,3 +78,4 @@ export function FilterState({ children }) {
     </FilterContext.Provider>
   );
 }
+export default FilterState;
