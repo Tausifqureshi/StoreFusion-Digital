@@ -24,7 +24,7 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
 
   // 3. Cart Logic
   const cartQuantity = useSelector((state) =>
-    state.cart.items.find((c) => c.id === id)?.quantity || 0
+    state.cart.find((c) => c.id === id)?.quantity || 0
   );
   
   const isProductInCart = cartQuantity > 0;

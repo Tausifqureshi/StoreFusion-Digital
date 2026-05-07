@@ -18,7 +18,7 @@ export function useProductInfo() {
 
   const params = useParams();
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
+  const cartItems = useSelector((state) => state.cart);
   const navigate = useNavigate();
   const isDark = mode === "dark";
 
