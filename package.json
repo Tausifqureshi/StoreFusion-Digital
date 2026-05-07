@@ -26,6 +26,7 @@
     "react-router-dom": "^7.14.0",
     "react-spring": "^10.0.3",
     "react-toastify": "^10.0.5",
+    "redux-persist": "^6.0.0",
     "swiper": "^12.1.2",
     "uuid": "^10.0.0"
   },

@@ -8,7 +8,7 @@ import CartView from "./components/CartView";
 function Cart() {
   const { cartLoading } = useAppLoading();
   const { mode } = useContext(ThemeContext);
-  const cartItems = useSelector((state) => state.cart) || [];
+  const cartItems = useSelector((state) => state.cart.items) || [];
   const isDark = mode === "dark";
 
   // 👉 ABSOLUTE ISOLATION REFS: This locks the payment data without triggering re-renders

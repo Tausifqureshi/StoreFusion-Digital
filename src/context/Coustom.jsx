@@ -174,7 +174,7 @@
 // import { fireDB } from "../../firebase/firebaseConfig";
 // import { toast } from "react-toastify";
 // import { useDispatch } from 'react-redux'; 
-// // import { clearCart } from '../../redux/cartSlice';
+// // import { clearCart } from '../../features/cart/cartSlice';
 
 // function Razorpay({ cartItems, totalAmount }) {
 //   const [formData, setFormData] = useState({
