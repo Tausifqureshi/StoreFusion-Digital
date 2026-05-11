@@ -1,7 +1,9 @@
 import { ThemeContext } from '../../context/AllContext';
 import React, { useContext } from "react";
+import useProducts from "../../features/products/useProducts";
 import HeroSection from "../../components/heroSection/HeroSection";
 import ProductCard from "../../components/productCard/ProductCard";
+
 import Track from "../../components/track/Track";
 import Testimonial from "../../components/testimonial/Testimonial";
 import { Link } from "react-router-dom";

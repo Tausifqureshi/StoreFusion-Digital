@@ -14,16 +14,18 @@ const OrderView = React.memo(function OrderView({
 
   const activeOrders = useMemo(() => {
     // Ye pehle saare "delivered" orders hata deta hai
+    if (!orders) return [];
+
     const nonDelivered = orders.filter(order => order.status?.toLowerCase() !== "delivered");
 
     if (activeTab === 'Returns') {
-      // Agar "Returns" tab select hai, toh sirf refunded/returned orders deta hai
+       // Agar "Returns" tab select hai, toh sirf refunded/returned orders deta hai
       return nonDelivered.filter(order =>
         ['refunded', 'returned'].includes(order.status?.toLowerCase())
       );
     }
-
     // "All Orders" tab me sab kuch dikhata hai siwaye (delivered, refunded aur returned) ke
+
     return nonDelivered.filter(order =>
       !['refunded', 'returned'].includes(order.status?.toLowerCase())
     );
@@ -52,7 +54,7 @@ const OrderView = React.memo(function OrderView({
               </button>
             )}
             <div className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs ${isDark ? "bg-gray-800 text-white" : "bg-gray-100 text-gray-900"}`}>
-              {user?.fullName?.charAt(0) || "U"}
+              {(user?.fullName || user?.name || "U").charAt(0)}
             </div>
           </div>
         </div>

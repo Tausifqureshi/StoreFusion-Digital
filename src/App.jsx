@@ -1,225 +1,3 @@
-// import "./App.css";
-// import React, { Suspense, lazy, useState } from "react";
-// import {
-//   createBrowserRouter,
-//   RouterProvider,
-//   Navigate,
-//   useLocation,
-//   Outlet
-// } from "react-router-dom";
-
-// import { ToastContainer } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
-
-// import Providers from "./context/Providers";
-// import Loader from "./components/loader/Loader";
-// import Layout from "./components/layout/Layout";
-
-// // 🔥 LAZY LOADING
-// const Home = lazy(() => import("./pages/home/Home"));
-// const Order = lazy(() => import("./components/order/order-components/Order"));
-// const OrderDetails = lazy(() => import("./components/order/order-details/OrderDetails"));
-// const Cart = lazy(() => import("./pages/cart/Cart"));
-// const Dashboard = lazy(() => import("./pages/admin/dashboard/DashboardView/Dashboard"));
-// const NoPage = lazy(() => import("./pages/nopage/NoPage"));
-// const Signup = lazy(() => import("./pages/registration/Signup"));
-// const Login = lazy(() => import("./pages/registration/Login"));
-// const ProductInfo = lazy(() => import("./pages/productInfo/ProductInfo"));
-// const AddProduct = lazy(() => import("./pages/admin/page-admin/AddProduct"));
-// const UpdateProduct = lazy(() => import("./pages/admin/page-admin/UpdateProduct"));
-// const Allproducts = lazy(() => import("./pages/allproducts/Allproducts"));
-// const Contact = lazy(() => import("./components/contact/Contact"));
-// const About = lazy(() => import("./components/about/About"));
-// const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonial"));
-
-
-// // 🔐 USER PROTECTED
-// export function ProtectedRoutes({ children }) {
-//   const location = useLocation();
-//   if (localStorage.getItem("user")) return children;
-//   return <Navigate to="/login" state={{ PreviousPathname: location.pathname }} replace />;
-// }
-
-// // 🔐 ADMIN PROTECTED
-// export function ProtectedRoutesForAdmin({ children }) {
-//   const location = useLocation();
-//   const user = JSON.parse(localStorage.getItem("user"));
-//   if (user && user.role === "admin") return children;
-//   return <Navigate to="/login" state={{ PreviousPathname: location.pathname }} replace />;
-// }
-
-// // ✅ ROOT LAYOUT WRAPPER (Handles Data Fetching & contexts statically)
-// function RootLayout() {
-//   return (
-//     <Providers>
-//       <Suspense fallback={<Loader type="spinner" fullScreen />}>
-//         <Outlet />
-//       </Suspense>
-//       <ToastContainer />
-//     </Providers>
-//   );
-// }
-
-// // ✅ MAIN UI LAYOUT (Persistent Navbar and Footer without re-mounting)
-// function MainLayout() {
-//   return (
-//     <Layout>
-//       <Outlet />
-//     </Layout>
-//   );
-// }
-
-// // ✅ STATIC DATA ROUTER OUTSIDE APP (Zero unnecessary recreations)
-// // const router = createBrowserRouter([
-
-// //   {
-// //     path: "/",
-// //     element: <RootLayout />,
-// //     children: [
-// //       {
-// //         element: <MainLayout />, // Routes WITH Navbar and Footer
-// //         children: [
-// //           { path: "/", element: <Home /> },
-// //           { path: "/about", element: <About /> },
-// //           { path: "/contact", element: <Contact /> },
-// //           { path: "/order", element: <Order /> },
-// //           { path: "/order-details/:id?", element: <OrderDetails /> },
-// //           { path: "/cart", element: <Cart /> },
-// //           { path: "/allproducts", element: <Allproducts /> },
-// //           { path: "/productInfo/:id", element: <ProductInfo /> },
-// //           { path: "/category/:name", element: <CategoryProducts /> },
-// //           {
-// //             path: "/dashboard",
-// //             element: (
-// //               <ProtectedRoutesForAdmin>
-// //                 <Suspense fallback={<Loader type="admin" />}>
-// //                   <Dashboard />
-// //                 </Suspense>
-// //               </ProtectedRoutesForAdmin>
-// //             ),
-// //           },
-// //           {
-// //             path: "/addProduct",
-// //             element: (
-// //               <ProtectedRoutesForAdmin>
-// //                 <AddProduct />
-// //               </ProtectedRoutesForAdmin>
-// //             ),
-// //           },
-// //           {
-// //             path: "/updateProduct",
-// //             element: (
-// //               <ProtectedRoutesForAdmin>
-// //                 <UpdateProduct />
-// //               </ProtectedRoutesForAdmin>
-// //             ),
-// //           },
-// //           {
-// //             path: "/addtestimonial",
-// //             element: (
-// //               <ProtectedRoutesForAdmin>
-// //                 <AddTestimonial />
-// //               </ProtectedRoutesForAdmin>
-// //             ),
-// //           },
-// //           { path: "/*", element: <NoPage /> },
-// //         ],
-// //       },
-// //       {
-// //         // Auth Routes WITHOUT Navbar and Footer
-// //         children: [
-// //           { path: "/signup", element: <Signup /> },
-// //           { path: "/login", element: <Login /> },
-// //         ],
-// //       },
-// //     ],
-// //   },
-// // ]);
-// // ✅ STATIC DATA ROUTER OUTSIDE APP (Fixed Syntax)
-// const router = createBrowserRouter(
-//   [
-//     {
-//       path: "/",
-//       element: <RootLayout />,
-//       children: [
-//         {
-//           element: <MainLayout />, // Routes WITH Navbar and Footer
-//           children: [
-//             { path: "/", element: <Home /> },
-//             { path: "/about", element: <About /> },
-//             { path: "/contact", element: <Contact /> },
-//             { path: "/order", element: <ProtectedRoutes><Order /></ProtectedRoutes> },
-//             { path: "/order-details/:id?", element: <ProtectedRoutes><OrderDetails /></ProtectedRoutes> },
-//             { path: "/cart", element: <Cart /> },
-//             { path: "/allproducts", element: <Allproducts /> },
-//             { path: "/productInfo/:id", element: <ProductInfo /> },
-//             { path: "/category/:name", element: <CategoryProducts /> },
-//             {
-//               path: "/dashboard",
-//               element: (
-//                 <ProtectedRoutesForAdmin>
-//                   <Suspense fallback={<Loader type="admin" />}>
-//                     <Dashboard />
-//                   </Suspense>
-//                 </ProtectedRoutesForAdmin>
-//               ),
-//             },
-
-//             {
-//               path: "/addtestimonial",
-//               element: (
-//                 <ProtectedRoutesForAdmin>
-//                   <AddTestimonial />
-//                 </ProtectedRoutesForAdmin>
-//               ),
-//             },
-//             { path: "/*", element: <NoPage /> },
-//           ],
-//         },
-//         {
-//           // Auth Routes WITHOUT Navbar and Footer
-//           children: [
-//             { path: "/signup", element: <Signup /> },
-//             { path: "/login", element: <Login /> },
-//             {
-//               path: "/addProduct",
-//               element: (
-//                 <ProtectedRoutesForAdmin>
-//                   <AddProduct />
-//                 </ProtectedRoutesForAdmin>
-//               ),
-//             },
-//             {
-//               path: "/updateProduct",
-//               element: (
-//                 <ProtectedRoutesForAdmin>
-//                   <UpdateProduct />
-//                 </ProtectedRoutesForAdmin>
-//               ),
-//             },
-//           ],
-//         },
-//       ],
-//     },
-//   ],
-
-// );
-// function App() {
-//   return <RouterProvider router={router}
-
-//   />;
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-
 import "./App.css";
 import React, { Suspense, lazy, memo } from "react";
 import {
@@ -229,15 +7,15 @@ import {
   useLocation,
   Outlet
 } from "react-router-dom";
-
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 import Providers from "./context/Providers";
 import Loader from "./components/loader/Loader";
 import Layout from "./components/layout/Layout";
 
-// 🔥 LAZY LOADING (Remains the same)
+// 🔥 LAZY LOADING COMPONENTS
 const Home = lazy(() => import("./pages/home/Home"));
 const Order = lazy(() => import("./components/order/order-components/Order"));
 const OrderDetails = lazy(() => import("./components/order/order-details/OrderDetails"));
@@ -256,44 +34,49 @@ const AddTestimonial = lazy(() => import("./components/testimonial/AddTestimonia
 const CategoryProducts = lazy(() => import("./components/navbar/CategoryProducts"));
 const AllTestimonials = lazy(() => import("./components/testimonial/AllTestimonials/AllTestimonials"));
 
-// 🔐 USER PROTECTED (Memoized to prevent unnecessary checks)
+/**
+ * 🔐 Protected Route for standard users.
+ */
 export const ProtectedRoutes = memo(({ children }) => {
   const location = useLocation();
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    // ✅ uid + email dono validate karo — sirf string hone se bypass na ho
-    if (user?.uid && user?.email) return children;
-  } catch {
-    // corrupted JSON — treat as logged out
-  }
+  const { loggedInUser, isAuthInitialized } = useSelector((state) => state.users);
+
+  if (!isAuthInitialized) return <Loader type="spinner" fullScreen />;
+  if (loggedInUser?.uid && loggedInUser?.email) return children;
+
   return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
 });
 
-// 🔐 ADMIN PROTECTED
+/**
+ * 🔐 Protected Route for Admins only.
+ */
 export const ProtectedRoutesForAdmin = memo(({ children }) => {
   const location = useLocation();
-  try {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user?.uid && user?.email && user?.role === "admin") return children;
-  } catch {
-    // corrupted JSON
-  }
+  const { loggedInUser, isAuthInitialized } = useSelector((state) => state.users);
+
+  if (!isAuthInitialized) return <Loader type="spinner" fullScreen />;
+  if (loggedInUser?.uid && loggedInUser?.role === "admin") return children;
+
   return <Navigate to={`/login?redirect=${location.pathname}`} replace />;
 });
 
-// ✅ ROOT LAYOUT (Now purely for structure, Providers moved out)
+/**
+ * Root Layout for structural wrapper.
+ */
 const RootLayout = memo(() => {
   return (
     <>
       <Suspense fallback={<Loader type="spinner" fullScreen />}>
         <Outlet />
       </Suspense>
-      <ToastContainer />
+      <ToastContainer position="top-right" autoClose={1500} hideProgressBar={false} />
     </>
   );
 });
 
-// ✅ MAIN UI LAYOUT (Optimized with React.memo)
+/**
+ * Main Layout with persistent Header/Footer.
+ */
 const MainLayout = memo(() => {
   return (
     <Layout>
@@ -302,7 +85,9 @@ const MainLayout = memo(() => {
   );
 });
 
-// ✅ STATIC DATA ROUTER (Stable reference)
+/**
+ * Router Configuration.
+ */
 const router = createBrowserRouter([
   {
     path: "/",
@@ -335,7 +120,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        // Auth/Admin Routes WITHOUT Navbar/Footer
+        // Auth & Admin Action Routes
         children: [
           { path: "/signup", element: <Signup /> },
           { path: "/login", element: <Login /> },
@@ -361,13 +146,8 @@ const router = createBrowserRouter([
   },
 ]);
 
-// ✅ FINAL APP COMPONENT
 function App() {
   return (
-    /* Optimization Tip: Providers ko yahan top par rakhne se 
-       router navigation aapke heavy Context layers ko 
-       trigger nahi karegi.
-    */
     <Providers>
       <RouterProvider router={router} />
     </Providers>

@@ -20,25 +20,41 @@ function Tracking({ order, isDark }) {
   const activeStepIndex = getStepIndex(currentStatus);
 
   // ✅ safe date formatter (converts "Monday, 12 January" to "12 Jan")
-  const shortenDate = (dateStr) => {
-    if (!dateStr || typeof dateStr !== "string") return dateStr;
+  // ✅ Robust date formatter: handles ISO strings and "Monday, 12 January" format
+  const shortenDate = (dateVal) => {
+    if (!dateVal) return "";
+
     try {
-      let short = dateStr.includes(",")
-        ? dateStr.split(",").slice(1).join(",").trim()
-        : dateStr;
+      const d = new Date(dateVal);
 
-      const months = {
-        January: "Jan", February: "Feb", March: "Mar", April: "Apr",
-        May: "May", June: "Jun", July: "Jul", August: "Aug",
-        September: "Sep", October: "Oct", November: "Nov", December: "Dec"
-      };
+      // 🛡️ Fallback for invalid/legacy date strings
+      if (isNaN(d.getTime())) {
+        if (typeof dateVal !== "string") return dateVal;
 
-      Object.keys(months).forEach((m) => {
-        if (short.includes(m)) short = short.replace(m, months[m]);
-      });
-      return short;
-    } catch {
-      return dateStr;
+        let short = dateVal.includes(",")
+          ? dateVal.split(",").slice(1).join(",").trim()
+          : dateVal;
+
+        const months = {
+          January: "Jan", February: "Feb", March: "Mar", April: "Apr",
+          May: "May", June: "Jun", July: "Jul", August: "Aug",
+          September: "Sep", October: "Oct", November: "Nov", December: "Dec"
+        };
+
+        Object.keys(months).forEach((m) => {
+          if (short.includes(m)) {
+            short = short.replace(m, months[m]);
+          }
+        });
+
+        return short;
+      }
+
+      // ✅ Professional Format: "12 Jan"
+      return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' });
+    } catch (error) {
+      console.error("❌ Date formatting error:", error);
+      return dateVal;
     }
   };
 
@@ -51,7 +67,7 @@ function Tracking({ order, isDark }) {
     return [
       {
         label: "Ordered",
-        date: getDate(order?.placedDate || order?.date, "Order Placed")
+        date: getDate(order?.placedDate || order?.createdAt || order?.date, "Pending")
       },
       {
         label: "Order packed",
@@ -89,8 +105,8 @@ function Tracking({ order, isDark }) {
       {/* MOBILE VIEW */}
       <div className="md:hidden">
         {trackingStepsData.map((step, index) => {
-          const isDone = index <= activeStepIndex && currentStatus !== "cancelled";
-          const isLast = index === trackingStepsData.length - 1;
+          const isDone = activeStepIndex >= index && currentStatus !== "cancelled";
+          const isLast = index === trackingStepsData.length - 1; //yhme check sirf isliye hai taaki akhiri step ke niche faltu danda (line) na dikhe 
           return (
             <div key={index} className="flex gap-4 relative min-h-[80px]">
               {!isLast && (
@@ -125,7 +141,7 @@ function Tracking({ order, isDark }) {
       <div className={`hidden md:block mt-6 p-8 border rounded-[30px] ${isDark ? "bg-[#1a1f2e] border-gray-800" : "bg-white border-gray-100 shadow-xl shadow-blue-500/5"}`}>
         <div className="flex justify-between items-start">
           {trackingStepsData.map((step, index) => {
-            const isDone = index <= activeStepIndex && currentStatus !== "cancelled";
+            const isDone = activeStepIndex >= index && currentStatus !== "cancelled";
             return (
               <div key={index} className="flex flex-col items-center flex-1 relative">
                 <div className={`w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all ${isDone ? "bg-green-500 border-green-500 shadow-lg shadow-green-500/20" : "border-gray-300"}`}>

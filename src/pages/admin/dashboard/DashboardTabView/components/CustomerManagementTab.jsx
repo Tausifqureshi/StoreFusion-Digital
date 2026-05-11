@@ -1,14 +1,16 @@
 import React, { useState, useMemo, useEffect, useContext } from 'react';
 import { FaSearch, FaUserAltSlash, FaEnvelope, FaPhone, FaEllipsisH, FaPlus } from 'react-icons/fa';
-import { UserContext, ThemeContext } from '../../../../../context/AllContext';
+import { useSelector } from 'react-redux';
+import { ThemeContext } from '../../../../../context/AllContext';
+
 import LoaderSpinner from '../../../../../components/loader/LoaderSpinner';
 
 function CustomerManagementTab() {
-  // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
   const { mode } = useContext(ThemeContext);
-  const { user, userLoading } = useContext(UserContext);
+  const { items: user, loading: userLoading } = useSelector(state => state.users);
   
   const isDark = mode === 'dark';
+
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterRole, setFilterRole] = useState("All Roles");

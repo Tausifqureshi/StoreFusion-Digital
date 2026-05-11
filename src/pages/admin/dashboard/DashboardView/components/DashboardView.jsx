@@ -4,9 +4,8 @@ import StatCardsContainer from './StatCardsContainer';
 import ChartsContainer from './ChartsContainer';
 import TablesContainer from './TablesContainer';
 import QuickActions from './QuickActions';
-import { ProductContext, OrderContext, UserContext } from '../../../../../context/AllContext';
+import { useSelector } from 'react-redux';
 import { useDashboardData } from '../hooks/useDashboardData';
-import { useContext } from 'react';
 
 // ✅ DASHBOARD VIEW: Explicit independent UI shell with its own localized filter states
 const DashboardView = React.memo(function DashboardView({ isDark, navigate, children }) {
@@ -17,15 +16,16 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
   const handleRangeChange = useCallback((r) => setSelectedRange(r), []);
   const handleDateChange = useCallback((d) => setCalendarDate(d), []);
 
-  const { product: allProducts } = useContext(ProductContext);
-  const { order: allOrders } = useContext(OrderContext);
-  const { user: allUsers } = useContext(UserContext);
+  const allProducts = useSelector((state) => state.products.items);
+  const allOrders = useSelector((state) => state.orders.orders);
+  const allUsers = useSelector((state) => state.users.items);
 
   const {
     order, product, user,
     monthlyOrders, monthlyRevenue,
     totalRevenue, newDiscounts
   } = useDashboardData(allProducts, allOrders, allUsers, selectedRange, calendarDate);
+
 
   return (
     <div className={`min-h-screen pt-28 pb-16 transition-all duration-300 ${isDark ? "bg-[#111827] text-white" : "bg-gray-50 text-gray-900"} font-sans`}>

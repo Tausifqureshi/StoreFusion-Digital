@@ -1,18 +1,18 @@
 
-import { ThemeContext, UserContext } from '../../../context/AllContext';
+import { ThemeContext } from '../../../context/AllContext';
 import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppLoading } from "../../../context/LoadingState";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { deleteUserOrdersFromFirestore } from "../orderFirestore";
+import { orderService } from "../../../services/orderService";
+
 import OrderView from "./OrderView";
 
 function Order() {
-  const { orderLoading } = useAppLoading();
   const { mode } = useContext(ThemeContext);
-  const { loggedInUser: user } = useContext(UserContext);
-  const { orders } = useSelector((state) => state.orders);
+  const user = useSelector((state) => state.users.loggedInUser);
+  const { items: orders, loading: orderLoading } = useSelector((state) => state.orders);
+
 
   const navigate = useNavigate();
   const isDark = mode === "dark";
@@ -20,7 +20,7 @@ function Order() {
   const handleDeleteAllOrders = async () => {
     if (!window.confirm("Bhai, kya aap sach mein saare orders delete karna chahte ho?")) return;
     try {
-      await deleteUserOrdersFromFirestore(user?.uid);
+      await orderService.deleteUserOrdersFromFirestore(user?.uid);
       toast.info("Order history cleared!");
     } catch (err) {
       toast.error("Failed to clear history");

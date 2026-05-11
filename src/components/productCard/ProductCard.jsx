@@ -1,6 +1,7 @@
-import { FilterContext, ProductContext, ThemeContext } from '../../context/AllContext';
+import { FilterContext, ThemeContext } from '../../context/AllContext';
 import React, { useContext, useState, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
+import useProducts from "../../features/products/useProducts";
 import SingleProductCard from "./SingleProductCard";
 import ProductSkeleton from "../loader/ProductSkeleton";
 import { FaChevronRight } from "react-icons/fa";
@@ -46,17 +47,18 @@ const HomeProductCard = React.memo(({ item, mode }) => {
 
 function ProductCard() {
   const { mode } = useContext(ThemeContext);
-  const { product, productLoading } = useContext(ProductContext);
+  const { products, productsLoading } = useProducts();
   const navigate = useNavigate();
 
   // 🚀 REDUCE KA JADU: Sirf ek loop mein grouping + unique subcategory logic
   const groupedCategoryData = useMemo(() => {
-    if (!product || product.length === 0) return [];
+    if (!products || products.length === 0) return [];
+
 
     // Ye Set record rakhega ki kaun-kaun si subcategories humne add kar li hain
     const seenSubCategories = new Set();
 
-    const resultObject = product.reduce((acc, p) => {
+    const resultObject = products.reduce((acc, p) => {
       const cat = p.category?.trim().toUpperCase(); // Ex: "ELECTRONICS"
       const sub = p.subcategory?.trim().toUpperCase(); // Ex: "MOBILES"
 
@@ -86,12 +88,12 @@ function ProductCard() {
       category: catName,
       categoryProducts: items
     }));
-  }, [product]);
+  }, [products]);
 
   return (
     <section className="body-font">
       <div className="container px-5 py-8 md:py-12 mx-auto">
-        {productLoading ? (
+        {productsLoading ? (
           <ProductSkeleton />
         ) : (
           <>

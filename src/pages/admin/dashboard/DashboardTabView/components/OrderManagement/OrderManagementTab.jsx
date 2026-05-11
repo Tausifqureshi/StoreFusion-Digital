@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useContext, useEffect } from 'react';
-import { FaSync, FaDownload } from 'react-icons/fa';
-import { OrderContext, ThemeContext } from '../../../../../../context/AllContext';
+import { FaDownload } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+import { ThemeContext } from '../../../../../../context/AllContext';
+
 import LoaderSpinner from '../../../../../../components/loader/LoaderSpinner';
 
 import OrderSummaryCards from './OrderSummaryCards';
@@ -9,11 +11,12 @@ import OrderTable from './OrderTable';
 import OrderPagination from './OrderPagination';
 
 function OrderManagementTab() {
-  // 🚀 CONTEXT ON DEMAND: Each tab now handles its own data
   const { mode } = useContext(ThemeContext);
-  const { order, orderLoading } = useContext(OrderContext);
+  const { items: order } = useSelector(state => state.orders);
+  const orderLoading = false; // Add real loading if needed from slice
   
   const isDark = mode === 'dark';
+
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);

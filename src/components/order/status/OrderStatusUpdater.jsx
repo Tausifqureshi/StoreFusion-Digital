@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FiRefreshCw } from 'react-icons/fi';
-import { updateOrderStatus } from '../orderFirestore';
+import { orderService } from '../../../services/orderService';
+
 import { statusOptions } from './statusConfig';
 
  
@@ -12,7 +13,7 @@ function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
     if (newStatus === currentStatus) return;
     setLoading(newStatus);
     try {
-      await updateOrderStatus(orderId, newStatus, currentStatus);
+      await orderService.updateOrderStatus(orderId, newStatus);
       onClose?.();
     } catch (err) {
       console.error('Status update failed:', err);

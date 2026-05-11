@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { UserContext } from "../../context/AllContext";
+import React from "react";
 import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import Testimonial from "../../components/testimonial/Testimonial";
 import AddTestimonial from "../../components/testimonial/AddTestimonial/AddTestimonial";
+import { useSelector } from "react-redux";
 
 import GallerySection from "./components/GallerySection";
 import ProductAction from "./components/ProductAction";
@@ -35,8 +35,8 @@ function ProductInfo() {
     gallery,
   } = useProductInfo();
 
-  const { loggedInUser } = useContext(UserContext);
-  const isAdmin = loggedInUser?.role === "admin";
+  const loggedInUser = useSelector((state) => state.users.loggedInUser);
+
 
   if (loading || !currentProduct) return <LoaderSpinner isDark={isDark} label="Loading product..." />;
 

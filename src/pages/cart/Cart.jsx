@@ -2,13 +2,14 @@
 import { ThemeContext } from '../../context/AllContext';
 import React, { useContext, useMemo, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useAppLoading } from "../../context/LoadingState";
+
 import CartView from "./components/CartView";
 
 function Cart() {
-  const { cartLoading } = useAppLoading();
+  const { items: cartItems, loading: cartLoading } = useSelector((state) => state.cart);
   const { mode } = useContext(ThemeContext);
-  const cartItems = useSelector((state) => state.cart) || [];
+
+
   const isDark = mode === "dark";
 
   // 👉 ABSOLUTE ISOLATION REFS: This locks the payment data without triggering re-renders

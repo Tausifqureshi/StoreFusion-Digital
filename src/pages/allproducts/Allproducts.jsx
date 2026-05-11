@@ -1,5 +1,6 @@
-import { FilterContext, ProductAdminContext, ProductContext, ThemeContext } from '../../context/AllContext';
+import { FilterContext, ThemeContext } from '../../context/AllContext';
 import React, { useContext, useEffect, useRef, useState, useMemo } from "react";
+import useProducts from "../../features/products/useProducts";
 import Filter from "../../components/filter/Filter";
 // ScrollToTopButton removed as it is globally handled
 import ProductSkeleton from "../../components/loader/ProductSkeleton";
@@ -8,10 +9,11 @@ import SingleProductCard from "../../components/productCard/SingleProductCard";
 
 // ✅ ALL PRODUCTS VIEW: Saare products, filters aur pagination yahan locked hain
 const AllProductsView = React.memo(function AllProductsView({
-  mode, product, productLoading,
+  mode, products, productsLoading,
   searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize,
   currentPage, setCurrentPage, expandedId, setExpandedId, productsRef
 }) {
+
   const productsPerPage = 8;
   const [isFilterLoading, setIsFilterLoading] = useState(false);
 
@@ -24,7 +26,7 @@ const AllProductsView = React.memo(function AllProductsView({
 
   // 👉 Master Filter Logic (useMemo pattern with clean chain)
   const filteredProducts = useMemo(() => {
-    return product
+    return products
       // 1. Search Filter
       .filter((p) => searchkey.trim() === "" || p.title.toLowerCase().includes(searchkey.toLowerCase()))
 
@@ -62,7 +64,8 @@ const AllProductsView = React.memo(function AllProductsView({
         if (sortPrice === "high-to-low") return b.price - a.price;
         return 0;
       });
-  }, [product, searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize]);
+  }, [products, searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize]);
+
 
   // Reset page when filters change
   useEffect(() => {
@@ -77,7 +80,7 @@ const AllProductsView = React.memo(function AllProductsView({
   return (
     <section className="text-gray-600 body-font w-full pt-4 pb-12">
       <div className="w-full">
-        {productLoading ? (
+        {productsLoading ? (
           <ProductSkeleton />
         ) : (
           <>
@@ -159,8 +162,9 @@ const AllProductsView = React.memo(function AllProductsView({
 
 const Allproducts = React.memo(function Allproducts() {
   const { mode } = useContext(ThemeContext);
-  const { product, productLoading } = useContext(ProductContext);
+  const { products, productsLoading } = useProducts();
   const { searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize } = useContext(FilterContext);
+
 
   const [currentPage, setCurrentPage] = useState(1);
   const [expandedId, setExpandedId] = useState(null);
@@ -189,8 +193,8 @@ const Allproducts = React.memo(function Allproducts() {
       <div className="lg:col-span-9 w-full">
         <AllProductsView
           mode={mode}
-          product={product}
-          productLoading={productLoading}
+          products={products}
+          productsLoading={productsLoading}
           searchkey={searchkey}
           filterPrice={filterPrice}
           filterType={filterType}
@@ -204,6 +208,7 @@ const Allproducts = React.memo(function Allproducts() {
           productsRef={productsRef}
         />
       </div>
+
     </div>
   );
 });

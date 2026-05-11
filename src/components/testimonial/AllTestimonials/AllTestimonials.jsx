@@ -1,14 +1,20 @@
 import React, { useContext, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import Layout from '../../layout/Layout';
 import SingleReviewCard from '../SingleReviewCard/SingleReviewCard';
-import { TestimonialContext, ThemeContext } from '../../../context/AllContext';
+import { ThemeContext } from '../../../context/AllContext';
+import { testimonialService } from '../../../services/testimonialService';
+import { setTestimonialForm } from '../../../features/testimonials/testimonialSlice';
+import { toast } from 'react-toastify';
 
 function AllTestimonials() {
-  const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(TestimonialContext);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  
+  const testimonials = useSelector((state) => state.testimonials.items);
   const { mode } = useContext(ThemeContext);
   const isDark = mode === 'dark';
-  const navigate = useNavigate();
   const reviewsRef = useRef(null);
 
   // Pagination Logic
@@ -17,14 +23,30 @@ function AllTestimonials() {
 
   const indexOfLastReview = currentPage * reviewsPerPage;
   const indexOfFirstReview = indexOfLastReview - reviewsPerPage;
-  const currentReviews = testimonial.slice(indexOfFirstReview, indexOfLastReview);
+  const currentReviews = testimonials.slice(indexOfFirstReview, indexOfLastReview);
 
-  const totalPages = Math.ceil(testimonial.length / reviewsPerPage);
+  const totalPages = Math.ceil(testimonials.length / reviewsPerPage);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
-    // Jab bhi user page change karega, ye line smoothly review section ke start (top) par le jayegi lekin ref ka use karne se page load hone k bd bhi start pr jaega
     reviewsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  // ✅ Helper Functions
+  const getAvatar = (item) => testimonialService.getAvatar(item);
+  
+  const editTestimonial = (item) => {
+    dispatch(setTestimonialForm(item));
+    navigate('/addtestimonial');
+  };
+
+  const deleteTestimonial = async (id) => {
+    try {
+      await testimonialService.deleteTestimonial(id);
+      toast.success('Testimonial deleted!', { autoClose: 1000 });
+    } catch (err) {
+      toast.error('Error deleting testimonial');
+    }
   };
 
   return (
@@ -38,7 +60,7 @@ function AllTestimonials() {
               Community <span className="text-orange-500">Testimonials</span>
             </h1>
             <p className={`text-sm md:text-base font-bold uppercase tracking-[0.4em] mt-2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`}>
-              What our community thinks about us ({testimonial.length})
+              What our community thinks about us ({testimonials.length})
             </p>
           </div>
 
@@ -50,7 +72,7 @@ function AllTestimonials() {
                 item={item}
                 isDark={isDark}
                 getAvatar={getAvatar}
-                editTestimonial={(item) => editTestimonial(item, navigate)}
+                editTestimonial={editTestimonial}
                 deleteTestimonial={deleteTestimonial}
               />
             ))}
@@ -63,7 +85,7 @@ function AllTestimonials() {
           )}
 
           {/* Pagination Buttons */}
-          {testimonial.length > reviewsPerPage && (
+          {testimonials.length > reviewsPerPage && (
             <div className="flex justify-center items-center gap-3 mt-16">
               <button
                 onClick={() => paginate(currentPage - 1)}

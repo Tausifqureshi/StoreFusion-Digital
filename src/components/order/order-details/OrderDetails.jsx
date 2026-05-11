@@ -1,12 +1,12 @@
-import { ThemeContext, UserContext } from '../../../context/AllContext';
+import { ThemeContext } from '../../../context/AllContext';
 import React, { useContext, useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useAppLoading } from "../../../context/LoadingState";
 import { useSelector, useDispatch } from "react-redux";
 import LoaderSpinner from "../../loader/LoaderSpinner";
 import { toast } from "react-toastify";
-import { cancelOrderFromFirestore } from "../orderFirestore";
-import { cancelOrder } from "../../../redux/orderSlice";
+import { orderService } from "../../../services/orderService";
+
+import { cancelOrder } from "../../../features/orders/orderSlice";
 
 import Tracking from "./Tracking";
 import OrderDetailHeader from "./components/OrderDetailHeader";
@@ -15,15 +15,15 @@ import OrderItemsList from "./components/OrderItemsList";
 import OrderCustomerInfo from "./components/OrderCustomerInfo";
 
 function OrderDetails() {
-  const { orderLoading } = useAppLoading();
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { mode } = useContext(ThemeContext);
   const isDark = mode === "dark";
 
-  const { loggedInUser: user } = useContext(UserContext);
-  const { orders } = useSelector((state) => state.orders);
+  const user = useSelector((state) => state.users.loggedInUser);
+  const { items: orders, loading: orderLoading } = useSelector((state) => state.orders);
+
   const [cancellingId, setCancellingId] = useState(null);
 
   // yah id se ham dynamic order ko find kar rahe hain
@@ -48,7 +48,8 @@ function OrderDetails() {
     if (!window.confirm("Bhai, kya aap sach mein cancel karna chahte ho?")) return;
     setCancellingId(orderId);
     try {
-      await cancelOrderFromFirestore(orderId);
+      await orderService.cancelOrderFromFirestore(order.id);
+
       dispatch(cancelOrder({ id: orderId }));
       toast.success("Order Cancelled!", { icon: "🔥" });
     } catch (err) {

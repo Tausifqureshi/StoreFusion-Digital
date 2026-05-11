@@ -1,62 +1,64 @@
-import React, { useContext, useEffect, useCallback, useRef, useState } from 'react'
+import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { ProductAdminContext, ThemeContext } from '../../../context/AllContext';
+import { useDispatch, useSelector } from "react-redux";
+import { setForm } from "../../../features/products/productSlice";
+import { productService } from "../../../services/productService";
+
+
+import { ThemeContext } from '../../../context/AllContext';
 import { FiX } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 function UpdateProduct() {
     const navigate = useNavigate();
-    const { products, setProducts, updateProduct } = useContext(ProductAdminContext);
+    const dispatch = useDispatch();
+    const products = useSelector(state => state.products.form);
     const { mode } = useContext(ThemeContext);
     const isDark = mode === 'dark';
     const [isSuccess, setIsSuccess] = useState(false);
 
     function inputHandle(e) {
-        setProducts({ ...products, [e.target.name]: e.target.value });
+        dispatch(setForm({ [e.target.name]: e.target.value }));
     }
 
-    // Memoized color toggle handler to keep JSX clean
     const handleColorToggle = useCallback((color) => {
-        if (products.color === color) {
-            setProducts({ ...products, color: "" });
-        } else {
-            setProducts({ ...products, color: color });
-        }
-    }, [products, setProducts]);
+        dispatch(setForm({ color: products.color === color ? "" : color }));
+    }, [products.color, dispatch]);
 
-    // Memoized size toggle handler
     const handleSizeToggle = useCallback((size) => {
-        if (products.size === size) {
-            setProducts({ ...products, size: "" });
-        } else {
-            setProducts({ ...products, size: size });
-        }
-    }, [products, setProducts]);
+        dispatch(setForm({ size: products.size === size ? "" : size }));
+    }, [products.size, dispatch]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    // 🚀 Security Check: Agar products.id nahi hai toh dashboard bhejo (URL manipulation prevention)
     useEffect(() => {
         if (!products.id) {
             navigate('/dashboard');
         }
     }, [products.id, navigate]);
 
-    // 🚀 Standard Pattern: Success hone par timer start karo aur cleanup me clear karo
     useEffect(() => {
         if (isSuccess) {
-            const timer = setTimeout(() => navigate('/dashboard'), 800);
+            const timer = setTimeout(() => navigate('/dashboard', { replace: true }), 800);
             return () => clearTimeout(timer);
         }
     }, [isSuccess, navigate]);
 
+
     const handleUpdateProduct = async () => {
-        const success = await updateProduct();
-        if (success) {
+        try {
+            await productService.updateProduct(products.id, products);
+
+
+            toast.success("Product Updated successfully");
             setIsSuccess(true);
+        } catch (error) {
+            toast.error("Update Failed");
         }
     };
+
 
 
     return (

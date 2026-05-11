@@ -8,18 +8,22 @@ import {
   incrementQuantity,
   decrementQuantity,
   clearCart,
-} from "../../../redux/cartSlice";
-import { clearCartStorage } from "../cartService";
-import { saveCartDebounce } from "../debounce";
+} from "../../../features/cart/cartSlice";
+import { cartService } from "../../../services/cartService";
+
+
+
 import LoaderSpinner from "../../../components/loader/LoaderSpinner";
 import CartItemCard from "../CartItemCard";
 import Razorpay from "../../razorpay/Razorpay";
+import { useSelector } from "react-redux";
 
 // ✅ CART VIEW: Explicitly named and colocated state
 const CartView = React.memo(function CartView({
   isDark, cartItems, cartLoading, totalAmountRef, cartItemsRef
 }) {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.loggedInUser);
   const [clearingCart, setClearingCart] = useState(false);
   const [cartUpdating, setCartUpdating] = useState(null);
 
@@ -52,32 +56,48 @@ const CartView = React.memo(function CartView({
 
   // 👉 Relying on cartItemsRef to maintain absolute referential stability for child components
   const deleteCart = useCallback((itemId) => {
-    const updatedCart = cartItemsRef.current.filter((i) => i.id !== itemId);
+    const currentCart = cartItemsRef.current || [];
+    const updatedCart = currentCart.filter((i) => i.id !== itemId);
     dispatch(deleteFromCart(itemId));
-    saveCartDebounce(updatedCart);
+    cartService.saveCartDebounce(updatedCart, user);
+
+
     toast.info("Removed from bag", { position: "bottom-right", autoClose: 1000 });
-  }, [dispatch, cartItemsRef]);
+  }, [dispatch, cartItemsRef, user]);
 
   const incrementCartQuantity = useCallback((itemId) => {
+    const currentCart = cartItemsRef.current || [];
     setCartUpdating({ id: itemId, type: "increment" });
     dispatch(incrementQuantity(itemId));
-    const updatedCart = cartItemsRef.current.map(i => i.id === itemId ? { ...i, quantity: (i.quantity || 1) + 1 } : i);
-    saveCartDebounce(updatedCart);
-  }, [dispatch, cartItemsRef]);
+    const updatedCart = currentCart.map(i => i.id === itemId ? { ...i, quantity: (i.quantity || 1) + 1 } : i);
+    cartService.saveCartDebounce(updatedCart, user);
+
+
+  }, [dispatch, cartItemsRef, user]);
 
   const decrementCartQuantity = useCallback((itemId) => {
-    setCartUpdating({ id: itemId, type: "decrement" });
-    dispatch(decrementQuantity(itemId));
-    const updatedCart = cartItemsRef.current.map(i => i.id === itemId ? { ...i, quantity: Math.max(1, (i.quantity || 1) - 1) } : i);
-    saveCartDebounce(updatedCart);
-  }, [dispatch, cartItemsRef]);
+    const currentCart = cartItemsRef.current || [];
+    const item = currentCart.find(i => i.id === itemId);
+    
+    // 🔥 Only trigger if quantity is > 1 (No loading/action at 1)
+    if (item && item.quantity > 1) {
+      setCartUpdating({ id: itemId, type: "decrement" });
+      dispatch(decrementQuantity(itemId));
+      const updatedCart = currentCart.map(i => i.id === itemId ? { ...i, quantity: i.quantity - 1 } : i);
+      cartService.saveCartDebounce(updatedCart, user);
+    }
+  }, [dispatch, cartItemsRef, user]);
+
 
   const clearCartItems = async () => {
     setClearingCart(true);
     try {
-      await clearCartStorage();
+      await cartService.clearCartStorage(user);
+
+
     } catch (err) { setClearingCart(false); }
   };
+
 
   if (cartLoading) return <LoaderSpinner isDark={isDark} label="Loading bag..." />;
 

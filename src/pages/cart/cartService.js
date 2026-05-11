@@ -10,10 +10,8 @@ import {
 } from "./cartFirestore";
 
 // 🔥 Save cart
-export const saveCart = async (cart) => {
+export const saveCart = async (cart, user) => {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-
     if (user?.uid) {
       return await saveCartToFirestore(user.uid, cart);
     } else {
@@ -21,15 +19,13 @@ export const saveCart = async (cart) => {
     }
   } catch (error) {
     console.error("❌ saveCart service error:", error);
-    throw error; // 👉 VERY IMPORTANT
+    throw error;
   }
 };
 
 // 🔥 Load cart
-export const loadCart = async () => {
+export const loadCart = async (user) => {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-
     if (user?.uid) {
       return await getCartFromFirestore(user.uid);
     } else {
@@ -37,15 +33,13 @@ export const loadCart = async () => {
     }
   } catch (error) {
     console.error("❌ loadCart service error:", error);
-    return []; // 👉 safe fallback
+    return [];
   }
 };
 
 // 🔥 Clear cart
-export const clearCartStorage = async () => {
+export const clearCartStorage = async (user) => {
   try {
-    const user = JSON.parse(localStorage.getItem("user"));
-
     if (user?.uid) {
       return await clearUserCartFromFirestore(user.uid);
     } else {
@@ -56,3 +50,4 @@ export const clearCartStorage = async () => {
     throw error;
   }
 };
+

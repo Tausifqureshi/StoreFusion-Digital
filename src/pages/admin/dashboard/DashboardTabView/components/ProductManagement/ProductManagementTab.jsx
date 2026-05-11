@@ -1,32 +1,47 @@
 import React, { useState, useMemo, useContext, useEffect, useRef, useCallback } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { ProductContext, OrderContext, ProductAdminContext, ThemeContext } from '../../../../../../context/AllContext';
-import LoaderSpinner from '../../../../../../components/loader/LoaderSpinner';
+import { useDispatch, useSelector } from 'react-redux';
+import useProducts from '../../../../../../features/products/useProducts';
+import { setForm, resetForm } from '../../../../../../features/products/productSlice';
+import { productService } from '../../../../../../services/productService';
 
-// Subcomponents ko yahan import kiya hai
+
+import { toast } from 'react-toastify';
+import LoaderSpinner from '../../../../../../components/loader/LoaderSpinner';
+import { ThemeContext } from '../../../../../../context/AllContext';
+
+// Subcomponents
 import SummaryCards from './SummaryCards';
 import ProductFilters from './ProductFilters';
 import ProductGrid from './ProductGrid';
 import ProductPagination from './ProductPagination';
 
+
 function ProductManagementTab() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { mode } = useContext(ThemeContext);
+  const { products: product, productsLoading: productLoading } = useProducts();
+  const { items: order } = useSelector(state => state.orders);
 
-  // 🚀 Har tab apna data khud handle kar raha hai (Context se)
-  const themeContext = useContext(ThemeContext) || {};
-  const { mode = "light" } = themeContext;
-  
-  const productContext = useContext(ProductContext) || {};
-  const { product = [], productLoading = false } = productContext;
-  
-  const orderContext = useContext(OrderContext) || {};
-  const { order = [] } = orderContext;
-  
-  const productAdminContext = useContext(ProductAdminContext) || {};
-  const { edithandle = () => {}, deleteProduct = () => {} } = productAdminContext;
+  const edithandle = useCallback((item) => {
+    dispatch(setForm(item));
+    navigate('/updateProduct');
+  }, [dispatch, navigate]);
 
-  const isDark = mode === 'dark';
+  const deleteProduct = useCallback(async (item) => {
+    if (!window.confirm("Bhai, kya aap sach mein ye product delete karna chahte ho?")) return;
+    try {
+      await productService.deleteProduct(item.id);
+
+
+      toast.success("Product Deleted successfully!");
+    } catch (err) {
+      toast.error("Delete Failed");
+    }
+  }, []);
+
 
   // Filters ke states (SessionStorage me save taaki refresh par ya page change par data na ude)
   const [searchQuery, setSearchQuery] = useState(() => sessionStorage.getItem("pm_search") || "");

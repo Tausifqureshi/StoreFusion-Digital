@@ -1,8 +1,13 @@
-import { ProductAdminContext, TestimonialContext, ThemeContext } from '../../../context/AllContext';
+import { ThemeContext } from '../../../context/AllContext';
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { FiX } from "react-icons/fi";
+import { useSelector, useDispatch } from "react-redux";
+import { setTestimonialForm, resetTestimonialForm, setTestimonialsLoading } from "../../../features/testimonials/testimonialSlice";
+import { testimonialService } from "../../../services/testimonialService";
+import { toast } from "react-toastify";
+
 
 const RATING_CONFIG = [
   { label: "Terrible", color: "text-red-500", bg: "bg-red-50 border-red-200" },
@@ -14,7 +19,7 @@ const RATING_CONFIG = [
 
 // ✅ Amazon Exact Style View Component
 const AddTestimonialView = React.memo(function AddTestimonialView({
-  isDark, rating, setRating, testimonialForm, setTestimonialForm, handleSubmit, loading, showClose, onClose
+  isDark, rating, setRating, testimonialForm, updateForm, handleSubmit, loading, showClose, onClose
 }) {
   const [hovered, setHovered] = useState(0);
   const active = hovered || rating;
@@ -93,7 +98,7 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
               placeholder="Paste photo link here (e.g. https://...)"
               className={inputCls}
               value={testimonialForm.img}
-              onChange={(e) => setTestimonialForm({ ...testimonialForm, img: e.target.value })}
+              onChange={(e) => updateForm({ img: e.target.value })}
             />
           </div>
 
@@ -106,7 +111,7 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
                 placeholder="John Doe"
                 className={inputCls}
                 value={testimonialForm.name}
-                onChange={(e) => setTestimonialForm({ ...testimonialForm, name: e.target.value })}
+                onChange={(e) => updateForm({ name: e.target.value })}
               />
             </div>
             <div className="space-y-2">
@@ -116,7 +121,7 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
                 placeholder="Verified Buyer"
                 className={inputCls}
                 value={testimonialForm.role}
-                onChange={(e) => setTestimonialForm({ ...testimonialForm, role: e.target.value })}
+                onChange={(e) => updateForm({ role: e.target.value })}
               />
             </div>
           </div>
@@ -129,7 +134,7 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
               placeholder="What did you like or dislike? What did you use this product for?"
               className={`${inputCls} resize-none`}
               value={testimonialForm.text}
-              onChange={(e) => setTestimonialForm({ ...testimonialForm, text: e.target.value })}
+              onChange={(e) => updateForm({ text: e.target.value })}
             />
           </div>
 
@@ -156,21 +161,15 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
 
 
 function AddTestimonial({ productId = "" }) {
-  const { testimonialForm, setTestimonialForm, addTestimonial, updateTestimonial, resetFormState } = useContext(TestimonialContext);
-  const { loading } = useContext(ProductAdminContext);
-  const { mode } = useContext(ThemeContext);
-  const [rating, setRating] = useState(0);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  const testimonialForm = useSelector((state) => state.testimonials.form);
+  const loading = useSelector((state) => state.testimonials.loading);
+  const { mode } = useContext(ThemeContext);
+
+  const [rating, setRating] = useState(0);
   const isDark = mode === "dark";
-
-  useEffect(() => {
-    // Ye function tab chalta hai jab component screen se hat-ta hai (Unmount)
-    return () => {
-      resetFormState(); // Context ke form ko wapas khali kar do
-      setRating(0);      // Star rating ko zero kar do
-    };
-  }, [resetFormState]);
-
 
   useEffect(() => {
     if (testimonialForm?.rating) setRating(testimonialForm.rating);
@@ -178,57 +177,67 @@ function AddTestimonial({ productId = "" }) {
 
   useEffect(() => {
     if (productId) {
-      setRating(0);  // Kabhi-kabhi Admin ek product page se doosre product page par direct ja sakta hai. Wahan bhi form reset hona chahiye Naye productId ke liye form ko reset kar do
-      setTestimonialForm({ name: "", text: "", img: "", role: "", productId: productId });
+      setRating(0);
+      dispatch(setTestimonialForm({ name: "", text: "", img: "", role: "", productId: productId }));
     }
-  }, [productId, setTestimonialForm]);
+  }, [productId, dispatch]);
 
-  const handleSubmit = () => {
-    if (rating === 0) {
-      alert("Please select a rating");
-      return;
-    }
-    if (testimonialForm.id) {
-      updateTestimonial(navigate);
-    } else {
-      addTestimonial({
-        ...testimonialForm,
-        rating,
-        productId: productId || testimonialForm.productId || "",
-      });
-    }
-    setRating(0);
-    setTestimonialForm({ name: "", text: "", img: "", role: "", productId: "" });
+  const updateForm = (data) => {
+    dispatch(setTestimonialForm(data));
   };
 
-  // 👉 Agar productId hai (yaani ProductInfo page), toh sirf View dikhao bina extra background/close button ke
-  if (productId) {
-    return (
-      <AddTestimonialView
-        isDark={isDark}
-        rating={rating}
-        setRating={setRating}
-        testimonialForm={testimonialForm}
-        setTestimonialForm={setTestimonialForm}
-        handleSubmit={handleSubmit}
-        loading={loading}
-        showClose={false}
-      />
-    );
-  }
+  const handleSubmit = async () => {
+    if (rating === 0) {
+      toast.error("Please select a rating");
+      return;
+    }
+    if (!testimonialForm.name || !testimonialForm.text) {
+      toast.error("Please fill all required fields");
+      return;
+    }
 
-  // 👉 Agar productId nahi hai (yaani Standalone page), toh background aur Header me 'X' button ke saath dikhao
+    dispatch(setTestimonialsLoading(true));
+    try {
+      if (testimonialForm.id) {
+        await testimonialService.updateTestimonial(testimonialForm.id, {
+          ...testimonialForm,
+          rating
+        });
+        toast.success("Review updated successfully!");
+        navigate(-1);
+      } else {
+        await testimonialService.addTestimonial({
+          ...testimonialForm,
+          rating,
+          productId: productId || testimonialForm.productId || "",
+        });
+        toast.success("Review submitted successfully!");
+      }
+      dispatch(resetTestimonialForm());
+      setRating(0);
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to submit review");
+    } finally {
+      dispatch(setTestimonialsLoading(false));
+    }
+  };
+
+  const commonProps = {
+    isDark,
+    rating,
+    setRating,
+    testimonialForm,
+    updateForm,
+    handleSubmit,
+    loading,
+  };
+
   return (
-    <div className={`min-h-screen py-6 px-4 transition-all duration-300 ${isDark ? "bg-[#111827]" : "bg-gray-50"}`}>
+    <div className={productId ? "" : `min-h-screen py-6 px-4 transition-all duration-300 ${isDark ? "bg-[#111827]" : "bg-gray-50"}`}>
       <AddTestimonialView
-        isDark={isDark}
-        rating={rating}
-        setRating={setRating}
-        testimonialForm={testimonialForm}
-        setTestimonialForm={setTestimonialForm}
-        handleSubmit={handleSubmit}
-        loading={loading}
-        showClose={true}
+        {...commonProps}
+        showClose={!productId}
         onClose={() => navigate(-1)}
       />
     </div>

@@ -1,12 +1,18 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../redux/cartSlice";
+import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../features/cart/cartSlice";
+
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import ImageWithLoader from "../loader/ImageWithLoader";
-import { saveCart } from "../../pages/cart/cartService";
+import { cartService } from "../../services/cartService";
+
+
+
+import { store } from "../../app/store";
 import { FaStar } from "react-icons/fa";
-import SaleCountdown from "./SaleCountdown";
+import { SaleCountdown } from "./SaleCountdown";
+
 
 function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "lg:w-1/4" }) {
   const { title, price, imageUrl, discount = 0, category, description, id, stock = 0, saleEndTime } = item;
@@ -14,6 +20,7 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
   const uniqueId = id || title;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = useSelector((state) => state.users.loggedInUser);
 
   // 1. States
   const [isLoading, setIsLoading] = useState(false);
@@ -24,16 +31,22 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
 
   // 3. Cart Logic
   const cartQuantity = useSelector((state) =>
-    state.cart.find((c) => c.id === id)?.quantity || 0
+    state.cart.items.find((c) => c.id === id)?.quantity || 0
   );
+
   
   const isProductInCart = cartQuantity > 0;
   const finalPrice = useMemo(() => Math.round(price - (price * discount) / 100), [price, discount]);
 
-  const dispatchAndSaveCart = useCallback((action) => async (dispatchFn, getState) => {
-    dispatchFn(action);
-    await saveCart(getState().cart);
-  }, []);
+  // ✅ SIMPLE STYLE: Ek saaf-suthra function jo update aur save dono karta hai
+  const updateCartSync = useCallback(async (action) => {
+    dispatch(action); // 1. Redux update karo
+    const latestCart = store.getState().cart.items; // 2. Latest cart lo
+    await cartService.saveCart(latestCart, user); // 3. Firestore mein save karo
+
+
+
+  }, [dispatch, user]);
 
   const handleIncrement = useCallback(async () => {
     if (isLoading) return;
@@ -43,26 +56,26 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
     }
     try {
       setIsLoading(true);
-      await dispatch(dispatchAndSaveCart(incrementQuantity(id)));
+      await updateCartSync(incrementQuantity(id));
     } finally {
       setIsLoading(false);
     }
-  }, [dispatch, dispatchAndSaveCart, id, cartQuantity, availableStock, isLoading]);
+  }, [updateCartSync, id, cartQuantity, availableStock, isLoading]);
 
   const handleDecrement = useCallback(async () => {
     if (isLoading) return;
     try {
       setIsLoading(true);
       if (cartQuantity === 1) {
-        await dispatch(dispatchAndSaveCart(deleteFromCart(id)));
+        await updateCartSync(deleteFromCart(id));
         toast.info("Removed from cart!", { toastId: `removed_${id}`, autoClose: 1000 });
       } else {
-        await dispatch(dispatchAndSaveCart(decrementQuantity(id)));
+        await updateCartSync(decrementQuantity(id));
       }
     } finally {
       setIsLoading(false);
     }
-  }, [dispatch, dispatchAndSaveCart, id, cartQuantity, isLoading]);
+  }, [updateCartSync, id, cartQuantity, isLoading]);
 
   const addCart = useCallback(async (product) => {
     if (isLoading) return;
@@ -72,13 +85,14 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
     }
     try {
       setIsLoading(true);
-      const serializedProductForDispatch = { ...product, quantity: 1, time: product.time?.seconds ?? Date.now() };
-      await dispatch(dispatchAndSaveCart(addToCart(serializedProductForDispatch)));
+      const serializedProduct = { ...product, quantity: 1, time: product.time?.seconds ?? Date.now() };
+      await updateCartSync(addToCart(serializedProduct));
       toast.success("Added to cart!", { toastId: `added_${id}`, position: "top-right", autoClose: 1000 });
     } finally {
       setIsLoading(false);
     }
-  }, [dispatch, dispatchAndSaveCart, id, availableStock, isLoading]);
+  }, [updateCartSync, id, availableStock, isLoading]);
+
 
   const toggleExpand = useCallback(() => {
     setExpandedId(prev => prev === uniqueId ? null : uniqueId);

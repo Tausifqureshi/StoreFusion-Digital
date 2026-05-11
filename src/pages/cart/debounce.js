@@ -1,15 +1,18 @@
-import { saveCart } from "./cartService";
+import { cartService } from "../../services/cartService";
+
 
 let timer = null;
 
-export const saveCartDebounce = (cart) => {
+export const saveCartDebounce = (cart, user) => {
   if (timer) clearTimeout(timer);
 
   timer = setTimeout(async () => {
     try {
-      await saveCart(cart);
+      await cartService.saveCart(cart, user);
+
     } catch (err) {
       console.error("debounce error", err);
     }
   }, 700);
 };
+

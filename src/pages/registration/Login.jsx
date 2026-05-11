@@ -2,26 +2,20 @@ import { ThemeContext } from '../../context/AllContext';
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import Loader from '../../components/loader/Loader';
 import { toast } from 'react-toastify';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-;
-import { auth, fireDB } from '../../firebase/firebaseConfig';
-import { getDocs, query, collection, where } from 'firebase/firestore';
-import { setCart } from "../../redux/cartSlice";
+import { authService } from '../../services/authService';
+import { setCart } from "../../features/cart/cartSlice";
 import { useDispatch } from "react-redux";
-import { getCartFromFirestore, getGuestCartFromFirestore, clearGuestCartFromFirestore, saveCartToFirestore } from '../cart/cartFirestore';
-// getGuestCartFromFirestore,
-//   clearGuestCartFromFirestore,
-//   saveCartToFirestore
-// import { saveCart, loadCart, clearCartStorage } from "../../services/cartService";
+import { cartService } from "../../services/cartService";
+import { orderService } from "../../services/orderService";
+import { setOrders } from "../../features/orders/orderSlice";
 
-
-import { getUserOrdersFromFirestore } from "../../components/order/orderFirestore";
-import { setOrders } from "../../redux/orderSlice";
-
+/**
+ * Login Component: Production-level implementation using AuthService.
+ * Features: Cart merging, Order synchronization, and redirect handling.
+ */
 function Login() {
-  const { mode } = useContext(ThemeContext);;
+  const { mode } = useContext(ThemeContext);
   const isDark = mode === 'dark';
   const [authLoading, setAuthLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -33,7 +27,6 @@ function Login() {
   const [searchParams] = useSearchParams();
   const redirectPath = searchParams.get('redirect') || '/';
 
-
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -44,16 +37,18 @@ function Login() {
 
   const validateForm = () => {
     let errors = {};
-    if (!formData.email.trim()) {
+    if (!formData.email?.trim()) {
       errors.email = 'Email is required';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       errors.email = 'Email is invalid';
     }
-    if (!formData.password.trim()) errors.password = 'Password is required';
+    if (!formData.password?.trim()) errors.password = 'Password is required';
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
+  /*
+  // 📜 LEGACY LOGIN LOGIC (Reference Only)
   // const login = async (e) => {
   //   e.preventDefault();
   //   setLoading(true); 
@@ -125,118 +120,56 @@ function Login() {
   //     setLoading(false);
   //   }
   // };
+  */
 
   const login = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      setAuthLoading(true);
-      try {
-        // 1️⃣ user doc nikaalo
-        const q = query(
-          collection(fireDB, "users"),
-          where("email", "==", formData.email)
-        );
-        const snap = await getDocs(q);
-
-        if (snap.empty) {
-          toast.error("User not found", {
-            position: "top-right",
-            autoClose: 1000,
-          });
-          return;
-        }
-
-        const userData = snap.docs[0].data();
-
-        // 2️⃣ Firebase auth login
-        await signInWithEmailAndPassword(
-          auth,
-          formData.email,
-          formData.password
-        );
-
-        // 3️⃣ user localStorage
-        localStorage.setItem(
-          "user",
-          JSON.stringify({
-            fullName: userData.name,
-            email: userData.email,
-            uid: userData.uid,
-            role: userData.role,
-          })
-        );
-
-        // ================== 🔥 CART MERGE LOGIC ==================
-
-        // user ka cart
-        const userCart = await getCartFromFirestore(userData.uid);
-
-        // guest ka cart
-        const guestCart = await getGuestCartFromFirestore();
-
-        let finalCart = [...userCart];
-
-        // guestCart.forEach((gItem) => {
-        //   const existing = finalCart.find((uItem) => uItem.id === gItem.id);
-        //   if (existing) {
-        //     // Amazone style same product add karne par quantity badh jaaye
-        //     existing.quantity += gItem.quantity;
-        //   } else {
-        //     // 🔥 new product
-        //     finalCart.push(gItem);
-        //   } 
-        // });
-
-        if (guestCart.length > 0) {
-          guestCart.forEach((gItem) => {
-            const existing = finalCart.find((uItem) => uItem.id === gItem.id);
-            if (existing) {
-              // Amazone style same product add karne par quantity badh jaaye
-              existing.quantity += gItem.quantity;
-            } else {
-              // 🔥 new product
-              finalCart.push(gItem);
-            }
-          }
-          );
-        }
-
-        // 🔥 merged cart save
-        await saveCartToFirestore(userData.uid, finalCart);
-
-        // 🔥 guest cart clear
-        await clearGuestCartFromFirestore();
-
-        // 🔥 redux update
-        dispatch(setCart(finalCart));
-
-        // =========================================================
-        getUserOrdersFromFirestore(userData.uid, (orders) => {
-          dispatch(setOrders(orders));
-        });
-
-        toast.success("Login Successful", {
-          position: "top-right",
-          autoClose: 1000,
-        });
-
-        navigate(redirectPath, { replace: true });
-
-      } catch (err) {
-        console.error(err);
-        toast.error("Login failed", {
-          position: "top-right",
-          autoClose: 1000,
-        });
-      } finally {
-        setAuthLoading(false);
-      }
-    } else {
-      toast.error("Please fix the errors in the form.", { autoClose: 1500 });
+    if (!validateForm()) {
+      return toast.error("Please fix the errors in the form.", { autoClose: 1500 });
     }
 
+    setAuthLoading(true);
+    try {
+      // 🚀 AuthService handles authentication and profile retrieval
+      const userData = await authService.loginUser(formData.email, formData.password);
 
+      // 🛒 CART SYNC LOGIC
+      const userCart = await cartService.getCartFromFirestore(userData.uid);
+      const guestCart = await cartService.getGuestCartFromFirestore();
 
+      let finalCart = [...userCart];
+      if (guestCart.length > 0) {
+        guestCart.forEach((gItem) => {
+          const existing = finalCart.find((uItem) => uItem.id === gItem.id);
+          if (existing) {
+            existing.quantity += gItem.quantity;
+          } else {
+            finalCart.push(gItem);
+          }
+        });
+      }
+
+      // Save merged cart and cleanup guest data
+      await cartService.saveCartToFirestore(userData.uid, finalCart);
+      await cartService.clearGuestCart();
+
+      // Update Global State
+      dispatch(setCart(finalCart));
+      
+      // Initialize Orders Listener
+      orderService.getUserOrders(userData.uid, (orders) => {
+        dispatch(setOrders(orders));
+      });
+
+      toast.success("Login Successful", { position: "top-right", autoClose: 1000 });
+      navigate(redirectPath, { replace: true });
+
+    } catch (err) {
+      console.error("❌ Login failed:", err);
+      toast.error(err.message || "Login failed", { position: "top-right", autoClose: 1000 });
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
   return (
@@ -310,7 +243,6 @@ function Login() {
         </div>
       </div>
 
-      {/* AMAZON-STYLE AUTH FOOTER */}
       <div className={`mt-10 text-center text-[11px] flex flex-col items-center gap-2 ${isDark ? "text-gray-400" : "text-gray-500"}`}>
         <div className="flex items-center gap-6 font-medium">
           <Link to="#" className={`hover:underline ${isDark ? "hover:text-orange-300" : "hover:text-blue-600"}`}>Conditions of Use</Link>
@@ -325,58 +257,3 @@ function Login() {
 }
 
 export default Login;
-
-
-
-
-
-
-
-
-
-
-
-
-// // 🔥 SAVE NEW ORDER
-// export const saveOrderToFirestore = async (order) => {
-//   const orderId = order.id || uuidv4();
-//   await setDoc(doc(fireDB, "orders", orderId), {
-//     ...order,
-//     createdAt: Date.now(),
-//   });
-// };
-
-// // 🔥 GET USER ORDERS
-// export const getUserOrdersFromFirestore = async (userid) => {
-//   if (!userid) return [];
-
-//   const q = query(
-//     collection(fireDB, "orders"),
-//     where("userid", "==", userid)
-//   );
-
-//   const snapshot = await getDocs(q);
-
-//   return snapshot.docs.map((docSnap) => ({
-//     id: docSnap.id,
-//     ...docSnap.data(),
-//   }));
-// };
-
-// // 🔥 CLEAR ALL USER ORDERS (PRODUCTION SAFE)
-// export const clearAllOrdersFromFirestore = async (userid) => {
-//   if (!userid) return;
-
-//   const q = query(
-//     collection(fireDB, "orders"),
-//     where("userid", "==", userid)
-//   );
-
-//   const snapshot = await getDocs(q);
-
-//   const deletePromises = snapshot.docs.map((docSnap) =>
-//     deleteDoc(doc(fireDB, "orders", docSnap.id))
-//   );
-
-//   await Promise.all(deletePromises);
-// };

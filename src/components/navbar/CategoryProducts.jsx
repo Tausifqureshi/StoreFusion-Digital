@@ -1,6 +1,8 @@
-import { ProductContext, ThemeContext, FilterContext } from '../../context/AllContext';
+import { ThemeContext, FilterContext } from '../../context/AllContext';
 import React, { useContext, useMemo, useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+
 ;
 ;
 import {
@@ -14,9 +16,10 @@ import LoaderSpinner from "../../components/loader/LoaderSpinner";
 
 function CategoryProducts() {
   const { name } = useParams();
-  const { product, productLoading } = useContext(ProductContext);
+  const { items: product, loading: productLoading } = useSelector((state) => state.products);
   const { mode } = useContext(ThemeContext);
   const { filterPrice, sortPrice, filterColor, filterSize, searchkey } = useContext(FilterContext);
+
   const navigate = useNavigate();
   const isDark = mode === "dark";
   const [expandedId, setExpandedId] = useState(null);

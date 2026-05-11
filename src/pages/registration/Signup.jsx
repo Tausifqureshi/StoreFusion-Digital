@@ -4,9 +4,7 @@ import { Link, replace, useNavigate } from 'react-router-dom';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
 ;
 import { toast } from 'react-toastify';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { fireDB, auth } from '../../firebase/firebaseConfig';
-import { Timestamp, addDoc, collection } from 'firebase/firestore';
+import { authService } from '../../services/authService';
 import Loader from '../../components/loader/Loader';
 
 function Signup() {
@@ -59,42 +57,37 @@ function Signup() {
     e.preventDefault();
 
     if (validateForm()) {
+      /*
+      // 📜 LEGACY SIGNUP LOGIC (Reference Only)
+      // const signupLegacy = async () => {
+      //   const users = await createUserWithEmailAndPassword(auth, email, password);
+      //   const user = {
+      //     name: fullName,
+      //     uid: users.user.uid,
+      //     email: users.user.email,
+      //     time: Timestamp.now()
+      //   };
+      //   const userRef = collection(fireDB, "users");
+      //   await addDoc(userRef, user);
+      // };
+      */
+
       setAuthLoading(true);
       try {
         const { email, password, fullName } = formData;
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-
-        // Check if the email is an admin email
-        const role = validAdminEmails.includes(email) ? "admin" : "user"; // Assign role based on email
-
-        const user = {
-          name: fullName,
-          uid: userCredential.user.uid,
-          email: userCredential.user.email,
-          role: role, // Set role based on email
-          time: Timestamp.now()
-        };
-
-        const userRef = collection(fireDB, "users");
-        await addDoc(userRef, user);
-
-        // Store user data in localStorage
-        // localStorage.setItem("user", JSON.stringify(user));
-        localStorage.setItem("user", JSON.stringify({
-          fullName: user.name,
-          email: user.email,
-          uid: user.uid,
-          role: user.role
-        }));
+        
+        // 🚀 PRO MODE: AuthService handles the heavy lifting
+        await authService.signupUser(email, password, fullName, validAdminEmails);
 
         toast.success("Signup Successful!", { autoClose: 1500 });
+
         setFormData({ fullName: '', email: '', password: '' });
         setTermsAccepted(false);
-        navigate('/login', { replace: true }); // Redirect to login page 
+        navigate('/login', { replace: true });
       } catch (error) {
         console.error(error);
         if (error.code === 'auth/email-already-in-use') {
-          toast.error("This email is already in use. Please use a different email.", { autoClose: 1500 });
+          toast.error("This email is already in use.", { autoClose: 1500 });
         } else {
           toast.error("Signup failed. Please try again.", { autoClose: 1500 });
         }

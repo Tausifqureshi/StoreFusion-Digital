@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaClock } from "react-icons/fa";
 
-const SaleCountdown = ({ saleEndTime }) => {
+export const SaleCountdown = ({ saleEndTime }) => {
+
   const [timeLeft, setTimeLeft] = useState("");
 
   useEffect(() => {
@@ -48,3 +49,5 @@ const SaleCountdown = ({ saleEndTime }) => {
 };
 
 export default React.memo(SaleCountdown);
+
+

@@ -1,16 +1,19 @@
 import { useState, useEffect, useMemo, useCallback, useContext } from "react";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../../redux/cartSlice";
+import { addToCart, incrementQuantity, decrementQuantity, deleteFromCart } from "../../../features/cart/cartSlice";
 import { useParams, useNavigate } from "react-router-dom";
-import { ProductAdminContext, ProductContext, ThemeContext } from '../../../context/AllContext';
-import { saveCart } from "../../cart/cartService";
-import { store } from "../../../redux/store";
+import { ThemeContext } from '../../../context/AllContext';
+import { cartService } from "../../../services/cartService";
+
+
+import { store } from "../../../app/store";
+import useProducts from "../../../features/products/useProducts";
 
 export function useProductInfo() {
-  const { product } = useContext(ProductContext);
-  const { loading } = useContext(ProductAdminContext);
+  const { products: product, productsLoading: loading } = useProducts();
   const { mode } = useContext(ThemeContext);
+
 
   const [mainImage, setMainImage] = useState("");
   const [isHeartFilled, setIsHeartFilled] = useState(false);
@@ -18,24 +21,16 @@ export function useProductInfo() {
 
   const params = useParams();
   const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart);
+  const cartItems = useSelector((state) => state.cart.items);
   const navigate = useNavigate();
   const isDark = mode === "dark";
+
+  const user = useSelector((state) => state.users.loggedInUser);
 
   const currentProduct = useMemo(() => product?.find((item) => item.id === params.id), [product, params.id]);
 
   const similarProducts = useMemo(() => {
     if (!currentProduct || !product) return [];
-    // return product
-    //   .filter((item) =>
-    //     // 1. Current product ko list se hata do
-    //     item.id !== currentProduct.id &&
-    //     // 2. Category match honi chahiye (Base check)
-    //     item.category?.toLowerCase() === currentProduct.category?.toLowerCase() &&
-    //     // 3. Subcategory match honi chahiye (Specific check)
-    //     (item.subcategory?.toLowerCase() || "") === (currentProduct.subcategory?.toLowerCase() || "")
-    //   )
-    //   .slice(0, 4);
     return product
       .filter((item) => {
         const sameCategory =
@@ -61,24 +56,29 @@ export function useProductInfo() {
     [cartItems, currentProduct]
   );
 
+  const dispatchAndSave = useCallback(async (action) => {
+    dispatch(action);
+    const updatedCart = store.getState().cart.items;
+    await cartService.saveCart(updatedCart, user);
+  }, [dispatch, user]);
+
+
   const handleIncrement = useCallback(async () => {
     if (isProductInCart && isProductInCart.quantity >= Number(currentProduct.stock || Infinity)) {
       toast.error(`Only ${currentProduct.stock} left in stock!`, { position: "top-right", autoClose: 1000 });
       return;
     }
-    dispatch(incrementQuantity(currentProduct.id));
-    await saveCart(store.getState().cart);
-  }, [dispatch, isProductInCart, currentProduct]);
+    await dispatchAndSave(incrementQuantity(currentProduct.id));
+  }, [dispatchAndSave, isProductInCart, currentProduct]);
 
   const handleDecrement = useCallback(async () => {
     if (isProductInCart?.quantity === 1) {
-      dispatch(deleteFromCart(currentProduct.id));
+      await dispatchAndSave(deleteFromCart(currentProduct.id));
       toast.info("Product removed from cart!", { icon: "🗑️", autoClose: 1000, position: "top-right" });
     } else {
-      dispatch(decrementQuantity(currentProduct.id));
+      await dispatchAndSave(decrementQuantity(currentProduct.id));
     }
-    await saveCart(store.getState().cart);
-  }, [dispatch, isProductInCart, currentProduct]);
+  }, [dispatchAndSave, isProductInCart, currentProduct]);
 
   const handleAddToCart = useCallback(async () => {
     if (Number(currentProduct.stock || 0) === 0) {
@@ -86,10 +86,10 @@ export function useProductInfo() {
       return;
     }
     const serializedProduct = { ...currentProduct, quantity: 1, time: currentProduct.time?.seconds ?? Date.now() };
-    dispatch(addToCart(serializedProduct));
-    await saveCart(store.getState().cart);
+    await dispatchAndSave(addToCart(serializedProduct));
     toast.success("Product added to cart!", { position: "top-right", autoClose: 1000 });
-  }, [dispatch, currentProduct]);
+  }, [dispatchAndSave, currentProduct]);
+
 
   const handleViewAll = useCallback(() => {
     if (currentProduct?.category) {

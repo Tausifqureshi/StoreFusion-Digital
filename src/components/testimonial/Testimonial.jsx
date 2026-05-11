@@ -1,9 +1,11 @@
 import React, { useContext, useMemo } from 'react';
-import { ProductContext, TestimonialContext, ThemeContext } from '../../context/AllContext';
-import { FaQuoteLeft, FaStar, FaEllipsisH, FaEye } from 'react-icons/fa';
+import { ThemeContext } from '../../context/AllContext';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import SingleReviewCard from './SingleReviewCard/SingleReviewCard';
-
+import { testimonialService } from '../../services/testimonialService';
+import { setTestimonialForm } from '../../features/testimonials/testimonialSlice';
+import { toast } from 'react-toastify';
 
 // ✅ INTERNAL VIEW: Amazon Modern List Style
 const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) {
@@ -32,25 +34,44 @@ const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDa
 });
 
 function Testimonial({ productId = null, categoryName = null, isAdmin = false, mode: propMode, homePage = false }) {
-  const { testimonial, getAvatar, editTestimonial, deleteTestimonial } = useContext(TestimonialContext);
-  const { product } = useContext(ProductContext);
-  const { mode: contextMode } = useContext(ThemeContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  
+  const testimonials = useSelector((state) => state.testimonials.items);
+  const products = useSelector((state) => state.products.items);
+  const { mode: contextMode } = useContext(ThemeContext);
 
   const currentMode = propMode || contextMode;
   const isDark = currentMode === 'dark';
 
   const finalReviews = useMemo(() => {
-    if (productId) return testimonial.filter(item => item.productId === productId);
+    if (productId) return testimonials.filter(item => item.productId === productId);
     if (categoryName) {
-      const categoryProductIds = product.filter(p => p.category?.toLowerCase() === categoryName.toLowerCase()).map(p => p.id);
-      return testimonial.filter(t => categoryProductIds.includes(t.productId));
+      const categoryProductIds = products.filter(p => p.category?.toLowerCase() === categoryName.toLowerCase()).map(p => p.id);
+      return testimonials.filter(t => categoryProductIds.includes(t.productId));
     }
-    return testimonial;
-  }, [testimonial, productId, categoryName, product]);
+    return testimonials;
+  }, [testimonials, productId, categoryName, products]);
 
   // ✅ Slice reviews for Home Page
   const displayReviews = homePage ? finalReviews.slice(0, 4) : finalReviews;
+
+  // ✅ Helper Functions (Previously in Context)
+  const getAvatar = (item) => testimonialService.getAvatar(item);
+  
+  const editTestimonial = (item) => {
+    dispatch(setTestimonialForm(item));
+    navigate('/addtestimonial');
+  };
+
+  const deleteTestimonial = async (id) => {
+    try {
+      await testimonialService.deleteTestimonial(id);
+      toast.success('Testimonial deleted!', { autoClose: 1000 });
+    } catch (err) {
+      toast.error('Error deleting testimonial');
+    }
+  };
 
   // ✅ Dynamic Heading Logic
   const getHeading = () => {
@@ -85,7 +106,7 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
             isAdmin={isAdmin}
             productId={productId}
             getAvatar={getAvatar}
-            editTestimonial={(item) => editTestimonial(item, navigate)}
+            editTestimonial={editTestimonial}
             deleteTestimonial={deleteTestimonial}
           />
 

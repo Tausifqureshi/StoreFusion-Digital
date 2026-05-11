@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import Modal from "../../components/modal/Modal";
-import { addDoc, collection } from "firebase/firestore";
-import { fireDB } from "../../firebase/firebaseConfig";
 import { toast } from "react-toastify";
-import { useDispatch } from 'react-redux'; // Redux dispatch import
-import { clearCart } from '../../redux/cartSlice'; // Import clearCart action
-import { addOrder } from '../../redux/orderSlice';
-import { saveCartToFirestore, clearUserCartFromFirestore } from "../cart/cartFirestore";
-import { saveOrderToFirestore } from "../../components/order/orderFirestore"
+import { useSelector, useDispatch } from 'react-redux';
+import { clearCart } from '../../features/cart/cartSlice';
+import { addOrder } from '../../features/orders/orderSlice';
+import { cartService } from "../../services/cartService";
+import { orderService } from "../../services/orderService";
 
-// ✅ ABSOLUTE ISOLATION: Razorpay component remains 100% IDLE during cart updates.
-// It pulls the latest data via stable Ref snapshots only when the trigger is fired.
+/**
+ * Razorpay Component: Handles Payment processing and Order placement.
+ * Uses Ref snapshots for cart data to prevent unnecessary re-renders during cart updates.
+ */
 const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) {
   const [formData, setFormData] = useState({
     fullName: '',
@@ -19,17 +19,11 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
     phoneNumber: ''
   });
 
-  const dispatch = useDispatch(); // Initialize Redux dispatch
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.loggedInUser);
 
+  // 💵 Cash on Delivery Handler
   const cashOnDelivery = async () => {
-    let user;
-    try {
-      user = JSON.parse(localStorage.getItem("user"));
-    } catch (err) {
-      toast.error("Invalid user data");
-      return;
-    }
-
     if (!user || !user.email || !user.uid) {
       return toast.error('User information is missing or invalid');
     }
@@ -61,42 +55,29 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
         totalAmount: totalAmountRef.current,
       };
 
-      const savedOrder = await saveOrderToFirestore(orderInfo);
-      toast.success('Order placed successfully via COD', { autoClose: 1000 });
-      // Red  ux store me order ko add kar rahe hain
+      /* 
+         PURANA CODE (Direct Firebase):
+         const orderRef = collection(fireDB, "orders");
+         await addDoc(orderRef, orderInfo); 
+      */
+      
+      // ✅ NEW CODE (Service Pattern)
+      const savedOrder = await orderService.saveOrder(orderInfo);
+      
       dispatch(addOrder(savedOrder));
-      // Redux store se cart ko clear kar rahe hain
       dispatch(clearCart());
-      // Firestore se cart ko clear kar rahe hain
-      await clearUserCartFromFirestore(user.uid);
-      // paymentSuccess event ko dispatch kar rahe hain
+      
+      await cartService.clearUserCart(user.uid);
+      
       window.dispatchEvent(new Event("paymentSuccess"));
     } catch (error) {
       console.error("Error saving COD order:", error);
-      toast.error('Failed to place COD order', { autoClose: 1000 });
+      toast.error('Failed to place COD order');
     }
   };
 
+  // 💳 Razorpay Online Payment Handler
   const buyNow = async () => {
-    // const user = JSON.parse(localStorage.getItem("user"));
-    let user;
-
-    // try {
-    //   const userData = localStorage.getItem("user");
-    //   console.log("User data from localStorage:", userData);
-    //   user = JSON.parse(userData);
-    // } catch (error) {
-    //   console.error("Error parsing user data:", error);
-    //   return toast.error('User data is corrupted or invalid');
-    // }
-
-    try {
-      user = JSON.parse(localStorage.getItem("user"));
-    } catch (err) {
-      toast.error("Invalid user data");
-      return;
-    }
-
     if (!user || !user.email || !user.uid) {
       return toast.error('User information is missing or invalid');
     }
@@ -115,19 +96,17 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
 
     const options = {
       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-      key_secret: import.meta.env.VITE_RAZORPAY_KEY_SECRET, // ⚠️ Test only — production me backend me hoga
+      key_secret: import.meta.env.VITE_RAZORPAY_KEY_SECRET,
       amount: parseInt(totalAmountRef.current * 100),
       currency: "INR",
       order_receipt: 'order_rcptid_' + formData.fullName,
       name: "StoreFusion",
-      description: "for testing purpose",
+      description: "Secure Payment",
       handler: async function (response) {
-        //  console.log("Razorpay response received:", response);
         try {
           window.dispatchEvent(new Event("paymentSuccess"));
-          // console.log("Razorpay response:", response);
           toast.success('Payment Successful', { autoClose: 1000 });
- 
+
           const paymentId = response.razorpay_payment_id;
           const orderInfo = {
             cartItems: cartItemsRef.current,
@@ -143,44 +122,36 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
             totalAmount: totalAmountRef.current,
           };
 
-          // const orderRef = collection(fireDB, "orders");
-          // await addDoc(orderRef, orderInfo); 
-          const savedOrder = await saveOrderToFirestore(orderInfo);
-          toast.success('Order saved successfully', { autoClose: 1000 });
-          // ✅ Redux update (immediate UI update)
+          /* 
+             PURANA CODE (Direct Firebase):
+             const orderRef = collection(fireDB, "orders");
+             await addDoc(orderRef, orderInfo); 
+          */
+
+          // ✅ NEW CODE (Service Pattern)
+          const savedOrder = await orderService.saveOrderToFirestore(orderInfo);
+          
           dispatch(addOrder(savedOrder));
-          // dispatch(addOrder(orderInfo)); // use saved order with ID
+          dispatch(clearCart());
 
-          // Clear cart from Redux and localStorage
-          dispatch(clearCart());  // Clear cart from Redux state
-          // localStorage.removeItem('cart');  // Clear cart from local storage
-          // ✅ LocalStorage clear (user specific)
-          // const cartKey = user ? `cart_${user.email}` : "cart_guest";
-          // localStorage.removeItem(cartKey);
-
-
-          // 4️⃣ Firestore → clear cart 🔥
-          // await saveCartToFirestore(user.uid, []);
-          await clearUserCartFromFirestore(user.uid);
+          await cartService.clearUserCart(user.uid);
 
         } catch (error) {
           console.error("Error saving order:", error);
-          toast.error('Failed to save order', { autoClose: 1000 });
+          toast.error('Failed to save order');
         }
       },
-      // ✅ YAHI add karna haia
       modal: {
         ondismiss: function () {
           window.dispatchEvent(new Event("paymentClosed"));
         },
       },
-
       theme: {
         color: "#3399cc",
       },
     };
 
-    var pay = new window.Razorpay(options);
+    const pay = new window.Razorpay(options);
     pay.open();
   };
 

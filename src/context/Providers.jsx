@@ -1,31 +1,26 @@
-
 import React from "react";
+import { Provider } from "react-redux";
+import { store } from "../app/store";
+import AppInitializer from "../components/initializer/AppInitializer";
 import { ThemeState } from "./ThemeState";
 import { FilterState } from "./FilterState";
-import ProductState from "./ProductState";
-import OrderState from "./OrderState";
-import UserState from "./UserState";
-import TestimonialState from "./TestimonialState";
-import { LoadingProvider } from "./LoadingState";
 
-// ✅ FIX: static component (no dynamic recreation)
+/**
+ * Providers: Flattened Root Provider Wrapper.
+ * Contexts like Theme, Filter, and Testimonials remain as they are UI-centric.
+ * Heavy data contexts (Product, Order, User, Loading) have been migrated to Redux.
+ */
 function Providers({ children }) {
   return (
-    <ThemeState>
-      <UserState>
-        <ProductState>
-          <OrderState>
-            <FilterState>
-              <TestimonialState>
-                <LoadingProvider>
-                  {children}
-                </LoadingProvider>
-              </TestimonialState>
-            </FilterState>
-          </OrderState>
-        </ProductState>
-      </UserState>
-    </ThemeState>
+    <Provider store={store}>
+      <AppInitializer>
+        <ThemeState>
+          <FilterState>
+            {children}
+          </FilterState>
+        </ThemeState>
+      </AppInitializer>
+    </Provider>
   );
 }
 

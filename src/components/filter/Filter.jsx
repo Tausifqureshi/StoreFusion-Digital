@@ -1,9 +1,11 @@
-import { ProductContext, FilterContext } from '../../context/AllContext';
+import { FilterContext } from '../../context/AllContext';
 import Search from '../search/Search';
 import React, { useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { FiRefreshCw, FiSliders, FiX, FiCheck } from "react-icons/fi";
 import { Drawer, IconButton, Slider } from "@mui/material";
+import { useSelector } from 'react-redux';
+
 
 // ✅ DESKTOP VIEW: Sidebar layout (Vertical)
 const DesktopFilter = React.memo(function DesktopFilter({
@@ -159,7 +161,7 @@ const MobileFilter = React.memo(function MobileFilter({ isDark, filterType, filt
 });
 
 function Filter({ mode, showCategoryFilter = false }) {
-  const { product } = useContext(ProductContext);
+  const product = useSelector((state) => state.products.items);
   const {
     filterType, setFilterType,
     filterPrice, setFilterPrice,
@@ -167,6 +169,7 @@ function Filter({ mode, showCategoryFilter = false }) {
     filterColor, setFilterColor,
     filterSize, setFilterSize
   } = useContext(FilterContext);
+
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
