@@ -24,6 +24,7 @@ class ProductService {
 
     const q = query(collection(fireDB, "products"), orderBy("time", "desc"));
     
+    
     this.closeProductsListener = onSnapshot(q, 
       (snapshot) => {
         const products = snapshot.docs.map(d => {

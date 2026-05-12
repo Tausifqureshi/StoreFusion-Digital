@@ -12,36 +12,72 @@ const orderSlice = createSlice({
   initialState,
   reducers: { 
     setOrdersLoading(state, action) {
-      state.loading = action.payload;
+      // state.loading = action.payload;
+      return { ...state, loading: action.payload };
     },
 
     setOrdersError(state, action) {
-      state.error = action.payload;
+      // state.error = action.payload;
+      return { ...state, error: action.payload };
     },
 
     addOrder(state, action) {
-      state.items.push(action.payload);
-      state.orderCount = state.items.filter(o => 
-        !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
-      ).length;
+      // state.items.push(action.payload);
+      // state.orderCount = state.items.filter(o => 
+      //   !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
+      // ).length;
+
+       return { 
+        items: [...state.items, action.payload], 
+        orderCount: state.items.filter(o => 
+          !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
+        ).length 
+      };
 
     },
-    
+
     clearOrders(state) {
-      state.items = [];
-      state.orderCount = 0;
+      // state.items = [];
+      // state.orderCount = 0;
+      return {
+        ...state,
+        items: [],
+        orderCount: 0,
+      };
+
     },
+
     cancelOrder(state, action) {
-      const orderToCancel = state.items.find((order) => order.id === action.payload.id);
-      if (orderToCancel) {
-        orderToCancel.status = "cancelled";
-      }
+      // const orderToCancel = state.items.find((order) => order.id === action.payload.id);
+      // if (orderToCancel) {
+      //   orderToCancel.status = "cancelled";
+      // }
+
+      return {
+        ...state,
+        items: state.items.map(order => 
+          order.id === action.payload.id ? { ...order, status: "cancelled" } : order
+        ),
+        orderCount: state.items.filter(o => 
+          !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
+        ).length,
+      };
+
+     
     },
+
     setOrders(state, action) {
-      state.items = action.payload || [];
-      state.orderCount = state.items.filter(o => 
-        !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
-      ).length;
+      // state.items = action.payload || [];
+      // state.orderCount = state.items.filter(o => 
+      //   !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
+      // ).length;
+      return {
+        ...state,
+        items: action.payload || [],
+        orderCount: action.payload.filter(o => 
+          !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
+        ).length,
+      };
 
     },
   },

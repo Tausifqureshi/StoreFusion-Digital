@@ -105,7 +105,7 @@ function Tracking({ order, isDark }) {
       {/* MOBILE VIEW */}
       <div className="md:hidden">
         {trackingStepsData.map((step, index) => {
-          const isDone = activeStepIndex >= index && currentStatus !== "cancelled";
+          const isDone = activeStepIndex >= index && currentStatus !== "cancelled"; //check kiya ki current step completed hai ya nahi isliye >= use kiya h kyuki agar order placed hai to 0 index completed hai  
           const isLast = index === trackingStepsData.length - 1; //yhme check sirf isliye hai taaki akhiri step ke niche faltu danda (line) na dikhe 
           return (
             <div key={index} className="flex gap-4 relative min-h-[80px]">

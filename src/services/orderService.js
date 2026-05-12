@@ -8,19 +8,19 @@ import { fireDB } from "../firebase/firebaseConfig";
 class OrderService {
 
   constructor() {
-    // 🛑 User ke orders ka listener band karne wala function yahan save hota hai
+    // 🛑 Ye property Firestore listener ko band (unsubscribe) karne wale function ko store karti hai
     this.closeUserOrdersListener = null;
-    // 🚦 Check karne ke liye ki kya User orders ka listener abhi chal raha hai
+    // 🚦 Ye variable batata hai ki kya user orders ka live connection abhi active hai
     this.userOrdersLive = false;
 
-    // 🛑 Admin ke saare orders ka listener band karne wala function yahan save hota hai
+    // 🛑 Ye property Admin listener ko band karne wale function ko store karti hai
     this.closeAdminOrdersListener = null;
-    // 🚦 Check karne ke liye ki kya Admin orders ka listener abhi chal raha hai
+    // 🚦 Ye variable batata hai ki kya admin orders ka live connection abhi active hai
     this.adminOrdersLive = false;
   }
 
   /**
-   * Real-time User Orders monitor.
+   * Real-time User Orders monitor.hjnmh
    * Normalizes timestamps and handles client-side sorting if needed.
    */
   getUserOrders(uid, callback) {

@@ -114,7 +114,7 @@ const AppInitializer = ({ children }) => {
       if (unsubscribe) unsubscribe();
       testimonialService.stopListener();
     };
-  }, [dispatch]);
+  }, [dispatch]); 
 
 
   // 📦 PRODUCT LISTENER (Store-wide Singleton)
