@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setForm } from "../../../features/products/productSlice";
 import { productService } from "../../../services/productService";
 
 
@@ -10,54 +8,56 @@ import { FiX } from "react-icons/fi";
 import { toast } from "react-toastify";
 
 function UpdateProduct() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const products = useSelector(state => state.products.form);
-    const { mode } = useContext(ThemeContext);
-    const isDark = mode === 'dark';
-    const [isSuccess, setIsSuccess] = useState(false);
+  const navigate = useNavigate();
+  const reduxForm = useSelector(state => state.products.form);
+  const { mode } = useContext(ThemeContext);
+  const isDark = mode === 'dark';
+  const [isSuccess, setIsSuccess] = useState(false);
 
-    function inputHandle(e) {
-        dispatch(setForm({ [e.target.name]: e.target.value }));
+  // 🔥 PRODUCTION OPTIMIZATION: Local state for editing to prevent Redux spam
+  const [products, setProductsState] = useState({ ...reduxForm });
+
+  function inputHandle(e) {
+    setProductsState(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  const handleColorToggle = useCallback((color) => {
+    setProductsState(prev => ({ ...prev, color: prev.color === color ? "" : color }));
+  }, []);
+
+  const handleSizeToggle = useCallback((size) => {
+    setProductsState(prev => ({ ...prev, size: prev.size === size ? "" : size }));
+  }, []);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    if (!products.id) {
+      navigate('/dashboard');
     }
+  }, [products.id, navigate]);
 
-    const handleColorToggle = useCallback((color) => {
-        dispatch(setForm({ color: products.color === color ? "" : color }));
-    }, [products.color, dispatch]);
-
-    const handleSizeToggle = useCallback((size) => {
-        dispatch(setForm({ size: products.size === size ? "" : size }));
-    }, [products.size, dispatch]);
-
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    useEffect(() => {
-        if (!products.id) {
-            navigate('/dashboard');
-        }
-    }, [products.id, navigate]);
-
-    useEffect(() => {
-        if (isSuccess) {
-            const timer = setTimeout(() => navigate('/dashboard', { replace: true }), 800);
-            return () => clearTimeout(timer);
-        }
-    }, [isSuccess, navigate]);
+  useEffect(() => {
+    if (isSuccess) {
+      const timer = setTimeout(() => navigate('/dashboard', { replace: true }), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [isSuccess, navigate]);
 
 
-    const handleUpdateProduct = async () => {
-        try {
-            await productService.updateProduct(products.id, products);
-
-
-            toast.success("Product Updated successfully");
-            setIsSuccess(true);
-        } catch (error) {
-            toast.error("Update Failed");
-        }
-    };
+  const handleUpdateProduct = async () => {
+    if (!products.id) return toast.error("Product ID missing! ⚠️");
+    try {
+      await productService.updateProduct(products.id, products);
+      toast.success("Product Updated successfully! ✨🚀");
+      setIsSuccess(true);
+    } catch (error) {
+      console.error("Update Product Error:", error);
+      toast.error("Failed to update product. Please try again.");
+    }
+  };
 
 
 

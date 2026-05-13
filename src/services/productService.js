@@ -1,9 +1,13 @@
-import { collection, onSnapshot, orderBy, query, addDoc, setDoc, doc, deleteDoc, serverTimestamp } from "firebase/firestore";
+import { 
+  collection, onSnapshot, orderBy, query, addDoc, 
+  setDoc, doc, deleteDoc, serverTimestamp, 
+  limit, startAfter, getDocs 
+} from "firebase/firestore";
 import { fireDB } from "../firebase/firebaseConfig";
-import { toast } from "react-toastify";
 
 /**
- * ProductService: Manages product lifecycle and real-time product updates.
+ * ProductService: Manages product lifecycle with production optimizations.
+ * Supports Pagination to handle large datasets and minimizes Firestore costs.
  */
 class ProductService {
 
@@ -15,7 +19,46 @@ class ProductService {
   }
 
   /**
-   * Sync all products in real-time.
+   * 🔥 PRODUCTION OPTIMIZED: Paginated product fetch.
+   * Use this for 'All Products' and 'Category' pages to avoid loading full DB.
+   * 
+   * 🛡️ Logic: Ye function thoda-thoda karke data mangwata hai (limit 20) 
+   * taaki app hang na ho aur Firestore ka bill kam aaye.
+   */
+  async getProductsPaginated(lastDoc = null, pageSize = 20) {
+    try {
+      let q = query(
+        collection(fireDB, "products"),
+        orderBy("time", "desc"),
+        limit(pageSize)
+      );
+
+      if (lastDoc) {
+        q = query(q, startAfter(lastDoc));
+      }
+
+      const snapshot = await getDocs(q);
+      const products = snapshot.docs.map(d => {
+        const data = d.data();
+        return { 
+          id: d.id, 
+          ...data,
+          time: data.time?.toDate?.()?.toISOString() ?? (typeof data.time === 'string' ? data.time : null)
+        };
+      });
+
+      return {
+        products,
+        lastVisible: snapshot.docs[snapshot.docs.length - 1] // 🚩 Agla batch mangwane ke liye marker
+      };
+    } catch (error) {
+      console.error("❌ getProductsPaginated error:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * Real-time listener for small datasets or critical updates.
    * Normalizes timestamps for Redux serializability.
    */
   getAllProductsFromFirestore(onUpdate, onError) {
@@ -24,7 +67,6 @@ class ProductService {
 
     const q = query(collection(fireDB, "products"), orderBy("time", "desc"));
     
-    
     this.closeProductsListener = onSnapshot(q, 
       (snapshot) => {
         const products = snapshot.docs.map(d => {
@@ -32,7 +74,6 @@ class ProductService {
           return { 
             id: d.id, 
             ...data,
-            // 🛡️ SERIALIZATION FIX: Convert Firestore Timestamp to ISO String
             time: data.time?.toDate?.()?.toISOString() ?? (typeof data.time === 'string' ? data.time : null)
           };
         });
@@ -50,9 +91,9 @@ class ProductService {
 
   /**
    * Adds a new product to Firestore.
-   * Handles server-side timestamps internally.
    */
   async addProduct(product) {
+    if (!product) throw new Error("Product data missing");
     try {
       const productWithTime = {
         ...product,
@@ -60,11 +101,9 @@ class ProductService {
         createdAt: new Date().toISOString()
       };
       const docRef = await addDoc(collection(fireDB, "products"), productWithTime);
-      toast.success("Product added successfully! 🚀");
       return { id: docRef.id, ...productWithTime };
     } catch (error) {
       console.error("❌ addProduct error:", error);
-      toast.error("Failed to add product.");
       throw error;
     }
   }
@@ -73,17 +112,16 @@ class ProductService {
    * Updates an existing product.
    */
   async updateProduct(id, product) {
-    if (!id) return;
+    if (!id || !product) throw new Error("ID or Data missing");
     try {
       const updateData = {
         ...product,
         updatedAt: new Date().toISOString()
       };
       await setDoc(doc(fireDB, "products", id), updateData, { merge: true });
-      toast.success("Product updated successfully! ✨");
+      return true;
     } catch (error) {
       console.error("❌ updateProduct error:", error);
-      toast.error("Failed to update product.");
       throw error;
     }
   }
@@ -92,13 +130,12 @@ class ProductService {
    * Deletes a product.
    */
   async deleteProduct(id) {
-    if (!id) return;
+    if (!id) throw new Error("ID missing");
     try {
       await deleteDoc(doc(fireDB, "products", id));
-      toast.success("Product deleted successfully! 🗑️");
+      return true;
     } catch (error) {
       console.error("❌ deleteProduct error:", error);
-      toast.error("Failed to delete product.");
       throw error;
     }
   }

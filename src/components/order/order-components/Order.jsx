@@ -20,10 +20,10 @@ function Order() {
   const handleDeleteAllOrders = async () => {
     if (!window.confirm("Bhai, kya aap sach mein saare orders delete karna chahte ho?")) return;
     try {
-      await orderService.deleteUserOrdersFromFirestore(user?.uid);
-      toast.info("Order history cleared!");
+      await orderService.clearUserOrderHistory(user?.uid);
+      toast.success("Order history cleared successfully! 🗑️");
     } catch (err) {
-      toast.error("Failed to clear history");
+      toast.error("Failed to clear history. Please try again.");
     }
   };
 

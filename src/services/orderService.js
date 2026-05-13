@@ -1,9 +1,13 @@
-import { collection, onSnapshot, query, where, orderBy, addDoc, updateDoc, doc, serverTimestamp, getDocs, deleteDoc } from "firebase/firestore";
-import { toast } from "react-toastify";
+import { 
+  collection, onSnapshot, query, where, orderBy, 
+  addDoc, updateDoc, doc, serverTimestamp, 
+  getDocs, deleteDoc, writeBatch 
+} from "firebase/firestore";
 import { fireDB } from "../firebase/firebaseConfig";
 
 /**
  * OrderService: Manages order placement, status updates, and real-time monitoring.
+ * Production Optimized: Uses Batch writes and separates UI from logic.
  */
 class OrderService {
 
@@ -20,8 +24,7 @@ class OrderService {
   }
 
   /**
-   * Real-time User Orders monitor.hjnmh
-   * Normalizes timestamps and handles client-side sorting if needed.
+   * Real-time User Orders monitor.
    */
   getUserOrders(uid, callback) {
     if (!uid) return () => { };
@@ -39,18 +42,15 @@ class OrderService {
         return { 
           id: d.id, 
           ...data,
-          // 🛡️ SERIALIZATION FIX: Convert Firestore Timestamp to ISO String
           createdAt: data.createdAt?.toDate?.()?.toISOString() ?? (typeof data.createdAt === 'string' ? data.createdAt : null)
         };
       });
       
-      // Secondary sort in JS to avoid index requirements for initial dev
       orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       callback(orders);
     }, (error) => {
       console.error("❌ getUserOrders error:", error);
       this.userOrdersLive = false;
-      toast.error("Orders sync failed.");
     });
 
     return this.closeUserOrdersListener;
@@ -78,7 +78,6 @@ class OrderService {
     }, (error) => {
       console.error("❌ getAllOrders error:", error);
       this.adminOrdersLive = false;
-      toast.error("Admin orders sync failed.");
     });
 
     return this.closeAdminOrdersListener;
@@ -88,20 +87,18 @@ class OrderService {
    * Placement of new order.
    */
   async saveOrder(orderInfo) {
-    if (!orderInfo) return;
+    if (!orderInfo) throw new Error("Order info missing");
     try {
       const orderWithMeta = {
         ...orderInfo,
         status: orderInfo.status ?? "placed",
         createdAt: serverTimestamp(),
-        placedDate: new Date().toISOString(), // 🚀 Added for Real Tracking
+        placedDate: new Date().toISOString(),
       };
       const docRef = await addDoc(collection(fireDB, "orders"), orderWithMeta);
-      toast.success("Order placed successfully! 🛍️");
       return { id: docRef.id, ...orderWithMeta };
     } catch (error) {
       console.error("❌ saveOrder error:", error);
-      toast.error("Failed to place order.");
       throw error;
     }
   }
@@ -110,35 +107,51 @@ class OrderService {
    * Updates Order Status (Admin/User).
    */
   async updateStatus(orderId, newStatus) {
-    if (!orderId || !newStatus) return;
+    if (!orderId || !newStatus) throw new Error("ID or Status missing");
     try {
       const dateField = `${newStatus}Date`;
       await updateDoc(doc(fireDB, "orders", orderId), {
         status: newStatus,
         [dateField]: new Date().toISOString()
       });
-      toast.success(`Order status updated to ${newStatus}!`);
+      return true;
     } catch (error) {
       console.error("❌ updateStatus error:", error);
-      toast.error("Failed to update status.");
       throw error;
     }
   }
 
   /**
-   * Deletes all orders for a specific user.
+   * 🔥 PRODUCTION OPTIMIZED: Clears all orders for a specific user using WriteBatch.
+   * Atomic operation (all or nothing). Handles up to 500 orders per batch.
+   */
+  /**
+   * 🔥 PRODUCTION OPTIMIZED: Clears all orders for a specific user using WriteBatch.
+   * Atomic operation (all or nothing). Handles up to 500 orders per batch.
+   * 
+   * 🛡️ Logic: Ye function ek saath saare orders delete karta hai 
+   * taaki network par load kam ho aur data ekdum clean delete ho.
    */
   async clearUserOrderHistory(uid) {
-    if (!uid) return;
+    if (!uid) throw new Error("UID missing");
     try {
       const q = query(collection(fireDB, "orders"), where("userid", "==", uid));
       const snap = await getDocs(q);
-      const promises = snap.docs.map((orderDoc) => deleteDoc(doc(fireDB, "orders", orderDoc.id)));
-      await Promise.all(promises);
-      toast.success("Order history cleared.");
+      
+      if (snap.empty) return true;
+
+      // 🛡️ Batch Write: Ek hi network request mein multiple deletes karne ke liye batch start kiya
+      const batch = writeBatch(fireDB);
+      snap.docs.forEach((orderDoc) => {
+        batch.delete(doc(fireDB, "orders", orderDoc.id));
+      });
+      
+      // 🚀 Commit: Saari delete requests ko ek saath Firestore ko bhej diya
+      await batch.commit();
+      return true;
     } catch (error) {
       console.error("❌ clearUserOrderHistory error:", error);
-      toast.error("Failed to clear history.");
+      throw error;
     }
   }
 

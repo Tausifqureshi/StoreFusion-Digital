@@ -1,7 +1,5 @@
 import React, { useContext, useEffect, useCallback, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { setForm, resetForm } from "../../../features/products/productSlice";
 import { productService } from "../../../services/productService";
 
 
@@ -11,47 +9,61 @@ import { toast } from "react-toastify";
 
 function AddProduct() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const products = useSelector(state => state.products.form);
   const { mode } = useContext(ThemeContext);
   const isDark = mode === 'dark';
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // 🔥 PRODUCTION OPTIMIZATION: Local state instead of Redux for form inputs
+  const [products, setProductsState] = useState({
+    title: "",
+    price: "",
+    imageUrl: "",
+    category: "",
+    subcategory: "",
+    description: "",
+    discount: "",
+    stock: "",
+    rating: "",
+    color: "",
+    size: "",
+    saleEndTime: ""
+  });
+
   function inputHandle(e) {
-    dispatch(setForm({ [e.target.name]: e.target.value }));
+    setProductsState(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
   const handleColorToggle = useCallback((color) => {
-    dispatch(setForm({ color: products.color === color ? "" : color }));
-  }, [products.color, dispatch]);
+    setProductsState(prev => ({ ...prev, color: prev.color === color ? "" : color }));
+  }, []);
 
   const handleSizeToggle = useCallback((size) => {
-    dispatch(setForm({ size: products.size === size ? "" : size }));
-  }, [products.size, dispatch]);
+    setProductsState(prev => ({ ...prev, size: prev.size === size ? "" : size }));
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    dispatch(resetForm());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (isSuccess) {
       const timer = setTimeout(() => navigate('/dashboard', { replace: true }), 800);
-      return () => clearTimeout(timer);
+      return () => setTimeout(() => clearTimeout(timer), 100);
     }
   }, [isSuccess, navigate]);
 
 
   const handleAddProduct = async () => {
     if (!products.title || !products.price || !products.imageUrl || !products.category) {
-      return toast.error("All fields are required");
+      return toast.error("All basic fields (Title, Price, Image, Category) are required! ⚠️");
     }
     try {
       await productService.addProduct(products);
-      toast.success("Product Added successfully");
+      toast.success("Product Added successfully! 🚀✨");
       setIsSuccess(true);
     } catch (error) {
-      toast.error("Add Product Failed");
+      console.error("Add Product Error:", error);
+      toast.error("Failed to add product. Please check your connection.");
     }
   };
 

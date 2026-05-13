@@ -45,55 +45,46 @@ const AppInitializer = ({ children }) => {
   }, [loggedInUser?.uid, dispatch]);
 
 
-  // 📝 ORDERS LISTENER (Real-time Sync)
+  // 📝 USER ORDERS LISTENER (Real-time Sync for Navbar Count)
   useEffect(() => {
     if (!loggedInUser?.uid) {
       dispatch(setOrders([]));
       return;
     }
 
+    // Only track specific user orders at root for Navbar count consistency
+    // Global admin orders will be tracked in the Dashboard component
+    if (loggedInUser.role === 'admin') return;
+
     dispatch(setOrdersLoading(true));
-    let unsubscribe;
-    
-    const onUpdate = (orders) => {
+    const unsubscribe = orderService.getUserOrders(loggedInUser.uid, (orders) => {
       dispatch(setOrders(orders));
       dispatch(setOrdersLoading(false));
-    };
-
-    if (loggedInUser.role === 'admin') {
-      unsubscribe = orderService.getAllOrders(onUpdate);
-    } else {
-      unsubscribe = orderService.getUserOrders(loggedInUser.uid, onUpdate);
-    }
+    });
 
     return () => {
       if (unsubscribe) unsubscribe();
-      orderService.stopLiveUpdates();
     };
   }, [loggedInUser?.uid, loggedInUser?.role, dispatch]);
 
 
-  // 👥 USERS LISTENER (Admin Dashboard Only)
+  // 📦 PRODUCT LISTENER (Store-wide Singleton)
   useEffect(() => {
-    if (!loggedInUser || loggedInUser.role !== 'admin') {
-      dispatch(setUsers([]));
-      return;
-    }
-
-    dispatch(setUsersLoading(true));
-    const unsubscribeUsers = authService.userListAdmin(
-      (usersArray) => {
-        dispatch(setUsers(usersArray));
-        dispatch(setUsersLoading(false));
+    dispatch(setProductsLoading(true));
+    const unsubscribe = productService.getAllProductsFromFirestore(
+      (newProducts) => {
+        dispatch(setProducts(newProducts));
+        dispatch(setProductsLoading(false));
       },
       (error) => {
-        console.error("❌ Users list error:", error);
-        dispatch(setUsersLoading(false));
+        dispatch(setProductsError(error));
+        dispatch(setProductsLoading(false));
       }
     );
-
-    return () => unsubscribe();
-  }, [loggedInUser?.uid, loggedInUser?.role, dispatch]);
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [dispatch]);
 
 
   // 💬 TESTIMONIALS LISTENER (Public Data)
@@ -112,27 +103,6 @@ const AppInitializer = ({ children }) => {
     );
     return () => {
       if (unsubscribe) unsubscribe();
-      testimonialService.stopListener();
-    };
-  }, [dispatch]); 
-
-
-  // 📦 PRODUCT LISTENER (Store-wide Singleton)
-  useEffect(() => {
-    dispatch(setProductsLoading(true));
-    const unsubscribe = productService.getAllProductsFromFirestore(
-      (newProducts) => {
-        dispatch(setProducts(newProducts));
-        dispatch(setProductsLoading(false));
-      },
-      (error) => {
-        dispatch(setProductsError(error));
-        dispatch(setProductsLoading(false));
-      }
-    );
-    return () => {
-      if (unsubscribe) unsubscribe();
-      productService.stopLiveUpdates();
     };
   }, [dispatch]);
 

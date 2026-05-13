@@ -6,6 +6,8 @@ import { statusOptions } from './statusConfig';
 
  
 
+import { toast } from 'react-toastify';
+
 function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
   const [loading, setLoading] = useState(null);
 
@@ -13,10 +15,12 @@ function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
     if (newStatus === currentStatus) return;
     setLoading(newStatus);
     try {
-      await orderService.updateOrderStatus(orderId, newStatus);
+      await orderService.updateStatus(orderId, newStatus);
+      toast.success(`Order status updated to ${newStatus}! ✨`);
       onClose?.();
     } catch (err) {
       console.error('Status update failed:', err);
+      toast.error('Failed to update status. Please try again.');
     } finally {
       setLoading(null);
     }

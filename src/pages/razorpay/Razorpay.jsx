@@ -65,6 +65,7 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
       const savedOrder = await orderService.saveOrder(orderInfo);
       
       dispatch(addOrder(savedOrder));
+      toast.success("Order placed successfully! 🛍️");
       dispatch(clearCart());
       
       await cartService.clearUserCart(user.uid);
@@ -129,9 +130,10 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
           */
 
           // ✅ NEW CODE (Service Pattern)
-          const savedOrder = await orderService.saveOrderToFirestore(orderInfo);
+          const savedOrder = await orderService.saveOrder(orderInfo);
           
           dispatch(addOrder(savedOrder));
+          toast.success("Order placed successfully! 🛍️");
           dispatch(clearCart());
 
           await cartService.clearUserCart(user.uid);
