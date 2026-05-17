@@ -1,10 +1,9 @@
 import { ThemeContext, FilterContext } from '../../context/AllContext';
 import React, { useContext, useMemo, useEffect, useState, useCallback } from "react";
 import { useParams, useNavigate, useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-
-;
-;
+import { useSelector, useDispatch } from "react-redux";
+import { productService } from "../../services/productService";
+import { setProducts, setProductsLoading, setProductsError } from "../../features/products/productSlice";
 import {
   FaArrowLeft,
 } from "react-icons/fa";
@@ -21,6 +20,7 @@ function CategoryProducts() {
   const { filterPrice, sortPrice, filterColor, filterSize, searchkey } = useContext(FilterContext);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isDark = mode === "dark";
   const [expandedId, setExpandedId] = useState(null);
   const [isFilterLoading, setIsFilterLoading] = useState(false);
@@ -52,6 +52,28 @@ function CategoryProducts() {
       prev.includes(sub) ? prev.filter(s => s !== sub) : [...prev, sub]
     );
   }, []);
+
+  // 📡 ON-DEMAND TARGETED LISTENER: Fetch Only Required Category Products
+  // 🚀 REDUX CACHE CHECK: Agar data pehle se loaded hai (with correct category items) toh baar-baar call mat karo
+  useEffect(() => {
+    if (!name) return;
+    
+    // Agar redax me data hai aur pichla fetch isi category ka tha, ya array me already kafi items hain, tab skip kar sakte hain
+    // Lekin best ye hai ki hum specific fetch karein taaki data accurate rahe
+    const fetchSpecificCategory = async () => {
+      dispatch(setProductsLoading(true));
+      try {
+        const categoryData = await productService.getProductsByCategory(name);
+        dispatch(setProducts(categoryData));
+        dispatch(setProductsLoading(false));
+      } catch (error) {
+        dispatch(setProductsError(error.message));
+        dispatch(setProductsLoading(false));
+      }
+    };
+
+    fetchSpecificCategory();
+  }, [dispatch, name]);
 
   // Trigger loading spinner when filters or category changes
   useEffect(() => {

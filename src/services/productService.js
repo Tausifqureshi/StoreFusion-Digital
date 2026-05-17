@@ -1,8 +1,9 @@
 import { 
   collection, onSnapshot, orderBy, query, addDoc, 
   setDoc, doc, deleteDoc, serverTimestamp, 
-  limit, startAfter, getDocs 
+  limit, startAfter, getDocs, getDoc, where 
 } from "firebase/firestore";
+import { CATEGORIES } from "../constants/categories";
 import { fireDB } from "../firebase/firebaseConfig";
 
 /**
@@ -58,13 +59,64 @@ class ProductService {
   }
 
   /**
+   * 🔥 OPTIMIZATION 1: Fetch SINGLE product by ID
+   * Reads: 1 Document
+   */
+  async getSingleProduct(id) {
+    if (!id) throw new Error("Product ID missing");
+    try {
+      const docRef = doc(fireDB, "products", id);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        return {
+          id: docSnap.id,
+          ...data,
+          time: data.time?.toDate?.()?.toISOString() ?? (typeof data.time === 'string' ? data.time : null)
+        };
+      }
+      return null;
+    } catch (error) {
+      console.error("❌ getSingleProduct error:", error);
+      throw error;
+    }
+  }
+
+  /**
+   * 🔥 OPTIMIZATION 2: Fetch Category Products ONLY
+   * Reads: Only products in this category (approx 5-20 docs instead of 500)
+   */
+  async getProductsByCategory(categoryName) {
+    if (!categoryName) return [];
+    try {
+      // Find the exact case from our categories constant to match Firestore's case-sensitivity
+      const exactCategory = CATEGORIES.find(c => c.name.toLowerCase() === categoryName.toLowerCase())?.name || categoryName;
+      
+      const q = query(
+        collection(fireDB, "products"),
+        where("category", "==", exactCategory)
+      );
+
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(d => {
+        const data = d.data();
+        return { 
+          id: d.id, 
+          ...data,
+          time: data.time?.toDate?.()?.toISOString() ?? (typeof data.time === 'string' ? data.time : null)
+        };
+      });
+    } catch (error) {
+      console.error("❌ getProductsByCategory error:", error);
+      throw error;
+    }
+  }
+
+  /**
    * Real-time listener for small datasets or critical updates.
    * Normalizes timestamps for Redux serializability.
    */
   getAllProductsFromFirestore(onUpdate, onError) {
-    if (this.productsLive) return this.closeProductsListener;    
-    this.productsLive = true;
-
     const q = query(collection(fireDB, "products"), orderBy("time", "desc"));
     
     this.closeProductsListener = onSnapshot(q, 

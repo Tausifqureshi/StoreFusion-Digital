@@ -9,23 +9,60 @@ import { cartService } from "../../../services/cartService";
 
 import { store } from "../../../app/store";
 import useProducts from "../../../features/products/useProducts";
+import { productService } from "../../../services/productService";
+import { setProducts, setProductsLoading, setProductsError } from "../../../features/products/productSlice";
 
 export function useProductInfo() {
   const { products: product, productsLoading: loading } = useProducts();
   const { mode } = useContext(ThemeContext);
+  const dispatch = useDispatch();
+  const params = useParams();
+  const navigate = useNavigate();
+  const cartItems = useSelector((state) => state.cart.items);
+  const user = useSelector((state) => state.users.loggedInUser);
+
+  // 📡 ON-DEMAND TARGETED FETCH: 1 Product + Category Products Only! (Massive Optimization)
+  useEffect(() => {
+    if (!params.id) return;
+    
+    // Agar redax me data pehle se hai toh use use karo (Redux cache check)
+    // Lekin agar nahi hai ya partial hai toh hi fetch karo
+    // Note: Hum direct specific fetch kar rahe hain for maximum performance!
+    
+    const fetchTargetedData = async () => {
+      // Agar pehle se product list mein ye id hai, aur array bada hai, toh fetch mat karo
+      const exists = product?.find(p => p.id === params.id);
+      if (exists && product.length > 5) return;
+
+      dispatch(setProductsLoading(true));
+      try {
+        // 1. Sirf 1 product mangwao (1 read cost)
+        const singleProduct = await productService.getSingleProduct(params.id);
+        if (singleProduct) {
+          dispatch(setProducts([singleProduct])); // Instant render ke liye
+
+          // 2. Similar products ke liye sirf us category ke products mangwao (~10 reads cost)
+          if (singleProduct.category) {
+            const categoryData = await productService.getProductsByCategory(singleProduct.category);
+            dispatch(setProducts(categoryData)); // Update redux state with category items
+          }
+        }
+        dispatch(setProductsLoading(false));
+      } catch (error) {
+        dispatch(setProductsError(error.message));
+        dispatch(setProductsLoading(false));
+      }
+    };
+
+    fetchTargetedData();
+  }, [dispatch, params.id, product.length]);
 
 
   const [mainImage, setMainImage] = useState("");
   const [isHeartFilled, setIsHeartFilled] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
 
-  const params = useParams();
-  const dispatch = useDispatch();
-  const cartItems = useSelector((state) => state.cart.items);
-  const navigate = useNavigate();
   const isDark = mode === "dark";
-
-  const user = useSelector((state) => state.users.loggedInUser);
 
   const currentProduct = useMemo(() => product?.find((item) => item.id === params.id), [product, params.id]);
 
@@ -39,7 +76,7 @@ export function useProductInfo() {
         const sameSubCategory =
           item.subcategory?.toLowerCase() === currentProduct.subcategory?.toLowerCase();
 
-        return sameCategory && sameSubCategory && item.id !== currentProduct.id;
+        return sameCategory && sameSubCategory && item.id !== currentProduct.id;//Current product (jo user abhi dekh raha hai) ko similar products ki list se hata do."Kyunki hum nahi chahte ki user jis product ke page par hai, wahi same product usko niche "Similar Products" mein bhi dikhai de.
       })
       .slice(0, 4);
   }, [product, currentProduct]);

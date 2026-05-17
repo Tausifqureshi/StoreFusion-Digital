@@ -6,6 +6,9 @@ import Filter from "../../components/filter/Filter";
 import ProductSkeleton from "../../components/loader/ProductSkeleton";
 import LoaderSpinner from "../../components/loader/LoaderSpinner";
 import SingleProductCard from "../../components/productCard/SingleProductCard";
+import { useDispatch } from "react-redux";
+import { productService } from "../../services/productService";
+import { setProducts, setProductsLoading, setProductsError } from "../../features/products/productSlice";
 
 // ✅ ALL PRODUCTS VIEW: Saare products, filters aur pagination yahan locked hain
 const AllProductsView = React.memo(function AllProductsView({
@@ -162,8 +165,30 @@ const AllProductsView = React.memo(function AllProductsView({
 
 const Allproducts = React.memo(function Allproducts() {
   const { mode } = useContext(ThemeContext);
+  const dispatch = useDispatch();
   const { products, productsLoading } = useProducts();
   const { searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize } = useContext(FilterContext);
+
+  // 📡 ON-DEMAND LISTENER: Fetch products only when All Products Page is active
+  useEffect(() => {
+    if (products && products.length > 1) return;
+
+    dispatch(setProductsLoading(true));
+    const unsubscribe = productService.getAllProductsFromFirestore(
+      (newProducts) => {
+        dispatch(setProducts(newProducts));
+        dispatch(setProductsLoading(false));
+      },
+      (error) => {
+        dispatch(setProductsError(error));
+        dispatch(setProductsLoading(false));
+      }
+    );
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [dispatch]);
 
 
   const [currentPage, setCurrentPage] = useState(1);

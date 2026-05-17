@@ -30,11 +30,16 @@ const AppInitializer = ({ children }) => {
 
   // 🛒 CART INITIALIZER (Sync with Cloud)
   useEffect(() => {
+    if (!loggedInUser?.uid) {
+      dispatch(setCart([]));
+      return;
+    }
+
     const syncCart = async () => {
       dispatch(setCartLoading(true));
       try {
         const cartData = await cartService.loadCart(loggedInUser);
-        dispatch(setCart(cartData));
+        if (cartData) dispatch(setCart(cartData));
       } catch (error) {
         dispatch(setCartError(error.message));
       } finally {
@@ -45,66 +50,28 @@ const AppInitializer = ({ children }) => {
   }, [loggedInUser?.uid, dispatch]);
 
 
-  // 📝 USER ORDERS LISTENER (Real-time Sync for Navbar Count)
+  // 📝 USER ORDERS LISTENER
   useEffect(() => {
+    // 🛡️ Skip if no user or if we already have orders (prevents blocking nav)
     if (!loggedInUser?.uid) {
       dispatch(setOrders([]));
       return;
     }
 
-    // Only track specific user orders at root for Navbar count consistency
-    // Global admin orders will be tracked in the Dashboard component
-    if (loggedInUser.role === 'admin') return;
-
-    dispatch(setOrdersLoading(true));
+    // Monitor personal orders
+    let isSubscribed = true;
     const unsubscribe = orderService.getUserOrders(loggedInUser.uid, (orders) => {
-      dispatch(setOrders(orders));
-      dispatch(setOrdersLoading(false));
+      if (isSubscribed) {
+        dispatch(setOrders(orders));
+        dispatch(setOrdersLoading(false));
+      }
     });
 
     return () => {
+      isSubscribed = false;
       if (unsubscribe) unsubscribe();
     };
-  }, [loggedInUser?.uid, loggedInUser?.role, dispatch]);
-
-
-  // 📦 PRODUCT LISTENER (Store-wide Singleton)
-  useEffect(() => {
-    dispatch(setProductsLoading(true));
-    const unsubscribe = productService.getAllProductsFromFirestore(
-      (newProducts) => {
-        dispatch(setProducts(newProducts));
-        dispatch(setProductsLoading(false));
-      },
-      (error) => {
-        dispatch(setProductsError(error));
-        dispatch(setProductsLoading(false));
-      }
-    );
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
-  }, [dispatch]);
-
-
-  // 💬 TESTIMONIALS LISTENER (Public Data)
-  useEffect(() => {
-    dispatch(setTestimonialsLoading(true));
-    const unsubscribe = testimonialService.observeTestimonials(
-      null, 
-      (testimonials) => {
-        dispatch(setTestimonials(testimonials));
-        dispatch(setTestimonialsLoading(false));
-      },
-      (error) => {
-        dispatch(setTestimonialsError(error.message));
-        dispatch(setTestimonialsLoading(false));
-      }
-    );
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
-  }, [dispatch]);
+  }, [loggedInUser?.uid, dispatch]);
 
 
   return children;

@@ -1,6 +1,9 @@
 import { FilterContext, ThemeContext } from '../../context/AllContext';
 import React, { useContext, useState, useMemo } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { productService } from "../../services/productService";
+import { setProducts, setProductsLoading, setProductsError } from "../../features/products/productSlice";
 import useProducts from "../../features/products/useProducts";
 import SingleProductCard from "./SingleProductCard";
 import ProductSkeleton from "../loader/ProductSkeleton";
@@ -47,8 +50,30 @@ const HomeProductCard = React.memo(({ item, mode }) => {
 
 function ProductCard() {
   const { mode } = useContext(ThemeContext);
+  const dispatch = useDispatch();
   const { products, productsLoading } = useProducts();
   const navigate = useNavigate();
+
+  // 📡 ON-DEMAND LISTENER: Fetch products only when Home Page is active
+  React.useEffect(() => {
+    if (products && products.length > 1) return;
+
+    dispatch(setProductsLoading(true));
+    const unsubscribe = productService.getAllProductsFromFirestore(
+      (newProducts) => {
+        dispatch(setProducts(newProducts));
+        dispatch(setProductsLoading(false));
+      },
+      (error) => {
+        dispatch(setProductsError(error));
+        dispatch(setProductsLoading(false));
+      }
+    );
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [dispatch]);
 
   // 🚀 REDUCE KA JADU: Sirf ek loop mein grouping + unique subcategory logic
   const groupedCategoryData = useMemo(() => {

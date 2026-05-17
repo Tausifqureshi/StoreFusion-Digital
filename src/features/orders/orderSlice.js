@@ -53,6 +53,11 @@ const orderSlice = createSlice({
       //   orderToCancel.status = "cancelled";
       // }
 
+      // state.orderCount = state.items.filter(o => 
+      //   !["delivered", "cancelled", "refunded", "returned"].includes(o.status?.toLowerCase())
+      // ).length;
+
+
       return {
         ...state,
         items: state.items.map(order => 

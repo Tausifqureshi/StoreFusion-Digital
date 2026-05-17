@@ -22,6 +22,7 @@ function ProductManagementTab() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { mode } = useContext(ThemeContext);
+  const isDark = mode === 'dark';
   const { products: product, productsLoading: productLoading } = useProducts();
   const { items: order } = useSelector(state => state.orders);
 
@@ -186,9 +187,6 @@ function ProductManagementTab() {
     return () => window.removeEventListener("scroll", handleScroll); // Kaam khatam hone par tracker hata do
   }, []);
 
-  // 👉 ProductGrid ke functions taaki faltu re-renders na ho
-  const memoizedEditHandle = useCallback((item) => edithandle(item), [edithandle]);
-  const memoizedDeleteProduct = useCallback((item) => deleteProduct(item), [deleteProduct]);
 
   if (productLoading) return <LoaderSpinner isDark={isDark} label="Loading products..." />;
 
@@ -205,13 +203,16 @@ function ProductManagementTab() {
           </p>
         </div>
         <button
-          onClick={() => navigate('/addproduct')}
+          onClick={() => {
+            dispatch(resetForm());
+            navigate('/addproduct');
+          }}
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white px-6 py-3 rounded-2xl font-bold shadow-xl shadow-blue-500/20 transition-all active:scale-95"
         >
           <FaPlus size={14} /> Add Product
         </button>
       </div>
-
+ 
       <SummaryCards
         isDark={isDark}
         product={product}
@@ -234,8 +235,8 @@ function ProductManagementTab() {
       <ProductGrid
         productsOnCurrentPage={productsOnCurrentPage}
         isDark={isDark}
-        edithandle={memoizedEditHandle}
-        deleteProduct={memoizedDeleteProduct}
+        edithandle={edithandle}
+        deleteProduct={deleteProduct}
       />
 
       <ProductPagination

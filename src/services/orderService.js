@@ -26,61 +26,61 @@ class OrderService {
   /**
    * Real-time User Orders monitor.
    */
-  getUserOrders(uid, callback) {
+  getUserOrders(uid, onUpdate) {
     if (!uid) return () => { };
-    if (this.userOrdersLive) return this.closeUserOrdersListener;
 
-    this.userOrdersLive = true;
     const q = query(
       collection(fireDB, "orders"),
       where("userid", "==", uid)
     );
 
-    this.closeUserOrdersListener = onSnapshot(q, (snapshot) => {
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const orders = snapshot.docs.map(d => {
         const data = d.data();
+        const timestamp = data.time || data.createdAt;
         return { 
           id: d.id, 
           ...data,
-          createdAt: data.createdAt?.toDate?.()?.toISOString() ?? (typeof data.createdAt === 'string' ? data.createdAt : null)
+          time: timestamp?.toDate?.()?.toISOString() ?? (typeof timestamp === 'string' ? timestamp : null)
         };
       });
       
-      orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      callback(orders);
+      // 🛡️ Manual Sort: Handle both legacy 'time' and new 'createdAt'
+      orders.sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
+      onUpdate(orders);
     }, (error) => {
       console.error("❌ getUserOrders error:", error);
       this.userOrdersLive = false;
     });
 
-    return this.closeUserOrdersListener;
+    return unsubscribe;
   }
 
   /**
    * Real-time Admin All Orders monitor.
    */
-  getAllOrders(callback) {
-    if (this.adminOrdersLive) return this.closeAdminOrdersListener;
+  getAllOrders(onUpdate) {
+    const q = query(collection(fireDB, "orders"));
 
-    this.adminOrdersLive = true;
-    const q = query(collection(fireDB, "orders"), orderBy("createdAt", "desc"));
-
-    this.closeAdminOrdersListener = onSnapshot(q, (snapshot) => {
+    const unsubscribe = onSnapshot(q, (snapshot) => {
       const orders = snapshot.docs.map(d => {
         const data = d.data();
+        const timestamp = data.time || data.createdAt;
         return { 
           id: d.id, 
           ...data,
-          createdAt: data.createdAt?.toDate?.()?.toISOString() ?? (typeof data.createdAt === 'string' ? data.createdAt : null)
+          time: timestamp?.toDate?.()?.toISOString() ?? (typeof timestamp === 'string' ? timestamp : null)
         };
       });
-      callback(orders);
+
+      orders.sort((a, b) => new Date(b.time || 0) - new Date(a.time || 0));
+      onUpdate(orders);
     }, (error) => {
       console.error("❌ getAllOrders error:", error);
       this.adminOrdersLive = false;
     });
 
-    return this.closeAdminOrdersListener;
+    return unsubscribe;
   }
 
   /**

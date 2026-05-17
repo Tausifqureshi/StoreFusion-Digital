@@ -1,5 +1,6 @@
 import { FilterContext } from '../../context/AllContext';
 import Search from '../search/Search';
+import { CATEGORY_NAMES } from "../../constants/categories";
 import React, { useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { FiRefreshCw, FiSliders, FiX, FiCheck } from "react-icons/fi";
@@ -178,11 +179,8 @@ function Filter({ mode, showCategoryFilter = false }) {
 
   const isDark = mode === "dark";
 
-  // Compute dynamic filter data directly from product database
-  const uniqueCategories = useMemo(() => {
-    const uniqueSet = new Set((product || []).map(p => p.category?.trim().toUpperCase()).filter(Boolean));
-    return [...uniqueSet];
-  }, [product]);
+  // Compute dynamic filter data
+  const uniqueCategories = useMemo(() => CATEGORY_NAMES, []);
 
   const uniqueColors = useMemo(() => {
     const uniqueSet = new Set((product || []).map(p => p.color?.trim().toUpperCase()).filter(Boolean));
@@ -314,7 +312,7 @@ function Filter({ mode, showCategoryFilter = false }) {
         </div>
 
         <div className="space-y-8 overflow-y-auto pb-6 hidden-scrollbar">
-          {/* Mobile Checkboxes Categories */}
+          {/* Mobile Checkboxes Categories */} 
           {showCategoryFilter && (
             <div>
               <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-4">Categories</p>

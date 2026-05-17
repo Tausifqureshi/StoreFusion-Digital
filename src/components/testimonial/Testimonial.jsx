@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import SingleReviewCard from './SingleReviewCard/SingleReviewCard';
 import { testimonialService } from '../../services/testimonialService';
-import { setTestimonialForm } from '../../features/testimonials/testimonialSlice';
+import { setTestimonialForm, setTestimonials, setTestimonialsLoading, setTestimonialsError } from '../../features/testimonials/testimonialSlice';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 // ✅ INTERNAL VIEW: Amazon Modern List Style
 const TestimonialView = React.memo(function TestimonialView({ finalReviews, isDark, isAdmin, productId, getAvatar, editTestimonial, deleteTestimonial }) {
@@ -43,6 +44,26 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
 
   const currentMode = propMode || contextMode;
   const isDark = currentMode === 'dark';
+
+  // 📡 ON-DEMAND LISTENER: Fetch testimonials only when this component is visible
+  useEffect(() => {
+    dispatch(setTestimonialsLoading(true));
+    const unsubscribe = testimonialService.observeTestimonials(
+      null, 
+      (data) => {
+        dispatch(setTestimonials(data));
+        dispatch(setTestimonialsLoading(false));
+      },
+      (error) => {
+        dispatch(setTestimonialsError(error));
+        dispatch(setTestimonialsLoading(false));
+      }
+    );
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [dispatch]);
 
   const finalReviews = useMemo(() => {
     if (productId) return testimonials.filter(item => item.productId === productId);

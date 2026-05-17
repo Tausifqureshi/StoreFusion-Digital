@@ -37,7 +37,7 @@ class AuthService {
               role: data.role || "user",
               address: data.address || "",
               phoneNumber: data.phoneNumber || "",
-              time: data.time || "",
+              time: data.time?.toDate?.()?.toISOString() ?? (typeof data.time === 'string' ? data.time : ""),
               date: data.date || ""
             };
             onUserChange(userData);
@@ -45,9 +45,11 @@ class AuthService {
             // Profile not found in Firestore yet
             onUserChange({ uid: user.uid, email: user.email, role: "user" });
           }
+          // 🔥 Only signal loading completion AFTER data is in Redux
           if (typeof onLoading === 'function') onLoading(false);
         }, (error) => {
           console.error("❌ User doc sync error:", error);
+          onUserChange({ uid: user.uid, email: user.email, role: "user" });
           if (typeof onLoading === 'function') onLoading(false);
         });
       } else {

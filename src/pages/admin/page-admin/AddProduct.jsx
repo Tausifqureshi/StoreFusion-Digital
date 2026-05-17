@@ -47,8 +47,8 @@ function AddProduct() {
 
   useEffect(() => {
     if (isSuccess) {
-      const timer = setTimeout(() => navigate('/dashboard', { replace: true }), 800);
-      return () => setTimeout(() => clearTimeout(timer), 100);
+      const timer = setTimeout(() => navigate(-1), 500);
+      return () => clearTimeout(timer);
     }
   }, [isSuccess, navigate]);
 

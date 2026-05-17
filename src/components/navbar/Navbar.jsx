@@ -1,5 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo, useRef, useCallback, useTransition } from "react";
-import throttle from "lodash/throttle";
+import React, { useContext, useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Drawer } from "@mui/material";
 import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,7 +7,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { ThemeContext } from "../../context/AllContext";
 import { authService } from "../../services/authService";
 import { setLoggedInUser } from "../../features/users/userSlice";
-import useProducts from "../../features/products/useProducts";
+import { CATEGORY_NAMES } from "../../constants/categories";
 
 // ✅ Icons
 import {
@@ -114,6 +113,7 @@ const NavLinks = React.memo(({ isDark, navItems, user, totalOrders }) => {
 
 const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout, navigate }) => {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const isAuthInitialized = useSelector((state) => state.users.isAuthInitialized);
 
   return (
     <div className="flex items-center gap-5 shrink-0">
@@ -155,52 +155,54 @@ const ActionIcons = React.memo(({ isDark, mode, toggleMode, user, handleLogout, 
         )}
       </div>
 
-      {user ? (
-        <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
-          <div className="hidden lg:flex flex-col leading-tight">
-            <span
-              className={`
-                text-[10px] font-bold 
-                ${isDark ? "text-gray-400" : "text-gray-500"}
-              `}
+      {isAuthInitialized && (
+        user ? (
+          <div className="hidden sm:flex items-center gap-3 border-l pl-4 border-gray-300 dark:border-gray-700">
+            <div className="hidden lg:flex flex-col leading-tight">
+              <span
+                className={`
+                  text-[10px] font-bold 
+                  ${isDark ? "text-gray-400" : "text-gray-500"}
+                `}
+              >
+                Hello, {user.fullName?.split(" ")[0]}
+              </span>
+              <span
+                className={`
+                  text-[11px] font-black uppercase tracking-widest 
+                  ${isDark ? "text-white" : "text-gray-800"}
+                `}
+              >
+                Account
+              </span>
+            </div>
+            <img
+              src={user.profilePic || "https://i.pravatar.cc/100"}
+              className="w-8 h-8 rounded-full border-2 border-orange-500 object-cover"
+              alt="u"
+            />
+            <button
+              onClick={handleLogout}
+              className="
+                text-[9px] font-black text-white bg-red-500 
+                px-3 py-1.5 rounded-lg hover:bg-red-600 
+                shadow-sm tracking-widest
+              "
             >
-              Hello, {user.fullName?.split(" ")[0]}
-            </span>
-            <span
-              className={`
-                text-[11px] font-black uppercase tracking-widest 
-                ${isDark ? "text-white" : "text-gray-800"}
-              `}
-            >
-              Account
-            </span>
+              LOGOUT
+            </button>
           </div>
-          <img
-            src={user.profilePic || "https://i.pravatar.cc/100"}
-            className="w-8 h-8 rounded-full border-2 border-orange-500 object-cover"
-            alt="u"
-          />
+        ) : (
           <button
-            onClick={handleLogout}
-            className="
-              text-[9px] font-black text-white bg-red-500 
-              px-3 py-1.5 rounded-lg hover:bg-red-600 
-              shadow-sm tracking-widest
-            "
+            onClick={() => navigate("/login")}
+            className={`
+              hidden sm:block px-5 py-1.5 rounded text-xs font-bold 
+              ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}
+            `}
           >
-            LOGOUT
+            SIGN IN
           </button>
-        </div>
-      ) : (
-        <button
-          onClick={() => navigate("/login")}
-          className={`
-            hidden sm:block px-5 py-1.5 rounded text-xs font-bold 
-            ${isDark ? "bg-white text-black" : "bg-blue-600 text-white"}
-          `}
-        >
-          SIGN IN
-        </button>
+        )
       )}
     </div>
   );
@@ -212,14 +214,19 @@ const NavScrollShield = React.memo(({ children }) => {
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    const onScroll = throttle(() => {
-      const current = window.scrollY;
-      if (window.innerWidth >= 1024) {
-        setIsVisible(!(current > lastScrollY.current && current > 50));
-      }
-      setIsScrolled(current > 50);
-      lastScrollY.current = current;
-    }, 300);
+    let timeoutId = null;
+    const onScroll = () => {
+      if (timeoutId) return;
+      timeoutId = setTimeout(() => {
+        const current = window.scrollY;
+        if (window.innerWidth >= 1024) {
+          setIsVisible(!(current > lastScrollY.current && current > 50));
+        }
+        setIsScrolled(current > 50);
+        lastScrollY.current = current;
+        timeoutId = null;
+      }, 100);
+    };
 
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
@@ -234,7 +241,6 @@ const NavScrollShield = React.memo(({ children }) => {
 
 function Navbar({ isDark }) {
   const { mode, toggleMode } = useContext(ThemeContext);
-  const { products } = useProducts();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -260,14 +266,8 @@ function Navbar({ isDark }) {
     []
   );
 
-  // 🛠️ Logic: Categories Extraction
-  const categories = useMemo(() => {
-    const raw = (products || [])
-      .map((p) => p.category?.trim().toUpperCase())
-      .filter(Boolean);
-
-    return [...new Set(raw)];
-  }, [products]);
+  // 🛠️ Logic: Categories (From Centralized Constant)
+  const categories = useMemo(() => CATEGORY_NAMES, []);
 
   // 🛠️ Handlers
   const handleLogout = useCallback(async () => {
@@ -363,7 +363,7 @@ function Navbar({ isDark }) {
                         Explore Categories
                       </h3>
                       <div className="grid grid-cols-3 gap-2 max-h-[350px] overflow-y-auto custom-scrollbar pr-2">
-                        {categories.map((cat) => {
+                        {(categories || []).map((cat) => {
                           const active = location.pathname === `/category/${cat.toLowerCase()}`;
                           return (
                             <div
@@ -450,7 +450,7 @@ function Navbar({ isDark }) {
                 )}
 
                 <h2 className="text-lg font-bold italic flex-1 truncate">
-                  Hello, {user ? user.fullName?.split(" ")[0] : "Sign In"}
+                  {user ? `Hello, ${user.fullName?.split(" ")[0]}` : "Store Fusion"}
                 </h2>
 
                 <button onClick={() => setOpen(false)}>
@@ -607,7 +607,7 @@ function Navbar({ isDark }) {
                   
                   <div className="flex-1 overflow-y-auto p-4 custom-scrollbar">
                     <div className="grid grid-cols-2 gap-3">
-                      {categories
+                      {(categories || [])
                         .filter((cat) => cat.toLowerCase().includes(query.toLowerCase()))
                         .map((cat) => (
                           <button

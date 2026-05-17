@@ -17,7 +17,7 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
   const handleDateChange = useCallback((d) => setCalendarDate(d), []);
 
   const allProducts = useSelector((state) => state.products.items);
-  const allOrders = useSelector((state) => state.orders.orders);
+  const allOrders = useSelector((state) => state.orders.items);
   const allUsers = useSelector((state) => state.users.items);
 
   const {

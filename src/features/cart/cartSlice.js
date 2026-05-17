@@ -83,12 +83,45 @@ const cartSlice = createSlice({
       const isIdentical = state.items.length === newItems.length &&
         state.items.every((item, index) => 
           item.id === newItems[index].id && item.quantity === newItems[index].quantity
-        );
+        ); //ska matlab hai: "Bhai, jab data badla hi nahi, toh state ko chhedo mat, jaisa hai waisa hi rehne do."
 
-      if (isIdentical) return state;
+      if (isIdentical) return state;  //agar data badla nahi hai toh state ko mat badlo 
 
-      state.items = newItems;
-      updateCartTotals(state);
+      state.items = newItems; // agar data badla hai toh state ko badlo
+      updateCartTotals(state); // or agar data badla hai toh totals ko update karo
+
+
+  //immutable way
+  //  const newItems = action.payload || [];
+
+  // const isIdentical =
+  //   state.items.length === newItems.length &&
+  //   state.items.every(
+  //     (item, index) =>
+  //       item.id === newItems[index]?.id &&
+  //       item.quantity === newItems[index]?.quantity
+  //   );
+
+  // if (isIdentical) {
+  //   return state;
+  // }
+
+  // return {
+  //   ...state,
+  //   items: newItems,
+  //   totalQuantity: newItems.reduce(
+  //     (acc, item) => acc + (item.quantity || 1),
+  //     0
+  //   ),
+  //   totalPrice: newItems.reduce(
+  //     (acc, item) =>
+  //       acc + (Number(item.price) || 0) * (item.quantity || 1),
+  //     0
+  //   ),
+  // };
+
+
+    
     }
 
 

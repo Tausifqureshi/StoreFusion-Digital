@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useCallback, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { productService } from "../../../services/productService";
 
 
@@ -41,7 +42,7 @@ function UpdateProduct() {
 
   useEffect(() => {
     if (isSuccess) {
-      const timer = setTimeout(() => navigate('/dashboard', { replace: true }), 800);
+      const timer = setTimeout(() => navigate(-1), 500);
       return () => clearTimeout(timer);
     }
   }, [isSuccess, navigate]);

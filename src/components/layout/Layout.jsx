@@ -8,19 +8,16 @@ function Layout({ children }) {
   const { mode } = useContext(ThemeContext);
   const isDark = mode === "dark";
 
-  // ✅ ABSOLUTE SHIELDING: Instances are locked in memoized references
-  // This ensures they are NEVER re-reconciled unless the theme actually changes.
-  const memoNavbar = useMemo(() => <Navbar isDark={isDark} />, [isDark]);
-  const memoFooter = useMemo(() => <Footer isDark={isDark} />, [isDark]);
+  // 🛡️ RE-SYNC: Standard components to ensure immediate reactivity
 
   return (
     <div className={`transition-all duration-300 ${isDark ? "bg-[#111827]" : "bg-white"}`}>
-      {memoNavbar}
+      <Navbar isDark={isDark} />
       <main className="content relative z-40 min-h-[60vh]">
         {children}
       </main>
       <ScrollToTopButoon mode={mode} />
-      {memoFooter}
+      <Footer isDark={isDark} />
     </div>
   );
 }

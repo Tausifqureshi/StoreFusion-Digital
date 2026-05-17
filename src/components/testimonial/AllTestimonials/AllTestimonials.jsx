@@ -1,11 +1,11 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Layout from '../../layout/Layout';
 import SingleReviewCard from '../SingleReviewCard/SingleReviewCard';
 import { ThemeContext } from '../../../context/AllContext';
 import { testimonialService } from '../../../services/testimonialService';
-import { setTestimonialForm } from '../../../features/testimonials/testimonialSlice';
+import { setTestimonialForm, setTestimonials, setTestimonialsLoading, setTestimonialsError } from '../../../features/testimonials/testimonialSlice';
 import { toast } from 'react-toastify';
 
 function AllTestimonials() {
@@ -16,6 +16,26 @@ function AllTestimonials() {
   const { mode } = useContext(ThemeContext);
   const isDark = mode === 'dark';
   const reviewsRef = useRef(null);
+
+  // 📡 ON-DEMAND LISTENER: Fetch testimonials only when this page is active
+  useEffect(() => {
+    dispatch(setTestimonialsLoading(true));
+    const unsubscribe = testimonialService.observeTestimonials(
+      null, 
+      (data) => {
+        dispatch(setTestimonials(data));
+        dispatch(setTestimonialsLoading(false));
+      },
+      (error) => {
+        dispatch(setTestimonialsError(error));
+        dispatch(setTestimonialsLoading(false));
+      }
+    );
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [dispatch]);
 
   // Pagination Logic
   const [currentPage, setCurrentPage] = useState(1);
