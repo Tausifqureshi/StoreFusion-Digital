@@ -6,7 +6,7 @@
  */
 
 export const CATEGORIES = [
-  {
+  { 
     name: "Electronic",
     subcategories: ["Mobile", "Laptop", "Accessories", "Watche", "Headphones", "Refrigerator"]
   },
