@@ -267,7 +267,7 @@ function Navbar({ isDark }) {
   );
 
   // 🛠️ Logic: Categories (From Centralized Constant)
-  const categories = useMemo(() => CATEGORY_NAMES, []);\
+  const categories = useMemo(() => CATEGORY_NAMES, []);
 
   // 🛠️ Handlers
   const handleLogout = useCallback(async () => {
