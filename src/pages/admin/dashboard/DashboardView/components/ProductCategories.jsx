@@ -138,5 +138,5 @@ function ProductCategories({ isDark, products }) {
   );
 };
 
-ProductCategories.displayName = 'ProductCategories';
+ProductCategories.displayName = 'ProductCategories'; 
 export default React.memo(ProductCategories);
