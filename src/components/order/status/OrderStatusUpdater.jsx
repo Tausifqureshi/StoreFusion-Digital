@@ -13,7 +13,7 @@ function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
 
   const handleStatusUpdate = async (newStatus) => {
     if (newStatus === currentStatus) return;
-    setLoading(newStatus);
+    setLoading(newStatus); 
     try {
       await orderService.updateStatus(orderId, newStatus);
       toast.success(`Order status updated to ${newStatus}! ✨`);
