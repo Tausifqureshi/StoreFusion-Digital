@@ -17,7 +17,7 @@ function ProductCategories({ isDark, products }) {
     }
 
     const totalProducts = products.length;
-    const baseColors = ["#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444"];
+    const baseColors = ["#8b5cf6", "#3b82f6", "#10b981", "#f59e0b", "#ef4444"];     
 
     // 👉 2. reduce: har product ki category gino → result: { Electronics: 5, Clothing: 3 }
     // const categoryCountMap = products.reduce((acc, product) => {
