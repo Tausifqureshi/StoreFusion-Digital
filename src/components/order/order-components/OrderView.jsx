@@ -69,8 +69,8 @@ const OrderView = React.memo(function OrderView({
         </div>
 
         {orderLoading ? (
-          <LoaderSpinner isDark={isDark} label="Loading orders..." />
-        ) : activeOrders.length > 0 ? (
+          <LoaderSpinner isDark={isDark} label="Loading orders..." /> 
+        ) : activeOrders.length > 0 ? (        
           <div className="space-y-6">
             {activeOrders.map((order) => (
               <div key={order.id}>
@@ -78,7 +78,7 @@ const OrderView = React.memo(function OrderView({
                   order={order}
                   isDark={isDark}
                   navigate={navigate}
-                  setUpdatingOrderId={setUpdatingOrderId}
+                  setUpdatingOrderId={setUpdatingOrderId}       
                 />
                 {updatingOrderId === order.id && (
                   <div className="mt-6 flex justify-end">
