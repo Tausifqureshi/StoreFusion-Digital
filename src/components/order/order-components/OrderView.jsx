@@ -70,10 +70,10 @@ const OrderView = React.memo(function OrderView({
 
         {orderLoading ? (
           <LoaderSpinner isDark={isDark} label="Loading orders..." /> 
-        ) : activeOrders.length > 0 ? (        
+        ) : activeOrders.length > 0 ? (   
           <div className="space-y-6">
             {activeOrders.map((order) => (
-              <div key={order.id}>
+              <div key={order.id}>           
                 <UserOrderItem
                   order={order}
                   isDark={isDark}     
