@@ -76,7 +76,7 @@ const OrderView = React.memo(function OrderView({
               <div key={order.id}>
                 <UserOrderItem
                   order={order}
-                  isDark={isDark}
+                  isDark={isDark}     
                   navigate={navigate}
                   setUpdatingOrderId={setUpdatingOrderId}       
                 />
