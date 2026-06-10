@@ -8,7 +8,7 @@ import {
 import { Link } from "react-router-dom"; // Link import kiya
 
 function About() {
-  const { mode } = useContext(ThemeContext);;
+  const { mode } = useContext(ThemeContext);
   const isDark = mode === "dark";
 
   // Accordion State
