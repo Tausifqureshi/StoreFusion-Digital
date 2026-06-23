@@ -40,7 +40,7 @@ class OrderService {
         const timestamp = data.time || data.createdAt;
         return { 
           id: d.id, 
-          ...data,
+          ...data, 
           time: timestamp?.toDate?.()?.toISOString() ?? (typeof timestamp === 'string' ? timestamp : null)
         };
       });
