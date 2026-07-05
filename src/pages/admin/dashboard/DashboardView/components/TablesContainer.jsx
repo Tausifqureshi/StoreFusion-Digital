@@ -15,5 +15,7 @@ const TablesContainer = React.memo(function TablesContainer({ isDark, product, o
     </div>
   );
 });
+TablesContainer.displayName = "TablesContainer";
+
 
 export default TablesContainer;

@@ -70,8 +70,9 @@ function UserOrderItem({ order, isDark, navigate, setUpdatingOrderId }) {
   );
 };
 
-UserOrderItem.displayName = 'UserOrderItem';
-export default React.memo(UserOrderItem);
+UserOrderItem.displayName = 'UserOrderItem';const MemoizedUserOrderItem = React.memo(UserOrderItem);
+MemoizedUserOrderItem.displayName = "UserOrderItem";
+export default MemoizedUserOrderItem;
 
 // export default React.memo(UserOrderItem, (prevProps, nextProps) => {
 //   if (prevProps.isDark !== nextProps.isDark) return false;

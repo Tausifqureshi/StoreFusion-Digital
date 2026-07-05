@@ -42,6 +42,6 @@ function Search({ placeholder = "Search StoreFusion...", isMobile = false }) {
       />
     </div>
   );
-}
-
-export default React.memo(Search);
+}const MemoizedSearch = React.memo(Search);
+MemoizedSearch.displayName = "Search";
+export default MemoizedSearch;

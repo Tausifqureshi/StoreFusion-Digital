@@ -84,5 +84,6 @@ const ProductFilters = ({
 };
 
 // 👉 React.memo: Absolute performance lock for product filters
-ProductFilters.displayName = 'ProductFilters';
-export default React.memo(ProductFilters);
+ProductFilters.displayName = 'ProductFilters';const MemoizedProductFilters = React.memo(ProductFilters);
+MemoizedProductFilters.displayName = "ProductFilters";
+export default MemoizedProductFilters;

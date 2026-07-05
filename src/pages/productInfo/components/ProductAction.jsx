@@ -147,5 +147,7 @@ const ProductAction = React.memo(function ProductAction({
     </div>
   );
 });
+ProductAction.displayName = "ProductAction";
+
 
 export default ProductAction;

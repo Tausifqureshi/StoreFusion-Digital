@@ -196,6 +196,6 @@ function Contact() {
       </div>
     </>
   );
-}
-
-export default React.memo(Contact);
+}const MemoizedContact = React.memo(Contact);
+MemoizedContact.displayName = "Contact";
+export default MemoizedContact;

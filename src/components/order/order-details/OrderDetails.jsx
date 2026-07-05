@@ -110,6 +110,6 @@ function OrderDetails() {
       </div>
     </>
   );
-}
-
-export default React.memo(OrderDetails);
+}const MemoizedOrderDetails = React.memo(OrderDetails);
+MemoizedOrderDetails.displayName = "OrderDetails";
+export default MemoizedOrderDetails;

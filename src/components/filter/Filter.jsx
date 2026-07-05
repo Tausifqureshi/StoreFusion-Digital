@@ -388,5 +388,9 @@ function Filter({ mode, showCategoryFilter = false }) {
     </div>
   );
 }
+DesktopFilter.displayName = "DesktopFilter";
 
-export default React.memo(Filter);
+MobileFilter.displayName = "MobileFilter";
+const MemoizedFilter = React.memo(Filter);
+MemoizedFilter.displayName = "Filter";
+export default MemoizedFilter;

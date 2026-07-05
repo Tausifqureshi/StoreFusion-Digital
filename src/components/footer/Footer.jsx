@@ -232,6 +232,6 @@ function Footer({ isDark }) {
 // ✅ ABSOLUTE SHIELDING: Locked component prevents reconciliation leaks 
 // export default React.memo(Footer, (prev, next) => {
 //   return prev.isDark === next.isDark;
-// });
-
-export default React.memo(Footer);
+// });const MemoizedFooter = React.memo(Footer);
+MemoizedFooter.displayName = "Footer";
+export default MemoizedFooter;

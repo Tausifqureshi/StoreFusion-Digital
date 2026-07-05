@@ -29,5 +29,6 @@ function ProductGrid({ productsOnCurrentPage, isDark, edithandle, deleteProduct 
   );
 };
 
-ProductGrid.displayName = 'ProductGrid';
-export default React.memo(ProductGrid);
+ProductGrid.displayName = 'ProductGrid';const MemoizedProductGrid = React.memo(ProductGrid);
+MemoizedProductGrid.displayName = "ProductGrid";
+export default MemoizedProductGrid;

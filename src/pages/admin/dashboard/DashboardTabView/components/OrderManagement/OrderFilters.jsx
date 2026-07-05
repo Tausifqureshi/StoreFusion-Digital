@@ -61,5 +61,6 @@ function OrderFilters({ isDark, searchQuery, setSearchQuery, filterStatus, setFi
 };
 
 // 👉 React.memo: Ensure filter bar doesn't re-render unless its own logic/state changes
-OrderFilters.displayName = 'OrderFilters';
-export default React.memo(OrderFilters);
+OrderFilters.displayName = 'OrderFilters';const MemoizedOrderFilters = React.memo(OrderFilters);
+MemoizedOrderFilters.displayName = "OrderFilters";
+export default MemoizedOrderFilters;

@@ -57,5 +57,6 @@ function MonthlyProductSales({ isDark, data }) {
   );
 };
 
-MonthlyProductSales.displayName = 'MonthlyProductSales';
-export default React.memo(MonthlyProductSales);
+MonthlyProductSales.displayName = 'MonthlyProductSales';const MemoizedMonthlyProductSales = React.memo(MonthlyProductSales);
+MemoizedMonthlyProductSales.displayName = "MonthlyProductSales";
+export default MemoizedMonthlyProductSales;

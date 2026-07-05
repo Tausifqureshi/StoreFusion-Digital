@@ -202,5 +202,7 @@ const CartView = React.memo(function CartView({
     </div>
   );
 });
-
-export default React.memo(CartView);
+CartView.displayName = "CartView";
+const MemoizedCartView = React.memo(CartView);
+MemoizedCartView.displayName = "CartView";
+export default MemoizedCartView;

@@ -149,8 +149,9 @@ STATUS: ${(o.status || 'placed').toUpperCase()}
   );
 };
 
-OrderItem.displayName = 'OrderItem';
-export default React.memo(OrderItem);
+OrderItem.displayName = 'OrderItem';const MemoizedOrderItem = React.memo(OrderItem);
+MemoizedOrderItem.displayName = "OrderItem";
+export default MemoizedOrderItem;
 
 // export default React.memo(OrderItem, (prev, next) => {
 //   if (prev.isDark !== next.isDark) return false;

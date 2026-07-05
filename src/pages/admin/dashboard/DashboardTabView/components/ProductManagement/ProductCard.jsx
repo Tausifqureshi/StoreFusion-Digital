@@ -117,5 +117,6 @@ function ProductCard({ item, isDark, edithandle, deleteProduct }) {
   );
 };
 
-ProductCard.displayName = 'ProductCard';
-export default React.memo(ProductCard);
+ProductCard.displayName = 'ProductCard';const MemoizedProductCard = React.memo(ProductCard);
+MemoizedProductCard.displayName = "ProductCard";
+export default MemoizedProductCard;

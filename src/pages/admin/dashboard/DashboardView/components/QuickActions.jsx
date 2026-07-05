@@ -31,5 +31,6 @@ function QuickActions({ isDark, navigate }) {
   );
 };
 
-QuickActions.displayName = 'QuickActions';
-export default React.memo(QuickActions);
+QuickActions.displayName = 'QuickActions';const MemoizedQuickActions = React.memo(QuickActions);
+MemoizedQuickActions.displayName = "QuickActions";
+export default MemoizedQuickActions;

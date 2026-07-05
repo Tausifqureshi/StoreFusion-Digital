@@ -49,6 +49,6 @@ function OrderItemsList({ order, isDark, navigate }) {
       )}
     </div>
   );
-}
-
-export default React.memo(OrderItemsList);
+}const MemoizedOrderItemsList = React.memo(OrderItemsList);
+MemoizedOrderItemsList.displayName = "OrderItemsList";
+export default MemoizedOrderItemsList;

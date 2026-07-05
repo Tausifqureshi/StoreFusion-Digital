@@ -73,5 +73,7 @@ const GallerySection = React.memo(function GallerySection({ mainImage, setMainIm
     </div>
   );
 });
+GallerySection.displayName = "GallerySection";
+
 
 export default GallerySection;

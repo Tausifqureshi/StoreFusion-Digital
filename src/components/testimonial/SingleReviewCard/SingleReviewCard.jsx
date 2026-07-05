@@ -116,6 +116,6 @@ const SingleReviewCard = ({ item, isDark, isAdmin, productId, getAvatar, editTes
       )}
     </div>
   );
-};
-
-export default React.memo(SingleReviewCard);
+};const MemoizedSingleReviewCard = React.memo(SingleReviewCard);
+MemoizedSingleReviewCard.displayName = "SingleReviewCard";
+export default MemoizedSingleReviewCard;

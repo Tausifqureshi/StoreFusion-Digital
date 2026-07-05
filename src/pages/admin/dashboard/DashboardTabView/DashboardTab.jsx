@@ -241,5 +241,7 @@ function DashboardTab() {
     </div>
   );
 }
-
-export default React.memo(DashboardTab);
+TabMenu.displayName = "TabMenu";
+const MemoizedDashboardTab = React.memo(DashboardTab);
+MemoizedDashboardTab.displayName = "DashboardTab";
+export default MemoizedDashboardTab;

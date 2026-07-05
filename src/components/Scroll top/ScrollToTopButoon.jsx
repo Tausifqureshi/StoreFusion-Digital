@@ -60,5 +60,6 @@ function ScrollToTopButoon({ mode }) {
       </div>
     </div>
   );
-}
-export default React.memo(ScrollToTopButoon, (prevProps, nextProps) => prevProps.mode === nextProps.mode);
+}const MemoizedScrollToTopButoon = React.memo(ScrollToTopButoon, (prevProps, nextProps) => prevProps.mode === nextProps.mode);
+MemoizedScrollToTopButoon.displayName = "ScrollToTopButoon";
+export default MemoizedScrollToTopButoon;

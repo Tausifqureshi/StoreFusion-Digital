@@ -65,8 +65,9 @@ function OrderStatusUpdater({ orderId, currentStatus, isDark, onClose }) {
   );
 };
 
-OrderStatusUpdater.displayName = 'OrderStatusUpdater';
-export default React.memo(OrderStatusUpdater);
+OrderStatusUpdater.displayName = 'OrderStatusUpdater';const MemoizedOrderStatusUpdater = React.memo(OrderStatusUpdater);
+MemoizedOrderStatusUpdater.displayName = "OrderStatusUpdater";
+export default MemoizedOrderStatusUpdater;
 
 // export default React.memo(OrderStatusUpdater, (prevProps, nextProps) => {
 //   if (prevProps.orderId !== nextProps.orderId) return false;

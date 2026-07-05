@@ -76,5 +76,6 @@ function ProductPagination({ isDark, currentPage, totalPages, setCurrentPage, it
 };
 
 // 👉 React.memo: Absolute performance lock for product pagination
-ProductPagination.displayName = 'ProductPagination';
-export default React.memo(ProductPagination);
+ProductPagination.displayName = 'ProductPagination';const MemoizedProductPagination = React.memo(ProductPagination);
+MemoizedProductPagination.displayName = "ProductPagination";
+export default MemoizedProductPagination;

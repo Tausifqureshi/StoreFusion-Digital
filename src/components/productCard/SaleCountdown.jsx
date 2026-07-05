@@ -46,8 +46,6 @@ export const SaleCountdown = ({ saleEndTime }) => {
       <span className="tracking-widest uppercase">Ends In: {timeLeft}</span>
     </div>
   );
-};
-
-export default React.memo(SaleCountdown);
-
-
+};const MemoizedSaleCountdown = React.memo(SaleCountdown);
+MemoizedSaleCountdown.displayName = "SaleCountdown";
+export default MemoizedSaleCountdown;

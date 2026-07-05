@@ -237,5 +237,9 @@ const Allproducts = React.memo(function Allproducts() {
     </div>
   );
 });
+AllProductsView.displayName = "AllProductsView";
+
+Allproducts.displayName = "Allproducts";
+
 
 export default Allproducts;

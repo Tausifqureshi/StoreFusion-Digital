@@ -159,9 +159,6 @@ function About() {
       </section>
     </>
   );
-}
-
-export default React.memo(About);
-
-
-
+}const MemoizedAbout = React.memo(About);
+MemoizedAbout.displayName = "About";
+export default MemoizedAbout;

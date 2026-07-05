@@ -37,5 +37,7 @@ const ProductAccordion = React.memo(function ProductAccordion({ accordionData, i
     </div>
   );
 });
+ProductAccordion.displayName = "ProductAccordion";
+
 
 export default ProductAccordion;

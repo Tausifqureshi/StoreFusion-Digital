@@ -73,5 +73,7 @@ const DashboardView = React.memo(function DashboardView({ isDark, navigate, chil
     </div>
   );
 });
-
-export default React.memo(DashboardView);
+DashboardView.displayName = "DashboardView";
+const MemoizedDashboardView = React.memo(DashboardView);
+MemoizedDashboardView.displayName = "DashboardView";
+export default MemoizedDashboardView;

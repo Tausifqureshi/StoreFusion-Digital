@@ -58,7 +58,6 @@ function Dashboard() {
       </DashboardView>
     </>
   );
-}
-
-export default React.memo(Dashboard);
-
+}const MemoizedDashboard = React.memo(Dashboard);
+MemoizedDashboard.displayName = "Dashboard";
+export default MemoizedDashboard;

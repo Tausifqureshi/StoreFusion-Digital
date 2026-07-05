@@ -22,5 +22,6 @@ function StatCard({ title, value, icon, bgClass, shadowClass, trend, trendValue,
   );
 };
 
-StatCard.displayName = 'StatCard';
-export default React.memo(StatCard);
+StatCard.displayName = 'StatCard';const MemoizedStatCard = React.memo(StatCard);
+MemoizedStatCard.displayName = "StatCard";
+export default MemoizedStatCard;

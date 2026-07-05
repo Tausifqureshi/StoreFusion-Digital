@@ -163,5 +163,7 @@ const Razorpay = React.memo(function Razorpay({ cartItemsRef, totalAmountRef }) 
     </div>
   );
 });
+Razorpay.displayName = "Razorpay";
+
 
 export default Razorpay;

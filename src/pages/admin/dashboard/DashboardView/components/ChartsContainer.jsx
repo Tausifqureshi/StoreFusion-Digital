@@ -17,5 +17,7 @@ const ChartsContainer = React.memo(function ChartsContainer({ isDark, monthlyOrd
     </>
   );
 });
+ChartsContainer.displayName = "ChartsContainer";
+
 
 export default ChartsContainer;

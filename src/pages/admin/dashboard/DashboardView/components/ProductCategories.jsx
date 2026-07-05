@@ -173,5 +173,6 @@ function ProductCategories({ isDark, products }) {
   );
 }
 
-ProductCategories.displayName = "ProductCategories";
-export default React.memo(ProductCategories);
+ProductCategories.displayName = "ProductCategories";const MemoizedProductCategories = React.memo(ProductCategories);
+MemoizedProductCategories.displayName = "ProductCategories";
+export default MemoizedProductCategories;

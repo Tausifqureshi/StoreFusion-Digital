@@ -29,6 +29,8 @@ const OrderStatusBadge = React.memo(function OrderStatusBadge({ status, isDark }
     </span>
   );
 });
+OrderStatusBadge.displayName = "OrderStatusBadge";
+
 
 
 

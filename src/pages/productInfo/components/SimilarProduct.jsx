@@ -39,5 +39,7 @@ const SimilarProduct = React.memo(function SimilarProduct({
     </section>
   );
 });
+SimilarProduct.displayName = "SimilarProduct";
+
 
 export default SimilarProduct;

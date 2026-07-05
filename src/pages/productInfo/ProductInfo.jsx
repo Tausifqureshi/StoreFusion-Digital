@@ -90,6 +90,6 @@ function ProductInfo() {
       </div>
     </>
   );
-}
-
-export default React.memo(ProductInfo);
+}const MemoizedProductInfo = React.memo(ProductInfo);
+MemoizedProductInfo.displayName = "ProductInfo";
+export default MemoizedProductInfo;

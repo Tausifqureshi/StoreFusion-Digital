@@ -43,6 +43,6 @@ function Order() {
       />
     </>
   );
-}
-
-export default React.memo(Order);
+}const MemoizedOrder = React.memo(Order);
+MemoizedOrder.displayName = "Order";
+export default MemoizedOrder;

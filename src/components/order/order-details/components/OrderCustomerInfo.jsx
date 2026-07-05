@@ -43,6 +43,6 @@ function OrderCustomerInfo({ user, addressInfo, order, isDark, cancellingId, han
       </div>
     </div>
   );
-}
-
-export default React.memo(OrderCustomerInfo);
+}const MemoizedOrderCustomerInfo = React.memo(OrderCustomerInfo);
+MemoizedOrderCustomerInfo.displayName = "OrderCustomerInfo";
+export default MemoizedOrderCustomerInfo;

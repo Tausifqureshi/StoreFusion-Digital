@@ -331,9 +331,10 @@ function Modal({ formData, setFormData, buyNow, cashOnDelivery }) {
         , document.body)}
     </>
   );
-}
+}const MemoizedModal = React.memo(Modal);
+MemoizedModal.displayName = "Modal";
+export default MemoizedModal;
 
-export default React.memo(Modal);
 // ✅ ABSOLUTE SHIELDING: Modal props are heavily memoized to prevent reconciliation leaks
 // export default React.memo(Modal, (prev, next) => {
 //   return (

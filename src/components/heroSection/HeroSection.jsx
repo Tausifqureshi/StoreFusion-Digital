@@ -148,6 +148,14 @@ const HeroSection = memo(function HeroSection({ mode }) {
     </div>
   );
 });
+SlideContent.displayName = "SlideContent";
+
+ProgressBar.displayName = "ProgressBar";
+
+SwiperContainer.displayName = "SwiperContainer";
+
+HeroSection.displayName = "HeroSection";
+
 
 
 export default HeroSection;

@@ -61,5 +61,7 @@ const StatCardsContainer = React.memo(function StatCardsContainer({ isDark, prod
     </div>
   );
 });
+StatCardsContainer.displayName = "StatCardsContainer";
+
 
 export default StatCardsContainer;

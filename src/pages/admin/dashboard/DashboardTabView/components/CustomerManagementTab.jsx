@@ -238,5 +238,6 @@ function CustomerManagementTab() {
   );
 };
 
-CustomerManagementTab.displayName = 'CustomerManagementTab';
-export default React.memo(CustomerManagementTab);
+CustomerManagementTab.displayName = 'CustomerManagementTab';const MemoizedCustomerManagementTab = React.memo(CustomerManagementTab);
+MemoizedCustomerManagementTab.displayName = "CustomerManagementTab";
+export default MemoizedCustomerManagementTab;

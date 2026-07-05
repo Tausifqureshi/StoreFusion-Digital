@@ -76,5 +76,6 @@ function RecentOrders({ isDark, orders }) {
   );
 };
 
-RecentOrders.displayName = 'RecentOrders';
-export default React.memo(RecentOrders);
+RecentOrders.displayName = 'RecentOrders';const MemoizedRecentOrders = React.memo(RecentOrders);
+MemoizedRecentOrders.displayName = "RecentOrders";
+export default MemoizedRecentOrders;

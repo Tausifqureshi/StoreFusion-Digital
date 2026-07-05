@@ -160,12 +160,12 @@ function Tracking({ order, isDark }) {
   );
 }
 
-Tracking.displayName = 'Tracking';
-
-export default React.memo(Tracking, (prev, next) => {
+Tracking.displayName = 'Tracking';const MemoizedTracking = React.memo(Tracking, (prev, next) => {
   return (
     prev.isDark === next.isDark &&
     prev.order?.id === next.order?.id &&
     prev.order?.status === next.order?.status
   );
 });
+MemoizedTracking.displayName = "Tracking";
+export default MemoizedTracking;

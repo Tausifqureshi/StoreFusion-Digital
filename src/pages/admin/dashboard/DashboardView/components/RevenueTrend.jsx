@@ -56,5 +56,6 @@ function RevenueTrend({ isDark, data }) {
   );
 };
 
-RevenueTrend.displayName = 'RevenueTrend';
-export default React.memo(RevenueTrend);
+RevenueTrend.displayName = 'RevenueTrend';const MemoizedRevenueTrend = React.memo(RevenueTrend);
+MemoizedRevenueTrend.displayName = "RevenueTrend";
+export default MemoizedRevenueTrend;

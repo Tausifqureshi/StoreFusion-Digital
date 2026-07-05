@@ -64,5 +64,6 @@ function SummaryCards({ isDark, product, filteredAndSortedProducts }) {
 };
 
 // 👉 React.memo: Ensure product summary cards only re-render when base data changes
-SummaryCards.displayName = 'SummaryCards';
-export default React.memo(SummaryCards);
+SummaryCards.displayName = 'SummaryCards';const MemoizedSummaryCards = React.memo(SummaryCards);
+MemoizedSummaryCards.displayName = "SummaryCards";
+export default MemoizedSummaryCards;

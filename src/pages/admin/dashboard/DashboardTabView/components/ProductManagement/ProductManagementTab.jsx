@@ -251,5 +251,6 @@ function ProductManagementTab() {
   );
 };
 
-ProductManagementTab.displayName = 'ProductManagementTab';
-export default React.memo(ProductManagementTab);
+ProductManagementTab.displayName = 'ProductManagementTab';const MemoizedProductManagementTab = React.memo(ProductManagementTab);
+MemoizedProductManagementTab.displayName = "ProductManagementTab";
+export default MemoizedProductManagementTab;

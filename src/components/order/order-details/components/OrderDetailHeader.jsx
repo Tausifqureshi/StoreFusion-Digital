@@ -14,6 +14,6 @@ function OrderDetailHeader({ navigate, isDark }) {
       </div>
     </div>
   );
-}
-
-export default React.memo(OrderDetailHeader);
+}const MemoizedOrderDetailHeader = React.memo(OrderDetailHeader);
+MemoizedOrderDetailHeader.displayName = "OrderDetailHeader";
+export default MemoizedOrderDetailHeader;

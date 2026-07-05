@@ -136,6 +136,6 @@ function Track({ mode }) {
       </div>
     </section>
   );
-}
-
-export default React.memo(Track);
+}const MemoizedTrack = React.memo(Track);
+MemoizedTrack.displayName = "Track";
+export default MemoizedTrack;

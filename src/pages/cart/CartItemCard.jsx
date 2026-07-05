@@ -77,5 +77,6 @@ const CartItemCard = ({
   );
 };
 
-CartItemCard.displayName = 'CartItemCard';
-export default React.memo(CartItemCard);
+CartItemCard.displayName = 'CartItemCard';const MemoizedCartItemCard = React.memo(CartItemCard);
+MemoizedCartItemCard.displayName = "CartItemCard";
+export default MemoizedCartItemCard;

@@ -147,5 +147,7 @@ function Testimonial({ productId = null, categoryName = null, isAdmin = false, m
     </div>
   );
 }
-
-export default React.memo(Testimonial);
+TestimonialView.displayName = "TestimonialView";
+const MemoizedTestimonial = React.memo(Testimonial);
+MemoizedTestimonial.displayName = "Testimonial";
+export default MemoizedTestimonial;

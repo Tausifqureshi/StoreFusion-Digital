@@ -64,5 +64,6 @@ function OrderPagination({ isDark, currentPage, totalPages, setCurrentPage, item
 };
 
 // 👉 React.memo: Ensure pagination only re-renders when necessary (page navigation or content size change)
-OrderPagination.displayName = 'OrderPagination';
-export default React.memo(OrderPagination);
+OrderPagination.displayName = 'OrderPagination';const MemoizedOrderPagination = React.memo(OrderPagination);
+MemoizedOrderPagination.displayName = "OrderPagination";
+export default MemoizedOrderPagination;

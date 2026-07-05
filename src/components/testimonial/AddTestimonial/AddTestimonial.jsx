@@ -245,4 +245,7 @@ function AddTestimonial({ productId = "" }) {
 }
 
 AddTestimonial.displayName = 'AddTestimonial';
-export default React.memo(AddTestimonial);
+AddTestimonialView.displayName = "AddTestimonialView";
+const MemoizedAddTestimonial = React.memo(AddTestimonial);
+MemoizedAddTestimonial.displayName = "AddTestimonial";
+export default MemoizedAddTestimonial;

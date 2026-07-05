@@ -174,9 +174,7 @@ function SingleProductCard({ item, isExpanded, setExpandedId, mode, colSize = "l
       </div>
     </div>
   );
-}
-
-export default React.memo(SingleProductCard, (prevProps, nextProps) => {
+}const MemoizedSingleProductCard = React.memo(SingleProductCard, (prevProps, nextProps) => {
   return (
     prevProps.item.id === nextProps.item.id &&
     prevProps.item.price === nextProps.item.price &&
@@ -189,3 +187,5 @@ export default React.memo(SingleProductCard, (prevProps, nextProps) => {
     prevProps.colSize === nextProps.colSize
   );
 });
+MemoizedSingleProductCard.displayName = "SingleProductCard";
+export default MemoizedSingleProductCard;

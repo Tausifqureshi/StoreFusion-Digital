@@ -645,7 +645,6 @@ function Navbar({ isDark }) {
       )}
     </NavScrollShield>
   );
-}
-
-export default React.memo(Navbar);
-      
+}const MemoizedNavbar = React.memo(Navbar);
+MemoizedNavbar.displayName = "Navbar";
+export default MemoizedNavbar;

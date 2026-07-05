@@ -56,5 +56,6 @@ function OrderSummaryCards({ isDark, order }) {
 };
 
 // 👉 React.memo: Absolute performance lock - preventing re-renders if order data hasn't changed
-OrderSummaryCards.displayName = 'OrderSummaryCards';
-export default React.memo(OrderSummaryCards);
+OrderSummaryCards.displayName = 'OrderSummaryCards';const MemoizedOrderSummaryCards = React.memo(OrderSummaryCards);
+MemoizedOrderSummaryCards.displayName = "OrderSummaryCards";
+export default MemoizedOrderSummaryCards;

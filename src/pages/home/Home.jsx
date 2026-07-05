@@ -26,6 +26,6 @@ function Home() {
       </section>
     </>
   );
-}
-
-export default React.memo(Home);
+}const MemoizedHome = React.memo(Home);
+MemoizedHome.displayName = "Home";
+export default MemoizedHome;

@@ -34,5 +34,6 @@ function OrderTable({ isDark, ordersOnCurrentPage, activeDropdown, setActiveDrop
 };
 
 // 👉 React.memo: Absolute performance lock for order list Without Risky hacks
-OrderTable.displayName = 'OrderTable';
-export default React.memo(OrderTable);
+OrderTable.displayName = 'OrderTable';const MemoizedOrderTable = React.memo(OrderTable);
+MemoizedOrderTable.displayName = "OrderTable";
+export default MemoizedOrderTable;

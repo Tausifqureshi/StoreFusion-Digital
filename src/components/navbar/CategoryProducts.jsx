@@ -229,7 +229,6 @@ function CategoryProducts() {
       </div>
     </>
   );
-}
-
-export default React.memo(CategoryProducts);
-
+}const MemoizedCategoryProducts = React.memo(CategoryProducts);
+MemoizedCategoryProducts.displayName = "CategoryProducts";
+export default MemoizedCategoryProducts;

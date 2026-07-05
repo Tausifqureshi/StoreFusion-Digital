@@ -20,8 +20,8 @@ function Layout({ children }) {
       <Footer isDark={isDark} />
     </div>
   );
-}
-
-export default React.memo(Layout);
+}const MemoizedLayout = React.memo(Layout);
+MemoizedLayout.displayName = "Layout";
+export default MemoizedLayout;
 
 // Layout component commends ---> Layout component ko is liye use karte hain kyunki project me kuch components, jaise Navbar aur Footer, har page pe dikhte hain. In components ko har page pe baar baar import karne ke bajaye, hum unhe Layout me include karte hain taaki yeh har route ke sath automatically show ho sakein.

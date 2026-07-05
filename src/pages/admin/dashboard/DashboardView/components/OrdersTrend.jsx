@@ -79,5 +79,6 @@ function OrdersTrend({ isDark, labels, data }) {
   );
 };
 
-OrdersTrend.displayName = 'OrdersTrend';
-export default React.memo(OrdersTrend);
+OrdersTrend.displayName = 'OrdersTrend';const MemoizedOrdersTrend = React.memo(OrdersTrend);
+MemoizedOrdersTrend.displayName = "OrdersTrend";
+export default MemoizedOrdersTrend;

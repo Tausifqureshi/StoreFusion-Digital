@@ -22,6 +22,6 @@ function Providers({ children }) {
       </AppInitializer>
     </Provider>
   );
-}
-
-export default React.memo(Providers);
+}const MemoizedProviders = React.memo(Providers);
+MemoizedProviders.displayName = "Providers";
+export default MemoizedProviders;

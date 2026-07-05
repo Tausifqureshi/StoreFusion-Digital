@@ -40,6 +40,6 @@ function OrderInfoBar({ order, totalPrice, isDark }) {
       <OrderStatusBadge status={order.status || "placed"} isDark={isDark} />
     </div>
   );
-}
-
-export default React.memo(OrderInfoBar);
+}const MemoizedOrderInfoBar = React.memo(OrderInfoBar);
+MemoizedOrderInfoBar.displayName = "OrderInfoBar";
+export default MemoizedOrderInfoBar;

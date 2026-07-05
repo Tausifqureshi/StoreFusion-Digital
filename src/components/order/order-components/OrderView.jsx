@@ -104,5 +104,7 @@ const OrderView = React.memo(function OrderView({
     </div>
   );
 });
-
-export default React.memo(OrderView);
+OrderView.displayName = "OrderView";
+const MemoizedOrderView = React.memo(OrderView);
+MemoizedOrderView.displayName = "OrderView";
+export default MemoizedOrderView;

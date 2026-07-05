@@ -192,6 +192,6 @@ function ProductCard() {
       </div>
     </section>
   );
-}
-
-export default React.memo(ProductCard);
+}const MemoizedProductCard = React.memo(ProductCard);
+MemoizedProductCard.displayName = "ProductCard";
+export default MemoizedProductCard;

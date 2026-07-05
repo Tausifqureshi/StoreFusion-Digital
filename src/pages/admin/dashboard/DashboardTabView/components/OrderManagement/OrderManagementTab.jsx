@@ -138,5 +138,6 @@ function OrderManagementTab() {
   );
 };
 
-OrderManagementTab.displayName = 'OrderManagementTab';
-export default React.memo(OrderManagementTab);
+OrderManagementTab.displayName = 'OrderManagementTab';const MemoizedOrderManagementTab = React.memo(OrderManagementTab);
+MemoizedOrderManagementTab.displayName = "OrderManagementTab";
+export default MemoizedOrderManagementTab;
