@@ -55,7 +55,7 @@ export function FilterState({ children }) {
 
   useEffect(() => {
     if (filterColor.length > 0) localStorage.setItem("filterColor", JSON.stringify(filterColor));
-    else localStorage.removeItem("filterColor");
+    else localStorage.removeItem("filterColor")
   }, [filterColor]);
 
   useEffect(() => {
