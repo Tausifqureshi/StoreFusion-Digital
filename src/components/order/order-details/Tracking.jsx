@@ -160,7 +160,7 @@ function Tracking({ order, isDark }) {
   );
 }
 
-Tracking.displayName = 'Tracking';  
+Tracking.displayName = 'Tracking'; 
 const MemoizedTracking = React.memo(Tracking, (prev, next) => {
   return (
     prev.isDark === next.isDark &&

@@ -143,12 +143,17 @@ class ProductService {
 
   /**
    * Adds a new product to Firestore.
+   * 🔥 PRODUCTION OPTIMIZED: Sanitizes numeric fields (price, discount, stock, rating) so they are stored cleanly as numbers.
    */
   async addProduct(product) {
     if (!product) throw new Error("Product data missing");
     try {
       const productWithTime = {
         ...product,
+        price: product.price !== undefined && product.price !== "" ? Number(product.price) || 0 : 0,
+        discount: product.discount !== undefined && product.discount !== "" ? Number(product.discount) || 0 : 0,
+        stock: product.stock !== undefined && product.stock !== "" ? Number(product.stock) || 0 : 1,
+        rating: product.rating !== undefined && product.rating !== "" ? Number(product.rating) || 5 : 5,
         time: serverTimestamp(),
         createdAt: new Date().toISOString()
       };
@@ -162,6 +167,7 @@ class ProductService {
 
   /**
    * Updates an existing product.
+   * 🔥 PRODUCTION OPTIMIZED: Sanitizes numeric fields cleanly without repeated spread operators.
    */
   async updateProduct(id, product) {
     if (!id || !product) throw new Error("ID or Data missing");
@@ -170,6 +176,12 @@ class ProductService {
         ...product,
         updatedAt: new Date().toISOString()
       };
+
+      if (product.price !== undefined && product.price !== "") updateData.price = Number(product.price) || 0;
+      if (product.discount !== undefined && product.discount !== "") updateData.discount = Number(product.discount) || 0;
+      if (product.stock !== undefined && product.stock !== "") updateData.stock = Number(product.stock) || 0;
+      if (product.rating !== undefined && product.rating !== "") updateData.rating = Number(product.rating) || 5;
+
       await setDoc(doc(fireDB, "products", id), updateData, { merge: true });
       return true;
     } catch (error) {
