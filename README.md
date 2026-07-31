@@ -45,12 +45,14 @@ Experience the live application in production:
 
 ## ✨ Top Features
 
-- ⭐ **Interactive Testimonial & Review System**: End-to-end customer review management with star ratings, verified buyer badges, and real-time Firebase sync (`AddTestimonial.jsx`, `SingleReviewCard.jsx`, `testimonialService.js`).
-- 🛒 **Redux-Persist Shopping Cart**: Cart state, item quantities, and pricing persist locally across browser sessions and page reloads without data loss.
-- 🔍 **Instant Catalog Search & Filtering**: Multi-category filtering (Electronics, Fashion, Home Decor), price range slider, and instant keyword search (`/allproducts`).
-- 🔐 **Firebase Authentication**: Secure user sign-up, sign-in, session persistence, and protected routes for checkout and administration.
-- 💳 **Secure Razorpay Payment Gateway**: Integrated checkout modal for seamless UPI, Card, NetBanking, and Wallet payments.
-- 📊 **Comprehensive Admin Dashboard**: Centralized `/admin` panel to manage store inventory, monitor user orders, and moderate customer reviews.
+| 🚀 Feature | 💡 Description | ⚙️ Key Tech / Highlight |
+| :--- | :--- | :--- |
+| ⭐ **Interactive Testimonial & Review System** | End-to-end customer review management with 5-star ratings, verified buyer badges, and real-time Firebase DB sync. | `AddTestimonial.jsx`<br/>**Firebase RTDB Sync** |
+| 🛒 **Redux-Persist Shopping Cart** | Persistent cart across browser sessions and page refreshes without data loss, with real-time tax & subtotal calculation. | `redux-persist`<br/>**Instant Price Calculation** |
+| 🔍 **Instant Catalog Search & Multi-Filters** | Filter products by Category (Electronics, Fashion, Home Decor), customizable price slider, and instant keyword search. | `/allproducts`<br/>**Instant UI Filtering** |
+| 🔐 **Firebase Authentication & Security** | Secure user registration, sign-in, auth state persistence, and protected routes for checkout & admin views. | `Firebase Auth`<br/>**Protected Routes** |
+| 💳 **Secure Razorpay Payment Gateway** | Integrated checkout modal for seamless UPI, Debit/Credit Card, NetBanking, and Wallet payments. | `Razorpay SDK`<br/>**Secure Transactions** |
+| 📊 **Comprehensive Admin Dashboard** | Centralized `/admin` control panel to manage inventory, monitor customer orders, and moderate reviews. | `/admin`<br/>**Chart.js Analytics** |
 
 ---
 
