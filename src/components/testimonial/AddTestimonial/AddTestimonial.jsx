@@ -85,7 +85,7 @@ const AddTestimonialView = React.memo(function AddTestimonialView({
               </span>
             )}
           </div>
-        </div>
+        </div>  
 
         <div className={`border-t ${isDark ? "border-gray-800" : "border-gray-100"} pt-4 space-y-4`}>
           
