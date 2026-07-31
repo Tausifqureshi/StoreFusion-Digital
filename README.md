@@ -6,260 +6,88 @@
 [![Vite 7](https://img.shields.io/badge/Vite-7.3.1-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-2.2.7-764ABC?style=for-the-badge&logo=redux&logoColor=white)](https://redux-toolkit.js.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Material UI](https://img.shields.io/badge/Material_UI-7.3-007FFF?style=for-the-badge&logo=mui&logoColor=white)](https://mui.com/)
 [![Firebase](https://img.shields.io/badge/Firebase-12.10-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![Razorpay](https://img.shields.io/badge/Razorpay-Integrated-0C2340?style=for-the-badge&logo=razorpay&logoColor=white)](https://razorpay.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-**A high-performance, modern full-stack e-commerce web application featuring real-time Firebase authentication, Redux-persist cart state management, interactive customer testimonials & rating reviews, and secure Razorpay payment checkout.**
+**A modern, responsive full-stack e-commerce web application featuring real-time Firebase authentication, Redux-persist cart caching, interactive customer testimonials & reviews, and secure Razorpay payment checkout.**
 
-[🌐 Live Demo](#-live-demo--deployment) • [📸 Screenshots](#-project-screenshots--ui-showcase) • [✨ Key Features](#-key-features--recent-upgrades) • [🏗️ System Architecture](#️-system-architecture--data-flow) • [📌 Portfolio Highlights](#-repository--portfolio-showcase) • [🚀 Getting Started](#-getting-started)
+[🌐 Live Demo](#-live-demo) • [🛠️ Tech Stack](#️-tech-stack) • [✨ Top Features](#-top-features) • [📸 Screenshots](#-project-screenshots)
 
 </div>
 
 ---
 
-## 🌐 Live Demo & Deployment
-
+## 🌐 Live Demo
 Experience the live application in production:
 
-- **Primary Live Production URL**: [https://storefusion-digital.vercel.app](https://storefusion-digital.vercel.app)
-- **Alternative Mirror (Firebase Hosting)**: [https://e-commerce-storefusion.web.app](https://e-commerce-storefusion.web.app)
+- **Primary Live URL**: [https://storefusion-digital.vercel.app](https://storefusion-digital.vercel.app)
+- **Alternative Mirror**: [https://e-commerce-storefusion.web.app](https://e-commerce-storefusion.web.app)
 
 > [!TIP]
-> **Testing the Live Demo:**
-> - You can register a new user or log in with test credentials to test protected checkout & admin features.
-> - Try adding products to your cart and refreshing the browser — your cart state persists automatically via `redux-persist`.
-> - Check out the **Interactive Testimonial & Review System** on any Product Details page to submit reviews with 5-star ratings.
+> **Testing the Demo:**
+> - Try adding products to your cart and refreshing — your cart persists automatically via `redux-persist`.
+> - Test the **Interactive Testimonial & Review System** on any Product Details page to submit reviews with 5-star ratings.
+> - Log in to test secure Razorpay checkout and protected Admin Dashboard features.
 
 ---
 
-## 📌 Repository & Portfolio Showcase
+## 🛠️ Tech Stack
 
-This repository (**`Tausifqureshi/StoreFusion-Digital`**) is structured and pinned as a **flagship full-stack React architecture project**, demonstrating:
-1. **Production-Grade Engineering**: Separation of presentation UI (`components/`), state logic (`features/`), API integration (`services/`), and route views (`pages/`).
-2. **Real-World E-Commerce Workflows**: Complete customer buying journey from discovery, multi-filter search, product reviews, cart management, to secure gateway checkout.
-3. **Optimized State & Caching**: Efficient use of Redux Toolkit with `redux-persist` to prevent cart abandonment and minimize redundant network fetches.
-4. **Scalable Component Design**: Over 15 modular feature directories built with clean Tailwind CSS utility styling, Framer Motion animations, and Material UI components.
+| Layer | Technologies Used |
+| :--- | :--- |
+| **Frontend** | React 18 (`v18.3.1`), Vite (`v7.3.1`), React Router DOM (`v7`) |
+| **State Management** | Redux Toolkit (`v2.2.7`), `redux-persist` (`v6.0.0`) |
+| **Styling & UI** | Tailwind CSS (`v3.4`), Material UI (`@mui/material`), Framer Motion |
+| **Backend & Database** | Firebase Authentication, Firebase Firestore / Realtime DB |
+| **Payment & Charts** | Razorpay Payment SDK, Chart.js (`v4.4`) |
 
 ---
 
-## 📸 Project Screenshots & UI Showcase
+## ✨ Top Features
 
-Below are the 4 main application views demonstrating the responsive layout, vibrant aesthetics, and rich UI features:
+- ⭐ **Interactive Testimonial & Review System**: End-to-end customer review management with star ratings, verified buyer badges, and real-time Firebase sync (`AddTestimonial.jsx`, `SingleReviewCard.jsx`, `testimonialService.js`).
+- 🛒 **Redux-Persist Shopping Cart**: Cart state, item quantities, and pricing persist locally across browser sessions and page reloads without data loss.
+- 🔍 **Instant Catalog Search & Filtering**: Multi-category filtering (Electronics, Fashion, Home Decor), price range slider, and instant keyword search (`/allproducts`).
+- 🔐 **Firebase Authentication**: Secure user sign-up, sign-in, session persistence, and protected routes for checkout and administration.
+- 💳 **Secure Razorpay Payment Gateway**: Integrated checkout modal for seamless UPI, Card, NetBanking, and Wallet payments.
+- 📊 **Comprehensive Admin Dashboard**: Centralized `/admin` panel to manage store inventory, monitor user orders, and moderate customer reviews.
+
+---
+
+## 🚀 Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Tausifqureshi/StoreFusion-Digital.git
+
+# 2. Install dependencies
+npm install
+
+# 3. Run development server
+npm run dev
+```
+
+---
+
+## 📸 Project Screenshots
 
 ### 1️⃣ Home Page & Promotional Hero Section
-*Features a responsive navigation bar with live cart counter, promotional seasonal hero banner, and curated featured product grids.*
-
-![Home Page Preview](./public/screenshots/home_page.png)
+![Home Page](./public/screenshots/home_page.png)
 
 ---
 
-### 2️⃣ Product Catalog, Instant Search & Multi-Category Filters
-*Comprehensive product catalog `/allproducts` featuring instant search, price slider, and category filtering (Electronics, Fashion, Home Decor).*
-
+### 2️⃣ Product Catalog & Instant Multi-Category Filters
 ![Products Catalog](./public/screenshots/products_catalog.png)
 
 ---
 
-### 3️⃣ Product Info & Interactive Customer Testimonials System
-*Detailed product view `/productInfo` with image gallery, interactive customer testimonials, star ratings, and the Add Testimonial modal.*
-
-![Customer Testimonials & Reviews](./public/screenshots/product_reviews.png)
+### 3️⃣ Product Info & Interactive Customer Testimonials
+![Customer Testimonials](./public/screenshots/product_reviews.png)
 
 ---
 
-### 4️⃣ Shopping Cart, Quantity Controls & Secure Razorpay Checkout
-*Full-featured cart `/cart` with quantity adjustments, automatic subtotal/tax calculations, and integrated Razorpay checkout modal.*
-
+### 4️⃣ Shopping Cart & Secure Razorpay Checkout
 ![Cart & Secure Checkout](./public/screenshots/cart_checkout.png)
-
----
-
-## ✨ Key Features & Recent Upgrades
-
-### ⭐ 1. Interactive Customer Testimonials & Review System (Recent Upgrade)
-- **End-to-End Review Management**: Users can read, submit, edit, and delete customer testimonials and product reviews.
-- **Dynamic 5-Star Rating Cards**: Visually rich review cards (`SingleReviewCard.jsx`) displaying verified badge, star ratings, customer avatar, and formatted feedback.
-- **Add Testimonial Modal**: Clean, interactive rating modal (`AddTestimonial.jsx`) with instant form validation and real-time Firebase synchronization.
-- **Dedicated Service Layer**: Centralized API handlers in `testimonialService.js` and Redux state caching in `testimonialSlice.js` for seamless state updates without page reloads.
-
-### 🛒 2. Redux-Persist Shopping Cart & Order Flow
-- **State Persistence**: Cart items, quantities, and pricing are saved locally using `redux-persist`, ensuring users never lose their cart across sessions or browser refreshes.
-- **Dynamic Price Calculations**: Real-time tax, shipping, subtotal, and total calculation powered by `cartService.js` and `cartSlice.js`.
-- **Order History & Tracking**: Dedicated `/orders` and real-time shipment status tracking UI (`/track`).
-
-### 🔍 3. Advanced Catalog Filtering & Search
-- **Instant Search Bar**: Real-time keyword filtering across product titles and descriptions.
-- **Multi-Category Filters**: Filter by Electronics, Fashion, Home & Living, and custom price brackets.
-- **Sorting & Pagination**: Smooth UX with animated product cards (`SingleProductCard.jsx`).
-
-### 🔐 4. Firebase Authentication & User Profiles
-- **Secure Authentication**: Integration with Firebase Auth supporting user signup, signin, and password recovery.
-- **Protected Routes**: Middleware guards for authenticated customer checkouts and administrator routes.
-- **Real-Time Database Sync**: User profiles and order histories synced with cloud Firestore/Database.
-
-### 💳 5. Secure Payment Gateway Integration (Razorpay)
-- **Seamless Checkout**: Native Razorpay payment modal integration supporting UPI, Credit/Debit Cards, NetBanking, and Wallets.
-- **Automated Verification**: Transaction status verification and order invoice generation upon successful payment.
-
-### 📊 6. Comprehensive Admin Dashboard
-- **Store Control Center**: Dedicated `/admin` interface for managing inventory, viewing customer orders, monitoring user analytics, and moderating customer reviews/testimonials.
-- **Visual Analytics**: Interactive sales and order charts rendered with `Chart.js` & `react-chartjs-2`.
-
----
-
-## 🏗️ System Architecture & Data Flow
-
-StoreFusion Digital follows a **unidirectional data flow pattern** utilizing **Redux Toolkit** for global state and **custom service adapters** for external cloud APIs.
-
-```mermaid
-graph TD
-    subgraph Client [React 18 Client Application]
-        UI[UI Components & Pages<br/>Home / ProductInfo / Cart / Admin]
-        Modal[Interactive Modals<br/>AddTestimonial / ReviewModal]
-        Hook[Custom Hooks & Services<br/>cartService / testimonialService]
-    end
-
-    subgraph State [Redux Toolkit Global Store]
-        CartSlice[cartSlice<br/>(redux-persist)]
-        TestimonialSlice[testimonialSlice]
-        ProductSlice[productSlice]
-    end
-
-    subgraph External [Cloud & Gateway Services]
-        FirebaseAuth[Firebase Authentication]
-        FirebaseDB[Firebase Firestore / RTDB]
-        Razorpay[Razorpay Payment Gateway]
-    end
-
-    UI -->|Dispatch Actions| State
-    Modal -->|Submit Review| Hook
-    Hook -->|Update Store| State
-    Hook -->|Async CRUD| FirebaseDB
-    UI -->|Auth Status| FirebaseAuth
-    UI -->|Checkout Request| Razorpay
-    State -->|Persist LocalStorage| Client
-```
-
-### 📂 Directory Structure
-
-```text
-d:\Recat-App\Complete Project\E-Commerce
-├── public/
-│   └── screenshots/           # High-resolution project showcase images
-├── src/
-│   ├── assets/                # Static icons, logos, and vector assets
-│   ├── components/            # Modular, reusable React components
-│   │   ├── heroSection/       # Landing promotional banner & slider
-│   │   ├── navbar/            # Navigation bar, auth menu & cart badge
-│   │   ├── productCard/       # SingleProductCard & ProductGrid layouts
-│   │   ├── testimonial/       # AddTestimonial, SingleReviewCard & review modals
-│   │   ├── cart/              # Cart item rows & price summary components
-│   │   ├── order/             # Order card & order summary items
-│   │   └── track/             # Live shipment progress indicators
-│   ├── features/              # Redux Toolkit Slices (state management)
-│   │   ├── cart/              # cartSlice.js & local persistence config
-│   │   ├── testimonials/      # testimonialSlice.js & review reducers
-│   │   ├── products/          # products slice
-│   │   └── orders/            # order tracking slice
-│   ├── pages/                 # Full-page application views
-│   │   ├── home/              # Home landing page
-│   │   ├── allproducts/       # Catalog & filterable product listings
-│   │   ├── productInfo/       # Single product details & customer review feed
-│   │   ├── cart/              # Shopping cart & checkout view
-│   │   ├── razorpay/          # Razorpay payment confirmation
-│   │   ├── registration/      # Sign in & sign up pages
-│   │   └── admin/             # Admin management console
-│   ├── services/              # API and backend service layer
-│   │   ├── cartService.js     # Cart calculation & validation logic
-│   │   └── testimonialService.js # Customer review CRUD operations
-│   ├── utils/                 # Helper utilities and formatters
-│   ├── App.jsx                # Application root with Route definitions
-│   └── main.jsx               # Redux Provider, PersistGate & DOM initialization
-├── package.json               # Project dependencies and npm scripts
-├── tailwind.config.js         # Tailwind CSS styling tokens & custom themes
-└── vite.config.js             # Vite bundler configuration
-```
-
----
-
-## 🚀 Getting Started
-
-### 1️⃣ Prerequisites
-- **Node.js**: `v18.0.0` or higher
-- **npm** or **yarn** package manager
-
-### 2️⃣ Clone the Repository
-```bash
-git clone https://github.com/Tausifqureshi/StoreFusion-Digital.git
-cd StoreFusion-Digital
-```
-
-### 3️⃣ Install Dependencies
-```bash
-npm install
-```
-
-### 4️⃣ Configure Environment Variables
-Create a `.env` file in the project root directory and populate it with your Firebase and Razorpay credentials:
-
-```ini
-# Firebase Authentication & Database Config
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
-
-# Razorpay Payment Gateway Key
-VITE_RAZORPAY_KEY_ID=your_razorpay_key_id
-```
-
-### 5️⃣ Run the Development Server
-```bash
-npm run dev
-```
-Open [http://localhost:5173](http://localhost:5173) in your browser to view the application locally.
-
-### 6️⃣ Build for Production
-```bash
-npm run build
-npm run preview
-```
-
----
-
-## 🛠️ Technology Stack
-
-| Component | Technologies Used |
-| :--- | :--- |
-| **Frontend Framework** | React 18 (`v18.3.1`), Vite (`v7.3.1`) |
-| **State Management** | Redux Toolkit (`v2.2.7`), `redux-persist` (`v6.0.0`) |
-| **Styling & UI Library** | Tailwind CSS (`v3.4.12`), Material UI (`@mui/material`), Emotion |
-| **Animations & UI UX** | Framer Motion (`v12`), React Spring, Swiper (`v12`), React Toastify |
-| **Backend & Auth** | Firebase (`v12.10.0`) — Authentication & Firestore / Realtime DB |
-| **Payment Gateway** | Razorpay Payment SDK |
-| **Data Visualization** | Chart.js (`v4.4.4`), `react-chartjs-2` |
-| **Routing** | React Router DOM (`v7.14.0`) |
-
----
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-Distributed under the **MIT License**. See `LICENSE` for more information.
 
 ---
 
