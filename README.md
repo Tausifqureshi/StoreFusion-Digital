@@ -97,7 +97,7 @@ npm run build
 ## Developer Information
 
 - **Developer:** Tausif Qureshi
-- **Portfolio:** [https://storefusion-digital.vercel.app](https://storefusion-digital.vercel.app)
+- **Portfolio:** [https://tausifporfolio-website.netlify.app](https://tausifporfolio-website.netlify.app)
 - **LinkedIn:** [https://www.linkedin.com/in/tausifqureshi](https://www.linkedin.com/in/tausifqureshi)
 - **GitHub:** [https://github.com/Tausifqureshi](https://github.com/Tausifqureshi)
 - **License:** MIT License
