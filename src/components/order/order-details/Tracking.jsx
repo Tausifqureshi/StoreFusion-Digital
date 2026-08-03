@@ -102,7 +102,7 @@ function Tracking({ order, isDark }) {
         Order Tracking
       </h3>
 
-      {/* MOBILE VIEW */}
+      {/* MOBILE VIEW */}      
       <div className="md:hidden">
         {trackingStepsData.map((step, index) => {
           const isDone = activeStepIndex >= index && currentStatus !== "cancelled"; //check kiya ki current step completed hai ya nahi isliye >= use kiya h kyuki agar order placed hai to 0 index completed hai  
