@@ -103,7 +103,7 @@ function Tracking({ order, isDark }) {
       </h3>
 
       {/* MOBILE VIEW */}      
-      <div className="md:hidden">
+      <div className="md:hidden"> 
         {trackingStepsData.map((step, index) => {
           const isDone = activeStepIndex >= index && currentStatus !== "cancelled"; //check kiya ki current step completed hai ya nahi isliye >= use kiya h kyuki agar order placed hai to 0 index completed hai  
           const isLast = index === trackingStepsData.length - 1; //yhme check sirf isliye hai taaki akhiri step ke niche faltu danda (line) na dikhe 
