@@ -90,18 +90,19 @@ function CategoryProducts() {
     return product
       // category wise product ko filter kar rahe hain lekin yaha dynamic ara hai name ka use kar re is me.
       .filter((item) => item.category?.toLowerCase() === name.toLowerCase())
-
       .filter((item) => {
         // Filter By Search
         if (!searchkey) return true;
         return item.title?.toLowerCase().includes(searchkey.toLowerCase());
       })
       .filter((item) => {
-        // Amazon jaisa filter: Agar URL mein ?sub=laptop hai, toh sirf laptop dikhao! Tarika 1: URL ke through
+        // Amazon-style filter: Agar URL mein ?sub=laptop hai, toh sirf laptop dikhao!
         if (subQuery) {
           return item.subcategory?.toLowerCase() === subQuery.toLowerCase();
         }
-        // Filter by Subcategory checkboxes yaha tab show hoga jab user bina url ke aye ga warna show nhi hoga yaha product ko hide show karne ke liye hai yaha check box. 
+        // Sidebar Subcategory Checkboxes Filter:
+        // 1. Agar user ne koi checkbox select nahi kiya (selectedSubcategories empty hai), toh saare products pass hone do.
+        // 2. Agar user ne checkbox select kiya hai, toh sirf selected subcategory ke products hi allow karo.
         if (selectedSubcategories.length === 0) return true;
         return item.subcategory && selectedSubcategories.includes(item.subcategory.trim().toUpperCase());
       })
@@ -123,7 +124,7 @@ function CategoryProducts() {
         if (sortPrice === "high-to-low") return b.price - a.price;
         return 0;
       });
-  }, [product, name, filterPrice, filterColor, filterSize, sortPrice, selectedSubcategories, searchkey]);
+  }, [product, name, filterPrice, filterColor, filterSize, sortPrice, selectedSubcategories, searchkey, subQuery]);
 
   return (
     <>
@@ -155,7 +156,7 @@ function CategoryProducts() {
             {/* Sidebar Filter (Without Category Checkboxes) */}
             <div className="lg:col-span-3 lg:sticky lg:top-32 w-full flex flex-col gap-6 mt-4">
 
-              {/*jab bhi user url ke thorw aye ge jaise  searchParams ka use kar Subcategory dehke gi.subCategory se reltive Checkboxes show nhi hoge productInfo page pe veiw all. agar user category se ata hai tab shoga subCategory se reltive checkbox*/}
+              {/*jab bhi user url ke thorw aye ge jaise searchParams ka use kar Subcategory dehke gi.subCategory se reltive Checkboxes show nhi hoge productInfo page pe se veiw all pe se aye ga tu yaha subcategory wale show nhi hoge. agar user dropdown category se ata hai tab shoga subCategory se reltive checkbox*/}
               {!subQuery && uniqueSubCategories.length > 0 && (
                 <div className={`p-5 rounded-[2rem] border ${isDark ? 'bg-[#1a1f2e] border-gray-800' : 'bg-white border-gray-100 shadow-sm'}`}>
                   <h3 className="text-[10px] font-black uppercase tracking-[0.2em] mb-4 text-orange-500">
@@ -229,6 +230,8 @@ function CategoryProducts() {
       </div>
     </>
   );
-}const MemoizedCategoryProducts = React.memo(CategoryProducts);
+}
+
+const MemoizedCategoryProducts = React.memo(CategoryProducts);
 MemoizedCategoryProducts.displayName = "CategoryProducts";
 export default MemoizedCategoryProducts;

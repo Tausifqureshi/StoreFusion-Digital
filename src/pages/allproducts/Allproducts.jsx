@@ -169,15 +169,23 @@ const Allproducts = React.memo(function Allproducts() {
   const { products, productsLoading } = useProducts();
   const { searchkey, filterType, filterPrice, sortPrice, filterColor, filterSize } = useContext(FilterContext);
 
-  // 📡 ON-DEMAND LISTENER: Fetch products only when All Products Page is active
-  useEffect(() => {
+   useEffect(() => {
+    // 1. REDUX CACHE CHECK:
+    // Agar Redux mein pehle se saare products loaded hain (length > 1),
+    // toh dobara Database se fetch mat karo (Firebase Read Cost & Load time bachta hai).
     if (products && products.length > 1) return;
 
+    // 2. LOADING STATE:
+    // Fetch start hone par UI par Spinner/Skeleton dikhane ke liye loading = true kiya.
     dispatch(setProductsLoading(true));
+
+    // 3. REALTIME FIRESTORE LISTENER:
+    // Firestore se saare products fetch karta hai. Agar database me product add/update hoga,
+    // toh instant Redux store me sync ho jayega.
     const unsubscribe = productService.getAllProductsFromFirestore(
       (newProducts) => {
-        dispatch(setProducts(newProducts));
-        dispatch(setProductsLoading(false));
+        dispatch(setProducts(newProducts)); // Data Redux me save kiya
+        dispatch(setProductsLoading(false)); // Loading off kar di
       },
       (error) => {
         dispatch(setProductsError(error));
@@ -185,10 +193,14 @@ const Allproducts = React.memo(function Allproducts() {
       }
     );
 
+    // 4. CLEANUP FUNCTION:
+    // Jab user is page se kisi aur page par jata hai, toh active listener ko disconnect (unsubscribe) 
+    // kar diya jata hai taaki memory leak na ho aur background me internet/data waste na ho.
     return () => {
       if (unsubscribe) unsubscribe();
     };
   }, [dispatch]);
+
 
 
   const [currentPage, setCurrentPage] = useState(1);

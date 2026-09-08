@@ -12,7 +12,7 @@ import { useLocation } from "react-router-dom";
 import { FiRefreshCw, FiSliders, FiX, FiCheck } from "react-icons/fi";
 import { Drawer, IconButton, Slider } from "@mui/material";
 import { useSelector } from "react-redux";
-
+ 
 // ✅ DESKTOP VIEW: Sidebar layout (Vertical)
 const DesktopFilter = React.memo(function DesktopFilter({
   isDark,

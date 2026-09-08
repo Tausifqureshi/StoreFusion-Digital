@@ -25,26 +25,24 @@ export function useProductInfo() {
   useEffect(() => {
     if (!params.id) return;
     
-    // Agar redax me data pehle se hai toh use use karo (Redux cache check)
-    // Lekin agar nahi hai ya partial hai toh hi fetch karo
-    // Note: Hum direct specific fetch kar rahe hain for maximum performance!
-    
     const fetchTargetedData = async () => {
-      // Agar pehle se product list mein ye id hai, aur array bada hai, toh fetch mat karo
+      // Agar redux me current product pehle se majood hai, toh refetch mat karo
       const exists = product?.find(p => p.id === params.id);
-      if (exists && product.length > 5) return;
+      if (exists && product.length > 1) return;
 
       dispatch(setProductsLoading(true));
       try {
         // 1. Sirf 1 product mangwao (1 read cost)
         const singleProduct = await productService.getSingleProduct(params.id);
         if (singleProduct) {
-          dispatch(setProducts([singleProduct])); // Instant render ke liye
-
-          // 2. Similar products ke liye sirf us category ke products mangwao (~10 reads cost)
           if (singleProduct.category) {
+            // 2. Similar products ke liye us category ke products mangwao
             const categoryData = await productService.getProductsByCategory(singleProduct.category);
-            dispatch(setProducts(categoryData)); // Update redux state with category items
+            const hasSingle = categoryData.some(p => p.id === singleProduct.id);
+            const finalProducts = hasSingle ? categoryData : [singleProduct, ...categoryData];
+            dispatch(setProducts(finalProducts));
+          } else {
+            dispatch(setProducts([singleProduct]));
           }
         }
         dispatch(setProductsLoading(false));
@@ -55,7 +53,7 @@ export function useProductInfo() {
     };
 
     fetchTargetedData();
-  }, [dispatch, params.id, product.length]);
+  }, [dispatch, params.id]);
 
 
   const [mainImage, setMainImage] = useState("");
@@ -128,18 +126,25 @@ export function useProductInfo() {
   }, [dispatchAndSave, currentProduct]);
 
 
-  const handleViewAll = useCallback(() => {
-    if (currentProduct?.category) {
-      const cat = currentProduct.category.toLowerCase();
-      if (currentProduct.subcategory) {
-        navigate(`/category/${cat}?sub=${currentProduct.subcategory.toLowerCase()}`);
-      } else {
-        navigate(`/category/${cat}`);
-      }
+const handleViewAll = useCallback(() => {
+  // Step 1: Check karo ki kya current product ki koi Main Category hai (jaise: "Fashion", "Electronics")
+  if (currentProduct?.category) {
+    const cat = currentProduct.category.toLowerCase();
+
+    // Step 2: Check karo ki kya Subcategory bhi hai (jaise: "T-Shirt", "Laptop", "Shoes")
+    if (currentProduct.subcategory) {
+      // ➔ Agar subcategory hai, toh category page par ?sub= parameter ke sath bhejo
+      navigate(`/category/${cat}?sub=${currentProduct.subcategory.toLowerCase()}`);
     } else {
-      navigate(`/allproducts`);
+      // ➔ Agar subcategory nahi hai, toh sirf main category page par bhejo
+      navigate(`/category/${cat}`);
     }
-  }, [navigate, currentProduct]);
+  } else {
+    // Step 3: Agar kisi wajha se Category info missing hai, toh fallback karke '/allproducts' page par bhejo
+    navigate(`/allproducts`);
+  }
+}, [navigate, currentProduct]);
+
 
   // Hook sirf raw data return karta hai — JSX ProductAction.jsx mein banega
   const productDescription = currentProduct?.description || "No description available";
